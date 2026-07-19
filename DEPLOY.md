@@ -76,7 +76,7 @@ Fields (defined in `src/content.config.ts`):
 | `url`    | string               | no       | Omit for an unlinked (not-yet-live) app. |
 | `order`  | number               | yes      | Sort order, ascending.                   |
 
-## Deploy to Cloudflare Pages (recommended)
+## Deploy to Cloudflare (recommended)
 
 **1. Push to GitHub.** Create an empty repo on GitHub first, then:
 
@@ -86,17 +86,34 @@ git branch -M main
 git push -u origin main
 ```
 
-**2. Connect Cloudflare Pages.**
+**2. Connect to Cloudflare.**
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. Select the repo you just pushed
-3. Framework preset: **Astro**
-4. Build command: `npm run build`
-5. Build output directory: `dist`
-6. Save and deploy
+Cloudflare's Git-connected onboarding now goes through **Workers** rather than a separate
+"Pages" product, and deploys via Wrangler instead of a framework-preset picker — so you
+won't see a "Framework preset" or "Build output directory" field. That's expected.
+
+1. Cloudflare dashboard → **Workers & Pages** → **Create** → connect the repo
+2. Build command: `npm run build`
+3. Deploy command: `npx wrangler deploy` (Cloudflare fills this in by default)
+4. Deploy
+
+This repo already has `wrangler.jsonc` at the root, which is what tells `wrangler deploy`
+where the static build output lives:
+
+```jsonc
+{
+	"name": "gaspery",
+	"compatibility_date": "2026-07-19",
+	"assets": { "directory": "./dist" }
+}
+```
+
+Without this file, `npx wrangler deploy` has nothing to deploy and the build step fails —
+if you ever start a similar project from scratch, add this file before connecting Git.
 
 That's it — Cloudflare builds and hosts it on the free tier. Every push to `main` triggers
-an automatic redeploy; pushes to other branches get their own preview URL.
+an automatic redeploy; pushes to other branches get their own preview URL (via `npx
+wrangler versions upload`, which Cloudflare also fills in by default).
 
 ## Alternative: Netlify
 
@@ -106,9 +123,10 @@ an automatic redeploy; pushes to other branches get their own preview URL.
 
 ## Custom domain
 
-1. In the Cloudflare Pages project → **Custom domains** → add your domain (Cloudflare
-   walks you through DNS if the domain is already on Cloudflare, or gives you a CNAME
-   target otherwise)
+1. In the Cloudflare dashboard, open the Worker project → **Settings** → **Domains &
+   Routes** (or **Custom domains**, depending on what Cloudflare labels it when you get
+   there) → add your domain. Cloudflare walks you through DNS if the domain is already on
+   Cloudflare, or gives you a CNAME target otherwise.
 2. Update `site` in `astro.config.mjs` to the real domain:
    ```js
    site: 'https://your-actual-domain.com',
