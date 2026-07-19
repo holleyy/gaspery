@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Rail from '../components/Rail.astro';
+import Hero from '../components/Hero.astro';
+import WritingList from '../components/WritingList.astro';
+import AppsList from '../components/AppsList.astro';
+import Footer from '../components/Footer.astro';
+
+// Writing — newest first, drafts hidden, latest flagged "New".
+const posts = (await getCollection('writing'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const newestId = posts[0]?.id;
+const postProps = posts.map((p) => ({
+  href: `/writing/${p.id}`,
+  title: p.data.title,
+  dek: p.data.dek,
+  date: p.data.date,
+  readingTime: p.data.readingTime,
+  isNew: p.id === newestId,
+}));
+
+// Apps — ordered small tools.
+const apps = (await getCollection('apps'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((a) => ({
+    name: a.data.name,
+    dek: a.data.dek,
+    meta: a.data.meta,
+    status: a.data.status,
+    url: a.data.url,
+  }));
+---
+<Base title="Alex Holley — a working notebook">
+  <div class="page">
+    <Rail name="Alex Holley" role="Design & small software" monogram="A" current="Writing" />
+
+    <main class="main">
+      <Hero
+        eyebrow="A working notebook · Est. MMXXVI"
+        title="Making small, sharp software — and writing down what the making teaches me."
+        intro="I'm a designer who ships. This is the desk where the essays and the experiments live side by side — long-form notes on craft, and the odd little tool I couldn't stop myself from building. No products, no funnels. Just work I'm proud of, printed in two inks."
+      />
+
+      <div class="streams">
+        <WritingList posts={postProps} />
+        <AppsList
+          apps={apps}
+          currently={{
+            text: 'Teaching GRØD to spot meetings on its own, and folding this very two-ink palette into the app. Notes to follow.',
+            href: '/writing',
+            linkLabel: 'Read the workshop log',
+          }}
+        />
+      </div>
+
+      <Footer />
+    </main>
+  </div>
+</Base>

@@ -1,0 +1,16 @@
+---
+title: Shipping alone, on purpose
+date: 2026-04-30
+readingTime: 8 min
+dek: The quiet economics of building software with an audience of one — and why that's the most honest brief there is.
+---
+
+When the audience is one, the brief can't lie to you. There's no persona to
+hide behind, no roadmap theatre, no feature that exists to look good in a
+changelog.
+
+## The most honest brief
+
+Build the thing you'll actually use on Tuesday. If it survives a month of your
+own impatience, maybe it's worth showing someone. Most things don't, and that's
+the point — the ones that do have already earned it.

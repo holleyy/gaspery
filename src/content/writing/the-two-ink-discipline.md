@@ -1,0 +1,20 @@
+---
+title: The two-ink discipline
+date: 2026-07-18
+readingTime: 7 min
+dek: What a Risograph's two colours taught me about restraint — and why every interface palette should start from a constraint, not a swatch library.
+---
+
+A Risograph gives you two drums. Maybe three if you're patient and don't mind
+re-feeding the paper. That constraint is the whole point.
+
+When you can only print in magenta and teal, you stop reaching for a third
+colour to solve a hierarchy problem and start solving it with weight, size, and
+space instead. The palette becomes a discipline rather than a decision you make
+five hundred times a day.
+
+## Start from the constraint
+
+Every interface palette I've liked started the same way: two inks and a ground.
+Everything else — states, emphasis, the quiet greys — is derived from those,
+not bolted on.

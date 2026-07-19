@@ -1,0 +1,297 @@
+/* =====================================================================
+   Riso / Overprint D2 — theme core
+   Palette + type scale pulled verbatim from the GRØD design system
+   (Themes.swift `riso`, Toppings.swift `overprintD2`). Two spot inks —
+   magenta (brand) + teal — on a warm bone ground. Blend modes are
+   load-bearing; misregistration is deliberate.
+   ===================================================================== */
+
+/* ---- Design tokens -------------------------------------------------- */
+:root {
+  /* Riso — light appearance */
+  --color-paper:          #F6F1E6;
+  --color-surface:        #E9E5DC;
+  --color-surface-raised: #F3EFE6;
+  --color-hairline:       #D9D3C6;
+  --color-ink:            #232019;
+  --color-ink-secondary:  #6C6759;
+  --color-brand:          #D63A86;
+  --color-brand-bright:   #B82E70;
+  --color-teal:           #2AA7C8;
+  --color-positive:       #4E7A44;
+  --color-warning:        #9A6516;
+  --color-error:          #C0392B;
+
+  /* Type */
+  --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
+  --font-sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --text-hero:  56px;
+  --text-title: 22px;
+  --text-body:  17px;
+  --text-dek:   15px;
+  --text-meta:  12px;
+
+  --tracking-label: 0.14em;
+
+  --radius-card: 8px;
+  --radius-card-expanded: 10px;
+
+  /* Layout */
+  --page-max: 1360px;
+  --rail-w:   232px;
+  --gutter:   88px;
+  --margin:   96px;
+}
+
+/* Riso — dark appearance (project's `riso.dark` palette). Theme-aware
+   by default; the halftone blend flips multiply -> screen below. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper:          #191712;
+    --color-surface:        #1E1C18;
+    --color-surface-raised: #29261F;
+    --color-hairline:       #39352C;
+    --color-ink:            #EDE8DC;
+    --color-ink-secondary:  #A8A18E;
+    --color-brand:          #F06AA6;
+    --color-brand-bright:   #F582B5;
+    --color-teal:           #5CC7E8;
+    --color-positive:       #9DBB7F;
+    --color-warning:        #E0A33E;
+    --color-error:          #E86254;
+  }
+}
+
+/* ---- Reset / base --------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+
+/* Shared label style — stands in for Overprint D2's monospace meta. */
+.label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-ink-secondary);
+}
+
+/* ---- Page grid ------------------------------------------------------ */
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 88px var(--margin) 72px;
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  gap: var(--gutter);
+  align-items: start;
+}
+
+/* ---- Rail ----------------------------------------------------------- */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: sticky;
+  top: 88px;
+}
+
+/* Identity */
+.identity { display: flex; flex-direction: column; gap: 18px; }
+.monogram { position: relative; width: 46px; height: 46px; }
+.monogram__ink,
+.monogram__ghost {
+  position: absolute; inset: 0; width: 46px; height: 46px; border-radius: 2px;
+}
+.monogram__ghost { transform: translate(3px, 3px); background: var(--color-teal); mix-blend-mode: multiply; }
+.monogram__ink {
+  background: var(--color-brand); color: var(--color-paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-weight: 900; font-size: 22px;
+}
+.wordmark { font-family: var(--font-serif); font-weight: 700; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; }
+.identity .label { margin-top: 6px; }
+
+/* Rail sections (nav + elsewhere) */
+.rail-group { display: flex; flex-direction: column; gap: 14px; }
+.rail-group__title { padding-bottom: 4px; border-bottom: 1px solid var(--color-hairline); }
+
+.nav a {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: var(--font-serif); font-weight: 700; font-size: 19px; line-height: 1.15;
+  transition: color .15s ease;
+}
+.nav a .marker { display: inline-block; width: 12px; flex-shrink: 0; color: var(--color-brand); font-family: var(--font-sans); font-weight: 700; font-size: 15px; }
+.nav a[aria-current="page"] { color: var(--color-ink); }
+.nav a:hover { color: var(--color-brand-bright); }
+
+.elsewhere a {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-weight: 500; font-size: var(--text-dek);
+  transition: color .15s ease;
+}
+.elsewhere a .ext { width: 14px; text-align: right; flex-shrink: 0; color: var(--color-brand); font-size: 13px; }
+.elsewhere a:hover { color: var(--color-brand-bright); }
+
+/* Colophon */
+.colophon { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--color-hairline); }
+.colophon p { font-size: 12px; line-height: 1.5; color: var(--color-ink-secondary); }
+
+/* ---- Main ----------------------------------------------------------- */
+.main { display: flex; flex-direction: column; gap: 72px; min-width: 0; }
+
+/* Hero */
+.hero { position: relative; display: flex; flex-direction: column; gap: 26px; padding-top: 4px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; position: relative; z-index: 2; }
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-brand); }
+
+/* The one print moment: an ink headline riding a misregistered magenta ghost. */
+.hero-title { position: relative; z-index: 2; max-width: 760px; }
+.hero-title .ink,
+.hero-title .ghost {
+  font-family: var(--font-serif); font-weight: 800;
+  font-size: var(--text-hero); line-height: 1.1; letter-spacing: -0.02em;
+  margin: 0;
+}
+.hero-title .ghost {
+  position: absolute; inset: 0; transform: translate(3px, 3px);
+  color: var(--color-brand); mix-blend-mode: multiply;
+  z-index: -1; pointer-events: none;
+}
+.hero-intro { position: relative; z-index: 2; max-width: 600px; font-size: var(--text-body); line-height: 1.65; }
+
+/* Halftone dot field — teal, multiply on light / screen on dark, fading out. */
+.halftone {
+  position: absolute; top: -20px; right: -6px; width: 320px; height: 200px;
+  background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px);
+  background-size: 7px 7px;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
+          mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
+  pointer-events: none; z-index: 1;
+}
+@media (prefers-color-scheme: dark) { .halftone { mix-blend-mode: screen; } }
+
+/* Streams: Writing (wider) + Apps */
+.streams { display: grid; grid-template-columns: 3fr 2fr; gap: 56px; align-items: start; }
+.stream { display: flex; flex-direction: column; min-width: 0; }
+.stream__head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 12px; border-bottom: 2px solid var(--color-ink);
+}
+.stream__head .title-group { display: flex; align-items: center; gap: 10px; }
+.stream__head h2 { font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title); }
+
+/* Writing entries */
+.post { display: block; padding: 22px 0; border-bottom: 1px solid var(--color-hairline); }
+.post__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.post__meta .sep { color: var(--color-hairline); font-size: 11px; }
+.tag-new {
+  font-family: var(--font-sans); font-weight: 700; font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--color-paper); background: var(--color-brand);
+  padding: 2px 6px; border-radius: 2px;
+}
+.post h3 { font-family: var(--font-serif); font-weight: 700; font-size: 21px; line-height: 1.28; transition: color .15s ease; }
+.post:hover h3 { color: var(--color-brand-bright); }
+.post__dek { margin-top: 7px; font-size: var(--text-dek); line-height: 1.53; color: var(--color-ink-secondary); max-width: 440px; }
+.more-link { display: inline-flex; align-items: center; gap: 7px; padding-top: 18px; font-weight: 600; font-size: 14px; color: var(--color-brand); }
+.more-link:hover { color: var(--color-brand-bright); }
+
+/* App entries */
+.app { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--color-hairline); }
+.app__num { width: 22px; flex-shrink: 0; font-family: var(--font-serif); font-weight: 700; font-size: 15px; line-height: 1.6; color: var(--color-teal); }
+.app__body { flex: 1; min-width: 0; }
+.app__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.app__name { flex-shrink: 0; white-space: nowrap; font-family: var(--font-serif); font-weight: 700; font-size: 18px; transition: color .15s ease; }
+.app:hover .app__name { color: var(--color-brand-bright); }
+.status { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.status .dot { width: 6px; height: 6px; border-radius: 50%; }
+.status--live { color: var(--color-positive); } .status--live .dot { background: var(--color-positive); }
+.status--wip  { color: var(--color-warning); }  .status--wip .dot  { background: var(--color-warning); }
+.app__dek { margin-top: 5px; font-size: 14px; line-height: 1.5; color: var(--color-ink-secondary); }
+.app__meta { margin-top: 8px; }
+
+/* Currently note */
+.currently { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--color-hairline); display: flex; flex-direction: column; gap: 9px; }
+.currently__head { display: flex; align-items: center; gap: 8px; }
+.currently__head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-teal); }
+.currently p { font-size: var(--text-dek); line-height: 1.53; }
+.currently a { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand); }
+.currently a:hover { color: var(--color-brand-bright); }
+
+/* Site footer (subscribe + registration marks) */
+.site-footer {
+  margin-top: 8px; padding-top: 26px; border-top: 2px solid var(--color-ink);
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;
+}
+.subscribe { display: flex; flex-direction: column; gap: 8px; }
+.subscribe__line { font-family: var(--font-serif); font-weight: 700; font-size: 20px; line-height: 1.35; }
+.subscribe__line a { color: var(--color-brand); }
+.subscribe__line a:hover { color: var(--color-brand-bright); }
+.marks { display: flex; align-items: center; gap: 14px; }
+
+/* Registration crosshair helper */
+.reg { display: block; }
+
+/* ---- Overprint D2 accessibility gate --------------------------------
+   Under reduced transparency or increased contrast, blend modes and the
+   halftone drop to solid tokenised ink — the two-colour logic survives
+   as flat shapes (spec §5.2, a v1 gate, not later polish). */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .hero-title .ghost { display: none; }
+  .halftone { display: none; }
+  .monogram__ghost { mix-blend-mode: normal; opacity: 1; }
+}
+
+/* ---- Mobile breakpoint ---------------------------------------------
+   Collapses to the single-column layout designed at 375px: identity +
+   horizontal nav on top, then hero, streams, elsewhere, subscribe,
+   colophon. display:contents lets rail/main children reflow as one
+   column and re-order. */
+@media (max-width: 860px) {
+  .page {
+    display: flex; flex-direction: column; gap: 34px;
+    padding: 36px 24px 40px;
+  }
+  .rail, .main { display: contents; }
+  .rail { position: static; }
+
+  .identity   { order: 1; }
+  .nav        { order: 2; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 16px;
+                padding-top: 16px; border-top: 1px solid var(--color-hairline); }
+  .nav .rail-group__title { display: none; }
+  .nav a      { font-family: var(--font-serif); font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .nav a .marker { display: none; }
+  .nav a[aria-current="page"] { color: var(--color-brand); }
+  .hero       { order: 3; }
+  .streams    { order: 4; grid-template-columns: 1fr; gap: 40px; }
+  .elsewhere-group { order: 5; }
+  .elsewhere  { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+  .elsewhere a { justify-content: flex-start; gap: 5px; }
+  .site-footer { order: 6; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .colophon   { order: 7; }
+
+  :root { --text-hero: 34px; }
+  .hero-title .ink, .hero-title .ghost { line-height: 1.18; }
+  .hero-title .ghost { transform: translate(2px, 2px); }
+  .halftone { width: 150px; height: 120px; top: -8px; }
+  .post__dek { max-width: none; }
+}
+
+@media (max-width: 420px) {
+  :root { --text-hero: 30px; }
+}

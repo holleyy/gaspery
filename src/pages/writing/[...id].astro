@@ -1,0 +1,95 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import RegistrationMark from '../../components/RegistrationMark.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing');
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+---
+<Base title={`${post.data.title} — Alex Holley`} description={post.data.dek}>
+  <article class="article">
+    <a class="back" href="/">← Alex Holley</a>
+
+    <div class="article__meta">
+      <span class="label">{fmt.toUpperCase()}</span>
+      <span class="sep">/</span>
+      <span class="label">{post.data.readingTime}</span>
+    </div>
+
+    <h1 class="article__title">{post.data.title}</h1>
+    <p class="article__dek">{post.data.dek}</p>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <div class="article__end">
+      <RegistrationMark size={14} />
+      <a href="/">Back to the notebook →</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+    display: flex;
+    flex-direction: column;
+  }
+  .back {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-brand);
+    margin-bottom: 40px;
+  }
+  .back:hover { color: var(--color-brand-bright); }
+  .article__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .article__meta .sep { color: var(--color-hairline); }
+  .article__title {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 46px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .article__dek {
+    margin-top: 16px;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--color-ink-secondary);
+    max-width: 560px;
+  }
+  .prose {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 2px solid var(--color-ink);
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  .prose :global(h2) {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.25;
+    margin: 40px 0 12px;
+  }
+  .prose :global(p) { margin: 0 0 20px; }
+  .prose :global(a) { color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px; }
+  .article__end {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .article__end a { font-weight: 600; font-size: 14px; color: var(--color-brand); }
+</style>

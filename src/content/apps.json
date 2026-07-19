@@ -1,0 +1,37 @@
+[
+  {
+    "id": "grod",
+    "name": "GRØD",
+    "dek": "A menu-bar calendar that stays out of the way until the next thing actually matters.",
+    "meta": "macOS · SwiftUI",
+    "status": "live",
+    "url": "https://example.com/grod",
+    "order": 1
+  },
+  {
+    "id": "overprint",
+    "name": "Overprint",
+    "dek": "A web toy for mixing two-ink Riso palettes and previewing the misregistration.",
+    "meta": "Web · Canvas",
+    "status": "live",
+    "url": "https://example.com/overprint",
+    "order": 2
+  },
+  {
+    "id": "measure",
+    "name": "Measure",
+    "dek": "Paste a paragraph, get its ideal line length and the type size to match.",
+    "meta": "Web tool",
+    "status": "live",
+    "url": "https://example.com/measure",
+    "order": 3
+  },
+  {
+    "id": "halftone",
+    "name": "Halftone",
+    "dek": "Turns a photo into a two-colour screen print, right in the browser.",
+    "meta": "WebGL · Experiment",
+    "status": "wip",
+    "order": 4
+  }
+]

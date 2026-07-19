@@ -1,0 +1,68 @@
+---
+import RegistrationMark from './RegistrationMark.astro';
+
+interface NavItem { label: string; href: string; }
+interface Link { label: string; href: string; }
+interface Props {
+  name: string;
+  role: string;
+  monogram: string;
+  current?: string;
+  nav?: NavItem[];
+  elsewhere?: Link[];
+}
+const {
+  name,
+  role,
+  monogram,
+  current = 'Writing',
+  nav = [
+    { label: 'Writing', href: '/' },
+    { label: 'Apps', href: '#apps' },
+    { label: 'About', href: '/about' },
+    { label: 'Now', href: '/now' },
+  ],
+  elsewhere = [
+    { label: 'Email', href: 'mailto:hello@example.com' },
+    { label: 'GitHub', href: 'https://github.com' },
+    { label: 'Mastodon', href: 'https://mastodon.social' },
+    { label: 'RSS', href: '/rss.xml' },
+  ],
+} = Astro.props;
+---
+<aside class="rail">
+  <div class="identity">
+    <div class="monogram">
+      <div class="monogram__ghost"></div>
+      <div class="monogram__ink">{monogram}</div>
+    </div>
+    <div>
+      <div class="wordmark">{name}</div>
+      <div class="label">{role}</div>
+    </div>
+  </div>
+
+  <nav class="nav rail-group" aria-label="Primary">
+    <div class="rail-group__title label">Index</div>
+    {nav.map((item) => (
+      <a href={item.href} aria-current={item.label === current ? 'page' : undefined}>
+        <span class="marker">{item.label === current ? '→' : ''}</span>{item.label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="elsewhere-group rail-group">
+    <div class="rail-group__title label">Elsewhere</div>
+    <div class="elsewhere">
+      {elsewhere.map((item) => (
+        <a href={item.href}>{item.label}<span class="ext">↗</span></a>
+      ))}
+    </div>
+  </div>
+
+  <div class="colophon">
+    <RegistrationMark size={16} />
+    <p>Set in Merriweather &amp; Inter. Printed here in two inks — magenta &amp; teal, occasionally out of register.</p>
+    <div class="label">© MMXXVI · Edinburgh</div>
+  </div>
+</aside>

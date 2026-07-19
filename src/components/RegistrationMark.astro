@@ -1,0 +1,33 @@
+---
+/**
+ * Printer's registration mark — the connective Riso motif.
+ * variant: "full" (crosshair + ring), "cross" (just the tick), "ring" (just the circle).
+ */
+interface Props {
+  size?: number;
+  variant?: 'full' | 'cross' | 'ring';
+  class?: string;
+}
+const { size = 16, variant = 'full', class: className = '' } = Astro.props;
+const c = size / 2;
+const r = size * 0.2;
+---
+<svg
+  width={size}
+  height={size}
+  viewBox={`0 0 ${size} ${size}`}
+  fill="none"
+  class:list={['reg', className]}
+  aria-hidden="true"
+>
+  {variant !== 'ring' && (
+    <path
+      d={`M${c} 0.5V${size - 0.5}M0.5 ${c}H${size - 0.5}`}
+      stroke="var(--color-teal)"
+      stroke-width="1"
+    />
+  )}
+  {variant !== 'cross' && (
+    <circle cx={c} cy={c} r={r} stroke="var(--color-brand)" stroke-width="1" />
+  )}
+</svg>

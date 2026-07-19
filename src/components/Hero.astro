@@ -1,0 +1,24 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro: string;
+}
+const { eyebrow, title, intro } = Astro.props;
+---
+<section class="hero">
+  <div class="halftone" aria-hidden="true"></div>
+
+  <div class="eyebrow">
+    <span class="dot"></span>
+    <span class="label">{eyebrow}</span>
+  </div>
+
+  <div class="hero-title">
+    {/* Two stacked copies = the deliberate misregistration. Ghost is decorative. */}
+    <h1 class="ghost" aria-hidden="true">{title}</h1>
+    <h1 class="ink">{title}</h1>
+  </div>
+
+  <p class="hero-intro">{intro}</p>
+</section>

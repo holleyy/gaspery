@@ -1,0 +1,44 @@
+---
+import RegistrationMark from './RegistrationMark.astro';
+
+interface Post {
+  href: string;
+  title: string;
+  dek: string;
+  date: Date;
+  readingTime: string;
+  isNew?: boolean;
+}
+interface Props {
+  posts: Post[];
+  moreHref?: string;
+}
+const { posts, moreHref = '/writing' } = Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+---
+<section class="stream" id="writing">
+  <div class="stream__head">
+    <div class="title-group">
+      <RegistrationMark size={14} />
+      <h2>Writing</h2>
+    </div>
+    <span class="label">Latest first</span>
+  </div>
+
+  {posts.map((post) => (
+    <a class="post" href={post.href}>
+      <div class="post__meta">
+        <span class="label">{fmt(post.date)}</span>
+        <span class="sep">/</span>
+        <span class="label">{post.readingTime}</span>
+        {post.isNew && <span class="tag-new">New</span>}
+      </div>
+      <h3>{post.title}</h3>
+      <p class="post__dek">{post.dek}</p>
+    </a>
+  ))}
+
+  <a class="more-link" href={moreHref}>Older notes <span>→</span></a>
+</section>

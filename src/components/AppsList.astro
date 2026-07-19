@@ -1,0 +1,57 @@
+---
+import RegistrationMark from './RegistrationMark.astro';
+
+interface App {
+  name: string;
+  dek: string;
+  meta: string;
+  status: 'live' | 'wip';
+  url?: string;
+}
+interface Props {
+  apps: App[];
+  currently?: { text: string; href?: string; linkLabel?: string };
+}
+const { apps, currently } = Astro.props;
+const statusLabel = { live: 'Live', wip: 'WIP' } as const;
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+---
+<section class="stream" id="apps">
+  <div class="stream__head">
+    <div class="title-group">
+      <RegistrationMark size={14} />
+      <h2>Apps</h2>
+    </div>
+    <span class="label">Small tools</span>
+  </div>
+
+  {apps.map((app, i) => {
+    const Tag = app.url ? 'a' : 'div';
+    return (
+      <Tag class="app" href={app.url}>
+        <div class="app__num">{pad(i)}</div>
+        <div class="app__body">
+          <div class="app__head">
+            <span class="app__name">{app.name}</span>
+            <span class:list={['status', `status--${app.status}`]}>
+              <span class="dot"></span>{statusLabel[app.status]}
+            </span>
+          </div>
+          <div class="app__dek">{app.dek}</div>
+          <div class="app__meta label">{app.meta}</div>
+        </div>
+      </Tag>
+    );
+  })}
+
+  {currently && (
+    <div class="currently">
+      <div class="currently__head">
+        <span class="dot"></span>
+        <span class="label">Currently</span>
+      </div>
+      <p>{currently.text}</p>
+      {currently.href && <a href={currently.href}>{currently.linkLabel ?? 'Read more'} →</a>}
+    </div>
+  )}
+</section>

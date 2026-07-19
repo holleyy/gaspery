@@ -1,0 +1,19 @@
+{
+  "name": "riso-notebook",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Alex Holley's personal homepage — a Risograph / Overprint D2 theme for Astro.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.2.0"
+  }
+}

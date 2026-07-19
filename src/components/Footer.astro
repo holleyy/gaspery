@@ -1,0 +1,20 @@
+---
+import RegistrationMark from './RegistrationMark.astro';
+
+interface Props {
+  subscribeHref?: string;
+}
+const { subscribeHref = '/subscribe' } = Astro.props;
+---
+<footer class="site-footer">
+  <div class="subscribe">
+    <span class="label">The notebook, by post</span>
+    <div class="subscribe__line">One short letter a month. <a href={subscribeHref}>Subscribe&nbsp;→</a></div>
+  </div>
+  <div class="marks" aria-hidden="true">
+    <RegistrationMark size={13} variant="cross" />
+    <RegistrationMark size={13} variant="ring" />
+    <RegistrationMark size={13} variant="cross" />
+    <span class="label">Made with two inks</span>
+  </div>
+</footer>
