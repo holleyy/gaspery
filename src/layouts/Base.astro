@@ -5,7 +5,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'Design & small software — a working notebook.' } = Astro.props;
+const { title, description = 'Product, design & small software — a working notebook.' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -25,6 +25,27 @@ const { title, description = 'Design & small software — a working notebook.' }
     />
   </head>
   <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <!-- Riso-duotone photo filter: grayscale, then remapped ink -> paper.
+           Paired with a full-bleed teal halftone overlay (.riso-photo in
+           global.css) so photography prints in the same two inks as
+           everything else. Fixed to the light-mode tokens on purpose --
+           a photographic negative is not a good dark-mode adaptation. -->
+      <filter id="riso-duotone">
+        <feColorMatrix
+          type="matrix"
+          values="0.2126 0.7152 0.0722 0 0
+                  0.2126 0.7152 0.0722 0 0
+                  0.2126 0.7152 0.0722 0 0
+                  0      0      0      1 0"
+        />
+        <feComponentTransfer>
+          <feFuncR type="table" tableValues="0.137 0.965" />
+          <feFuncG type="table" tableValues="0.125 0.945" />
+          <feFuncB type="table" tableValues="0.098 0.902" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
     <slot />
   </body>
 </html>

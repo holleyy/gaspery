@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AppPageHeader from '../../components/AppPageHeader.astro';
+import QuietAppBody from '../../components/QuietAppBody.astro';
+import EditorialAppBody from '../../components/EditorialAppBody.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('appPages');
+  const apps = await getCollection('apps');
+  return pages.map((page) => {
+    const app = apps.find((a) => a.id === page.id);
+    return { params: { id: page.id }, props: { page, app } };
+  });
+}
+
+const { page, app } = Astro.props;
+const { Content } = await render(page);
+---
+<Base title={`${app.data.name} — Alex Holley`} description={app.data.dek}>
+  <div class="app-page">
+    <a class="app-page__back" href="/">&larr; Alex Holley</a>
+
+    <AppPageHeader name={app.data.name} meta={app.data.meta} status={app.data.status} />
+
+    {page.data.template === 'quiet' ? (
+      <QuietAppBody><Content /></QuietAppBody>
+    ) : (
+      <EditorialAppBody spreads={page.data.spreads ?? []}><Content /></EditorialAppBody>
+    )}
+  </div>
+</Base>

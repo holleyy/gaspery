@@ -1,0 +1,12 @@
+---
+// Direction 1: "a paragraph, a screenshot if it helps, a link" — for the
+// small tools that aren't products. See against-the-one-pager.md.
+import RegistrationMark from './RegistrationMark.astro';
+---
+<div class="app-page__lede">
+  <slot />
+</div>
+<div class="media-placeholder">
+  <RegistrationMark size={28} />
+  <span class="label">Screenshot coming soon</span>
+</div>

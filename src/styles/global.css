@@ -123,8 +123,9 @@ img, svg { display: block; max-width: 100%; }
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-serif); font-weight: 900; font-size: 22px;
 }
-.wordmark { font-family: var(--font-serif); font-weight: 700; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; }
+.wordmark { font-family: var(--font-serif); font-weight: 700; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; transition: color .15s ease; }
 .identity .label { margin-top: 6px; }
+.identity:hover .wordmark { color: var(--color-brand-bright); }
 
 /* Rail sections (nav + elsewhere) */
 .rail-group { display: flex; flex-direction: column; gap: 14px; }
@@ -186,6 +187,38 @@ img, svg { display: block; max-width: 100%; }
 }
 @media (prefers-color-scheme: dark) { .halftone { mix-blend-mode: screen; } }
 
+/* Riso-duotone photography — a photo run through the same press as
+   everything else. The image itself is piped through the ink/paper duotone
+   filter defined once in Base.astro; a full-bleed version of the halftone
+   dot field (same recipe as .halftone above, uncropped and unmasked) sits
+   over the top. Under the accessibility gate the halftone drops out and the
+   duotone photo stands alone -- still fully legible. */
+.riso-photo { position: relative; margin: 32px 0; border-radius: var(--radius-card); overflow: hidden; }
+.riso-photo img {
+  display: block; width: 100%; height: auto; filter: url(#riso-duotone);
+  transition: filter .5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.riso-photo::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px);
+  background-size: 7px 7px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: opacity .5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (prefers-color-scheme: dark) { .riso-photo::after { mix-blend-mode: screen; } }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .riso-photo::after { display: none; } }
+/* Hover reveals the real photo underneath -- the print lifts to show what it
+   was made from. */
+.riso-photo:hover img { filter: none; }
+.riso-photo:hover::after { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .riso-photo img, .riso-photo::after { transition: none; }
+}
+.riso-photo figcaption {
+  margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--color-ink-secondary);
+}
+
 /* Streams: Writing (wider) + Apps */
 .streams { display: grid; grid-template-columns: 3fr 2fr; gap: 56px; align-items: start; }
 .stream { display: flex; flex-direction: column; min-width: 0; }
@@ -220,18 +253,22 @@ img, svg { display: block; max-width: 100%; }
 .app:hover .app__name { color: var(--color-brand-bright); }
 .status { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 .status .dot { width: 6px; height: 6px; border-radius: 50%; }
-.status--live { color: var(--color-positive); } .status--live .dot { background: var(--color-positive); }
-.status--wip  { color: var(--color-warning); }  .status--wip .dot  { background: var(--color-warning); }
+.status--live     { color: var(--color-positive); }     .status--live .dot     { background: var(--color-positive); }
+.status--dev      { color: var(--color-warning); }      .status--dev .dot      { background: var(--color-warning); }
+.status--planning { color: var(--color-ink-secondary); } .status--planning .dot { background: var(--color-ink-secondary); }
 .app__dek { margin-top: 5px; font-size: 14px; line-height: 1.5; color: var(--color-ink-secondary); }
 .app__meta { margin-top: 8px; }
 
-/* Currently note */
-.currently { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--color-hairline); display: flex; flex-direction: column; gap: 9px; }
-.currently__head { display: flex; align-items: center; gap: 8px; }
-.currently__head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-teal); }
-.currently p { font-size: var(--text-dek); line-height: 1.53; }
-.currently a { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand); }
-.currently a:hover { color: var(--color-brand-bright); }
+/* Now panel — building/reading/watching/listening, links through to /now. */
+.now-panel { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--color-hairline); display: flex; flex-direction: column; gap: 12px; }
+.now-panel__head { display: flex; align-items: center; gap: 8px; }
+.now-panel__head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-teal); }
+.now-panel__row { display: flex; flex-direction: column; gap: 3px; }
+.now-panel__row + .now-panel__row { padding-top: 11px; border-top: 1px solid var(--color-hairline); }
+.now-panel__row-label { font-family: var(--font-sans); font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); }
+.now-panel__row-value { font-size: var(--text-dek); line-height: 1.5; color: var(--color-ink); }
+.now-panel__link { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand); }
+.now-panel__link:hover { color: var(--color-brand-bright); }
 
 /* Site footer (subscribe + registration marks) */
 .site-footer {
@@ -240,12 +277,52 @@ img, svg { display: block; max-width: 100%; }
 }
 .subscribe { display: flex; flex-direction: column; gap: 8px; }
 .subscribe__line { font-family: var(--font-serif); font-weight: 700; font-size: 20px; line-height: 1.35; }
-.subscribe__line a { color: var(--color-brand); }
-.subscribe__line a:hover { color: var(--color-brand-bright); }
+.subscribe__cta {
+  font: inherit; background: none; border: none; padding: 0; margin: 0;
+  color: var(--color-brand); cursor: pointer; transition: color .15s ease;
+}
+.subscribe__cta:hover:not(:disabled) { color: var(--color-brand-bright); }
+.subscribe__cta:disabled { color: var(--color-ink-secondary); cursor: default; }
 .marks { display: flex; align-items: center; gap: 14px; }
 
 /* Registration crosshair helper */
 .reg { display: block; }
+
+/* ---- App detail page (e.g. /apps/grod) ------------------------------
+   A distinct page type: monogram-only identity, no rail/nav/colophon.
+   Reuses .identity/.monogram/.label/.status wholesale — same ink,
+   different structure. */
+.app-page { max-width: 680px; margin: 0 auto; padding: 88px var(--margin) 96px; display: flex; flex-direction: column; gap: 40px; }
+.app-page__back { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--color-ink-secondary); transition: color .15s ease; }
+.app-page__back:hover { color: var(--color-brand-bright); }
+.app-page__meta-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.app-page__lede { display: flex; flex-direction: column; gap: 22px; font-size: var(--text-body); line-height: 1.7; color: var(--color-ink); }
+.app-page__lede p { max-width: 62ch; margin: 0; }
+
+/* Honest stand-in for real product imagery — never a fake screenshot. */
+.media-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  padding: 48px 24px; border: 1px solid var(--color-hairline); border-radius: var(--radius-card);
+  background: var(--color-surface-raised);
+}
+
+/* Editorial app-page body: italic standfirst + alternating spreads, each
+   preceded by a registration-mark divider. Selected when an app page's
+   template is "editorial" (see src/content/app-pages and EditorialAppBody). */
+.app-standfirst {
+  font-family: var(--font-serif); font-style: italic; font-weight: 500;
+  font-size: var(--text-title); line-height: 1.5; color: var(--color-ink); max-width: 56ch;
+}
+.app-standfirst p { margin: 0; }
+.app-editorial__block { display: flex; flex-direction: column; gap: 24px; }
+.app-editorial__divider { display: flex; padding-top: 8px; }
+.app-editorial__spread { display: flex; align-items: center; gap: 40px; }
+.app-editorial__spread--reverse { flex-direction: row-reverse; }
+.app-editorial__media { flex: 1 1 260px; margin: 0; }
+.app-editorial__text { flex: 1 1 320px; display: flex; flex-direction: column; gap: 10px; }
+.app-editorial__text h3 { font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title); color: var(--color-ink); }
+.app-editorial__text p { font-size: var(--text-body); line-height: 1.6; color: var(--color-ink-secondary); margin: 0; }
+.app-editorial__closing { display: flex; align-items: center; gap: 10px; padding-top: 16px; border-top: 1px solid var(--color-hairline); }
 
 /* ---- Overprint D2 accessibility gate --------------------------------
    Under reduced transparency or increased contrast, blend modes and the
@@ -290,6 +367,8 @@ img, svg { display: block; max-width: 100%; }
   .hero-title .ghost { transform: translate(2px, 2px); }
   .halftone { width: 150px; height: 120px; top: -8px; }
   .post__dek { max-width: none; }
+  .app-page { padding: 36px 24px 40px; gap: 32px; }
+  .app-editorial__spread, .app-editorial__spread--reverse { flex-direction: column; }
 }
 
 @media (max-width: 420px) {

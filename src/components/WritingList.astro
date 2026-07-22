@@ -12,8 +12,9 @@ interface Post {
 interface Props {
   posts: Post[];
   moreHref?: string;
+  showMore?: boolean;
 }
-const { posts, moreHref = '/writing' } = Astro.props;
+const { posts, moreHref = '/writing', showMore = true } = Astro.props;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
@@ -40,5 +41,5 @@ const fmt = (d: Date) =>
     </a>
   ))}
 
-  <a class="more-link" href={moreHref}>Older notes <span>→</span></a>
+  {showMore && <a class="more-link" href={moreHref}>Older notes <span>→</span></a>}
 </section>

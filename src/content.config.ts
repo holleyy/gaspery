@@ -21,10 +21,28 @@ const apps = defineCollection({
     name: z.string(),
     dek: z.string(),
     meta: z.string(),
-    status: z.enum(['live', 'wip']),
+    status: z.enum(['live', 'dev', 'planning']),
     url: z.string().optional(),
     order: z.number(),
   }),
 });
 
-export const collections = { writing, apps };
+// App detail pages (/apps/[id]) — one markdown file per app that has one.
+// `template` picks which body renders: "quiet" (a paragraph, a screenshot,
+// a link) or "editorial" (standfirst + alternating feature spreads).
+const appPages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/app-pages' }),
+  schema: z.object({
+    template: z.enum(['quiet', 'editorial']),
+    spreads: z
+      .array(
+        z.object({
+          heading: z.string(),
+          body: z.string(),
+        })
+      )
+      .optional(),
+  }),
+});
+
+export const collections = { writing, apps, appPages };

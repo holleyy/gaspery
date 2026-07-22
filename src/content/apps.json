@@ -2,36 +2,36 @@
   {
     "id": "grod",
     "name": "GRØD",
-    "dek": "A menu-bar calendar that stays out of the way until the next thing actually matters.",
+    "dek": "A private, Mac-native memory for your meetings — notes you'd keep, not just a transcript.",
     "meta": "macOS · SwiftUI",
     "status": "live",
-    "url": "https://example.com/grod",
+    "url": "/apps/grod",
     "order": 1
   },
   {
-    "id": "overprint",
-    "name": "Overprint",
-    "dek": "A web toy for mixing two-ink Riso palettes and previewing the misregistration.",
-    "meta": "Web · Canvas",
-    "status": "live",
-    "url": "https://example.com/overprint",
+    "id": "pls-fix",
+    "name": "pls fix.",
+    "dek": "Edits the HTML decks Claude generates — without opening an HTML editor.",
+    "meta": "macOS · SwiftUI",
+    "status": "dev",
+    "url": "/apps/pls-fix",
     "order": 2
   },
   {
-    "id": "measure",
-    "name": "Measure",
-    "dek": "Paste a paragraph, get its ideal line length and the type size to match.",
-    "meta": "Web tool",
-    "status": "live",
-    "url": "https://example.com/measure",
+    "id": "afterframe",
+    "name": "Afterframe",
+    "dek": "Pulls stills and GIFs straight off whatever's playing on your Plex server.",
+    "meta": "iOS · SwiftUI",
+    "status": "dev",
+    "url": "/apps/afterframe",
     "order": 3
   },
   {
-    "id": "halftone",
-    "name": "Halftone",
-    "dek": "Turns a photo into a two-colour screen print, right in the browser.",
-    "meta": "WebGL · Experiment",
-    "status": "wip",
+    "id": "top-secret",
+    "name": "Top Secret",
+    "dek": "Something new — details when it's ready.",
+    "meta": "Details soon",
+    "status": "planning",
     "order": 4
   }
 ]

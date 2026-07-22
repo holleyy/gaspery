@@ -34,23 +34,26 @@ const apps = (await getCollection('apps'))
 ---
 <Base title="Alex Holley — a working notebook">
   <div class="page">
-    <Rail name="Alex Holley" role="Design & small software" monogram="A" current="Writing" />
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
 
     <main class="main">
       <Hero
         eyebrow="A working notebook · Est. MMXXVI"
-        title="Making small, sharp software — and writing down what the making teaches me."
-        intro="I'm a designer who ships. This is the desk where the essays and the experiments live side by side — long-form notes on craft, and the odd little tool I couldn't stop myself from building. No products, no funnels. Just work I'm proud of, printed in two inks."
+        title="Things people should see; things I want to remember."
+        intro="Essays & experiments. But also unloading my favourites folder, because there's a lot to share."
       />
 
       <div class="streams">
         <WritingList posts={postProps} />
         <AppsList
           apps={apps}
-          currently={{
-            text: 'Teaching GRØD to spot meetings on its own, and folding this very two-ink palette into the app. Notes to follow.',
-            href: '/writing',
-            linkLabel: 'Read the workshop log',
+          now={{
+            building: 'Teaching GRØD to spot meetings on its own, and folding this very two-ink palette into the app.',
+            reading: 'The Faith of Beasts — James S. A. Corey',
+            watching: 'The Agency — Paramount+',
+            listening: 'Every single pod about The Odyssey',
+            href: '/now',
+            linkLabel: 'More on all this',
           }}
         />
       </div>

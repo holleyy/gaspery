@@ -1,19 +1,27 @@
 ---
 import RegistrationMark from './RegistrationMark.astro';
+import { statusLabel, type AppStatus } from '../lib/appStatus';
 
 interface App {
   name: string;
   dek: string;
   meta: string;
-  status: 'live' | 'wip';
+  status: AppStatus;
   url?: string;
+}
+interface Now {
+  building: string;
+  reading: string;
+  watching: string;
+  listening: string;
+  href?: string;
+  linkLabel?: string;
 }
 interface Props {
   apps: App[];
-  currently?: { text: string; href?: string; linkLabel?: string };
+  now?: Now;
 }
-const { apps, currently } = Astro.props;
-const statusLabel = { live: 'Live', wip: 'WIP' } as const;
+const { apps, now } = Astro.props;
 const pad = (n: number) => String(n + 1).padStart(2, '0');
 ---
 <section class="stream" id="apps">
@@ -44,14 +52,29 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
     );
   })}
 
-  {currently && (
-    <div class="currently">
-      <div class="currently__head">
+  {now && (
+    <div class="now-panel">
+      <div class="now-panel__head">
         <span class="dot"></span>
-        <span class="label">Currently</span>
+        <span class="label">Now</span>
       </div>
-      <p>{currently.text}</p>
-      {currently.href && <a href={currently.href}>{currently.linkLabel ?? 'Read more'} →</a>}
+      <div class="now-panel__row">
+        <span class="now-panel__row-label">Building</span>
+        <span class="now-panel__row-value">{now.building}</span>
+      </div>
+      <div class="now-panel__row">
+        <span class="now-panel__row-label">Reading</span>
+        <span class="now-panel__row-value">{now.reading}</span>
+      </div>
+      <div class="now-panel__row">
+        <span class="now-panel__row-label">Watching</span>
+        <span class="now-panel__row-value">{now.watching}</span>
+      </div>
+      <div class="now-panel__row">
+        <span class="now-panel__row-label">Listening</span>
+        <span class="now-panel__row-value">{now.listening}</span>
+      </div>
+      {now.href && <a class="now-panel__link" href={now.href}>{now.linkLabel ?? 'More'} →</a>}
     </div>
   )}
 </section>

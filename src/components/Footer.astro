@@ -1,15 +1,13 @@
 ---
 import RegistrationMark from './RegistrationMark.astro';
-
-interface Props {
-  subscribeHref?: string;
-}
-const { subscribeHref = '/subscribe' } = Astro.props;
 ---
 <footer class="site-footer">
   <div class="subscribe">
     <span class="label">The notebook, by post</span>
-    <div class="subscribe__line">One short letter a month. <a href={subscribeHref}>Subscribe&nbsp;→</a></div>
+    <div class="subscribe__line">
+      One short letter a month.
+      <button type="button" class="subscribe__cta" data-subscribe-cta>Subscribe&nbsp;→</button>
+    </div>
   </div>
   <div class="marks" aria-hidden="true">
     <RegistrationMark size={13} variant="cross" />
@@ -18,3 +16,17 @@ const { subscribeHref = '/subscribe' } = Astro.props;
     <span class="label">Made with two inks</span>
   </div>
 </footer>
+
+<script>
+  // No newsletter yet. Clicking records interest and swaps the CTA to
+  // "Coming soon" instead of linking to a page that doesn't exist. The
+  // custom event is the seam for real analytics once there's a newsletter --
+  // e.g. window.addEventListener('subscribe-interest', () => gtag(...)).
+  document.querySelectorAll<HTMLButtonElement>('[data-subscribe-cta]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('subscribe-interest'));
+      btn.textContent = 'Coming soon';
+      btn.disabled = true;
+    });
+  });
+</script>

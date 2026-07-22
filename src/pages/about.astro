@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import Rail from '../components/Rail.astro';
+import RegistrationMark from '../components/RegistrationMark.astro';
+---
+<Base
+  title="About — Alex Holley"
+  description="Product, running, film, and music — the rest of what's true, not just the CV."
+>
+  <div class="page">
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="About" />
+
+    <main class="main">
+      <section class="about-page">
+        <h1 class="about-page__title">About</h1>
+        <p class="about-page__dek">Product, running, film, and music — the rest of what's true, not just the CV.</p>
+
+        <div class="about-page__prose">
+          <p>I've spent most of my career finding out what happens when you take something complicated and make it feel like it isn't. That's the throughline, if there is one — in the product work, in the running, in the taste. I like things that are precisely built and don't announce it.</p>
+
+          <p>I started in education, working inside charities before I'd ever heard the phrase "product manager" said out loud. Then, in 2018, I became the first product hire at a blockchain ticketing startup — two years spent making sure nobody buying a ticket ever had to know what a blockchain was. That's still mostly the job: find the complicated, slightly frightening thing underneath, and let the person on the other end just tap a button.</p>
+
+          <p>Since then there's been an InsurTech platform running across four international regions, a Member Communications tool that finally told Nationwide who it had said what to and when, and a driver-coaching app for Michelin that turned machine-learning signals into something a driver could act on mid-shift. Currently it's Fresenius Medical Care, where the software I work on supports over 300,000 home dialysis patients worldwide — which has a way of putting a product roadmap into perspective — alongside running discovery workshops for the kind of organisations that still print their strategy decks. The long version is on <a href="https://linkedin.com/in/aholley/">LinkedIn</a>.</p>
+
+          <p>The other discipline is running — marathons and cross country, including the British Marathon Championships, and for one brief week, a spot somewhere in the top 100 marathoners in the country. I wrote up the last long run before my personal best — 2:41 in San Sebastián — <a href="/writing/so-well-planned-it-feels-unplanned">over here</a>. Most of the training happens on Hampstead Heath, which I'm unreasonably attached to.</p>
+
+          <p>I clearly like the same thing in film as I do at my desk. Fincher, Nolan, Park Chan-wook, Barry Jenkins — directors who build something exact and let you feel the precision rather than explain it. Inception, Moonlight, Parasite, The Social Network, Cloud Atlas and Kill Bill are the ones I'll always stop and rewatch. On television I've apparently spent a decade watching people at work — Halt and Catch Fire, Industry, Mad Men, Succession, Andor — alongside The Leftovers, Station Eleven, The Americans and Atlanta, which are mostly about grief and getting away with things instead. I log all of it on <a href="https://letterboxd.com/holley/">Letterboxd</a>.</p>
+
+          <p>Music's been a constant longer than any of this — Kendrick, Kanye before Life of Pablo, and Solange for the version of hip-hop that's still doing something formally interesting; Nils Frahm, Darkside, Caribou, Four Tet, Bonobo and Theon Cross for when I want texture and rhythm over lyrics. Most of it ends up soundtracking a run eventually, whether it was built for one or not — ask the Jacques Greene techno that carried me through the back half in Spain.</p>
+
+          <p>Some of this you were always going to see — the essays, the apps, the CV. The rest I just wanted written down somewhere.</p>
+        </div>
+
+        <div class="about-page__end">
+          <RegistrationMark size={14} />
+          <a href="/">Back to the notebook →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .about-page { max-width: 640px; display: flex; flex-direction: column; }
+  .about-page__title {
+    font-family: var(--font-serif); font-weight: 800;
+    font-size: clamp(32px, 5vw, 44px); line-height: 1.12; letter-spacing: -0.02em;
+  }
+  .about-page__dek {
+    margin-top: 14px; font-size: 18px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 520px;
+  }
+  .about-page__prose {
+    margin-top: 36px; padding-top: 28px; border-top: 2px solid var(--color-ink);
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .about-page__prose p { font-size: var(--text-body); line-height: 1.7; max-width: 62ch; }
+  .about-page__prose :global(a) {
+    color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .about-page__prose :global(a:hover) { color: var(--color-brand-bright); }
+  .about-page__end {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
+  }
+  .about-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand); }
+  .about-page__end a:hover { color: var(--color-brand-bright); }
+</style>

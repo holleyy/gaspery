@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import Rail from '../components/Rail.astro';
+import RegistrationMark from '../components/RegistrationMark.astro';
+---
+<Base
+  title="Now — Alex Holley"
+  description="What I'm building, reading, watching, and listening to right now."
+>
+  <div class="page">
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Now" />
+
+    <main class="main">
+      <section class="now-page">
+        <div class="now-page__meta label">Updated 21 Jul 2026</div>
+        <h1 class="now-page__title">Now</h1>
+        <p class="now-page__dek">What's actually on my desk and in my ears right now — not a highlight reel.</p>
+
+        <div class="now-page__entry">
+          <h2>Building</h2>
+          <p>Teaching GRØD to notice a meeting on its own, and folding this same two-ink palette into the app itself. Both are still mid-shape — a proper post is coming once there's something worth showing rather than telling.</p>
+        </div>
+
+        <div class="now-page__entry">
+          <h2>Reading</h2>
+          <p><em>The Faith of Beasts</em>, by James S. A. Corey — the pen name behind The Expanse. Early into this one; more once I'm further in.</p>
+        </div>
+
+        <div class="now-page__entry">
+          <h2>Watching</h2>
+          <p><em>The Agency</em>, on Paramount+.</p>
+        </div>
+
+        <div class="now-page__entry">
+          <h2>Listening</h2>
+          <p>Every Odyssey podcast I can find. There's no such thing as too many takes on one story that old.</p>
+        </div>
+
+        <div class="now-page__end">
+          <RegistrationMark size={14} />
+          <a href="/">Back to the notebook →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .now-page { max-width: 640px; display: flex; flex-direction: column; }
+  .now-page__meta { margin-bottom: 14px; }
+  .now-page__title {
+    font-family: var(--font-serif); font-weight: 800;
+    font-size: clamp(32px, 5vw, 44px); line-height: 1.12; letter-spacing: -0.02em;
+  }
+  .now-page__dek {
+    margin-top: 14px; font-size: 18px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 520px;
+  }
+  .now-page__entry {
+    margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--color-hairline);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .now-page__entry:first-of-type { margin-top: 40px; padding-top: 32px; border-top: 2px solid var(--color-ink); }
+  .now-page__entry h2 {
+    font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title); color: var(--color-ink);
+  }
+  .now-page__entry p {
+    font-size: var(--text-body); line-height: 1.65; color: var(--color-ink-secondary); max-width: 60ch;
+  }
+  .now-page__entry em { font-style: italic; color: var(--color-ink); }
+  .now-page__end {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
+  }
+  .now-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand); }
+  .now-page__end a:hover { color: var(--color-brand-bright); }
+</style>

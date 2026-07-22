@@ -1,0 +1,7 @@
+---
+template: quiet
+---
+
+Afterframe pulls stills and GIFs straight off whatever's playing on my Plex server — pause on the frame I want, and it's saved. Built because I got tired of screenshotting my TV.
+
+iOS, quick, and it only does the one thing.

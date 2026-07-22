@@ -1,0 +1,100 @@
+---
+title: So Well Planned It Feels Unplanned
+date: 2026-07-22
+readingTime: 3 min
+dek: The last long run through Hampstead Heath before flying out for San Sebastián — and what a hundred-day plan is actually for.
+---
+
+It was day 68. I think. Or maybe 70. A 100 day marathon plan, you see. Specifically, a 100 day plan for Donostia-San Sebastián Marathon. Thing is; it wasn't the day number I was thinking about at the time. I was wandering home during my absolute favourite session of this marathon cycle.
+
+*90 minutes (easy).*
+
+My Wednesdays, basically. I was in my favourite place, and I looked to the left of me. And, well:
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/1.jpg" alt="Sunrise mist over Hampstead Heath, a lone dog walker cutting through the gold." loading="lazy" />
+  <figcaption>The Heath, most Wednesdays.</figcaption>
+</figure>
+
+> A sprawling North London parkland, composed of oaks, willows and chestnuts, yews and sycamores, the beech and the birch; that encompasses the city's highest point and spreads far beyond it; that is so well planted it feels unplanned; that is not the country but is no more a garden than Yellowstone; that has a shade of green for every possible felicitation of light; that paints itself in russets and ambers in autumn, canary-yellow in the splashy spring— Zadie Smith
+
+*Here i*s the running equivalent of doing something nice for yourself on any given day.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/2.jpg" alt="Two friends mid-run, chasing a dirt path across the Heath's open grass." loading="lazy" />
+</figure>
+
+Excuse the corniness, but the Heath is pretty much heaven. The thing about Marathon cycles that I've learned over the years is the need to keep things interesting. My last few, aside from being decisively injured by this stage, I'd spent avoiding the places I love.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/3.jpg" alt="The London skyline hazy and gold-lit, seen from Parliament Hill." loading="lazy" />
+</figure>
+
+Not the way you might ghost a Tinder match, either. I was ghosting the heath. I was ghosting hills (unless, you know, it was a hill session). Hell, I was even ghosting races with some DNS's. I made running as flat as possible. Not a good thing, I learned.
+
+This time I thought things needed to be different. If I had the time - and I would make the time - I would see my favourite place at least three times a week. Healthy relationship, I think. Even in the depths of hundred mile weeks, I'd try.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/4.jpg" alt="Running through the Hill Garden pergola, ivy hanging off every column." loading="lazy" />
+</figure>
+
+And succeed.
+
+So this specific time, with a bunch of my favourite people, we jogged along our favourites routes across the heath. We took photos and chatted about how this was the last Sunday long run we could go through the Heath and laughed. San Sebastian soon come.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/5.jpg" alt="Cresting Parliament Hill with the skyline laid out behind, three runners strong." loading="lazy" />
+</figure>
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/6.jpg" alt="A four-star Chicago Marathon shirt, climbing the last rise before the view opens up." loading="lazy" />
+</figure>
+
+But first, _coffee_.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/7.jpg" alt="Coffee after the long run, sunglasses still pushed up into a beanie." loading="lazy" />
+</figure>
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/8.jpg" alt="A tattooed hand holding open Runner's World's marathon special — SMASH YOUR GOALS." loading="lazy" />
+</figure>
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/9.jpg" alt="Eyes shut, laughing into the sun, a coffee cup halfway to the table." loading="lazy" />
+</figure>
+
+_And the race?_
+
+I remember most of it.
+
+The sudden start, no countdown. Just go.
+
+Dodging and weaving the first mile.
+
+The 2:45 pacer was in front of me, running 2:38 pace.
+
+Pulling away from that group as they slowed down.
+
+And then. You know. Nothing. Around an hour listening to Kendrick Lamar's DAMN. Grinning as Element came on, getting sad listening to Duckworth again.
+
+But this was the point. I've always wanted the first hour as a non event in a marathon.
+
+_Maybe those silly mileage weeks paid off huh_, I mumbled under my breathe. Then the music switched to techno (Jacques Greene, if you're curious) and I settled in for the next handful of miles. Mile 16 was where this race was going to start for me, mostly since that's where my knee died in Manchester. I was about to learn if I ever did really shake off that injury.
+
+Mile 20 was where things started falling apart in Barcelona.
+
+Finally, Mile 23 was the last mental hurdle. If I got here still around the pace I was aiming at, I could screw up the last 5k and still dip under 2:45.
+
+Of course it was here when my calves left me know exactly how they felt about the past few hours, but not enough to stop. Or slow down. It's pretty sweet, watching yourself do something for the first time.
+
+I sped up.
+
+For 2:41.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/10.jpg" alt="Bib 152, Alexander, the 2:45 pace group — somewhere past the halfway point in San Sebastián." loading="lazy" />
+</figure>
+
+The week later, I returned to the Heath. It was alright.
+
+<figure class="riso-photo">
+  <img src="/writing/so-well-planned-it-feels-unplanned/11.jpg" alt="Back on the Heath a week later, the group swallowed by hedge and low winter light." loading="lazy" />
+</figure>

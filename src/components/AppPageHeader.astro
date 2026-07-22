@@ -1,0 +1,26 @@
+---
+import { statusLabel, type AppStatus } from '../lib/appStatus';
+
+interface Props {
+  name: string;
+  meta: string;
+  status: AppStatus;
+}
+const { name, meta, status } = Astro.props;
+const monogram = name.trim().charAt(0).toUpperCase();
+---
+<div class="identity">
+  <div class="monogram">
+    <div class="monogram__ghost"></div>
+    <div class="monogram__ink">{monogram}</div>
+  </div>
+  <div>
+    <div class="wordmark">{name}</div>
+    <div class="app-page__meta-row">
+      <span class="label">{meta}</span>
+      <span class:list={['status', `status--${status}`]}>
+        <span class="dot"></span>{statusLabel[status]}
+      </span>
+    </div>
+  </div>
+</div>

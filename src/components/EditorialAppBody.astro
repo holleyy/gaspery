@@ -1,0 +1,40 @@
+---
+// Direction 2: italic standfirst + alternating feature spreads, each
+// preceded by a registration-mark divider. For apps with more to say.
+import RegistrationMark from './RegistrationMark.astro';
+
+interface Spread {
+  heading: string;
+  body: string;
+}
+interface Props {
+  spreads: Spread[];
+}
+const { spreads } = Astro.props;
+---
+<div class="app-standfirst">
+  <slot />
+</div>
+
+{spreads.map((s, i) => (
+  <div class="app-editorial__block">
+    <div class="app-editorial__divider">
+      <RegistrationMark size={16} variant={i % 2 === 0 ? 'cross' : 'ring'} />
+    </div>
+    <div class:list={['app-editorial__spread', i % 2 === 1 && 'app-editorial__spread--reverse']}>
+      <div class="media-placeholder app-editorial__media">
+        <RegistrationMark size={24} />
+        <span class="label">Screenshot coming soon</span>
+      </div>
+      <div class="app-editorial__text">
+        <h3>{s.heading}</h3>
+        <p>{s.body}</p>
+      </div>
+    </div>
+  </div>
+))}
+
+<div class="app-editorial__closing">
+  <RegistrationMark size={16} variant="full" />
+  <span class="label">Made with two inks</span>
+</div>

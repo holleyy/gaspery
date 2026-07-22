@@ -21,10 +21,10 @@ const postProps = posts.map((p) => ({
 ---
 <Base title="Writing — Alex Holley" description="Every note from the notebook, newest first.">
   <div class="page">
-    <Rail name="Alex Holley" role="Design & small software" monogram="A" current="Writing" />
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
 
     <main class="main">
-      <WritingList posts={postProps} moreHref="/" />
+      <WritingList posts={postProps} showMore={false} />
       <Footer />
     </main>
   </div>

@@ -13,3 +13,15 @@ npm-debug.log*
 .env.production
 # macOS
 .DS_Store
+
+# AI tooling configs/skills (local dev tooling, not site source)
+.agents/
+.claude/skills/
+.codex/
+.cursor/
+.impeccable/live/
+.impeccable/*.local.json
+.impeccable/hook.cache.json
+
+# stray build artifact
+site-ready.zip

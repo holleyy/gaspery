@@ -17,21 +17,23 @@ const {
   monogram,
   current = 'Writing',
   nav = [
-    { label: 'Writing', href: '/' },
-    { label: 'Apps', href: '#apps' },
+    { label: 'Writing', href: '/writing' },
+    { label: 'Apps', href: '/#apps' },
     { label: 'About', href: '/about' },
     { label: 'Now', href: '/now' },
   ],
   elsewhere = [
     { label: 'Email', href: 'mailto:hello@example.com' },
     { label: 'GitHub', href: 'https://github.com' },
-    { label: 'Mastodon', href: 'https://mastodon.social' },
+    { label: 'Bluesky', href: 'https://bsky.app/profile/alexholley.bsky.social' },
+    { label: 'Mastodon', href: 'https://mastodon.social/@alexholley' },
+    { label: 'Letterboxd', href: 'https://letterboxd.com/holley/' },
     { label: 'RSS', href: '/rss.xml' },
   ],
 } = Astro.props;
 ---
 <aside class="rail">
-  <div class="identity">
+  <a class="identity" href="/" aria-label={`${name} — home`}>
     <div class="monogram">
       <div class="monogram__ghost"></div>
       <div class="monogram__ink">{monogram}</div>
@@ -40,7 +42,7 @@ const {
       <div class="wordmark">{name}</div>
       <div class="label">{role}</div>
     </div>
-  </div>
+  </a>
 
   <nav class="nav rail-group" aria-label="Primary">
     <div class="rail-group__title label">Index</div>
@@ -63,6 +65,6 @@ const {
   <div class="colophon">
     <RegistrationMark size={16} />
     <p>Set in Merriweather &amp; Inter. Printed here in two inks — magenta &amp; teal, occasionally out of register.</p>
-    <div class="label">© MMXXVI · Edinburgh</div>
+    <div class="label">© MMXXVI · London</div>
   </div>
 </aside>
