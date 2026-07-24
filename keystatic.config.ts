@@ -85,7 +85,7 @@ export default config({
   singletons: {
     about: singleton({
       label: 'About page',
-      path: 'src/content/about',
+      path: 'src/content/about/',
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title' }),
