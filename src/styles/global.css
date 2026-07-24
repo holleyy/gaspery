@@ -308,7 +308,7 @@ img, svg { display: block; max-width: 100%; }
 
 /* Editorial app-page body: italic standfirst + alternating spreads, each
    preceded by a registration-mark divider. Selected when an app page's
-   template is "editorial" (see src/content/app-pages and EditorialAppBody). */
+   template is "editorial" (see src/content/appPages and EditorialAppBody). */
 .app-standfirst {
   font-family: var(--font-serif); font-style: italic; font-weight: 500;
   font-size: var(--text-title); line-height: 1.5; color: var(--color-ink); max-width: 56ch;
