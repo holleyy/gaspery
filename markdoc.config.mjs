@@ -1,0 +1,57 @@
+import Markdoc from '@markdoc/markdoc';
+import { defineMarkdocConfig, component } from '@astrojs/markdoc/config';
+
+// Interleave a `\n` between each sibling so consecutive block-level
+// elements land on their own line, matching how the pre-migration
+// remark/rehype pipeline serialized block content.
+function withNewlinesBetween(children) {
+  const out = [];
+  children.forEach((child, i) => {
+    if (i > 0) out.push('\n');
+    out.push(child);
+  });
+  return out;
+}
+
+export default defineMarkdocConfig({
+  nodes: {
+    // The pre-migration markdown pipeline rendered post bodies with no
+    // wrapping element (the Astro template supplies `.prose`). Markdoc's
+    // default `document` node wraps output in `<article>` — disable that
+    // wrapper, but keep the newline-per-block-sibling formatting the old
+    // pipeline produced, so rendered HTML stays byte-identical to the
+    // baseline.
+    document: {
+      transform(node, config) {
+        return withNewlinesBetween(node.transformChildren(config));
+      },
+    },
+    // The old pipeline (remark) preserved soft line breaks as literal
+    // newlines in the output HTML. Markdoc's default collapses them to a
+    // single space, which would fail the byte-parity gate.
+    softbreak: { transform: () => '\n' },
+    // Match the old pipeline's formatting of blockquote contents: a
+    // newline before/after the block children, and between them.
+    blockquote: {
+      render: 'blockquote',
+      transform(node, config) {
+        const children = withNewlinesBetween(node.transformChildren(config));
+        return new Markdoc.Tag('blockquote', node.transformAttributes(config), [
+          '\n',
+          ...children,
+          '\n',
+        ]);
+      },
+    },
+  },
+  tags: {
+    RisoPhoto: {
+      render: component('./src/components/RisoPhoto.astro'),
+      attributes: {
+        src: { type: String, required: true },
+        alt: { type: String, required: true },
+        caption: { type: String },
+      },
+    },
+  },
+});

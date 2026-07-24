@@ -3,7 +3,7 @@ import { glob, file } from 'astro/loaders';
 
 // Blog posts — one markdown file per entry.
 const writing = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/writing' }),
+  loader: glob({ pattern: '**/*.mdoc', base: './src/content/writing' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),

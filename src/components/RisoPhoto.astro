@@ -1,0 +1,36 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+const { src, alt, caption } = Astro.props;
+
+// Rendered via a hand-built HTML string (set:html) rather than plain Astro
+// attribute bindings for two reasons, both required for byte-identical
+// parity with the pre-migration hand-written HTML:
+// 1. Astro's production build compresses whitespace in its compiled static
+//    template output, collapsing the multi-line <figure>/<img> markup onto
+//    a single line. The original hand-written figures — and the baseline
+//    they're diffed against — kept their source line breaks.
+// 2. The baseline HTML-escapes apostrophes in attribute values as `&#x27;`
+//    (e.g. `Heath&#x27;s`). Astro's built-in attribute serializer leaves
+//    apostrophes unescaped inside double-quoted attributes, which is valid
+//    HTML but not byte-identical.
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function escapeText(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+}
+
+const figcaptionHtml = caption ? `\n  <figcaption>${escapeText(caption)}</figcaption>` : '';
+const html = `<figure class="riso-photo">\n  <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy">${figcaptionHtml}\n</figure>`;
+---
+<Fragment set:html={html} />

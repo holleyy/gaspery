@@ -13,6 +13,6 @@ export default defineConfig({
   // Used for canonical URLs, the sitemap, and the RSS feed.
   site: 'https://your-domain.com',
 
-  integrations: [sitemap(), react(), markdoc(), keystatic()],
+  integrations: [sitemap(), react(), markdoc({ typographer: true }), keystatic()],
   adapter: cloudflare(),
 });
