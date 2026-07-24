@@ -228,45 +228,11 @@ export default defineConfig({
 
 Note: `output` is intentionally left at its default (`static`) so public pages stay prerendered.
 
-- [ ] **Step 3: Verify the build still produces identical HTML**
+- [ ] **Step 3: Create `keystatic.config.ts` — required for the build to succeed**
 
-Run:
-```bash
-./scripts/verify-parity.sh
-```
-Expected: `PARITY OK — all pages match baseline`.
+The `keystatic()` integration injects routes that import `virtual:keystatic-config`, which resolves to `./keystatic.config`. Without this file `astro build` hard-fails, so it must land in the same commit as the integration.
 
-If the route set diff reports Keystatic routes as new `.html` files, that means they were prerendered — they must not be. Confirm they are on-demand instead by checking the build log lists them under server routes (`λ`), not prerendered (`▶`).
-
-- [ ] **Step 4: Confirm public routes are still prerendered**
-
-Run:
-```bash
-npm run build 2>&1 | grep -E '^\s*(▶|λ)' | head -20
-```
-Expected: all `src/pages/*` entries appear with `▶` (prerendered). Only Keystatic/API routes may appear as `λ`.
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add package.json package-lock.json astro.config.mjs
-git commit -m "feat: add react, markdoc, keystatic and cloudflare adapter"
-```
-
----
-
-### Task 3: Keystatic config and a reachable admin
-
-**Files:**
-- Create: `keystatic.config.ts`
-
-**Interfaces:**
-- Consumes: Task 2's integrations.
-- Produces: `export default config({...})` from `keystatic.config.ts`. Later tasks add entries to its `collections` and `singletons` objects. Storage resolves to `local` in dev and `github` in production.
-
-This task deliberately ships an empty schema so the integration itself is proven working before any content is migrated.
-
-- [ ] **Step 1: Create `keystatic.config.ts` at the project root**
+Create `keystatic.config.ts` at the project root. The schema is intentionally empty here; later tasks populate it:
 
 ```ts
 import { config } from '@keystatic/core';
@@ -283,13 +249,7 @@ export default config({
 });
 ```
 
-- [ ] **Step 2: Verify the admin loads**
-
-Start the dev server via `preview_start` and navigate to `/keystatic`. Use `read_page` to confirm the Keystatic admin shell renders (in local mode it loads without a GitHub login). Check `read_console_messages` for errors.
-
-Expected: admin UI renders, no console errors.
-
-- [ ] **Step 3: Verify parity is unaffected**
+- [ ] **Step 4: Verify the build still produces identical HTML**
 
 Run:
 ```bash
@@ -297,12 +257,36 @@ Run:
 ```
 Expected: `PARITY OK — all pages match baseline`.
 
-- [ ] **Step 4: Commit**
+If the route set diff reports Keystatic routes as new `.html` files, that means they were prerendered — they must not be. Confirm they are on-demand instead by checking the build log lists them under server routes (`λ`), not prerendered (`▶`).
+
+- [ ] **Step 5: Confirm public routes are still prerendered**
+
+Run:
+```bash
+npm run build 2>&1 | grep -E '^\s*(▶|λ)' | head -20
+```
+Expected: all `src/pages/*` entries appear with `▶` (prerendered). Only Keystatic/API routes may appear as `λ`.
+
+- [ ] **Step 6: Commit**
 
 ```bash
-git add keystatic.config.ts
-git commit -m "feat: add keystatic config with local/github dual storage"
+git add package.json package-lock.json astro.config.mjs keystatic.config.ts
+git commit -m "feat: add react, markdoc, keystatic and cloudflare adapter"
 ```
+
+---
+
+### Task 3: `[CONTROLLER]` Verify the admin loads — no subagent dispatch
+
+**Merged into Task 2.** Creating `keystatic.config.ts` moved into Task 2 Step 3, because `astro build` fails without it the moment `keystatic()` is registered — the two cannot be separated into different commits.
+
+What remains here is a one-off browser verification the controlling session performs directly:
+
+- [ ] **Step 1: `[CONTROLLER]` Confirm `/keystatic` renders**
+
+Start the dev server via `preview_start`, navigate to `/keystatic`, and confirm via `read_page` that the Keystatic admin shell renders (in local storage mode it loads without a GitHub login). Check `read_console_messages` for errors.
+
+Expected: admin UI renders, no console errors. With an empty schema it will show no collections — that is correct at this stage.
 
 ---
 
