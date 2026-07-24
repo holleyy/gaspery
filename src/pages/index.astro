@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import WritingList from '../components/WritingList.astro';
 import AppsList from '../components/AppsList.astro';
 import Footer from '../components/Footer.astro';
+import home from '../data/home/index.json';
 
 // Writing — newest first, drafts hidden, latest flagged "New".
 const posts = (await getCollection('writing'))
@@ -38,9 +39,9 @@ const apps = (await getCollection('apps'))
 
     <main class="main">
       <Hero
-        eyebrow="A working notebook · Est. MMXXVI"
-        title="Things people should see; things I want to remember."
-        intro="Essays & experiments. But also unloading my favourites folder, because there's a lot to share."
+        eyebrow={home.hero.eyebrow}
+        title={home.hero.title}
+        intro={home.hero.intro}
       />
 
       <div class="streams">
@@ -48,12 +49,12 @@ const apps = (await getCollection('apps'))
         <AppsList
           apps={apps}
           now={{
-            building: 'Teaching GRØD to spot meetings on its own, and folding this very two-ink palette into the app.',
-            reading: 'The Faith of Beasts — James S. A. Corey',
-            watching: 'The Agency — Paramount+',
-            listening: 'Every single pod about The Odyssey',
+            building: home.nowSummary.building,
+            reading: home.nowSummary.reading,
+            watching: home.nowSummary.watching,
+            listening: home.nowSummary.listening,
             href: '/now',
-            linkLabel: 'More on all this',
+            linkLabel: home.nowSummary.linkLabel,
           }}
         />
       </div>

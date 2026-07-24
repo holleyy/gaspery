@@ -110,5 +110,30 @@ export default config({
         ),
       },
     }),
+    home: singleton({
+      label: 'Homepage',
+      path: 'src/data/home/',
+      format: { data: 'json' },
+      schema: {
+        hero: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow' }),
+            title: fields.text({ label: 'Title', multiline: true }),
+            intro: fields.text({ label: 'Intro', multiline: true }),
+          },
+          { label: 'Hero' },
+        ),
+        nowSummary: fields.object(
+          {
+            building: fields.text({ label: 'Building', multiline: true }),
+            reading: fields.text({ label: 'Reading' }),
+            watching: fields.text({ label: 'Watching' }),
+            listening: fields.text({ label: 'Listening' }),
+            linkLabel: fields.text({ label: 'Link label' }),
+          },
+          { label: 'Now summary' },
+        ),
+      },
+    }),
   },
 });
