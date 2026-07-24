@@ -1,5 +1,7 @@
 # build output
 dist/
+# visual regression baseline
+.baseline/
 # generated types
 .astro/
 # wrangler local state
