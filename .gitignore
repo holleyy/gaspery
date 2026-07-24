@@ -25,3 +25,6 @@ npm-debug.log*
 
 # stray build artifact
 site-ready.zip
+
+# superpowers SDD scratch
+.superpowers/

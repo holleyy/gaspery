@@ -19,6 +19,7 @@
 - Keystatic storage: `local` in dev, `github` in production.
 - Commits go straight to `main` in Keystatic's GitHub config (no PR workflow).
 - Never run a dev server with `Bash`; use the preview/browser tooling.
+- **Steps marked `[CONTROLLER]` are performed by the controlling session, not by task implementers** — screenshots cannot be handed between fresh subagents. Implementers skip those steps and rely on `./scripts/verify-parity.sh`.
 
 **Reference spec:** `docs/superpowers/specs/2026-07-24-keystatic-cms-migration-design.md`
 
@@ -152,17 +153,9 @@ chmod +x scripts/snapshot-baseline.sh scripts/verify-parity.sh && ./scripts/snap
 ```
 Expected: `Baseline captured: 13 pages`
 
-- [ ] **Step 5: Capture baseline screenshots**
+- [ ] **Step 5: `[CONTROLLER]` Capture baseline screenshots — skip if you are a task implementer**
 
-Start the preview with `preview_start` (create `.claude/launch.json` with an entry named `homepage` running `npm` / `["run","dev"]` on port `4321` if absent). Screenshot each of these at desktop (1280x800) **and** mobile (375x812), and save them for later comparison:
-
-- `/`
-- `/about`
-- `/now`
-- `/writing/so-well-planned-it-feels-unplanned`
-- `/apps/grod`
-
-These five cover every page type touched by this migration. Keep them; Task 11 compares against them.
+Performed by the controlling session before this task is dispatched. Scoped to `/about` and `/now` at desktop (1280x800) and mobile (375x812) — the only two routes whose CSS this migration changes. Every other route is covered by the HTML parity diff, since unchanged HTML plus unchanged CSS cannot render differently.
 
 - [ ] **Step 6: Verify the harness detects a real change**
 
@@ -776,9 +769,9 @@ Run:
 ```
 Expected: `PARITY OK — all pages match baseline`.
 
-- [ ] **Step 6: Verify visually — this is the step the harness cannot do**
+- [ ] **Step 6: `[CONTROLLER]` Verify visually — skip if you are a task implementer**
 
-Screenshot `/about` at desktop and mobile and compare against the Task 1 baseline screenshots. Confirm paragraph size, line height, measure (`62ch` wrap point), and link colour are unchanged. A structural diff pass with a visual mismatch means the `:global` fix is incomplete.
+The controlling session screenshots `/about` at desktop and mobile and compares against the baseline, confirming paragraph size, line height, measure (`62ch` wrap point), and link colour are unchanged. A structural diff pass with a visual mismatch means the `:global` fix is incomplete. Report your parity result and stop; the controller runs this gate.
 
 - [ ] **Step 7: Add the singleton to Keystatic**
 
@@ -937,9 +930,9 @@ Expected: `PARITY OK — all pages match baseline`.
 
 This is a precise test of `renderInline`: the baseline contains `<em>The Faith of Beasts</em>`, so any wrapper leakage or lost emphasis fails the diff.
 
-- [ ] **Step 6: Verify visually**
+- [ ] **Step 6: `[CONTROLLER]` Verify visually — skip if you are a task implementer**
 
-Screenshot `/now` at desktop and mobile, compare against the Task 1 baselines. Confirm the italics render and the entry spacing/rules are unchanged.
+The controlling session screenshots `/now` at desktop and mobile and compares against the baseline, confirming the italics render and the entry spacing/rules are unchanged. Report your parity result and stop; the controller runs this gate.
 
 - [ ] **Step 7: Add the singleton to Keystatic**
 
@@ -1153,9 +1146,9 @@ git commit -m "chore: point wrangler at the Cloudflare worker entrypoint"
 - Consumes: everything above.
 - Produces: written instructions for the four steps only Alex can perform.
 
-- [ ] **Step 1: Full-site visual comparison**
+- [ ] **Step 1: `[CONTROLLER]` Full visual comparison — skip if you are a task implementer**
 
-Screenshot all five baseline routes (`/`, `/about`, `/now`, `/writing/so-well-planned-it-feels-unplanned`, `/apps/grod`) at desktop **and** mobile. Compare each against the Task 1 baselines. Any difference is a bug to fix before proceeding — this is the primary acceptance gate for the whole migration.
+The controlling session re-screenshots `/about` and `/now` at desktop and mobile and compares against the baselines, and confirms `./scripts/verify-parity.sh` passes for every other route. Any difference is a bug to fix before merge — this is the primary acceptance gate for the whole migration.
 
 - [ ] **Step 2: Verify RSS and sitemap**
 
