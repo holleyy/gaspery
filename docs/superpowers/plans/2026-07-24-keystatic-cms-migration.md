@@ -20,6 +20,7 @@
 - Commits go straight to `main` in Keystatic's GitHub config (no PR workflow).
 - Never run a dev server with `Bash`; use the preview/browser tooling.
 - **Steps marked `[CONTROLLER]` are performed by the controlling session, not by task implementers** — screenshots cannot be handed between fresh subagents. Implementers skip those steps and rely on `./scripts/verify-parity.sh`.
+- **Singleton `path` MUST end with a trailing slash** (`'src/content/about/'`, `'src/data/now/'`, `'src/data/home/'`) because each singleton's data file lives at `<dir>/index.<ext>`. Without the slash, Keystatic resolves to a sibling file (`about.mdoc`, `now.json`) that does not exist — the editor loads blank and a save orphans a file the site never reads. This does NOT fail `verify-parity.sh` (the site still renders from the real file), so it must be caught by a `[CONTROLLER]` editability check: open the singleton in `/keystatic` and confirm it loads the existing content with a **Save** button (not a blank form with **Create**). Learned from the Task 7 review.
 
 **Reference spec:** `docs/superpowers/specs/2026-07-24-keystatic-cms-migration-design.md`
 
@@ -774,7 +775,7 @@ In `keystatic.config.ts`, add `singleton` to the import from `@keystatic/core` a
 ```ts
     about: singleton({
       label: 'About page',
-      path: 'src/content/about',
+      path: 'src/content/about/',
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title' }),
@@ -937,7 +938,7 @@ In `keystatic.config.ts`, inside `singletons`:
 ```ts
     now: singleton({
       label: 'Now page',
-      path: 'src/data/now',
+      path: 'src/data/now/',
       format: { data: 'json' },
       schema: {
         updated: fields.date({ label: 'Updated' }),
@@ -1052,7 +1053,7 @@ In `keystatic.config.ts`, inside `singletons`:
 ```ts
     home: singleton({
       label: 'Homepage',
-      path: 'src/data/home',
+      path: 'src/data/home/',
       format: { data: 'json' },
       schema: {
         hero: fields.object(
