@@ -20,7 +20,7 @@ const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getU
       <section class="now-page">
         <div class="now-page__meta label">Updated {updatedLabel}</div>
         <h1 class="now-page__title">{now.title}</h1>
-        <p class="now-page__dek" set:html={now.dek} />
+        <p class="now-page__dek">{now.dek}</p>
 
         {now.entries.flatMap((entry, i) => [
           i > 0 ? ' ' : null,
