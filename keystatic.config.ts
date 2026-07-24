@@ -1,4 +1,4 @@
-import { config, collection, fields } from '@keystatic/core';
+import { config, collection, fields, singleton } from '@keystatic/core';
 import { block } from '@keystatic/core/content-components';
 
 export const risoPhotoComponents = {
@@ -82,5 +82,16 @@ export default config({
       },
     }),
   },
-  singletons: {},
+  singletons: {
+    about: singleton({
+      label: 'About page',
+      path: 'src/content/about',
+      format: { contentField: 'content' },
+      schema: {
+        title: fields.text({ label: 'Title' }),
+        dek: fields.text({ label: 'Dek', multiline: true }),
+        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+      },
+    }),
+  },
 });

@@ -45,4 +45,13 @@ const appPages = defineCollection({
   }),
 });
 
-export const collections = { writing, apps, appPages };
+// About page singleton — one markdown file holding the page's prose body.
+const about = defineCollection({
+  loader: glob({ pattern: '**/*.mdoc', base: './src/content/about' }),
+  schema: z.object({
+    title: z.string(),
+    dek: z.string(),
+  }),
+});
+
+export const collections = { writing, apps, appPages, about };
