@@ -183,13 +183,23 @@ git commit -m "test: add HTML parity regression harness for the Keystatic migrat
 - Consumes: `./scripts/verify-parity.sh` (Task 1).
 - Produces: a build with `react()`, `markdoc()`, `keystatic()` integrations and the `cloudflare()` adapter registered. Later tasks assume `@astrojs/markdoc` and `@keystatic/core` are installed.
 
-- [ ] **Step 1: Install packages**
+- [ ] **Step 1: Install packages — versions are pinned deliberately**
 
-Run:
+This project is on Astro **5.18.2**. As of 2026-07-24 the `latest` tags of `@astrojs/markdoc` (2.x) and `@astrojs/cloudflare` (14.x) declare `astro ^7.0.0` and will hard-fail with `ERESOLVE`. The versions below are the newest published releases whose peer range accepts Astro 5, verified against the npm registry. Do not substitute `latest`, and do not use `--legacy-peer-deps` or `--force`.
+
+Run exactly:
 ```bash
-npm install @keystatic/core @keystatic/astro @astrojs/react @astrojs/markdoc @astrojs/cloudflare react react-dom
+npm install @keystatic/core@0.6.0 @keystatic/astro@5.2.0 @astrojs/react@5.0.7 @astrojs/markdoc@0.15.11 @astrojs/cloudflare@12.6.13 @markdoc/markdoc@0.4.0 react@^19 react-dom@^19
 ```
-Expected: installs succeed, `package.json` dependencies updated.
+
+Expected: resolves without `ERESOLVE`, ~250 packages added, `package.json` updated.
+
+Why each pin:
+- `@astrojs/markdoc@0.15.11` — last release with peer `astro ^5.0.0`
+- `@astrojs/cloudflare@12.6.13` — peer `astro ^5.7.0`, satisfied by 5.18.2
+- `@astrojs/react@5.0.7` — declares no `astro` peer, so npm will not catch a mismatch; the 5.x line is the Astro-5 generation and 6.x targets Astro 6/7
+- `@keystatic/astro@5.2.0` — peer `astro 2 || 3 || 4 || 5 || 6 || 7`, so `latest` is fine
+- `@markdoc/markdoc@0.4.0` — **direct** dependency because Task 8 imports it directly in `src/lib/inlineMarkdoc.ts`; it must not be relied on transitively
 
 - [ ] **Step 2: Update `astro.config.mjs`**
 
