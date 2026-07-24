@@ -34,6 +34,31 @@ export default config({
         content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
       },
     }),
+    appPages: collection({
+      label: 'App pages',
+      path: 'src/content/appPages/*',
+      slugField: 'title',
+      format: { contentField: 'content' },
+      schema: {
+        title: fields.slug({ name: { label: 'Title' } }),
+        template: fields.select({
+          label: 'Template',
+          options: [
+            { label: 'Quiet', value: 'quiet' },
+            { label: 'Editorial', value: 'editorial' },
+          ],
+          defaultValue: 'quiet',
+        }),
+        spreads: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading' }),
+            body: fields.text({ label: 'Body', multiline: true }),
+          }),
+          { label: 'Spreads', itemLabel: (props) => props.fields.heading.value },
+        ),
+        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+      },
+    }),
   },
   singletons: {},
 });

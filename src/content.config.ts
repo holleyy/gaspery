@@ -31,7 +31,7 @@ const apps = defineCollection({
 // `template` picks which body renders: "quiet" (a paragraph, a screenshot,
 // a link) or "editorial" (standfirst + alternating feature spreads).
 const appPages = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/appPages' }),
+  loader: glob({ pattern: '**/*.mdoc', base: './src/content/appPages' }),
   schema: z.object({
     title: z.string(),
     template: z.enum(['quiet', 'editorial']),
