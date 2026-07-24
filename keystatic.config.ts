@@ -59,6 +59,28 @@ export default config({
         content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
       },
     }),
+    apps: collection({
+      label: 'Apps',
+      path: 'src/content/apps/*',
+      slugField: 'name',
+      format: { data: 'yaml' },
+      schema: {
+        name: fields.slug({ name: { label: 'Name' } }),
+        dek: fields.text({ label: 'Dek', multiline: true }),
+        meta: fields.text({ label: 'Meta' }),
+        status: fields.select({
+          label: 'Status',
+          options: [
+            { label: 'Live', value: 'live' },
+            { label: 'Dev', value: 'dev' },
+            { label: 'Planning', value: 'planning' },
+          ],
+          defaultValue: 'planning',
+        }),
+        url: fields.text({ label: 'URL' }),
+        order: fields.number({ label: 'Order' }),
+      },
+    }),
   },
   singletons: {},
 });

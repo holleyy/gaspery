@@ -1,5 +1,5 @@
 import { defineCollection, z } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+import { glob } from 'astro/loaders';
 
 // Blog posts — one markdown file per entry.
 const writing = defineCollection({
@@ -13,11 +13,10 @@ const writing = defineCollection({
   }),
 });
 
-// Small apps / tools — a single JSON file of records.
+// Small apps / tools — one YAML file per app; the entry's id is its filename.
 const apps = defineCollection({
-  loader: file('./src/content/apps.json'),
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/apps' }),
   schema: z.object({
-    id: z.string(),
     name: z.string(),
     dek: z.string(),
     meta: z.string(),

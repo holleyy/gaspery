@@ -1,0 +1,6 @@
+name: pls fix.
+dek: Edits the HTML decks Claude generates — without opening an HTML editor.
+meta: macOS · SwiftUI
+status: dev
+url: /apps/pls-fix
+order: 2
