@@ -2,6 +2,10 @@
 import { defineConfig } from 'astro/config';
 
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
+import markdoc from '@astrojs/markdoc';
+import keystatic from '@keystatic/astro';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,5 +13,6 @@ export default defineConfig({
   // Used for canonical URLs, the sitemap, and the RSS feed.
   site: 'https://your-domain.com',
 
-  integrations: [sitemap()],
+  integrations: [sitemap(), react(), markdoc(), keystatic()],
+  adapter: cloudflare(),
 });
