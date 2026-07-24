@@ -1,4 +1,5 @@
 ---
+title: "GRØD"
 template: editorial
 spreads:
   - heading: "Notes, not transcripts"
