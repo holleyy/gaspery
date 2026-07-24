@@ -805,6 +805,8 @@ git commit -m "feat: move About page copy into a Keystatic singleton"
 
 The Now entries contain `<em>` emphasis that must survive. The date must render exactly as `21 Jul 2026`, so formatting is done with an explicit month table rather than `toLocaleDateString`, which is locale- and platform-dependent.
 
+**Note on Markdoc versions (verified):** two copies of `@markdoc/markdoc` coexist by necessity — `@keystatic/core` requires `^0.4.0`, `@astrojs/markdoc` requires `^0.5.4`, and the ranges do not overlap. The top-level (hoisted) copy is **0.4.0**, the same one Keystatic's editor uses, so `import Markdoc from '@markdoc/markdoc'` below resolves to 0.4.0. This is correct and intentional — do not try to dedupe them. The parity gate in Step 5 proves the rendered emphasis matches the baseline byte-for-byte regardless.
+
 - [ ] **Step 1: Create the inline Markdoc helper**
 
 Create `src/lib/inlineMarkdoc.ts`:
