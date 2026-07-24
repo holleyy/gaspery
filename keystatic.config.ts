@@ -93,5 +93,22 @@ export default config({
         content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
       },
     }),
+    now: singleton({
+      label: 'Now page',
+      path: 'src/data/now/',
+      format: { data: 'json' },
+      schema: {
+        updated: fields.date({ label: 'Updated' }),
+        title: fields.text({ label: 'Title' }),
+        dek: fields.text({ label: 'Dek', multiline: true }),
+        entries: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading' }),
+            body: fields.markdoc.inline({ label: 'Body' }),
+          }),
+          { label: 'Entries', itemLabel: (props) => props.fields.heading.value },
+        ),
+      },
+    }),
   },
 });

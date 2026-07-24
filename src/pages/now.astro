@@ -2,6 +2,12 @@
 import Base from '../layouts/Base.astro';
 import Rail from '../components/Rail.astro';
 import RegistrationMark from '../components/RegistrationMark.astro';
+import now from '../data/now/index.json';
+import { renderInline } from '../lib/inlineMarkdoc';
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const d = new Date(now.updated);
+const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 ---
 <Base
   title="Now — Alex Holley"
@@ -12,29 +18,17 @@ import RegistrationMark from '../components/RegistrationMark.astro';
 
     <main class="main">
       <section class="now-page">
-        <div class="now-page__meta label">Updated 21 Jul 2026</div>
-        <h1 class="now-page__title">Now</h1>
-        <p class="now-page__dek">What's actually on my desk and in my ears right now — not a highlight reel.</p>
+        <div class="now-page__meta label">Updated {updatedLabel}</div>
+        <h1 class="now-page__title">{now.title}</h1>
+        <p class="now-page__dek" set:html={now.dek} />
 
-        <div class="now-page__entry">
-          <h2>Building</h2>
-          <p>Teaching GRØD to notice a meeting on its own, and folding this same two-ink palette into the app itself. Both are still mid-shape — a proper post is coming once there's something worth showing rather than telling.</p>
-        </div>
-
-        <div class="now-page__entry">
-          <h2>Reading</h2>
-          <p><em>The Faith of Beasts</em>, by James S. A. Corey — the pen name behind The Expanse. Early into this one; more once I'm further in.</p>
-        </div>
-
-        <div class="now-page__entry">
-          <h2>Watching</h2>
-          <p><em>The Agency</em>, on Paramount+.</p>
-        </div>
-
-        <div class="now-page__entry">
-          <h2>Listening</h2>
-          <p>Every Odyssey podcast I can find. There's no such thing as too many takes on one story that old.</p>
-        </div>
+        {now.entries.flatMap((entry, i) => [
+          i > 0 ? ' ' : null,
+          <div class="now-page__entry">
+            <h2>{entry.heading}</h2>
+            <p set:html={renderInline(entry.body)} />
+          </div>,
+        ])}
 
         <div class="now-page__end">
           <RegistrationMark size={14} />
@@ -66,7 +60,7 @@ import RegistrationMark from '../components/RegistrationMark.astro';
   .now-page__entry p {
     font-size: var(--text-body); line-height: 1.65; color: var(--color-ink-secondary); max-width: 60ch;
   }
-  .now-page__entry em { font-style: italic; color: var(--color-ink); }
+  .now-page__entry :global(em) { font-style: italic; color: var(--color-ink); }
   .now-page__end {
     display: flex; align-items: center; gap: 12px;
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
