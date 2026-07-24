@@ -139,11 +139,15 @@ Image files stay where they are in `public/`; `src` remains a text path. No asse
 
 Astro's scoped styles only apply to elements present in that component's own template. Once prose is rendered from Markdoc, scoped selectors targeting it **silently stop matching**, changing typography.
 
-Every selector that targets moved prose must become `:global()`. Known cases:
+Every selector that targets moved prose must become `:global()`. Verified cases:
 
-- `.about-page__prose p` → `.about-page__prose :global(p)`
-- `.now-page__entry h2`, `.now-page__entry p`, `.now-page__entry em`
-- any `.riso-photo` rules that styled the previously-inline figure markup
+- `.about-page__prose p` → `.about-page__prose :global(p)` — the `a` / `a:hover` rules are already `:global`
+- `.now-page__entry em` → `:global(em)` — the `h2` and `p` elements stay in the template, so their rules keep working
+
+Verified as needing **no** change:
+
+- `.riso-photo` — styled in `src/styles/global.css`, not scoped to any component
+- `src/pages/writing/[...id].astro` — its `.prose` rules already use `:global()`, because post bodies were already rendered content
 
 This must be verified visually, not just by build success.
 
