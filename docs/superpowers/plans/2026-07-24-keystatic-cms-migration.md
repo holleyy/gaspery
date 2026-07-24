@@ -1101,13 +1101,13 @@ git commit -m "feat: move homepage hero and now summary into a Keystatic singlet
 ```jsonc
 {
 	"name": "gaspery",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	"pages_build_output_dir": "./dist",
 	"compatibility_date": "2026-07-19",
 	"compatibility_flags": ["nodejs_compat"]
 }
 ```
 
-The `ASSETS` binding is configured automatically by the adapter, so the previous `assets.directory` key is removed.
+**Deploy model — Cloudflare Pages, not Workers.** The site is a Cloudflare **Pages** project, and the pinned adapter `@astrojs/cloudflare@12.6.13` emits Pages output (`dist/_worker.js/` + `dist/_routes.json`, where `_routes.json` excludes the prerendered routes and sends only `/keystatic*` to the worker). Do NOT use the Workers `main: "@astrojs/cloudflare/entrypoints/server"` convention — that export does not exist in 12.6.13 (it is a 14.x feature) and fails deploy. `pages_build_output_dir` is the Pages config; deploy with `wrangler pages deploy` (or the Pages Git integration), not `wrangler deploy`. Validated locally with `wrangler pages dev ./dist`: the worker compiles, boots, serves static pages as assets and `/keystatic` via the worker.
 
 - [ ] **Step 2: Verify the build emits both assets and a worker**
 
@@ -1180,7 +1180,7 @@ Production uses `github` storage, which requires a GitHub App and four secrets.
 
 ## 1. Create the GitHub App
 
-1. Deploy the branch, or run `npm run build && npx wrangler dev`.
+1. Build, then run the site locally as a Pages worker: `npm run build && npx wrangler pages dev ./dist`.
 2. Visit `/keystatic` and click **Log in with GitHub**.
 3. Follow the **Create GitHub App** wizard. Name it anything (e.g. `gaspery-cms`).
 4. Grant it access to the `holleyy/gaspery` repository.
@@ -1192,26 +1192,31 @@ The wizard writes four values into a local `.env` (already gitignored):
 - `KEYSTATIC_SECRET`
 - `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
 
-## 2. Add the same four values as Cloudflare secrets
+## 2. Add the same four values to the Cloudflare **Pages** project
+
+This is a Pages project, so use Pages env/secrets — NOT `wrangler secret put` (that is for Workers). Easiest is the dashboard: **Pages → gaspery → Settings → Variables and Secrets**, for the **Production** environment. Add the three `KEYSTATIC_*` values as **Secrets**, and `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` as a **plaintext variable** (it is a build-time public value, inlined into the client bundle, not a runtime secret). CLI equivalent for the secrets:
 
 ```bash
-npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID
-npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_SECRET
-npx wrangler secret put KEYSTATIC_SECRET
-npx wrangler secret put PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
+npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_ID --project-name gaspery
+npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_SECRET --project-name gaspery
+npx wrangler pages secret put KEYSTATIC_SECRET --project-name gaspery
 ```
+
+Because `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` is inlined at build time, it must be present in the build environment — set it in the Pages **build** variables (or your local `.env` if you build locally before deploying).
 
 ## 3. Deploy
 
+If your Pages project deploys from Git, just merge `keystatic-cms` to `main` and Pages builds/deploys automatically. To deploy from the CLI instead:
+
 ```bash
-npm run build && npx wrangler deploy
+npm run build && npx wrangler pages deploy ./dist --project-name gaspery
 ```
 
 ## 4. Editing
 
 Visit `/keystatic` on the live site. Anyone with **write** access to
 `holleyy/gaspery` can log in. Saves commit straight to `main`, which
-triggers your normal deploy.
+triggers your normal Pages deploy.
 ```
 
 - [ ] **Step 6: Commit**
