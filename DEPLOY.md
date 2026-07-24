@@ -54,34 +54,36 @@ git branch -M main
 git push -u origin main
 ```
 
-**2. Connect to Cloudflare Pages.**
+**2. Connect to Cloudflare (Workers Builds).**
 
-This is a Cloudflare **Pages** project. Since adopting Keystatic the site is no longer a
+`gaspery` is a Cloudflare **Worker** (with static assets), Git-connected via Workers Builds
+and deployed with `npx wrangler deploy`. Since adopting Keystatic the site is no longer a
 pure static upload — it builds an SSR bundle so the `/keystatic` admin route can run — but
 every public page is still prerendered, so visitors get the same static site.
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → connect the repo
+1. Cloudflare dashboard → **Workers & Pages** → connect the `holleyy/gaspery` repo
 2. Build command: `npm run build`
-3. Build output directory: `dist`
-4. Deploy
+3. Deploy command: `npx wrangler deploy`
 
-`wrangler.jsonc` at the root declares the Pages build output:
+`wrangler.jsonc` at the root declares the Worker entry and static assets:
 
 ```jsonc
 {
 	"name": "gaspery",
-	"pages_build_output_dir": "./dist",
+	"main": "./dist/_worker.js/index.js",
 	"compatibility_date": "2026-07-19",
-	"compatibility_flags": ["nodejs_compat"]
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": { "directory": "./dist", "binding": "ASSETS" }
 }
 ```
 
-To deploy from the CLI instead of Git: `npm run build && npx wrangler pages deploy ./dist --project-name gaspery`.
+The `postbuild` script writes `dist/.assetsignore` so the adapter's `_worker.js` and
+`_routes.json` aren't served as public static assets.
 
 **3. Configure Keystatic's GitHub mode.** The production `/keystatic` admin authenticates
-via a GitHub App and needs four environment values set in the Pages project. Full steps are
-in [docs/keystatic-setup.md](docs/keystatic-setup.md) — do this once before relying on the
-hosted editor.
+via a GitHub App and needs four values set on the Worker (one build variable + three runtime
+secrets). Full steps are in [docs/keystatic-setup.md](docs/keystatic-setup.md) — do this once
+before relying on the hosted editor.
 
 That's it — Cloudflare builds and hosts it on the free tier. Every push to `main` triggers
 an automatic redeploy; pushes to other branches get their own preview URL.
@@ -94,8 +96,8 @@ an automatic redeploy; pushes to other branches get their own preview URL.
 
 ## Custom domain
 
-1. In the Cloudflare dashboard, open the Pages project → **Custom domains** → add your
-   domain. Cloudflare walks you through DNS if the domain is already on Cloudflare, or
+1. In the Cloudflare dashboard, open the Worker → **Settings** → **Domains & Routes** → add
+   your domain. Cloudflare walks you through DNS if the domain is already on Cloudflare, or
    gives you a CNAME target otherwise.
 2. Update `site` in `astro.config.mjs` to the real domain:
    ```js

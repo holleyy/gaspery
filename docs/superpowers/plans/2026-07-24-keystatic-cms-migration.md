@@ -6,7 +6,7 @@
 
 **Architecture:** Add React + Markdoc + Keystatic + the Cloudflare adapter to an Astro 5 static site. Public pages stay prerendered; only `/keystatic` and `/api/keystatic/*` render on demand, which converts the Cloudflare deploy from static assets to a Worker. Content moves from `.md` to `.mdoc` (Keystatic cannot write plain `.md`), hardcoded page prose moves into Keystatic singletons, and `apps.json` becomes one file per app.
 
-**Tech Stack:** Astro 5, Keystatic, Markdoc, React, Cloudflare Pages, Zod (via `astro:content`).
+**Tech Stack:** Astro 5, Keystatic, Markdoc, React, Cloudflare Workers (with static assets), Zod (via `astro:content`).
 
 ## Global Constraints
 
@@ -1087,7 +1087,7 @@ git commit -m "feat: move homepage hero and now summary into a Keystatic singlet
 
 ---
 
-### Task 10: Cloudflare Pages deployment config
+### Task 10: Cloudflare Workers deployment config
 
 **Files:**
 - Modify: `wrangler.jsonc`
@@ -1101,13 +1101,14 @@ git commit -m "feat: move homepage hero and now summary into a Keystatic singlet
 ```jsonc
 {
 	"name": "gaspery",
-	"pages_build_output_dir": "./dist",
+	"main": "./dist/_worker.js/index.js",
 	"compatibility_date": "2026-07-19",
-	"compatibility_flags": ["nodejs_compat"]
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": { "directory": "./dist", "binding": "ASSETS" }
 }
 ```
 
-**Deploy model — Cloudflare Pages, not Workers.** The site is a Cloudflare **Pages** project, and the pinned adapter `@astrojs/cloudflare@12.6.13` emits Pages output (`dist/_worker.js/` + `dist/_routes.json`, where `_routes.json` excludes the prerendered routes and sends only `/keystatic*` to the worker). Do NOT use the Workers `main: "@astrojs/cloudflare/entrypoints/server"` convention — that export does not exist in 12.6.13 (it is a 14.x feature) and fails deploy. `pages_build_output_dir` is the Pages config; deploy with `wrangler pages deploy` (or the Pages Git integration), not `wrangler deploy`. Validated locally with `wrangler pages dev ./dist`: the worker compiles, boots, serves static pages as assets and `/keystatic` via the worker.
+**Deploy model — Cloudflare Worker (Workers Builds), not Pages.** The dashboard is authoritative: `gaspery` is a Worker deployed with `npx wrangler deploy` (Git-connected). Point `main` at the adapter's emitted worker `./dist/_worker.js/index.js` (NOT `@astrojs/cloudflare/entrypoints/server` — that export does not exist in 12.6.13), and add the `assets` binding. Because the adapter emits Pages-style output (`_worker.js/` + `_routes.json`) with no `.assetsignore`, a `postbuild` step writes `dist/.assetsignore` (`_worker.js`, `_routes.json`) so the server bundle is not served as a public asset. Validated locally with `wrangler dev`: static routes 200, `/keystatic` via the worker, `/_worker.js/index.js` → 404, parity holds.
 
 - [ ] **Step 2: Verify the build emits both assets and a worker**
 
@@ -1180,7 +1181,7 @@ Production uses `github` storage, which requires a GitHub App and four secrets.
 
 ## 1. Create the GitHub App
 
-1. Build, then run the site locally as a Pages worker: `npm run build && npx wrangler pages dev ./dist`.
+1. Build, then run the site locally as a Pages worker: `npm run build && npx wrangler dev`.
 2. Visit `/keystatic` and click **Log in with GitHub**.
 3. Follow the **Create GitHub App** wizard. Name it anything (e.g. `gaspery-cms`).
 4. Grant it access to the `holleyy/gaspery` repository.
@@ -1197,9 +1198,9 @@ The wizard writes four values into a local `.env` (already gitignored):
 This is a Pages project, so use Pages env/secrets — NOT `wrangler secret put` (that is for Workers). Easiest is the dashboard: **Pages → gaspery → Settings → Variables and Secrets**, for the **Production** environment. Add the three `KEYSTATIC_*` values as **Secrets**, and `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` as a **plaintext variable** (it is a build-time public value, inlined into the client bundle, not a runtime secret). CLI equivalent for the secrets:
 
 ```bash
-npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_ID --project-name gaspery
-npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_SECRET --project-name gaspery
-npx wrangler pages secret put KEYSTATIC_SECRET --project-name gaspery
+npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID
+npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_SECRET
+npx wrangler secret put KEYSTATIC_SECRET
 ```
 
 Because `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` is inlined at build time, it must be present in the build environment — set it in the Pages **build** variables (or your local `.env` if you build locally before deploying).
@@ -1209,7 +1210,7 @@ Because `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` is inlined at build time, it must be 
 If your Pages project deploys from Git, just merge `keystatic-cms` to `main` and Pages builds/deploys automatically. To deploy from the CLI instead:
 
 ```bash
-npm run build && npx wrangler pages deploy ./dist --project-name gaspery
+npm run build && npx wrangler deploy
 ```
 
 ## 4. Editing

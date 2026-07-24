@@ -3,60 +3,65 @@
 Keystatic runs in `local` storage during `npm run dev` (edit at
 `http://localhost:4321/keystatic`, no login, writes straight to the files on disk).
 Production uses `github` storage, which authenticates via a GitHub App and needs four
-values set in the Cloudflare Pages project. This is a one-time setup.
+values set on the Cloudflare **Worker**. This is a one-time setup.
+
+> **Deploy model:** `gaspery` is a Cloudflare **Worker** (Workers Builds, Git-connected;
+> deploy command `npx wrangler deploy`), not a Pages project. `wrangler.jsonc` uses the
+> Workers config (`main` + `assets`), and `postbuild` writes `dist/.assetsignore` so the
+> server bundle isn't served as a static asset.
 
 ## 1. Create the GitHub App
 
-1. Build and run the site as a Pages worker locally: `npm run build && npx wrangler pages dev ./dist`.
-2. Visit `/keystatic` and click **Log in with GitHub**.
-3. Follow the **Create GitHub App** wizard. Name it anything (e.g. `gaspery-cms`).
-4. Grant it access to the `holleyy/gaspery` repository.
+The "Log in with GitHub" flow only appears in **github** storage mode, but the config keeps
+`npm run dev` in **local** mode. So force github mode just for this one-time step:
 
-The wizard writes four values into a local `.env` (already gitignored):
+1. In `keystatic.config.ts`, temporarily replace the `storage:` line with:
+   `storage: { kind: 'github', repo: { owner: 'holleyy', name: 'gaspery' } },`
+2. `npm run dev`, open `http://localhost:4321/keystatic`, click **Log in with GitHub**.
+3. Follow the **Create GitHub App** wizard (name it e.g. `holleyy-keystatic`) and grant it
+   access to the `holleyy/gaspery` repo. A localhost callback warning is expected/fine.
+4. It writes four values into a local `.env` (gitignored). **Revert the `storage:` line** to
+   the `import.meta.env.DEV ? { kind: 'local' } : { kind: 'github', ... }` split.
+
+The four values:
 
 - `KEYSTATIC_GITHUB_CLIENT_ID`
 - `KEYSTATIC_GITHUB_CLIENT_SECRET`
 - `KEYSTATIC_SECRET`
-- `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+- `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`  (already known: `holleyy-keystatic`)
 
-## 2. Add the four values to the Cloudflare **Pages** project
+## 2. Add the four values to the Cloudflare **Worker**
 
-`gaspery` is a Cloudflare **Pages** project, so use Pages variables/secrets — NOT
-`wrangler secret put` (that is the Workers command). Easiest via the dashboard:
-**Workers & Pages → gaspery → Settings → Variables and Secrets**, for the **Production**
-environment:
+Dashboard → **Workers & Pages → gaspery → Settings**. There are two places, and the split matters:
 
-- Add the three `KEYSTATIC_*` values as **Secrets**.
-- Add `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` as a **plaintext variable**. It is a build-time
-  public value (Astro inlines `PUBLIC_*` into the client bundle), so it must also be
-  available when the site builds — set it in the Pages **build** variables too (or in your
-  local `.env` if you build before deploying).
+- **`PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`** → a **Build** variable (Settings → Build → Variables
+  and secrets). It's a build-time public value that Astro inlines into the client bundle, so
+  it must be present when `npm run build` runs. Value: `holleyy-keystatic`.
+- **The three `KEYSTATIC_*` values** → **runtime Secrets** on the Worker (Settings → the
+  Worker's **Variables and Secrets**, added as encrypted **Secrets**). The `/keystatic` OAuth
+  routes read these at request time. Copy each value from your local `.env`.
 
-CLI equivalent for the three secrets:
+CLI equivalent for the three runtime secrets:
 
 ```bash
-npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_ID --project-name gaspery
-npx wrangler pages secret put KEYSTATIC_GITHUB_CLIENT_SECRET --project-name gaspery
-npx wrangler pages secret put KEYSTATIC_SECRET --project-name gaspery
+npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID
+npx wrangler secret put KEYSTATIC_GITHUB_CLIENT_SECRET
+npx wrangler secret put KEYSTATIC_SECRET
 ```
 
 ## 3. Deploy
 
-If the Pages project deploys from Git, merge `keystatic-cms` into `main` and Pages
-builds/deploys automatically. To deploy from the CLI instead:
+Your Worker deploys from Git (production branch `main`). Merge `keystatic-cms` into `main` and
+Cloudflare runs `npm run build && npx wrangler deploy` automatically. To deploy from the CLI
+instead: `npm run build && npx wrangler deploy`.
 
-```bash
-npm run build && npx wrangler pages deploy ./dist --project-name gaspery
-```
-
-Note: the local `wrangler pages dev` runtime may warn that it caps `compatibility_date`
-at an earlier date than the requested `2026-07-19`. That is a local-runtime limitation
-only — the real Cloudflare Pages runtime honors the requested date.
+Note: local `wrangler dev` warns it caps `compatibility_date` at an earlier date than the
+requested `2026-07-19` — a local-runtime limitation only; the real Workers runtime honors it.
 
 ## 4. Editing
 
 Visit `/keystatic` on the live site. Anyone with **write** access to `holleyy/gaspery`
-can log in. Saves commit straight to `main`, which triggers the normal Pages deploy.
+can log in. Saves commit straight to `main`, which triggers the normal deploy.
 
 ## Good to know — Keystatic normalizes files on first save
 
