@@ -10,71 +10,39 @@ npm install
 npm run dev
 ```
 
-Site runs at `http://localhost:4321`. `npm run build` outputs the static site to `dist/`;
-`npm run preview` serves that build locally.
+Site runs at `http://localhost:4321`. Every public page is prerendered to static
+HTML; `npm run build` outputs to `dist/` as a Cloudflare Pages bundle (`_worker.js/`
+for the on-demand `/keystatic` admin route, plus the prerendered pages as static
+assets). `npm run preview` serves the build locally.
 
 Node version is pinned in `.nvmrc` (22). If you use nvm: `nvm use`.
 
+The content editor (Keystatic) lives at `http://localhost:4321/keystatic` while the
+dev server is running — see [Editing content](#adding-content).
+
 ## Adding content
 
-### A new blog post
+Content is edited through **Keystatic**, a GUI CMS. Run `npm run dev` and open
+`http://localhost:4321/keystatic`. In local dev it edits the files on disk directly
+(no login); in production it commits to GitHub — see [keystatic-setup.md](docs/keystatic-setup.md).
 
-Add a markdown file to `src/content/writing/`, e.g. `src/content/writing/my-new-post.md`:
+Keystatic covers everything editable: **Writing**, **App pages**, **Apps** (the roster),
+and the **Homepage / About / Now** singletons. The underlying files still live under
+`src/content/` and `src/data/` if you prefer to edit them by hand — the formats:
 
-```md
----
-title: My new post
-date: 2026-07-19
-readingTime: 5 min
-dek: One or two sentences describing the post — shown in the list view and RSS.
----
+- **Writing** — one Markdoc file per post: `src/content/writing/<slug>.mdoc`. Frontmatter
+  `title`, `date` (`YYYY-MM-DD`), `readingTime`, `dek`, optional `draft`. The most recent
+  non-draft post is tagged "New" on the homepage. Body is Markdoc (a Markdown superset);
+  photo figures use a `{% RisoPhoto src="…" alt="…" /%}` block.
+- **Apps** (roster) — one YAML file per app: `src/content/apps/<id>.yaml`, where the
+  filename is the id. Fields `name`, `dek`, `meta`, `status` (`live` | `dev` | `planning`),
+  optional `url`, `order`.
+- **App detail pages** — `src/content/appPages/<id>.mdoc` (`template`, optional `spreads`).
+- **Homepage / Now** — `src/data/home/index.json`, `src/data/now/index.json`.
+- **About** — `src/content/about/index.mdoc`.
 
-Post content in markdown goes here.
-
-## A subheading
-
-More content.
-```
-
-Frontmatter fields (defined in `src/content.config.ts`):
-
-| Field         | Type    | Required | Notes                                      |
-| ------------- | ------- | -------- | ------------------------------------------- |
-| `title`       | string  | yes      |                                              |
-| `date`        | date    | yes      | `YYYY-MM-DD`. Newest date sorts first.      |
-| `readingTime` | string  | yes      | Free text, e.g. `"5 min"`.                  |
-| `dek`         | string  | yes      | Standfirst/summary shown in list + RSS.     |
-| `draft`       | boolean | no       | Defaults to `false`. `true` hides the post. |
-
-The most recent non-draft post is automatically tagged "New" on the homepage.
-
-### A new app
-
-Add a record to the array in `src/content/apps.json`:
-
-```json
-{
-  "id": "my-app",
-  "name": "My App",
-  "dek": "One sentence describing what it does.",
-  "meta": "macOS · SwiftUI",
-  "status": "live",
-  "url": "https://example.com/my-app",
-  "order": 5
-}
-```
-
-Fields (defined in `src/content.config.ts`):
-
-| Field    | Type                | Required | Notes                                   |
-| -------- | ------------------- | -------- | ---------------------------------------- |
-| `id`     | string               | yes      | Unique slug.                             |
-| `name`   | string               | yes      | App title.                               |
-| `dek`    | string               | yes      | Tagline.                                 |
-| `meta`   | string               | yes      | Platform/tech line, e.g. `"Web tool"`.   |
-| `status` | `"live"` \| `"wip"`  | yes      | Drives the status pill.                  |
-| `url`    | string               | no       | Omit for an unlinked (not-yet-live) app. |
-| `order`  | number               | yes      | Sort order, ascending.                   |
+`.astro` pages (layouts, the Rail, components) are code, not content, and are not editable
+in Keystatic — change those in `src/`.
 
 ## Deploy to Cloudflare (recommended)
 
@@ -86,34 +54,37 @@ git branch -M main
 git push -u origin main
 ```
 
-**2. Connect to Cloudflare.**
+**2. Connect to Cloudflare Pages.**
 
-Cloudflare's Git-connected onboarding now goes through **Workers** rather than a separate
-"Pages" product, and deploys via Wrangler instead of a framework-preset picker — so you
-won't see a "Framework preset" or "Build output directory" field. That's expected.
+This is a Cloudflare **Pages** project. Since adopting Keystatic the site is no longer a
+pure static upload — it builds an SSR bundle so the `/keystatic` admin route can run — but
+every public page is still prerendered, so visitors get the same static site.
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → connect the repo
+1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → connect the repo
 2. Build command: `npm run build`
-3. Deploy command: `npx wrangler deploy` (Cloudflare fills this in by default)
+3. Build output directory: `dist`
 4. Deploy
 
-This repo already has `wrangler.jsonc` at the root, which is what tells `wrangler deploy`
-where the static build output lives:
+`wrangler.jsonc` at the root declares the Pages build output:
 
 ```jsonc
 {
 	"name": "gaspery",
+	"pages_build_output_dir": "./dist",
 	"compatibility_date": "2026-07-19",
-	"assets": { "directory": "./dist" }
+	"compatibility_flags": ["nodejs_compat"]
 }
 ```
 
-Without this file, `npx wrangler deploy` has nothing to deploy and the build step fails —
-if you ever start a similar project from scratch, add this file before connecting Git.
+To deploy from the CLI instead of Git: `npm run build && npx wrangler pages deploy ./dist --project-name gaspery`.
+
+**3. Configure Keystatic's GitHub mode.** The production `/keystatic` admin authenticates
+via a GitHub App and needs four environment values set in the Pages project. Full steps are
+in [docs/keystatic-setup.md](docs/keystatic-setup.md) — do this once before relying on the
+hosted editor.
 
 That's it — Cloudflare builds and hosts it on the free tier. Every push to `main` triggers
-an automatic redeploy; pushes to other branches get their own preview URL (via `npx
-wrangler versions upload`, which Cloudflare also fills in by default).
+an automatic redeploy; pushes to other branches get their own preview URL.
 
 ## Alternative: Netlify
 
@@ -123,10 +94,9 @@ wrangler versions upload`, which Cloudflare also fills in by default).
 
 ## Custom domain
 
-1. In the Cloudflare dashboard, open the Worker project → **Settings** → **Domains &
-   Routes** (or **Custom domains**, depending on what Cloudflare labels it when you get
-   there) → add your domain. Cloudflare walks you through DNS if the domain is already on
-   Cloudflare, or gives you a CNAME target otherwise.
+1. In the Cloudflare dashboard, open the Pages project → **Custom domains** → add your
+   domain. Cloudflare walks you through DNS if the domain is already on Cloudflare, or
+   gives you a CNAME target otherwise.
 2. Update `site` in `astro.config.mjs` to the real domain:
    ```js
    site: 'https://your-actual-domain.com',
@@ -146,11 +116,9 @@ or remove — they won't break the build, but they're worth a pass before sharin
 
 - `astro.config.mjs` — `site` is a placeholder (`your-domain.com`) until you complete the
   custom domain step above.
-- `src/components/Rail.astro` — nav links to `/about` and `/now`, and the `elsewhere`
-  links (email, GitHub, Mastodon) point to placeholder addresses.
+- `src/components/Rail.astro` — the `elsewhere` links (email, GitHub, Mastodon, etc.)
+  point to placeholder addresses.
 - `src/components/Footer.astro` — the "Subscribe" link points to `/subscribe`, which
-  doesn't have a page yet.
-- `/about`, `/now`, and `/subscribe` have no corresponding pages in `src/pages/` yet.
-  They 404 until you either add pages for them or remove the links from `Rail.astro` /
-  `Footer.astro`. Left as-is deliberately since the content is personal (bio, current
-  status, newsletter provider) — not something to invent on your behalf.
+  doesn't have a page yet and 404s until you add one or remove the link.
+
+(`/about` and `/now` are real pages now, editable in Keystatic — no longer placeholders.)

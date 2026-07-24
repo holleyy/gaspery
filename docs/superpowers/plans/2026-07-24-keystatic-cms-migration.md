@@ -6,7 +6,7 @@
 
 **Architecture:** Add React + Markdoc + Keystatic + the Cloudflare adapter to an Astro 5 static site. Public pages stay prerendered; only `/keystatic` and `/api/keystatic/*` render on demand, which converts the Cloudflare deploy from static assets to a Worker. Content moves from `.md` to `.mdoc` (Keystatic cannot write plain `.md`), hardcoded page prose moves into Keystatic singletons, and `apps.json` becomes one file per app.
 
-**Tech Stack:** Astro 5, Keystatic, Markdoc, React, Cloudflare Workers, Zod (via `astro:content`).
+**Tech Stack:** Astro 5, Keystatic, Markdoc, React, Cloudflare Pages, Zod (via `astro:content`).
 
 ## Global Constraints
 
@@ -1087,7 +1087,7 @@ git commit -m "feat: move homepage hero and now summary into a Keystatic singlet
 
 ---
 
-### Task 10: Cloudflare Worker deployment config
+### Task 10: Cloudflare Pages deployment config
 
 **Files:**
 - Modify: `wrangler.jsonc`
