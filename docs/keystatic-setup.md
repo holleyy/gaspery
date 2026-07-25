@@ -58,7 +58,17 @@ instead: `npm run build && npx wrangler deploy`.
 Note: local `wrangler dev` warns it caps `compatibility_date` at an earlier date than the
 requested `2026-07-19` — a local-runtime limitation only; the real Workers runtime honors it.
 
-## 4. Editing
+## 4. Add the production callback URL to the GitHub App
+
+The GitHub App was created from `localhost` (Step 1), so its OAuth callback only points at
+localhost. Production login will fail on the redirect until you add the live callback:
+
+1. Go to **github.com/settings/apps/holleyy-keystatic** → **Callback URL**.
+2. Add `https://gaspery.com/api/keystatic/github/oauth/callback` (GitHub Apps allow multiple
+   callback URLs — keep the localhost one too if you still develop against github mode locally).
+3. Save.
+
+## 5. Editing
 
 Visit `/keystatic` on the live site. Anyone with **write** access to `holleyy/gaspery`
 can log in. Saves commit straight to `main`, which triggers the normal deploy.
