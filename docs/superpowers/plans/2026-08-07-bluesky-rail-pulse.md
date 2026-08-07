@@ -555,7 +555,7 @@ curl -s -D- http://localhost:4321/api/pulse.json | head -20
 
 Expected: 200, the `cache-control` header verbatim, and a real post. Also load `http://localhost:4321/` in a browser and confirm the pulse renders and the Network tab shows the endpoint returning 200.
 
-If the port differs, use whatever `npm run preview` prints. If `npm run preview` does not start, fall back to `npx wrangler dev` and note the discrepancy in the commit message.
+**Confirmed during execution: `npm run preview` does not work in this repo.** `@astrojs/cloudflare` does not support `astro preview`, so the script at `package.json:12` fails immediately without binding a port. Use `npx wrangler dev` instead, which serves the built Worker on **port 8787**. Substitute that port in the curl above. This is a pre-existing repo issue, unrelated to the pulse.
 
 - [ ] **Step 5: Commit any fix**
 
