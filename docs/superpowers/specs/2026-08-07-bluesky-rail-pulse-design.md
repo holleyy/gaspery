@@ -144,7 +144,7 @@ The normaliser in `bskyPulse.ts` is the one genuinely unit-testable surface — 
 
 ## 9. Risks
 
-**This is the site's first on-demand route.** Every route prerenders today, so the Worker only ever serves static assets. Adding one changes the shape of `_routes.json` and makes the `postbuild` `.assetsignore` step load-bearing in a way it has not been. Verification must include a real build and a deployed check — `astro dev` will happily serve a route that misconfigures in production.
+~~**This is the site's first on-demand route.**~~ **Corrected during implementation:** it is not. `@keystatic/astro` already injects `/keystatic/[...params]` and `/api/keystatic/[...params]` as Worker-handled routes, so `_routes.json` already had its final shape and `.assetsignore` was already load-bearing. The claim came from grepping `src/` for `prerender`, which cannot see integration-injected routes. The residual risk is narrower than stated: verification still needs a real build and a deployed check, because `astro dev` will happily serve a route that misconfigures in production, but the Worker was already executing code before this change.
 
 **The build now touches a third party.** Mitigated by the 4-second timeout, soft failure, and memoisation: worst case the build is a few seconds slower and the pulse is absent that deploy.
 
