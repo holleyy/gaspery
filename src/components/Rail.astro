@@ -2,6 +2,7 @@
 import RegistrationMark from './RegistrationMark.astro';
 import Pulse from './Pulse.astro';
 import { isPulseEnabled, getLatestPost } from '../lib/bskyPulse';
+import sidebar from '../data/sidebar/index.json';
 
 interface NavItem { label: string; href: string; }
 interface Link { label: string; href: string; }
@@ -24,14 +25,8 @@ const {
     { label: 'About', href: '/about' },
     { label: 'Now', href: '/now' },
   ],
-  elsewhere = [
-    { label: 'Email', href: 'mailto:hello@example.com' },
-    { label: 'GitHub', href: 'https://github.com' },
-    { label: 'Bluesky', href: 'https://bsky.app/profile/alexholley.bsky.social' },
-    { label: 'Mastodon', href: 'https://mastodon.social/@alexholley' },
-    { label: 'Letterboxd', href: 'https://letterboxd.com/holley/' },
-    { label: 'RSS', href: '/rss.xml' },
-  ],
+  // Edited at /keystatic under "Sidebar"; pass the prop to override per-page.
+  elsewhere = sidebar.elsewhere,
 } = Astro.props;
 
 const pulse = isPulseEnabled() ? await getLatestPost() : null;

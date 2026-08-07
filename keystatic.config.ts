@@ -152,6 +152,13 @@ export default config({
           label: 'Hide posts older than (days)',
           defaultValue: 90,
         }),
+        elsewhere: fields.array(
+          fields.object({
+            label: fields.text({ label: 'Label', validation: { isRequired: true } }),
+            href: fields.text({ label: 'URL', validation: { isRequired: true } }),
+          }),
+          { label: 'Elsewhere', itemLabel: (props) => props.fields.label.value },
+        ),
       },
     }),
   },

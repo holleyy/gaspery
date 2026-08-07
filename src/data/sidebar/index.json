@@ -1,5 +1,31 @@
 {
   "pulseEnabled": true,
   "pulseHandle": "alexholley.bsky.social",
-  "pulseMaxAgeDays": 90
+  "pulseMaxAgeDays": 90,
+  "elsewhere": [
+    {
+      "label": "Email",
+      "href": "mailto:alex@gaspery.com"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/holleyy"
+    },
+    {
+      "label": "Bluesky",
+      "href": "https://bsky.app/profile/alexholley.bsky.social"
+    },
+    {
+      "label": "Mastodon",
+      "href": "https://mastodon.social/@alexholley"
+    },
+    {
+      "label": "Letterboxd",
+      "href": "https://letterboxd.com/holley/"
+    },
+    {
+      "label": "RSS",
+      "href": "/rss.xml"
+    }
+  ]
 }
