@@ -135,5 +135,24 @@ export default config({
         ),
       },
     }),
+    sidebar: singleton({
+      label: 'Sidebar',
+      path: 'src/data/sidebar/',
+      format: { data: 'json' },
+      schema: {
+        pulseEnabled: fields.checkbox({
+          label: 'Show latest Bluesky post',
+          defaultValue: true,
+        }),
+        pulseHandle: fields.text({
+          label: 'Bluesky handle',
+          defaultValue: 'alexholley.bsky.social',
+        }),
+        pulseMaxAgeDays: fields.number({
+          label: 'Hide posts older than (days)',
+          defaultValue: 90,
+        }),
+      },
+    }),
   },
 });
