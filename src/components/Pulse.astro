@@ -13,3 +13,29 @@ const { post } = Astro.props;
     <p class="pulse__text" data-pulse-text>{post.text}</p>
   </a>
 </div>
+
+<script is:inline>
+  /* Build-time HTML is already correct; this only catches posts made since
+     the last deploy. It updates an existing block and never creates one --
+     if the build found nothing, the rail stays short until the next deploy. */
+  (async () => {
+    const root = document.querySelector('.pulse');
+    if (!root) return;
+    try {
+      const res = await fetch('/api/pulse.json');
+      if (!res.ok) return;
+      const { post } = await res.json();
+      if (!post) return;
+      const link = root.querySelector('[data-pulse-link]');
+      const text = root.querySelector('[data-pulse-text]');
+      const age = root.querySelector('[data-pulse-age]');
+      if (!link || !text || !age) return;
+      if (link.getAttribute('href') === post.url) return;
+      link.setAttribute('href', post.url);
+      text.textContent = post.text;
+      age.textContent = post.age;
+    } catch {
+      /* leave the server-rendered post in place */
+    }
+  })();
+</script>
