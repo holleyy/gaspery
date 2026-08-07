@@ -148,6 +148,18 @@ img, svg { display: block; max-width: 100%; }
 .elsewhere a .ext { width: 14px; text-align: right; flex-shrink: 0; color: var(--color-brand); font-size: 13px; }
 .elsewhere a:hover { color: var(--color-brand-bright); }
 
+/* Rail pulse — latest Bluesky post. Structured like the other rail groups
+   on purpose: the head doubles as the group title, so the age rides the
+   label instead of taking a line of its own. */
+.pulse { display: flex; flex-direction: column; gap: 14px; }
+.pulse__head {
+  display: flex; align-items: center; gap: 7px;
+  padding-bottom: 4px; border-bottom: 1px solid var(--color-hairline);
+}
+.pulse__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-teal); flex-shrink: 0; }
+.pulse__text { font-size: 13px; line-height: 1.5; color: var(--color-ink); transition: color .15s ease; }
+.pulse__link:hover .pulse__text { color: var(--color-brand-bright); }
+
 /* Colophon */
 .colophon { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--color-hairline); }
 .colophon p { font-size: 12px; line-height: 1.5; color: var(--color-ink-secondary); }
@@ -360,7 +372,8 @@ img, svg { display: block; max-width: 100%; }
   .elsewhere  { display: flex; flex-wrap: wrap; gap: 10px 22px; }
   .elsewhere a { justify-content: flex-start; gap: 5px; }
   .site-footer { order: 6; flex-direction: column; align-items: flex-start; gap: 18px; }
-  .colophon   { order: 7; }
+  .pulse      { order: 7; }
+  .colophon   { order: 8; }
 
   :root { --text-hero: 34px; }
   .hero-title .ink, .hero-title .ghost { line-height: 1.18; }

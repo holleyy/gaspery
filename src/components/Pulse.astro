@@ -1,0 +1,15 @@
+---
+import { ageToken, type Pulse } from '../lib/bskyPulse';
+
+interface Props { post: Pulse; }
+const { post } = Astro.props;
+---
+<div class="pulse">
+  <a class="pulse__link" href={post.url} data-pulse-link>
+    <div class="pulse__head">
+      <span class="pulse__dot" aria-hidden="true"></span>
+      <span class="label">Latest · <span data-pulse-age>{ageToken(post.isoDate)}</span></span>
+    </div>
+    <p class="pulse__text" data-pulse-text>{post.text}</p>
+  </a>
+</div>
