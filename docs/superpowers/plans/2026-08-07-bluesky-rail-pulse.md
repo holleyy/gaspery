@@ -507,7 +507,9 @@ git commit -m "feat: refresh rail pulse from the edge-cached endpoint"
 
 ## Task 5: Production build and route verification
 
-This is the task the spec flags as riskiest (§9). Every route in this repo prerenders today; `/api/pulse.json` is the first that does not, which changes the shape of `dist/_routes.json` and makes the existing `postbuild` `.assetsignore` step load-bearing. **`astro dev` will happily serve a route that is misconfigured in production**, so none of the checks above prove this works when deployed.
+**Correction to spec §9, established during Task 2:** the spec claims this is the site's first on-demand route. It is not. `@keystatic/astro` already injects `/keystatic/[...params]` and `/api/keystatic/[...params]`, both of which are Worker-handled — they appear in the worker manifest and have no static directory in `dist`. The original check grepped `src/` for `prerender`, which cannot see integration-injected routes. `_routes.json` therefore already had its final shape (`include: ["/*"]` plus an exclude list of prerendered paths) and `.assetsignore` was already load-bearing. The risk here is lower than the spec states.
+
+What still needs proving: that `/api/pulse.json` lands in the worker bundle rather than as a static file, and that it actually responds through Wrangler. **`astro dev` will happily serve a route that is misconfigured in production**, so the dev-server checks in earlier tasks do not establish this.
 
 **Files:** none modified. This task is verification only, plus a possible fix if it fails.
 
