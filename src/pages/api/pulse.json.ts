@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { fetchLatestPost, ageToken } from '../../lib/bskyPulse';
 
-/* The site's only on-demand route. Everything else prerenders. */
+/* On-demand: this route runs on the Worker, alongside Keystatic's injected routes. */
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
