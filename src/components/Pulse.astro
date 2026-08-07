@@ -30,12 +30,13 @@ const { post } = Astro.props;
       const text = root.querySelector('[data-pulse-text]');
       const age = root.querySelector('[data-pulse-age]');
       if (!link || !text || !age) return;
+      age.textContent = post.age;
       if (link.getAttribute('href') === post.url) return;
       link.setAttribute('href', post.url);
       text.textContent = post.text;
-      age.textContent = post.age;
-    } catch {
+    } catch (err) {
       /* leave the server-rendered post in place */
+      console.debug('pulse refresh failed', err);
     }
   })();
 </script>
