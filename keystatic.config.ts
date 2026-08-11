@@ -27,9 +27,20 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
+        sourceUrl: fields.text({
+          label: 'Source URL',
+          description: 'Paste a URL to make this a link post — the headline will point there instead of here. Leave empty for an essay.',
+        }),
         date: fields.date({ label: 'Date' }),
-        readingTime: fields.text({ label: 'Reading time' }),
-        dek: fields.text({ label: 'Dek', multiline: true }),
+        readingTime: fields.text({
+          label: 'Reading time',
+          description: 'Essays only. Leave empty on a link post.',
+        }),
+        dek: fields.text({
+          label: 'Dek / remark',
+          description: 'An essay’s standfirst, or a link post’s remark. Shown in the stream and the feed.',
+          multiline: true,
+        }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
         content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
       },
