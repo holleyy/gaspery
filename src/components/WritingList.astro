@@ -1,23 +1,32 @@
 ---
 import RegistrationMark from './RegistrationMark.astro';
+import { sourceDomain } from '../lib/links';
 
 interface Post {
   href: string;
   title: string;
-  dek: string;
   date: Date;
-  readingTime: string;
+  dek: string;
+  readingTime?: string;
+  sourceUrl?: string;
   isNew?: boolean;
 }
 interface Props {
   posts: Post[];
   moreHref?: string;
   showMore?: boolean;
+  filter?: 'all' | 'essays' | 'links';
 }
-const { posts, moreHref = '/writing', showMore = true } = Astro.props;
+const { posts, moreHref = '/writing', showMore = true, filter } = Astro.props;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+
+const FILTERS = [
+  { key: 'all', label: 'All', href: '/writing' },
+  { key: 'essays', label: 'Essays', href: '/essays' },
+  { key: 'links', label: 'Links', href: '/links' },
+] as const;
 ---
 <section class="stream" id="writing">
   <div class="stream__head">
@@ -25,10 +34,32 @@ const fmt = (d: Date) =>
       <RegistrationMark size={14} />
       <h2>Writing</h2>
     </div>
-    <span class="label">Latest first</span>
+    {filter ? (
+      <nav class="stream__filter" aria-label="Filter writing">
+        {FILTERS.map((f) => (
+          <a class="label" href={f.href} aria-current={f.key === filter ? 'page' : undefined}>{f.label}</a>
+        ))}
+      </nav>
+    ) : (
+      <span class="label">Latest first</span>
+    )}
   </div>
 
-  {posts.map((post) => (
+  {posts.map((post) => post.sourceUrl ? (
+    <article class="post post--link">
+      <div class="post__meta">
+        <span class="label">{fmt(post.date)}</span>
+        <span class="sep">/</span>
+        <span class="label">{sourceDomain(post.sourceUrl)}</span>
+        {post.isNew && <span class="tag-new">New</span>}
+      </div>
+      <h3><a href={post.sourceUrl}>{post.title}</a><span class="post__out" aria-hidden="true">↗</span></h3>
+      <p class="post__dek">{post.dek}</p>
+      <a class="post__permalink" href={post.href}>
+        <span aria-hidden="true">★</span><span class="sr-only">Permalink to this post</span>
+      </a>
+    </article>
+  ) : (
     <a class="post" href={post.href}>
       <div class="post__meta">
         <span class="label">{fmt(post.date)}</span>

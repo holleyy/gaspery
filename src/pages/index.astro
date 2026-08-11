@@ -7,20 +7,14 @@ import WritingList from '../components/WritingList.astro';
 import AppsList from '../components/AppsList.astro';
 import Footer from '../components/Footer.astro';
 import home from '../data/home/index.json';
+import { newestEssayId, toPostProps } from '../lib/links';
 
 // Writing — newest first, drafts hidden, latest flagged "New".
 const posts = (await getCollection('writing'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const newestId = posts[0]?.id;
-const postProps = posts.map((p) => ({
-  href: `/writing/${p.id}`,
-  title: p.data.title,
-  dek: p.data.dek,
-  date: p.data.date,
-  readingTime: p.data.readingTime,
-  isNew: p.id === newestId,
-}));
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
 
 // Apps — ordered small tools.
 const apps = (await getCollection('apps'))
