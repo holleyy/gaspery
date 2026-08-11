@@ -32,8 +32,9 @@ const src = post.data.sourceUrl;
         <a class="article__source" href={src}>{post.data.title}</a><span class="article__out" aria-hidden="true">↗</span>
       </h1>
     ) : (
-      <h1 class="article__title">{post.data.title}</h1> <p class="article__dek">{post.data.dek}</p>
+      <h1 class="article__title">{post.data.title}</h1>
     )}
+    <p class="article__dek">{post.data.dek}</p>
 
     <div class="prose">
       <Content />

@@ -105,7 +105,7 @@ The `Post` prop interface gains `sourceUrl?: string`; the component derives the 
 
 - `.article__meta` shows `DATE / source-domain` instead of `DATE / reading-time`.
 - `.article__title` is wrapped in an anchor to `sourceUrl` and followed by a ↗ in `--color-teal-ink`. The headline itself stays in `--color-ink`; magenta at that size clears AA for large text (3.88:1) but shouts.
-- `.article__dek` is omitted. `.article__end` leads with the ★ in place of the registration mark.
+- `.article__dek` is retained on both types — it is the standfirst for an essay and the remark for a link post, and on a link post with no Markdoc body it is the author's entire contribution to the item. Beyond the headline treatment above, only `.article__meta` and `.article__end` differ from the essay layout; `.article__end` leads with the ★ in place of the registration mark.
 
 ### The quote convention
 
