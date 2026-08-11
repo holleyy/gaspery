@@ -42,7 +42,14 @@ This makes `readingTime` the only conditionally-required field. Task 1 amends th
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `isLink(data: { sourceUrl?: string }): boolean` and `sourceDomain(sourceUrl: string): string` from `src/lib/links.ts`. The `writing` collection schema gains an optional `sourceUrl: string`, and `readingTime` becomes optional at the type level.
+- Produces, all from `src/lib/links.ts`: `isLink(data): boolean`, `sourceDomain(sourceUrl): string`, `newestEssayId(entries): string | null`, and `toPostProps(entry, newestEssayId): PostProps`. The `writing` collection schema gains an optional `sourceUrl: string`, and `readingTime` becomes optional at the type level.
+
+> **Amendment (owner decision, pre-flight).** The mapping from a collection
+> entry to `WritingList`'s prop shape is used by four pages. It lives in
+> `toPostProps` here rather than being copy-pasted into each, so the four call
+> sites cannot drift. `newestEssayId` comes with it: because it returns the
+> first non-link entry, a links-only list yields `null` and needs no
+> special-casing at the call site.
 
 > **Prerequisite — needs a human answer before Task 5 can be trusted.**
 > `astro.config.mjs:14` still reads `site: 'https://your-domain.com'`. That
@@ -51,11 +58,10 @@ This makes `readingTime` the only conditionally-required field. Task 1 amends th
 > the ★ href from `context.site`, so linked posts would ship broken permalinks
 > on top of an already-broken feed.
 >
-> Replace it with the real production origin — **confirm the value with the
-> owner; do not infer it** — then rebuild and check `grep -oE '<link>[^<]*' dist/rss.xml`.
-> Commit separately as `fix: point the site URL at the production domain`.
-> This is a pre-existing bug, not linked-posts work; it is here only because
-> Task 5 depends on it.
+> **Confirmed by the owner: `https://gaspery.com`.** Set it, rebuild, and check
+> `grep -oE '<link>[^<]*' dist/rss.xml` shows `gaspery.com`. Commit separately
+> as `fix: point the site URL at the production domain`. This is a pre-existing
+> bug, not linked-posts work; it is here only because Task 5 depends on it.
 
 - [ ] **Step 1: Capture the parity baseline before touching anything**
 
@@ -107,6 +113,43 @@ test('sourceDomain keeps a meaningful subdomain', () => {
 test('sourceDomain ignores a port', () => {
   assert.equal(sourceDomain('https://example.com:8443/post'), 'example.com');
 });
+
+const essay = { id: 'two-ink', data: { title: 'The two-ink discipline', date: new Date('2026-07-18'), dek: 'A dek.', readingTime: '7 min' } };
+const link = { id: 'worry-stone', data: { title: 'Worry Stone', date: new Date('2026-08-11'), dek: 'A remark.', sourceUrl: 'https://ethanmarcotte.com/x' } };
+
+test('newestEssayId picks the first essay, ignoring links ahead of it', () => {
+  assert.equal(newestEssayId([link, essay]), 'two-ink');
+});
+
+test('newestEssayId is null when a list holds no essays', () => {
+  assert.equal(newestEssayId([link]), null);
+  assert.equal(newestEssayId([]), null);
+});
+
+test('toPostProps maps an essay and flags it as new when it matches', () => {
+  assert.deepEqual(toPostProps(essay, 'two-ink'), {
+    href: '/writing/two-ink',
+    title: 'The two-ink discipline',
+    date: new Date('2026-07-18'),
+    dek: 'A dek.',
+    readingTime: '7 min',
+    sourceUrl: undefined,
+    isNew: true,
+  });
+});
+
+test('toPostProps carries sourceUrl through and never flags a link as new', () => {
+  const props = toPostProps(link, 'two-ink');
+  assert.equal(props.sourceUrl, 'https://ethanmarcotte.com/x');
+  assert.equal(props.href, '/writing/worry-stone');
+  assert.equal(props.isNew, false);
+});
+```
+
+Update the import at the top of the file to pull in all four:
+
+```ts
+import { isLink, sourceDomain, newestEssayId, toPostProps } from '../src/lib/links.ts';
 ```
 
 - [ ] **Step 4: Run the test to verify it fails**
@@ -138,6 +181,46 @@ export function isLink(data: LinkFields): boolean {
 export function sourceDomain(sourceUrl: string): string {
   return new URL(sourceUrl).hostname.replace(/^www\./, '');
 }
+
+export type WritingData = LinkFields & {
+  title: string;
+  date: Date;
+  dek: string;
+  readingTime?: string;
+};
+export type WritingEntry = { id: string; data: WritingData };
+
+export type PostProps = {
+  href: string;
+  title: string;
+  date: Date;
+  dek: string;
+  readingTime?: string;
+  sourceUrl?: string;
+  isNew: boolean;
+};
+
+/** The newest essay in a date-sorted list, or null if it holds none.
+    "New" marks essays only: links post often, and left unscoped the tag would
+    sit on a link permanently and stop meaning anything. A links-only list
+    therefore yields null, so callers need no special case. */
+export function newestEssayId(entries: WritingEntry[]): string | null {
+  return entries.find((e) => !isLink(e.data))?.id ?? null;
+}
+
+/** Map a collection entry to what WritingList renders. The single place that
+    knows the prop shape — four pages call it. */
+export function toPostProps(entry: WritingEntry, newestId: string | null): PostProps {
+  return {
+    href: `/writing/${entry.id}`,
+    title: entry.data.title,
+    date: entry.data.date,
+    dek: entry.data.dek,
+    readingTime: entry.data.readingTime,
+    sourceUrl: entry.data.sourceUrl,
+    isNew: entry.id === newestId,
+  };
+}
 ```
 
 - [ ] **Step 6: Run the test to verify it passes**
@@ -146,7 +229,7 @@ export function sourceDomain(sourceUrl: string): string {
 npm test
 ```
 
-Expected: `pass 4`, `fail 0`.
+Expected: `pass 8`, `fail 0`.
 
 - [ ] **Step 7: Extend the collection schema**
 
@@ -378,26 +461,33 @@ In `src/styles/global.css`, immediately after the `.more-link:hover` rule, inser
 
 - [ ] **Step 4: Pass the new fields from the homepage**
 
-In `src/pages/index.astro`, replace the block from `const newestId` through the end of `postProps` with:
+In `src/pages/index.astro`, add to the imports:
 
 ```ts
-/* "New" marks the newest *essay*. Links post often; left unscoped the tag
-   would live on a link permanently and stop meaning anything. */
-const newestEssayId = posts.find((p) => !p.data.sourceUrl)?.id;
-const postProps = posts.map((p) => ({
-  href: `/writing/${p.id}`,
-  title: p.data.title,
-  dek: p.data.dek,
-  date: p.data.date,
-  readingTime: p.data.readingTime,
-  sourceUrl: p.data.sourceUrl,
-  isNew: p.id === newestEssayId,
-}));
+import { newestEssayId, toPostProps } from '../lib/links';
 ```
 
-- [ ] **Step 5: Apply the identical change in `src/pages/writing/index.astro`**
+…then replace the block from `const newestId` through the end of `postProps` with:
 
-Replace its `const newestId` / `postProps` block with exactly the same code as Step 4.
+```ts
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
+```
+
+- [ ] **Step 5: Apply the same change in `src/pages/writing/index.astro`**
+
+Add the import — note the path is one level deeper:
+
+```ts
+import { newestEssayId, toPostProps } from '../../lib/links';
+```
+
+…then replace its `const newestId` / `postProps` block with:
+
+```ts
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
+```
 
 - [ ] **Step 6: Build and inspect the diff**
 
@@ -471,22 +561,14 @@ import Base from '../layouts/Base.astro';
 import Rail from '../components/Rail.astro';
 import WritingList from '../components/WritingList.astro';
 import Footer from '../components/Footer.astro';
-import { isLink } from '../lib/links';
+import { isLink, newestEssayId, toPostProps } from '../lib/links';
 
 // Essays only — the long-form view of the notebook.
 const posts = (await getCollection('writing'))
   .filter((p) => !p.data.draft && !isLink(p.data))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const newestEssayId = posts[0]?.id;
-const postProps = posts.map((p) => ({
-  href: `/writing/${p.id}`,
-  title: p.data.title,
-  dek: p.data.dek,
-  date: p.data.date,
-  readingTime: p.data.readingTime,
-  sourceUrl: p.data.sourceUrl,
-  isNew: p.id === newestEssayId,
-}));
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
 ---
 <Base title="Essays — Alex Holley" description="The long-form writing, newest first.">
   <div class="page">
@@ -511,21 +593,15 @@ import Base from '../layouts/Base.astro';
 import Rail from '../components/Rail.astro';
 import WritingList from '../components/WritingList.astro';
 import Footer from '../components/Footer.astro';
-import { isLink } from '../lib/links';
+import { isLink, newestEssayId, toPostProps } from '../lib/links';
 
-// Linked posts only — things worth pointing at, newest first.
+/* Linked posts only — things worth pointing at, newest first. `newestEssayId`
+   returns null for a links-only list, so nothing here gets the "New" tag. */
 const posts = (await getCollection('writing'))
   .filter((p) => !p.data.draft && isLink(p.data))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const postProps = posts.map((p) => ({
-  href: `/writing/${p.id}`,
-  title: p.data.title,
-  dek: p.data.dek,
-  date: p.data.date,
-  readingTime: p.data.readingTime,
-  sourceUrl: p.data.sourceUrl,
-  isNew: false,
-}));
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
 ---
 <Base title="Links — Alex Holley" description="Things worth pointing at, newest first.">
   <div class="page">
@@ -933,7 +1009,7 @@ Everything above is also editable through the CMS at `/keystatic`.
 npm test && npm run build
 ```
 
-Expected: `pass 4 / fail 0`, then a successful build listing `/essays`, `/links`, and the link permalink.
+Expected: `pass 8 / fail 0`, then a successful build listing `/essays`, `/links`, and the link permalink.
 
 - [ ] **Step 4: Confirm drafts still stay out**
 
