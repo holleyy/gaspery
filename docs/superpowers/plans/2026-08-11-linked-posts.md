@@ -843,7 +843,9 @@ git commit -m "feat: render the linked-post permalink and the quote block"
 npm run build && grep -c '<guid' dist/rss.xml
 ```
 
-Record the answer. `0` means we add ours freely. Any other number means the package emits its own from `link`, and Step 2's `customData` would produce a **duplicate** — in that case keep `customData` but strip the generated one by post-processing the string the endpoint returns, and note it in the file's comment.
+**Answered during implementation:** `@astrojs/rss` *does* auto-emit `<guid isPermaLink="true">` from `link` — but it does **not** duplicate, because the generated guid and our `customData` guid resolve to the same object key and the later one replaces the earlier. No post-processing fallback is needed.
+
+Note the command above is misleading: the built feed is a single line, and `grep -c` counts matching *lines*, not occurrences, so it reports `1` no matter what. Use `grep -o '<guid' dist/rss.xml | wc -l`, or parse the XML.
 
 - [ ] **Step 2: Rewrite the feed**
 
@@ -877,9 +879,14 @@ export async function GET(context) {
         title: post.data.title,
         pubDate: post.data.date,
         link: linked ? post.data.sourceUrl : `/writing/${post.id}/`,
-        description: linked
-          ? `<![CDATA[<p>${post.data.dek}</p>${star}]]>`
-          : post.data.dek,
+        /* No CDATA wrapper. `@astrojs/rss` builds through fast-xml-parser
+           with no `cdataPropName` wired up, so a literal `<![CDATA[…]]>`
+           string gets entity-escaped and the delimiters show up as visible
+           "![CDATA[" junk in the feed. Passing plain HTML lets the builder
+           entity-escape it normally, which is the standard interoperable
+           convention — readers unescape and render it. Verified by parsing
+           dist/rss.xml back with an XML parser. */
+        description: linked ? `<p>${post.data.dek}</p>${star}` : post.data.dek,
         customData: `<guid isPermaLink="${linked ? 'false' : 'true'}">${permalink}</guid>`,
       };
     }),
