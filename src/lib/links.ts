@@ -8,6 +8,17 @@ export function isLink(data: LinkFields): boolean {
   return typeof data.sourceUrl === 'string' && data.sourceUrl.length > 0;
 }
 
+/** True when the string parses as an http(s) URL. Must not throw: Zod's
+    `.url()` marks a bad string dirty without aborting, so this predicate
+    still runs on input that already failed URL parsing. */
+export function isHttpUrl(value: string): boolean {
+  try {
+    return /^https?:$/.test(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+}
+
 /** Display form of a source's host: no scheme, no `www.`, no port, no path.
     Safe to call unguarded — the schema has already rejected anything that is
     not an http(s) URL. */

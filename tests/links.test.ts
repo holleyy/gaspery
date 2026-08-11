@@ -3,13 +3,30 @@ import assert from 'node:assert/strict';
 // The `.ts` extension is required here and only here: Node's native type
 // stripping runs this file directly, and ESM in Node needs explicit
 // extensions. Astro/Vite files import the same module extensionless.
-import { isLink, sourceDomain, newestEssayId, toPostProps } from '../src/lib/links.ts';
+import { isLink, isHttpUrl, sourceDomain, newestEssayId, toPostProps } from '../src/lib/links.ts';
 
 test('isLink is true only when a source URL is present', () => {
   assert.equal(isLink({ sourceUrl: 'https://example.com/a' }), true);
   assert.equal(isLink({}), false);
   assert.equal(isLink({ sourceUrl: '' }), false);
   assert.equal(isLink({ sourceUrl: undefined }), false);
+});
+
+test('isHttpUrl is true for a valid http(s) URL', () => {
+  assert.equal(isHttpUrl('https://daringfireball.net/linked/2026/08/11/x'), true);
+  assert.equal(isHttpUrl('http://example.com'), true);
+});
+
+test('isHttpUrl returns false, and does not throw, for a scheme-less string', () => {
+  assert.equal(isHttpUrl('daringfireball.net/linked/x'), false);
+});
+
+test('isHttpUrl returns false, and does not throw, for a non-http scheme', () => {
+  assert.equal(isHttpUrl('mailto:someone@example.com'), false);
+});
+
+test('isHttpUrl returns false, and does not throw, for the empty string', () => {
+  assert.equal(isHttpUrl(''), false);
 });
 
 test('sourceDomain drops the scheme, the www, and everything after the host', () => {

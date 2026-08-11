@@ -43,9 +43,7 @@ schema: z
     sourceUrl: z
       .string()
       .url()
-      .refine((u) => /^https?:$/.test(new URL(u).protocol), {
-        message: 'Source URL must be an http(s) address.',
-      })
+      .refine(isHttpUrl, { message: 'Source URL must be an http(s) address.' })
       .optional(),
     readingTime: z.string().optional(),
     dek: z.string(),

@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { isHttpUrl } from './lib/links';
 
 // Blog posts — one markdown file per entry. An entry carrying `sourceUrl` is a
 // linked post: its headline points out, and `dek` holds the remark.
@@ -12,9 +13,7 @@ const writing = defineCollection({
       sourceUrl: z
         .string()
         .url()
-        .refine((u) => /^https?:$/.test(new URL(u).protocol), {
-          message: 'Source URL must be an http(s) address.',
-        })
+        .refine(isHttpUrl, { message: 'Source URL must be an http(s) address.' })
         .optional(),
       readingTime: z.string().optional(),
       dek: z.string(),
