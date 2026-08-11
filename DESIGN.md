@@ -135,7 +135,8 @@ ramp; semantic colors appear only on status and error states.
 - **Editorial Magenta** (`--color-brand`, `#D63A86` light / `#F06AA6` dark): the primary ink. Links, the hero mark, the monogram, the "New" tag. **Brand Bright** (`--color-brand-bright`, `#B82E70` / `#F582B5`) is its hover-only companion.
 
 ### Secondary
-- **Registration Teal** (`--color-teal`, `#2AA7C8` light / `#5CC7E8` dark): the second ink. The halftone field, the monogram ghost, and every registration mark. Used sparingly — its rarity is what makes it a signature.
+- **Registration Teal** (`--color-teal`, `#2AA7C8` light / `#5CC7E8` dark): the second ink. The halftone field, the monogram ghost, and every registration mark. Used sparingly — its rarity is what makes it a signature. **Never set type in it**: on the bone ground it measures 2.50:1, below every WCAG threshold. It is a mark, not a word.
+- **Teal Ink** (`--color-teal-ink`, `#1A6F86` light / `#5CC7E8` dark): the same ink darkened enough to be read. 5.09:1 on bone — the weight of the secondary ink — and unchanged in dark, where display teal already clears 9.20:1. Used for the small set of teal things that are text: app enumerations, Now-panel field labels, quote attributions, and the ↗ / ★ marks on linked posts.
 
 ### Neutral
 - **Bone Paper** (`--color-paper`, `#F6F1E6` / `#191712`): the page ground.
@@ -163,7 +164,8 @@ Full light/dark reference (dark values are theme-aware by default via
 | `--color-ink-secondary` | `#6C6759` | `#A8A18E` | secondary/meta text |
 | `--color-brand` | `#D63A86` | `#F06AA6` | primary accent — links, hero mark, "New" tag |
 | `--color-brand-bright` | `#B82E70` | `#F582B5` | hover state for brand |
-| `--color-teal` | `#2AA7C8` | `#5CC7E8` | second ink — halftone, ghost, registration marks |
+| `--color-teal` | `#2AA7C8` | `#5CC7E8` | second ink — halftone, ghost, registration marks. Never type |
+| `--color-teal-ink` | `#1A6F86` | `#5CC7E8` | teal as text — labels, enumerations, attributions, permalink marks |
 | `--color-positive` | `#4E7A44` | `#9DBB7F` | status: live |
 | `--color-warning` | `#9A6516` | `#E0A33E` | status: WIP |
 | `--color-error` | `#C0392B` | `#E86254` | error state |
@@ -171,8 +173,13 @@ Full light/dark reference (dark values are theme-aware by default via
 ### Named Rules
 **The Two-Ink Rule.** Every screen prints in exactly two inks — magenta and teal
 — over one bone ground. A third accent color is never introduced; hierarchy is
-solved with weight, size, and space. Teal is the rarer ink: halftone, ghost, and
-registration marks only, never body or links.
+solved with weight, size, and space. Teal is the rarer ink, and it comes in two
+weights of the same colour: `--color-teal` for marks that are *printed* rather
+than read — halftone, ghost, registration marks, status dots — and
+`--color-teal-ink` for the small set of labels and markers that are *read*:
+enumerations, field labels, attributions, and printer's marks that happen to
+carry a link. Teal is never body copy, and never an ordinary hyperlink. Magenta
+remains the link ink.
 
 **The Token Rule.** Dark values are theme-aware by default. Never hardcode a
 light value where a token exists — the token already carries its dark twin.

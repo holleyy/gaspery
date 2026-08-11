@@ -18,6 +18,10 @@
   --color-brand:          #D63A86;
   --color-brand-bright:   #B82E70;
   --color-teal:           #2AA7C8;
+  /* Teal as *text*. Display teal is 2.50:1 on the bone ground — it can only
+     ever be a mark, never a word. This is the same ink darkened to 5.09:1,
+     matching the secondary ink's weight. Dark needs no darkening. */
+  --color-teal-ink:       #1A6F86;
   --color-positive:       #4E7A44;
   --color-warning:        #9A6516;
   --color-error:          #C0392B;
@@ -57,6 +61,7 @@
     --color-brand:          #F06AA6;
     --color-brand-bright:   #F582B5;
     --color-teal:           #5CC7E8;
+    --color-teal-ink:       #5CC7E8;   /* 9.20:1 on the dark ground already */
     --color-positive:       #9DBB7F;
     --color-warning:        #E0A33E;
     --color-error:          #E86254;
@@ -259,7 +264,7 @@ img, svg { display: block; max-width: 100%; }
 
 /* App entries */
 .app { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--color-hairline); }
-.app__num { width: 22px; flex-shrink: 0; font-family: var(--font-serif); font-weight: 700; font-size: 15px; line-height: 1.6; color: var(--color-teal); }
+.app__num { width: 22px; flex-shrink: 0; font-family: var(--font-serif); font-weight: 700; font-size: 15px; line-height: 1.6; color: var(--color-teal-ink); }
 .app__body { flex: 1; min-width: 0; }
 .app__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .app__name { flex-shrink: 0; white-space: nowrap; font-family: var(--font-serif); font-weight: 700; font-size: 18px; transition: color .15s ease; }
@@ -278,7 +283,7 @@ img, svg { display: block; max-width: 100%; }
 .now-panel__head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-teal); }
 .now-panel__row { display: flex; flex-direction: column; gap: 3px; }
 .now-panel__row + .now-panel__row { padding-top: 11px; border-top: 1px solid var(--color-hairline); }
-.now-panel__row-label { font-family: var(--font-sans); font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); }
+.now-panel__row-label { font-family: var(--font-sans); font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal-ink); }
 .now-panel__row-value { font-size: var(--text-dek); line-height: 1.5; color: var(--color-ink); }
 .now-panel__link { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand); }
 .now-panel__link:hover { color: var(--color-brand-bright); }

@@ -198,7 +198,9 @@ Display `--color-teal` is **not** touched — the halftone, the monogram ghost a
 
 Why the token exists: display teal `#2AA7C8` on the bone ground measures **2.50:1**, below every WCAG threshold, so it cannot carry text in light mode. It is fine in dark at 9.20:1, which is why the problem is easy to miss. `#1A6F86` measures **5.09:1**, near-identical to the existing secondary ink's 5.01:1, so it sits at the same optical weight.
 
-**`DESIGN.md` must document the new token in the same pass**, or subsequent design-hook runs will keep reporting it as palette drift.
+**Status: already landed** (see §12) — the token exists and `DESIGN.md` documents it. The implementation plan consumes it rather than creating it.
+
+Documenting it required amending the **Two-Ink Rule**, which previously read "halftone, ghost, and registration marks only, never body or links." Two of the shipped components already broke that rule, and this design adds more teal text (the ↗, the ★, the quote attribution). The rule now distinguishes teal that is *printed* from teal that is *read*, and holds the line that matters: teal is never body copy and never an ordinary hyperlink — magenta remains the link ink. The ★ is the one deliberate edge, admitted as a printer's mark that happens to carry a link.
 
 ## 10. Verification plan
 
@@ -230,8 +232,10 @@ Why the token exists: display teal `#2AA7C8` on the bone ground measures **2.50:
 - **Bluesky cross-posting.** A GitHub Action on push to `main`, firing when a push *adds* a file to the writing directory. The git diff is the idempotency key, so no `crossposted` flag pollutes content and **no schema field is needed now**. Known gotchas: `facets` use **byte** offsets into UTF-8 (an em dash in the remark will shift a link built on character offsets); link cards need `app.bsky.embed.external` with a blob-uploaded thumbnail; the trigger must respect `draft`; posts cap at 300 graphemes. Open editorial question: the rail already shows the latest Bluesky post ([Rail.astro:64](../../../src/components/Rail.astro)), so auto-posting every link makes the pulse a mirror of the site's own links.
 - **An essays-only RSS feed.**
 
-**Observed, not addressed here:**
+**Landed ahead of this feature** (commit precedes the implementation plan, so the plan can assume them):
 
-- `.app__num` and `.now-panel__row-label` set display teal as text at **2.50:1** in light mode — a pre-existing AA gap against `PRODUCT.md`'s stated WCAG 2.1 AA target. `--color-teal-ink` gives it a one-line fix whenever it is picked up.
-- `DESIGN.md` documents the light palette but not the dark tokens, which is why design-hook runs flag shipped dark values as drift.
-- `getStaticPaths` in `writing/[...id].astro` does not filter drafts, so draft entries build a reachable page while staying out of listings and the feed. Pre-existing and plausibly intentional as URL preview; noted only so it is a decision rather than a surprise.
+- `--color-teal-ink` added to `global.css` and documented in `DESIGN.md`. §9 describes the token; it already exists.
+- `.app__num` and `.now-panel__row-label` moved onto it, closing a pre-existing **2.50:1** AA gap against `PRODUCT.md`'s WCAG 2.1 AA target.
+- `getStaticPaths` in `writing/[...id].astro` now filters drafts in production builds only, so a draft is still previewable at its real URL under `astro dev` but never ships.
+
+**Corrected:** an earlier draft of this spec claimed `DESIGN.md` documents the light palette but not the dark tokens. That is wrong — §2 carries a full light/dark reference table and every bullet lists both values. Design-hook runs flag shipped dark values because of how the hook parses the file, not because they are undocumented.
