@@ -40,17 +40,23 @@ schema: z
   .object({
     title: z.string(),
     date: z.coerce.date(),
-    sourceUrl: z.string().url().optional(),
-    dek: z.string().optional(),
+    sourceUrl: z
+      .string()
+      .url()
+      .refine((u) => /^https?:$/.test(new URL(u).protocol), {
+        message: 'Source URL must be an http(s) address.',
+      })
+      .optional(),
     readingTime: z.string().optional(),
+    dek: z.string(),
     draft: z.boolean().default(false),
   })
   .superRefine((v, ctx) => {
-    if (v.sourceUrl) return;
-    if (!v.dek) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['dek'],
-      message: 'Essays require a dek.' });
-    if (!v.readingTime) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['readingTime'],
-      message: 'Essays require a reading time.' });
+    /* Only essays carry a reading time; a linked post has nothing to time. */
+    if (!v.sourceUrl && !v.readingTime) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['readingTime'],
+        message: 'Essays require a readingTime.' });
+    }
   })
 ```
 
@@ -105,7 +111,7 @@ The `Post` prop interface gains `sourceUrl?: string`; the component derives the 
 
 ### The quote convention
 
-One new component in `global.css`, applied to `blockquote` inside `.prose`:
+One new component, applied to `blockquote` inside `.prose`. It lives in the `<style>` block of `writing/[...id].astro` alongside the other `.prose :global(…)` rules, not in `global.css`, because that is where every existing prose rule already lives:
 
 ```css
 background: var(--color-surface);
