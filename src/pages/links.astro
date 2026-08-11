@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Rail from '../components/Rail.astro';
+import WritingList from '../components/WritingList.astro';
+import Footer from '../components/Footer.astro';
+import { isLink, newestEssayId, toPostProps } from '../lib/links';
+
+/* Linked posts only — things worth pointing at, newest first. `newestEssayId`
+   returns null for a links-only list, so nothing here gets the "New" tag. */
+const posts = (await getCollection('writing'))
+  .filter((p) => !p.data.draft && isLink(p.data))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const newestId = newestEssayId(posts);
+const postProps = posts.map((p) => toPostProps(p, newestId));
+---
+<Base title="Links — Alex Holley" description="Things worth pointing at, newest first.">
+  <div class="page">
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
+
+    <main class="main">
+      <WritingList posts={postProps} showMore={false} filter="links" />
+      <Footer />
+    </main>
+  </div>
+</Base>
