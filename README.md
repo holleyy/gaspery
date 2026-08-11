@@ -73,10 +73,16 @@ elsewhere links, subscribe, and colophon.
 
 ## Editing content
 
-- **New post:** add a markdown file to `src/content/writing/`. Newest date sorts
-  first; the latest post automatically gets the "New" tag.
-- **New app:** add a record to `src/content/apps.json` (`status` is `live` or
-  `wip`; omit `url` for an unlinked entry).
+- **New essay:** add a markdown file to `src/content/writing/` with `title`,
+  `date`, `readingTime` and `dek`. Newest date sorts first; the latest essay
+  gets the "New" tag.
+- **New link post:** the same, but add `sourceUrl` and omit `readingTime`. The
+  headline will point at the source, `dek` becomes the remark, and the ★ links
+  back here. A Markdoc body is optional — use it for a pull quote.
+- **New app:** add a YAML file to `src/content/apps/` (`status` is `live`,
+  `dev` or `planning`; omit `url` for an unlinked entry).
+
+Everything above is also editable through the CMS at `/keystatic`.
 
 ## Placeholders to replace
 

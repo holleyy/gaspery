@@ -257,6 +257,22 @@ Sheet."
 - **Preference:** rows over cards. Content lists (writing, apps) are rows divided by 1px hairlines, not boxed cards. Reach for a card only when a row genuinely won't do; never nest cards.
 - **Surface:** if a raised panel is needed, `--color-surface-raised` on `--color-paper`, hairline border, no shadow.
 
+### Linked posts
+A stream entry whose headline points out. Headline set at 18px against an
+essay's 21px, so a busy link week never outranks the long-form. The source
+domain replaces the reading time in the meta line. Two marks in
+`--color-teal-ink`: a trailing ↗ on the headline (decorative, `aria-hidden`)
+and a ★ below the remark that is the permalink back to our copy — the only
+route home once the headline points away.
+
+### Pull quote
+`blockquote` inside `.prose`. Set on `--color-surface` with `--radius-card`,
+body in the serif at 17px, attribution as a `<cite>` in `--color-teal-ink`
+small caps. Separates a source's voice from your own. Authors reach the
+attribution with a Markdoc tag, not raw HTML: `{% cite text="Ethan Marcotte" /%}`
+inside the blockquote renders `<cite>Ethan Marcotte</cite>`; the same field is
+exposed in Keystatic as the `cite` block's "Attribution" input.
+
 ### Inputs / Fields
 - No form inputs ship today. When one is added: `--color-surface` fill, 1px `--color-hairline` stroke, `--radius-card` (8px). Focus shifts the border to `--color-brand` (no glow — flat press). Error state uses `--color-error` on the border and message.
 
