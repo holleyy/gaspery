@@ -53,5 +53,22 @@ export default defineMarkdocConfig({
         caption: { type: String },
       },
     },
+    // Pull-quote attribution. No Astro component needed — the `.prose
+    // :global(blockquote cite)` rule in [...id].astro does the styling; this
+    // just needs to land a plain <cite> element in the output. The Keystatic
+    // content component (keystatic.config.ts) is field-based (`block()`), so
+    // the attribution arrives as a `text` attribute, not tag children —
+    // transform it into the tag's rendered content instead of leaving it as
+    // a (non-standard) HTML attribute.
+    cite: {
+      render: 'cite',
+      attributes: {
+        text: { type: String, required: true },
+      },
+      transform(node, config) {
+        const { text } = node.transformAttributes(config);
+        return new Markdoc.Tag('cite', {}, [text]);
+      },
+    },
   },
 });

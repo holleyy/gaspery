@@ -10,6 +10,21 @@ export const risoPhotoComponents = {
       caption: fields.text({ label: 'Caption (optional)' }),
     },
   }),
+  // A pull-quote's attribution line. `block()`, not `wrapper()`: a `wrapper`
+  // compiles to a ProseMirror node with `content: 'block+'`, so it can only
+  // wrap other block nodes (paragraphs) — a bare run of attribution text
+  // fails to parse ("tag has unexpected children"), confirmed against the
+  // live editor. It would also mean a nested <p> inside the <cite>, which
+  // would pick up the blockquote-paragraph styles (serif, 17px) and stomp
+  // the small-caps teal look. `block()` — one plain field, exactly like
+  // RisoPhoto's `caption` — sidesteps both problems.
+  cite: block({
+    label: 'Cite',
+    description: 'A pull-quote attribution line (e.g. the source name).',
+    schema: {
+      text: fields.text({ label: 'Attribution', validation: { isRequired: true } }),
+    },
+  }),
 };
 
 export default config({
