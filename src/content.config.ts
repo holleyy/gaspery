@@ -1,16 +1,35 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// Blog posts — one markdown file per entry.
+// Blog posts — one markdown file per entry. An entry carrying `sourceUrl` is a
+// linked post: its headline points out, and `dek` holds the remark.
 const writing = defineCollection({
   loader: glob({ pattern: '**/*.mdoc', base: './src/content/writing' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    readingTime: z.string(),
-    dek: z.string(),
-    draft: z.boolean().default(false),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      date: z.coerce.date(),
+      sourceUrl: z
+        .string()
+        .url()
+        .refine((u) => /^https?:$/.test(new URL(u).protocol), {
+          message: 'Source URL must be an http(s) address.',
+        })
+        .optional(),
+      readingTime: z.string().optional(),
+      dek: z.string(),
+      draft: z.boolean().default(false),
+    })
+    .superRefine((v, ctx) => {
+      /* Only essays carry a reading time; a linked post has nothing to time. */
+      if (!v.sourceUrl && !v.readingTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['readingTime'],
+          message: 'Essays require a readingTime.',
+        });
+      }
+    }),
 });
 
 // Small apps / tools — one YAML file per app; the entry's id is its filename.

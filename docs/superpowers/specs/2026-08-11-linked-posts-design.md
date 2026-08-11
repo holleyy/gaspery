@@ -54,7 +54,11 @@ schema: z
   })
 ```
 
-`dek` and `readingTime` relax from required to conditionally required. Essays keep exactly the guarantees they have today; link posts carry no dead fields.
+`readingTime` relaxes from required to essay-only. `dek` stays required for
+every entry: for an essay it is the standfirst, for a link post it is the
+remark, and it is what the stream and the feed display. A link post's Markdoc
+body is optional and holds a pull-quote or a longer riff shown only on the
+permalink page — the stream cannot cheaply render N Markdoc bodies.
 
 **No content migration.** All six existing entries already have both fields and validate unchanged.
 

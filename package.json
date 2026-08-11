@@ -10,7 +10,8 @@
     "build": "astro build",
     "postbuild": "printf '_worker.js\\n_routes.json\\n' > dist/.assetsignore",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",
