@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import RegistrationMark from '../../components/RegistrationMark.astro';
+import { sourceDomain } from '../../lib/links';
 
 export async function getStaticPaths() {
   /* Drafts stay reachable under `astro dev` so a post can be previewed at its
@@ -14,6 +15,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+const src = post.data.sourceUrl;
 ---
 <Base title={`${post.data.title} — Alex Holley`} description={post.data.dek}>
   <article class="article">
@@ -22,18 +24,25 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>
       <span class="sep">/</span>
-      <span class="label">{post.data.readingTime}</span>
+      <span class="label">{src ? sourceDomain(src) : post.data.readingTime}</span>
     </div>
 
-    <h1 class="article__title">{post.data.title}</h1>
-    <p class="article__dek">{post.data.dek}</p>
+    {src ? (
+      <h1 class="article__title">
+        <a class="article__source" href={src}>{post.data.title}</a><span class="article__out" aria-hidden="true">↗</span>
+      </h1>
+    ) : (
+      <h1 class="article__title">{post.data.title}</h1> <p class="article__dek">{post.data.dek}</p>
+    )}
 
     <div class="prose">
       <Content />
     </div>
 
     <div class="article__end">
-      <RegistrationMark size={14} />
+      {src
+        ? <span class="article__star" aria-hidden="true">★</span>
+        : <RegistrationMark size={14} />}
       <a href="/">Back to the notebook →</a>
     </div>
   </article>
@@ -86,6 +95,40 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
   }
   .prose :global(p) { margin: 0 0 20px; }
   .prose :global(a) { color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px; }
+
+  .article__source { color: inherit; }
+  .article__source:hover { color: var(--color-brand-bright); }
+  .article__out { margin-left: 10px; font-size: 24px; color: var(--color-teal-ink); }
+  .article__star { font-size: 16px; color: var(--color-teal-ink); }
+
+  /* Quoting a source — the tint block, so their voice and yours are
+     visually separable. Applies to essays too; the site had no
+     blockquote style at all before this. */
+  .prose :global(blockquote) {
+    margin: 28px 0 26px;
+    padding: 22px 26px;
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+  }
+  .prose :global(blockquote p) {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+  .prose :global(blockquote p:last-child) { margin-bottom: 0; }
+  .prose :global(blockquote cite) {
+    display: block;
+    margin-top: 12px;
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-teal-ink);
+  }
+
   .article__end {
     display: flex;
     align-items: center;
