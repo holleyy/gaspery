@@ -182,6 +182,17 @@ export function sourceDomain(sourceUrl: string): string {
   return new URL(sourceUrl).hostname.replace(/^www\./, '');
 }
 
+/** True when the string parses as an http(s) URL. Must not throw: Zod's
+    `.url()` marks a bad string dirty without aborting, so this predicate
+    still runs on input that already failed URL parsing. */
+export function isHttpUrl(value: string): boolean {
+  try {
+    return /^https?:$/.test(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+}
+
 export type WritingData = LinkFields & {
   title: string;
   date: Date;
@@ -229,7 +240,7 @@ export function toPostProps(entry: WritingEntry, newestId: string | null): PostP
 npm test
 ```
 
-Expected: `pass 8`, `fail 0`.
+Expected: `pass 12`, `fail 0`.
 
 - [ ] **Step 7: Extend the collection schema**
 
@@ -247,9 +258,7 @@ const writing = defineCollection({
       sourceUrl: z
         .string()
         .url()
-        .refine((u) => /^https?:$/.test(new URL(u).protocol), {
-          message: 'Source URL must be an http(s) address.',
-        })
+        .refine(isHttpUrl, { message: 'Source URL must be an http(s) address.' })
         .optional(),
       readingTime: z.string().optional(),
       dek: z.string(),
@@ -1009,7 +1018,7 @@ Everything above is also editable through the CMS at `/keystatic`.
 npm test && npm run build
 ```
 
-Expected: `pass 8 / fail 0`, then a successful build listing `/essays`, `/links`, and the link permalink.
+Expected: `pass 12 / fail 0`, then a successful build listing `/essays`, `/links`, and the link permalink.
 
 - [ ] **Step 4: Confirm drafts still stay out**
 
