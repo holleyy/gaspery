@@ -12,7 +12,20 @@
 
 ## Global Constraints
 
-- **Never alter the essays' rendered HTML.** Essay rows and essay permalinks must stay byte-identical to the baseline captured in Task 1. `scripts/verify-parity.sh` is the gate, and it compares HTML only — so the new quote style, being pure CSS, must produce **no** parity diff even on `so-well-planned-it-feels-unplanned`, the one essay that already contains a blockquote. Its *appearance* changes; its markup must not. The only permitted parity diffs are new routes and the new link rows.
+- **Never alter the essays' rendered markup.** Essay rows and essay permalinks must stay byte-identical to the Task 1 baseline *in markup*. The only permitted markup diffs are new routes and the new link rows.
+
+  **Corrected during Task 4:** the gate is markup, not raw bytes. Astro inlines the article component's scoped `<style>` block into every page it renders, so adding the quote CSS legitimately changes the bytes of all six essay permalinks. `scripts/verify-parity.sh` normalises asset hashes but not inline style text, so **it exits 1 from Task 4 onward and that is correct** — do not "fix" it, and do not edit the script or `astro.config.mjs`. Verify markup with a style-stripped comparison instead:
+
+  ```bash
+  norm() { perl -0777 -pe 's|<style>.*?</style>||gs' "$1" | sed -E -e 's#/_astro/[A-Za-z0-9_.-]+\.(css|js)#/_astro/ASSET#g' -e 's# ?data-astro-cid-[a-z0-9]+(="[^"]*")?##g'; }
+  for f in dist/writing/*/index.html; do
+    rel="${f#dist/}"
+    [ -f ".baseline/$rel" ] || { echo "NEW ROUTE: $rel"; continue; }
+    diff -q <(norm "$f") <(norm ".baseline/$rel") >/dev/null || echo "MARKUP CHANGED: $rel"
+  done
+  ```
+
+  Two grep traps found the hard way: `grep '^CHANGED: writing/[a-z]'` does not isolate essay permalinks — it matches `writing/index.html`, the archive. Use `writing/[^/]+/`. And grepping a built page for `article__dek` matches the inlined CSS selector, not the markup — strip `<style>` first.
 - **Two inks only.** Magenta and teal over the bone ground; no third accent. Use `--color-teal-ink` (already in `global.css`) for any teal that is *read*; `--color-teal` is for marks that are *printed* and must never be set as type — it measures 2.50:1 on bone.
 - **WCAG 2.1 AA.** Body text ≥ 4.5:1. Never convey state by colour alone.
 - **No new runtime dependencies.** Tests use Node's built-in `node:test` with native TypeScript type stripping.
