@@ -10,6 +10,17 @@ export async function getStaticPaths() {
   const apps = await getCollection('apps');
   return pages.map((page) => {
     const app = apps.find((a) => a.id === page.id);
+    /* Keystatic keeps `apps` and `appPages` as separate collections, so
+       renaming one does not rename the other — and an orphaned page used to
+       fail the whole build with an untraceable "reading 'data'" TypeError.
+       Name both files instead; an app page with no roster entry is genuinely
+       broken, so stopping here is right. */
+    if (!app) {
+      throw new Error(
+        `appPages/${page.id}.mdoc has no matching apps/${page.id}.yaml. ` +
+          `Rename the two together, or add the missing roster entry.`
+      );
+    }
     return { params: { id: page.id }, props: { page, app } };
   });
 }

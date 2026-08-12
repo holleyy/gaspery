@@ -17,9 +17,9 @@ const { title, description = 'Product, design & small software — a working not
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Autodiscovery. Linked posts point their headline at the source, so the
-         ★ in a feed item is the only route back here — which assumes a reader
-         can find the feed in the first place. -->
+    {/* Autodiscovery. A linked post's headline points at the source, so the ★
+        in a feed item is the only route back here — which assumes a reader can
+        find the feed at all. Astro strips this comment from the output. */}
     <link
       rel="alternate"
       type="application/rss+xml"
