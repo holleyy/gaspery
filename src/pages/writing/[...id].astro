@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import RegistrationMark from '../../components/RegistrationMark.astro';
-import { sourceDomain } from '../../lib/links';
+import { isLink, sourceDomain } from '../../lib/links';
 
 export async function getStaticPaths() {
   /* Drafts stay reachable under `astro dev` so a post can be previewed at its
@@ -15,7 +15,6 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
-const src = post.data.sourceUrl;
 ---
 <Base title={`${post.data.title} — Alex Holley`} description={post.data.dek}>
   <article class="article">
@@ -24,12 +23,15 @@ const src = post.data.sourceUrl;
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>
       <span class="sep">/</span>
-      <span class="label">{src ? sourceDomain(src) : post.data.readingTime}</span>
+      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
     </div>
 
-    {src ? (
+    {/* .article__dek below must stay outside this ternary — moving it into
+        either branch changes Astro's whitespace serialization and breaks
+        essay-markup parity (the regression fixed by commit 56796fa). */
+    isLink(post.data) ? (
       <h1 class="article__title">
-        <a class="article__source" href={src}>{post.data.title}</a><span class="article__out" aria-hidden="true">↗</span>
+        <a class="article__source" href={post.data.sourceUrl}>{post.data.title}</a><span class="article__out" aria-hidden="true">↗</span>
       </h1>
     ) : (
       <h1 class="article__title">{post.data.title}</h1>
@@ -41,7 +43,7 @@ const src = post.data.sourceUrl;
     </div>
 
     <div class="article__end">
-      {src
+      {isLink(post.data)
         ? <span class="article__star" aria-hidden="true">★</span>
         : <RegistrationMark size={14} />}
       <a href="/">Back to the notebook →</a>

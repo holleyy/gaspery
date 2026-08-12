@@ -1,6 +1,6 @@
 ---
 import RegistrationMark from './RegistrationMark.astro';
-import { sourceDomain } from '../lib/links';
+import { isLink, sourceDomain } from '../lib/links';
 
 interface Post {
   href: string;
@@ -45,7 +45,7 @@ const FILTERS = [
     )}
   </div>
 
-  {posts.map((post) => post.sourceUrl ? (
+  {posts.map((post) => isLink(post) ? (
     <article class="post post--link">
       <div class="post__meta">
         <span class="label">{fmt(post.date)}</span>

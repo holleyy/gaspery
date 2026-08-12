@@ -10,22 +10,29 @@ export const risoPhotoComponents = {
       caption: fields.text({ label: 'Caption (optional)' }),
     },
   }),
-  // A pull-quote's attribution line. `block()`, not `wrapper()`: a `wrapper`
-  // compiles to a ProseMirror node with `content: 'block+'`, so it can only
-  // wrap other block nodes (paragraphs) — a bare run of attribution text
-  // fails to parse ("tag has unexpected children"), confirmed against the
-  // live editor. It would also mean a nested <p> inside the <cite>, which
-  // would pick up the blockquote-paragraph styles (serif, 17px) and stomp
-  // the small-caps teal look. `block()` — one plain field, exactly like
-  // RisoPhoto's `caption` — sidesteps both problems.
-  cite: block({
-    label: 'Cite',
-    description: 'A pull-quote attribution line (e.g. the source name).',
-    schema: {
-      text: fields.text({ label: 'Attribution', validation: { isRequired: true } }),
-    },
-  }),
 };
+
+// A pull-quote's attribution line. `block()`, not `wrapper()`: a `wrapper`
+// compiles to a ProseMirror node with `content: 'block+'`, so it can only
+// wrap other block nodes (paragraphs) — a bare run of attribution text
+// fails to parse ("tag has unexpected children"), confirmed against the
+// live editor. It would also mean a nested <p> inside the <cite>, which
+// would pick up the blockquote-paragraph styles (serif, 17px) and stomp
+// the small-caps teal look. `block()` — one plain field, exactly like
+// RisoPhoto's `caption` — sidesteps both problems.
+//
+// Kept out of `risoPhotoComponents`: `.prose blockquote cite` is styled only
+// in src/pages/writing/[...id].astro, so offering it in the `appPages` or
+// `about` editors would insert a tag that renders as unstyled UA-default
+// italic there. `writingComponents` below adds it back for `writing` only.
+const cite = block({
+  label: 'Cite',
+  description: 'A pull-quote attribution line (e.g. the source name).',
+  schema: {
+    text: fields.text({ label: 'Attribution', validation: { isRequired: true } }),
+  },
+});
+const writingComponents = { ...risoPhotoComponents, cite };
 
 export default config({
   storage: import.meta.env.DEV
@@ -45,6 +52,18 @@ export default config({
         sourceUrl: fields.text({
           label: 'Source URL',
           description: 'Paste a URL to make this a link post — the headline will point there instead of here. Leave empty for an essay.',
+          validation: {
+            // Empty must stay valid — that's what makes the field optional
+            // (Keystatic serialises '' to undefined). The alternation's first
+            // branch matches only the empty string; the second requires an
+            // http(s) scheme, so a bare domain like "ethanmarcotte.com" is
+            // rejected here instead of failing the whole site's deploy when
+            // Zod's schema (src/content.config.ts) rejects it later.
+            pattern: {
+              regex: /^$|^https?:\/\/\S+$/,
+              message: 'Must start with http:// or https://',
+            },
+          },
         }),
         date: fields.date({ label: 'Date' }),
         readingTime: fields.text({
@@ -57,7 +76,7 @@ export default config({
           multiline: true,
         }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
-        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+        content: fields.markdoc({ label: 'Body', components: writingComponents }),
       },
     }),
     appPages: collection({

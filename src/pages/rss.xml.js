@@ -40,6 +40,13 @@ export async function GET(context) {
     description: 'Product, design & small software — a working notebook.',
     site: context.site,
     items: posts.map((post) => {
+      // Built by hand, independently of @astrojs/rss's own `createCanonicalURL`
+      // (node_modules/@astrojs/rss/dist/util.js), which derives the essay
+      // <link> below from the relative `/writing/${post.id}/` path. The two
+      // agree today because both assume a trailing slash — this hand-built
+      // one always adds one, and `createCanonicalURL` defaults its own
+      // `trailingSlash` option to `true` — but they are not wired together,
+      // so a future `trailingSlash` config change could silently split them.
       const permalink = `${site}/writing/${post.id}/`;
       const linked = isLink(post.data);
       const star = `<p><a href="${permalink}" title="Permanent link to this post">★</a></p>`;

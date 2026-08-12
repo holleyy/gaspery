@@ -12,6 +12,26 @@ test('isLink is true only when a source URL is present', () => {
   assert.equal(isLink({ sourceUrl: undefined }), false);
 });
 
+test('isLink narrows sourceUrl to string, so callers need no re-test or assertion', () => {
+  // `data` carries extra fields beyond LinkFields (title), exercising the
+  // generic `T extends LinkFields` — the predicate must narrow the whole
+  // object type, not just a bare `{ sourceUrl?: string }`.
+  const data: { title: string; sourceUrl?: string } = {
+    title: 'Worry Stone',
+    sourceUrl: 'https://ethanmarcotte.com/x',
+  };
+  if (isLink(data)) {
+    // Only type-checks if `isLink` is a type predicate that narrows
+    // `data.sourceUrl` from `string | undefined` to `string` — passing it
+    // straight to `sourceDomain` (which takes `string`) would be a type
+    // error under a plain `boolean` return. This is the property
+    // WritingList.astro and writing/[...id].astro rely on.
+    assert.equal(sourceDomain(data.sourceUrl), 'ethanmarcotte.com');
+  } else {
+    assert.fail('expected isLink to narrow a present sourceUrl to true');
+  }
+});
+
 test('isHttpUrl is true for a valid http(s) URL', () => {
   assert.equal(isHttpUrl('https://daringfireball.net/linked/2026/08/11/x'), true);
   assert.equal(isHttpUrl('http://example.com'), true);

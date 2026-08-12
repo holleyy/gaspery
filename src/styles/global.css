@@ -257,7 +257,11 @@ img, svg { display: block; max-width: 100%; }
   padding: 2px 6px; border-radius: 2px;
 }
 .post h3 { font-family: var(--font-serif); font-weight: 700; font-size: 21px; line-height: 1.28; transition: color .15s ease; }
-.post:hover h3 { color: var(--color-brand-bright); }
+/* Scoped to `a.post` (essay rows only, the whole row is one anchor) — plain
+   `.post:hover h3` also matches `.post--link` (an <article>, not an <a>), so
+   hovering its dek, meta line, or ★ would light up the headline via `a {
+   color: inherit }` as though that non-interactive area were the target. */
+a.post:hover h3 { color: var(--color-brand-bright); }
 .post__dek { margin-top: 7px; font-size: var(--text-dek); line-height: 1.53; color: var(--color-ink-secondary); max-width: 440px; }
 .more-link { display: inline-flex; align-items: center; gap: 7px; padding-top: 18px; font-weight: 600; font-size: 14px; color: var(--color-brand); }
 .more-link:hover { color: var(--color-brand-bright); }
@@ -266,7 +270,6 @@ img, svg { display: block; max-width: 100%; }
    essay headline so a busy link week never outranks the long-form. */
 .post--link h3 { font-family: var(--font-serif); font-weight: 700; font-size: 18px; line-height: 1.28; }
 .post--link h3 a { transition: color .15s ease; }
-.post--link:hover h3 a { color: var(--color-brand-bright); }
 .post__out { margin-left: 6px; font-size: 14px; color: var(--color-teal-ink); }
 .post__permalink { display: inline-block; margin-top: 9px; font-size: 14px; color: var(--color-teal-ink); }
 .post__permalink:hover { color: var(--color-brand-bright); }

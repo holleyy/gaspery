@@ -3,8 +3,13 @@
 
 export type LinkFields = { sourceUrl?: string };
 
-/** An entry is a link post if, and only if, it carries a source URL. */
-export function isLink(data: LinkFields): boolean {
+/** An entry is a link post if, and only if, it carries a source URL. A type
+    predicate, not a plain boolean, so a caller that branches on `isLink(x)`
+    gets `x.sourceUrl` narrowed from `string | undefined` to `string` —
+    that's what lets rendering surfaces call this instead of re-testing the
+    raw field just to satisfy the type checker at the `sourceDomain(...)`
+    call site. */
+export function isLink<T extends LinkFields>(data: T): data is T & { sourceUrl: string } {
   return typeof data.sourceUrl === 'string' && data.sourceUrl.length > 0;
 }
 
