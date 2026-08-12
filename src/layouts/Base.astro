@@ -17,6 +17,15 @@ const { title, description = 'Product, design & small software — a working not
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Autodiscovery. Linked posts point their headline at the source, so the
+         ★ in a feed item is the only route back here — which assumes a reader
+         can find the feed in the first place. -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Alex Holley — a working notebook"
+      href="/rss.xml"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

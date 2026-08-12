@@ -11,6 +11,7 @@ colors:
   brand: "#D63A86"
   brand-bright: "#B82E70"
   teal: "#2AA7C8"
+  teal-ink: "#1A6F86"
   positive: "#4E7A44"
   warning: "#9A6516"
   error: "#C0392B"
