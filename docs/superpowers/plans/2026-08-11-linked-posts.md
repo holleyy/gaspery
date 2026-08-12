@@ -708,15 +708,17 @@ Replace the whole `<article class="article">` element with:
       <span class="label">{src ? sourceDomain(src) : post.data.readingTime}</span>
     </div>
 
-    {src ? (
+    {/* .article__dek below must stay outside this ternary and appear exactly
+        once — moving a copy into either branch changes Astro's whitespace
+        serialization and breaks essay-markup parity. */
+    src ? (
       <h1 class="article__title">
         <a class="article__source" href={src}>{post.data.title}</a><span class="article__out" aria-hidden="true">↗</span>
       </h1>
-      <p class="article__dek">{post.data.dek}</p>
     ) : (
       <h1 class="article__title">{post.data.title}</h1>
-      <p class="article__dek">{post.data.dek}</p>
     )}
+    <p class="article__dek">{post.data.dek}</p>
 
     <div class="prose">
       <Content />
@@ -730,6 +732,15 @@ Replace the whole `<article class="article">` element with:
     </div>
   </article>
 ```
+
+**Note (back-ported after the fact):** this step previously documented
+`<p class="article__dek">{post.data.dek}</p>` duplicated inside *both* ternary
+branches, rather than hoisted out as above. What was actually implemented
+from that diverged further still: the link branch's copy was missing
+entirely, not just duplicated, so a link post with no Markdoc body rendered
+with no visible remark at all — caught and fixed in commit `56796fa`, which
+hoisted the dek out to the single copy shown above and updated spec §6 to
+match. Re-running this step now produces that already-fixed shape directly.
 
 - [ ] **Step 3: Add the styles**
 

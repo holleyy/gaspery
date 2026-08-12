@@ -178,7 +178,7 @@ Three rules:
 **Two things to resolve during implementation:**
 
 - Whether `@astrojs/rss` already emits its own `<guid>` derived from `link`, so the `customData` entry overrides rather than duplicates it.
-- A link post's `description` is its **rendered remark**, not frontmatter, so the endpoint must render Markdoc. Use the documented container recipe. Fallback if it proves awkward: plain-text remark plus the ★ anchor.
+- ~~A link post's `description` is its **rendered remark**, not frontmatter, so the endpoint must render Markdoc.~~ **Resolved differently, by the implementation plan's "Resolved ambiguity" section:** the remark lives in `dek`, required for every entry (§3), so it is already a plain frontmatter string by the time Task 5 ships. `description` is built directly from it — no Markdoc renderer runs in the endpoint, and this risk doesn't materialize. Trade-off accepted there: a pull-quote living in the optional Markdoc body does not reach the feed.
 
 ## 8. Keystatic
 
@@ -191,7 +191,7 @@ sourceUrl: fields.text({
 }),
 ```
 
-`dek` and `readingTime` stop being required in the Keystatic schema; Zod enforces them conditionally instead. `content` stays as-is — for a link post the Markdoc body *is* the remark, which is what gives the quote convention somewhere to live.
+`dek` and `readingTime` stop being required in the Keystatic schema; Zod enforces them conditionally instead. `content` stays as-is — its Markdoc body is optional for a link post, holding a pull-quote or a longer riff shown only on the permalink page. **Corrected:** an earlier version of this section said the Markdoc body *is* the remark. It isn't — the remark lives in `dek`, required for every entry (§3's resolution), and the Markdoc body is what gives the quote convention somewhere to live.
 
 ## 9. Design system
 
