@@ -249,7 +249,7 @@ Sheet."
 - **Hover / Focus:** shifts to `--color-brand-bright` over 150ms ease. Keep a visible focus style for keyboard users.
 
 ### Chips
-- **"New" tag:** `--color-brand` background, `--color-paper` text, 2px radius, 2px 6px padding, Inter 700 10px uppercase, 0.12em tracking. Marks the newest post.
+- **"New" tag:** `--color-brand` background, `--color-paper` text, 2px radius, 2px 6px padding, Inter 700 10px uppercase, 0.12em tracking. Marks the newest *essay*, not the newest entry — link posts can run weekly, and an unscoped tag would camp on whichever link ran most recently instead of surfacing the newest long-form piece (`newestEssayId` in `src/lib/links.ts`).
 - **Status pill:** a 6px dot + Inter 600 10px uppercase label. `--color-positive` for "Live", `--color-warning` for "WIP". Color is never the only signal — the text label always states the status.
 
 ### Cards / Containers
@@ -279,11 +279,12 @@ exposed in Keystatic as the `cite` block's "Attribution" input.
 ### Navigation
 - **Rail nav:** Merriweather 700 19px/1.15. A 12px fixed-width marker slot shows `→` in `--color-brand` when active (`aria-current="page"`) and is empty otherwise — active and default share the same ink text; only the marker and hover differ. Hover: `--color-brand-bright`, 150ms ease.
 - **Mobile (≤860px):** the rail nav becomes a horizontal wrapping row above the hero; the marker slot is hidden and the active item is colored brand instead.
+- **Stream filter (`.stream__filter`):** `All · Essays · Links`, set in `.label` typography (Inter 600 11px uppercase, 0.14em tracking). Lives in the stream head's "Latest first" slot on the three archive views only (`/writing`, `/essays`, `/links`) — the home stream keeps "Latest first". `aria-current="page"` is set, so it is sound for assistive tech, but it is a **deliberate second idiom**, not an oversight to reconcile with the rail: it signals the current view by colour alone — `--color-ink` active, `--color-ink-secondary` default, no marker glyph — where the rail nav rule above holds active and default to the same ink and differs only by marker and hover. Scoped to this control; don't carry it into the rail.
 
 ### Component measurements
 - **Writing post row** — 22px 0 padding, 1px hairline bottom border. Meta row: 8px gap, 9px margin-bottom. Title: serif 700 21px/1.28, hovers to `--color-brand-bright`. Dek: 15px/1.53, max-width 440px, 7px margin-top.
-- **App row + status pill** — 20px 0 padding, 14px gap. Index number: 22px fixed slot, serif 700 15px teal. Name: serif 700 18px. Status: 6px dot + 10px/600 uppercase label. Dek: 14px/1.5.
-- **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Closing link 13px/600 brand → brand-bright. Links through to `/now` for the longer version.
+- **App row + status pill** — 20px 0 padding, 14px gap. Index number: 22px fixed slot, serif 700 15px teal-ink. Name: serif 700 18px. Status: 6px dot + 10px/600 uppercase label. Dek: 14px/1.5.
+- **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal-ink 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Closing link 13px/600 brand → brand-bright. Links through to `/now` for the longer version.
 
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a
