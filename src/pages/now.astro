@@ -16,7 +16,7 @@ const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getU
   <div class="page">
     <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Now" />
 
-    <main class="main">
+    <main class="main" id="main">
       <section class="now-page">
         <div class="now-page__meta label">Updated {updatedLabel}</div>
         <h1 class="now-page__title">{now.title}</h1>
@@ -65,6 +65,6 @@ const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getU
     display: flex; align-items: center; gap: 12px;
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
   }
-  .now-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand); }
-  .now-page__end a:hover { color: var(--color-brand-bright); }
+  .now-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+  .now-page__end a:hover { color: var(--color-brand-strong-hover); }
 </style>

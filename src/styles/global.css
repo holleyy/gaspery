@@ -17,13 +17,22 @@
   --color-ink-secondary:  #6C6759;
   --color-brand:          #D63A86;
   --color-brand-bright:   #B82E70;
+  /* The brand ink pressed harder. Brand is 3.88:1 on bone — fine at display
+     sizes (WCAG large text), short of AA's 4.5:1 below ~19px — so small-text
+     links at rest, the "New" tag ground, and the mobile active nav take this
+     5.09:1 press instead; hover lifts to the display press. Dark needs no
+     darkening (brand is 6.24:1 there), so both resolve to the dark brand ramp. */
+  --color-brand-strong:       #B82E70;
+  --color-brand-strong-hover: #D63A86;
   --color-teal:           #2AA7C8;
   /* Teal as *text*. Display teal is 2.50:1 on the bone ground — it can only
      ever be a mark, never a word. This is the same ink darkened to 5.09:1,
      matching the secondary ink's weight. Dark needs no darkening. */
   --color-teal-ink:       #1A6F86;
-  --color-positive:       #4E7A44;
-  --color-warning:        #9A6516;
+  /* One step darker than the original pressings (#4E7A44 / #9A6516, which sat
+     at 4.45:1 and 4.39:1) so the 10px status pills clear AA's 4.5:1. */
+  --color-positive:       #4A7441;
+  --color-warning:        #94600F;
   --color-error:          #C0392B;
 
   /* Type */
@@ -60,6 +69,8 @@
     --color-ink-secondary:  #A8A18E;
     --color-brand:          #F06AA6;
     --color-brand-bright:   #F582B5;
+    --color-brand-strong:       #F06AA6;
+    --color-brand-strong-hover: #F582B5;
     --color-teal:           #5CC7E8;
     --color-teal-ink:       #5CC7E8;   /* 9.20:1 on the dark ground already */
     --color-positive:       #9DBB7F;
@@ -84,6 +95,21 @@ body {
 h1, h2, h3, p { margin: 0; }
 a { color: inherit; text-decoration: none; }
 img, svg { display: block; max-width: 100%; }
+
+/* Keyboard focus — the brand ink as a plain 2px ring, offset off the
+   element. No glow, no shadow: the flat press extends to focus. */
+:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 3px; }
+
+/* Skip link — parked above the viewport until keyboard focus calls it. */
+.skip-link {
+  position: fixed; top: 12px; left: 12px; z-index: 10;
+  padding: 8px 14px;
+  background: var(--color-paper); color: var(--color-brand-strong);
+  border: 1px solid var(--color-hairline); border-radius: 2px;
+  font-weight: 600; font-size: 13px;
+  transform: translateY(calc(-100% - 16px));
+}
+.skip-link:focus { transform: none; }
 
 /* Shared label style — stands in for Overprint D2's monospace meta. */
 .label {
@@ -142,7 +168,12 @@ img, svg { display: block; max-width: 100%; }
   transition: color .15s ease;
 }
 .nav a .marker { display: inline-block; width: 12px; flex-shrink: 0; color: var(--color-brand); font-family: var(--font-sans); font-weight: 700; font-size: 15px; }
-.nav a[aria-current="page"] { color: var(--color-ink); }
+/* Visual "current" (the marker slot, and brand colour on mobile) keys off
+   data-current, which the rail sets per page context — e.g. home shows the
+   marker on Writing because home IS the writing stream. aria-current is
+   separate and stricter: only the link whose href matches the actual URL
+   claims it, so assistive tech is never told home is /writing. */
+.nav a[data-current] { color: var(--color-ink); }
 .nav a:hover { color: var(--color-brand-bright); }
 
 .elsewhere a {
@@ -242,6 +273,7 @@ img, svg { display: block; max-width: 100%; }
 .stream { display: flex; flex-direction: column; min-width: 0; }
 .stream__head {
   display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; row-gap: 6px; column-gap: 16px;
   padding-bottom: 12px; border-bottom: 2px solid var(--color-ink);
 }
 .stream__head .title-group { display: flex; align-items: center; gap: 10px; }
@@ -249,11 +281,12 @@ img, svg { display: block; max-width: 100%; }
 
 /* Writing entries */
 .post { display: block; padding: 22px 0; border-bottom: 1px solid var(--color-hairline); }
-.post__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.post__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; margin-bottom: 9px; }
+.post__meta .label { white-space: nowrap; }
 .post__meta .sep { color: var(--color-hairline); font-size: 11px; }
 .tag-new {
   font-family: var(--font-sans); font-weight: 700; font-size: 10px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--color-paper); background: var(--color-brand);
+  text-transform: uppercase; color: var(--color-paper); background: var(--color-brand-strong);
   padding: 2px 6px; border-radius: 2px;
 }
 .post h3 { font-family: var(--font-serif); font-weight: 700; font-size: 21px; line-height: 1.28; transition: color .15s ease; }
@@ -263,16 +296,22 @@ img, svg { display: block; max-width: 100%; }
    color: inherit }` as though that non-interactive area were the target. */
 a.post:hover h3 { color: var(--color-brand-bright); }
 .post__dek { margin-top: 7px; font-size: var(--text-dek); line-height: 1.53; color: var(--color-ink-secondary); max-width: 440px; }
-.more-link { display: inline-flex; align-items: center; gap: 7px; padding-top: 18px; font-weight: 600; font-size: 14px; color: var(--color-brand); }
-.more-link:hover { color: var(--color-brand-bright); }
+.more-link { display: inline-flex; align-items: center; gap: 7px; padding-top: 18px; font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+.more-link:hover { color: var(--color-brand-strong-hover); }
 
 /* Linked posts — the headline points out, the ★ points home. Smaller than an
    essay headline so a busy link week never outranks the long-form. */
 .post--link h3 { font-family: var(--font-serif); font-weight: 700; font-size: 18px; line-height: 1.28; }
 .post--link h3 a { transition: color .15s ease; }
 .post__out { margin-left: 6px; font-size: 14px; color: var(--color-teal-ink); }
-.post__permalink { display: inline-block; margin-top: 9px; font-size: 14px; color: var(--color-teal-ink); }
+.post__permalink {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 5px; padding: 4px 0; min-height: 24px;
+  font-size: 14px; color: var(--color-teal-ink);
+}
 .post__permalink:hover { color: var(--color-brand-bright); }
+/* Same recipe as .now-panel__row-label — the teal-ink label weight. */
+.post__permalink-label { font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
 
 /* Filter control — takes the "Latest first" slot on the archive views. */
 .stream__filter { display: flex; align-items: center; gap: 12px; }
@@ -290,7 +329,7 @@ a.post:hover h3 { color: var(--color-brand-bright); }
 .app { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--color-hairline); }
 .app__num { width: 22px; flex-shrink: 0; font-family: var(--font-serif); font-weight: 700; font-size: 15px; line-height: 1.6; color: var(--color-teal-ink); }
 .app__body { flex: 1; min-width: 0; }
-.app__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.app__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; }
 .app__name { flex-shrink: 0; white-space: nowrap; font-family: var(--font-serif); font-weight: 700; font-size: 18px; transition: color .15s ease; }
 .app:hover .app__name { color: var(--color-brand-bright); }
 .status { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -308,23 +347,22 @@ a.post:hover h3 { color: var(--color-brand-bright); }
 .now-panel__row { display: flex; flex-direction: column; gap: 3px; }
 .now-panel__row + .now-panel__row { padding-top: 11px; border-top: 1px solid var(--color-hairline); }
 .now-panel__row-label { font-family: var(--font-sans); font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal-ink); }
-.now-panel__row-value { font-size: var(--text-dek); line-height: 1.5; color: var(--color-ink); }
-.now-panel__link { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand); }
-.now-panel__link:hover { color: var(--color-brand-bright); }
+/* pre-line: a value can carry real newlines (two builds in flight reads as
+   two lines, not a run-on sentence). */
+.now-panel__row-value { font-size: var(--text-dek); line-height: 1.5; color: var(--color-ink); white-space: pre-line; }
+.now-panel__link { margin-top: 2px; font-weight: 600; font-size: 13px; color: var(--color-brand-strong); }
+.now-panel__link:hover { color: var(--color-brand-strong-hover); }
 
 /* Site footer (subscribe + registration marks) */
 .site-footer {
   margin-top: 8px; padding-top: 26px; border-top: 2px solid var(--color-ink);
-  display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 18px 40px;
 }
 .subscribe { display: flex; flex-direction: column; gap: 8px; }
 .subscribe__line { font-family: var(--font-serif); font-weight: 700; font-size: 20px; line-height: 1.35; }
-.subscribe__cta {
-  font: inherit; background: none; border: none; padding: 0; margin: 0;
-  color: var(--color-brand); cursor: pointer; transition: color .15s ease;
-}
-.subscribe__cta:hover:not(:disabled) { color: var(--color-brand-bright); }
-.subscribe__cta:disabled { color: var(--color-ink-secondary); cursor: default; }
+.subscribe__cta { color: var(--color-brand); transition: color .15s ease; }
+.subscribe__cta:hover { color: var(--color-brand-bright); }
 .marks { display: flex; align-items: center; gap: 14px; }
 
 /* Registration crosshair helper */
@@ -376,12 +414,15 @@ a.post:hover h3 { color: var(--color-brand-bright); }
   .monogram__ghost { mix-blend-mode: normal; opacity: 1; }
 }
 
-/* ---- Mobile breakpoint ---------------------------------------------
+/* ---- Collapse breakpoint -------------------------------------------
    Collapses to the single-column layout designed at 375px: identity +
    horizontal nav on top, then hero, streams, elsewhere, subscribe,
    colophon. display:contents lets rail/main children reflow as one
-   column and re-order. */
-@media (max-width: 860px) {
+   column and re-order. Collapses at 1000px, not 860px: the rail, gutter
+   and margins eat 320px of fixed overhead, so below ~1080px the apps
+   column cannot hold its longest name + status pill — the two-column
+   grid has no honest room in that band. */
+@media (max-width: 1000px) {
   .page {
     display: flex; flex-direction: column; gap: 34px;
     padding: 36px 24px 40px;
@@ -395,7 +436,7 @@ a.post:hover h3 { color: var(--color-brand-bright); }
   .nav .rail-group__title { display: none; }
   .nav a      { font-family: var(--font-serif); font-weight: 700; font-size: 15px; white-space: nowrap; }
   .nav a .marker { display: none; }
-  .nav a[aria-current="page"] { color: var(--color-brand); }
+  .nav a[data-current] { color: var(--color-brand-strong); }
   .hero       { order: 3; }
   .streams    { order: 4; grid-template-columns: 1fr; gap: 40px; }
   .elsewhere-group { order: 5; }
@@ -412,6 +453,17 @@ a.post:hover h3 { color: var(--color-brand-bright); }
   .post__dek { max-width: none; }
   .app-page { padding: 36px 24px 40px; gap: 32px; }
   .app-editorial__spread, .app-editorial__spread--reverse { flex-direction: column; }
+}
+
+/* ---- Tablet band (861–1000px) ---------------------------------------
+   iPad landscape and half-screen desktop windows. Keeps the collapsed
+   single-column flow but sets it as a centered notebook column — a
+   tablet-native reading measure, not a stretched phone layout. Widths
+   ≤860px keep the 375px-designed values above, untouched. */
+@media (min-width: 861px) and (max-width: 1000px) {
+  :root { --text-hero: 40px; }
+  .page { max-width: 768px; padding: 56px 32px 56px; }
+  .post__dek { max-width: 440px; }
 }
 
 @media (max-width: 420px) {

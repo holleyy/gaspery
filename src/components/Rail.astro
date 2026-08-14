@@ -30,6 +30,13 @@ const {
 } = Astro.props;
 
 const pulse = isPulseEnabled() ? await getLatestPost() : null;
+
+/* aria-current is stricter than the visual marker: only the link whose href
+   matches the real URL claims it. The marker (via `current`) may highlight
+   Writing on `/` because home IS the writing stream — but assistive tech
+   should never be told home is /writing. */
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pathname;
 ---
 <aside class="rail">
   <a class="identity" href="/" aria-label={`${name} — home`}>
@@ -46,7 +53,11 @@ const pulse = isPulseEnabled() ? await getLatestPost() : null;
   <nav class="nav rail-group" aria-label="Primary">
     <div class="rail-group__title label">Index</div>
     {nav.map((item) => (
-      <a href={item.href} aria-current={item.label === current ? 'page' : undefined}>
+      <a
+        href={item.href}
+        data-current={item.label === current ? '' : undefined}
+        aria-current={isCurrentPage(item.href) ? 'page' : undefined}
+      >
         <span class="marker">{item.label === current ? '→' : ''}</span>{item.label}
       </a>
     ))}

@@ -29,7 +29,7 @@ const { page, app } = Astro.props;
 const { Content } = await render(page);
 ---
 <Base title={`${app.data.name} — Alex Holley`} description={app.data.dek}>
-  <div class="app-page">
+  <main class="app-page" id="main">
     <a class="app-page__back" href="/">&larr; Alex Holley</a>
 
     <AppPageHeader name={app.data.name} meta={app.data.meta} status={app.data.status} />
@@ -39,5 +39,5 @@ const { Content } = await render(page);
     ) : (
       <EditorialAppBody spreads={page.data.spreads ?? []}><Content /></EditorialAppBody>
     )}
-  </div>
+  </main>
 </Base>

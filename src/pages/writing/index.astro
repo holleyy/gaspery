@@ -17,7 +17,7 @@ const postProps = posts.map((p) => toPostProps(p, newestId));
   <div class="page">
     <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
 
-    <main class="main">
+    <main class="main" id="main">
       <WritingList posts={postProps} showMore={false} filter="all" />
       <Footer />
     </main>

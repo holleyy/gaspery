@@ -55,8 +55,8 @@ const FILTERS = [
       </div>
       <h3><a href={post.sourceUrl}>{post.title}</a><span class="post__out" aria-hidden="true">↗</span></h3>
       <p class="post__dek">{post.dek}</p>
-      <a class="post__permalink" href={post.href}>
-        <span aria-hidden="true">★</span><span class="sr-only">Permalink to this post</span>
+      <a class="post__permalink" href={post.href} aria-label={`Permalink — ${post.title}`}>
+        <span aria-hidden="true">★</span><span class="post__permalink-label">Permalink</span>
       </a>
     </article>
   ) : (
