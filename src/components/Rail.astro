@@ -58,7 +58,7 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
         data-current={item.label === current ? '' : undefined}
         aria-current={isCurrentPage(item.href) ? 'page' : undefined}
       >
-        <span class="marker">{item.label === current ? '→' : ''}</span>{item.label}
+        <span class="marker" aria-hidden="true">{item.label === current ? '→' : ''}</span>{item.label}
       </a>
     ))}
   </nav>
@@ -67,7 +67,7 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
     <div class="rail-group__title label">Elsewhere</div>
     <div class="elsewhere">
       {elsewhere.map((item) => (
-        <a href={item.href}>{item.label}<span class="ext">↗</span></a>
+        <a href={item.href}>{item.label}<span class="ext" aria-hidden="true">↗</span></a>
       ))}
     </div>
   </div>

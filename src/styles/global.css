@@ -100,6 +100,11 @@ img, svg { display: block; max-width: 100%; }
    element. No glow, no shadow: the flat press extends to focus. */
 :focus-visible { outline: 2px solid var(--color-brand); outline-offset: 3px; }
 
+/* Selected text prints in the house ink, not the browser's blue — the one
+   act this site invites is close reading. Brand-strong clears 4.5:1 with
+   paper in both schemes. */
+::selection { background: var(--color-brand-strong); color: var(--color-paper); }
+
 /* Skip link — parked above the viewport until keyboard focus calls it. */
 .skip-link {
   position: fixed; top: 12px; left: 12px; z-index: 10;
@@ -270,6 +275,8 @@ img, svg { display: block; max-width: 100%; }
 
 /* Streams: Writing (wider) + Apps */
 .streams { display: grid; grid-template-columns: 3fr 2fr; gap: 56px; align-items: start; }
+/* The nav's Apps item is an anchor link; keep the landing clear of the top. */
+#apps { scroll-margin-top: 24px; }
 .stream { display: flex; flex-direction: column; min-width: 0; }
 .stream__head {
   display: flex; align-items: flex-end; justify-content: space-between;
@@ -279,8 +286,15 @@ img, svg { display: block; max-width: 100%; }
 .stream__head .title-group { display: flex; align-items: center; gap: 10px; }
 .stream__head h2 { font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title); }
 
-/* Writing entries */
+/* Writing entries. Essay rows are whole-row anchors whose accessible name
+   reads in DOM order — so the markup puts the title first (title, meta,
+   dek) and `order` restores the visual stack (meta above title). A link
+   list announces every essay by its title, not its date. */
 .post { display: block; padding: 22px 0; border-bottom: 1px solid var(--color-hairline); }
+a.post { display: flex; flex-direction: column; }
+a.post .post__meta { order: 1; }
+a.post h3 { order: 2; }
+a.post .post__dek { order: 3; }
 .post__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; margin-bottom: 9px; }
 .post__meta .label { white-space: nowrap; }
 .post__meta .sep { color: var(--color-hairline); font-size: 11px; }
@@ -331,7 +345,10 @@ a.post:hover h3 { color: var(--color-brand-bright); }
 .app__body { flex: 1; min-width: 0; }
 .app__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; }
 .app__name { flex-shrink: 0; white-space: nowrap; font-family: var(--font-serif); font-weight: 700; font-size: 18px; transition: color .15s ease; }
-.app:hover .app__name { color: var(--color-brand-bright); }
+/* Scoped to `a.app` for the same reason as `a.post:hover h3` above — the
+   row without a URL renders as a <div>, and a div must not light up like
+   a link. */
+a.app:hover .app__name { color: var(--color-brand-bright); }
 .status { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 .status .dot { width: 6px; height: 6px; border-radius: 50%; }
 .status--live     { color: var(--color-positive); }     .status--live .dot     { background: var(--color-positive); }
@@ -434,14 +451,17 @@ a.post:hover h3 { color: var(--color-brand-bright); }
   .nav        { order: 2; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 16px;
                 padding-top: 16px; border-top: 1px solid var(--color-hairline); }
   .nav .rail-group__title { display: none; }
-  .nav a      { font-family: var(--font-serif); font-weight: 700; font-size: 15px; white-space: nowrap; }
+  /* Touch band: vertical padding lifts the wrapping rows past WCAG 2.5.8's
+     24px target floor (the type alone is ~17px tall). */
+  .nav a      { font-family: var(--font-serif); font-weight: 700; font-size: 15px; white-space: nowrap;
+                padding: 6px 0; }
   .nav a .marker { display: none; }
   .nav a[data-current] { color: var(--color-brand-strong); }
   .hero       { order: 3; }
   .streams    { order: 4; grid-template-columns: 1fr; gap: 40px; }
   .elsewhere-group { order: 5; }
   .elsewhere  { display: flex; flex-wrap: wrap; gap: 10px 22px; }
-  .elsewhere a { justify-content: flex-start; gap: 5px; }
+  .elsewhere a { justify-content: flex-start; gap: 5px; padding: 4px 0; }
   .site-footer { order: 6; flex-direction: column; align-items: flex-start; gap: 18px; }
   .pulse      { order: 7; }
   .colophon   { order: 8; }

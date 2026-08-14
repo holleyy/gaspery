@@ -22,7 +22,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
 
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>
-      <span class="sep">/</span>
+      <span class="sep" aria-hidden="true">/</span>
       <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
     </div>
 
