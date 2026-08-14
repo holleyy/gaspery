@@ -17,12 +17,12 @@ const { Content } = await render(post);
 const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
 ---
 <Base title={`${post.data.title} — Alex Holley`} description={post.data.dek}>
-  <article class="article">
+  <main class="article" id="main">
     <a class="back" href="/">← Alex Holley</a>
 
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>
-      <span class="sep">/</span>
+      <span class="sep" aria-hidden="true">/</span>
       <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
     </div>
 
@@ -48,7 +48,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
         : <RegistrationMark size={14} />}
       <a href="/">Back to the notebook →</a>
     </div>
-  </article>
+  </main>
 </Base>
 
 <style>
@@ -62,10 +62,10 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
   .back {
     font-weight: 600;
     font-size: 14px;
-    color: var(--color-brand);
+    color: var(--color-brand-strong);
     margin-bottom: 40px;
   }
-  .back:hover { color: var(--color-brand-bright); }
+  .back:hover { color: var(--color-brand-strong-hover); }
   .article__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .article__meta .sep { color: var(--color-hairline); }
   .article__title {
@@ -97,7 +97,8 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
     margin: 40px 0 12px;
   }
   .prose :global(p) { margin: 0 0 20px; }
-  .prose :global(a) { color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px; }
+  .prose :global(a) { color: var(--color-brand-strong); text-decoration: underline; text-underline-offset: 2px; }
+  .prose :global(a:hover) { color: var(--color-brand-strong-hover); }
 
   .article__source { color: inherit; }
   .article__source:hover { color: var(--color-brand-bright); }
@@ -140,5 +141,6 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
     padding-top: 24px;
     border-top: 1px solid var(--color-hairline);
   }
-  .article__end a { font-weight: 600; font-size: 14px; color: var(--color-brand); }
+  .article__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+  .article__end a:hover { color: var(--color-brand-strong-hover); }
 </style>

@@ -10,10 +10,12 @@ colors:
   ink-secondary: "#6C6759"
   brand: "#D63A86"
   brand-bright: "#B82E70"
+  brand-strong: "#B82E70"
+  brand-strong-hover: "#D63A86"
   teal: "#2AA7C8"
   teal-ink: "#1A6F86"
-  positive: "#4E7A44"
-  warning: "#9A6516"
+  positive: "#4A7441"
+  warning: "#94600F"
   error: "#C0392B"
 typography:
   display:
@@ -51,7 +53,7 @@ components:
     textColor: "{colors.paper}"
     rounded: "{rounded.sm}"
   tag-new:
-    backgroundColor: "{colors.brand}"
+    backgroundColor: "{colors.brand-strong}"
     textColor: "{colors.paper}"
     rounded: "{rounded.sm}"
     padding: "2px 6px"
@@ -113,8 +115,9 @@ for reach.
 - **One loud moment.** The misregistered headline is spent once per page; the rest is quiet.
 - **Accessibility-gated ink.** Every blend-mode effect degrades to solid ink under `prefers-reduced-transparency` / `prefers-contrast: more`; meaning never depends on a blend.
 
-**Layout.** The page is a two-column grid inside a centered max width; a single
-breakpoint collapses it to one column.
+**Layout.** The page is a two-column grid inside a centered max width; one
+breakpoint collapses it to one column, with a tablet refinement inside the
+collapsed range.
 
 | Token | Value | Note |
 |---|---|---|
@@ -123,9 +126,17 @@ breakpoint collapses it to one column.
 | `--rail-w` | 232px | sticky left rail width |
 | `--gutter` | 88px | rail ↔ main gap |
 
-Single breakpoint at **860px**: the two-column grid collapses to one column
-(identity + horizontal nav on top, then hero, streams, elsewhere, subscribe,
-colophon). A second type-only breakpoint at **420px** shrinks the hero further.
+Collapse at **1000px**: the two-column grid becomes one column (identity +
+horizontal nav on top, then hero, streams, elsewhere, subscribe, colophon).
+The rail, gutter, and margins are 320px of fixed overhead, so below ~1080px
+the apps column cannot hold its longest name + status pill — the two-column
+grid has no honest room under 1000px. Inside the collapsed range, a **tablet
+band (861–1000px)** sets the column as a centered 768px notebook measure with
+a 40px hero and 56px/32px padding; **≤860px** keeps the 375px-designed mobile
+values (24px padding, 34px hero), and the type-only **420px** step shrinks
+the hero to 30px. Flex rows that pair a fixed label with variable text
+(`.stream__head`, `.app__head`, `.post__meta`, `.site-footer`) wrap instead
+of overflowing when a future long value outgrows its row.
 
 ## 2. Colors
 
@@ -133,7 +144,8 @@ A warm bone ground carrying two saturated spot inks and a quiet tonal-neutral
 ramp; semantic colors appear only on status and error states.
 
 ### Primary
-- **Editorial Magenta** (`--color-brand`, `#D63A86` light / `#F06AA6` dark): the primary ink. Links, the hero mark, the monogram, the "New" tag. **Brand Bright** (`--color-brand-bright`, `#B82E70` / `#F582B5`) is its hover-only companion.
+- **Editorial Magenta** (`--color-brand`, `#D63A86` light / `#F06AA6` dark): the primary ink. Display-size links and marks — the hero mark, the monogram, the subscribe line, the focus ring. **Brand Bright** (`--color-brand-bright`, `#B82E70` / `#F582B5`) is its hover-only companion.
+- **Brand Strong** (`--color-brand-strong`, `#B82E70` light / `#F06AA6` dark): the same ink pressed harder. Brand is 3.88:1 on bone — fine at WCAG-large sizes, short of AA below ~19px — so small-text links at rest (more-links, prose links, page-end links, the skip link), the "New" tag ground, and the mobile active nav take this 5.09:1 press; hover lifts to **Brand Strong Hover** (`--color-brand-strong-hover`, `#D63A86` / `#F582B5`). In dark, brand already clears 6.24:1, so both resolve to the ordinary dark brand ramp and nothing changes there.
 
 ### Secondary
 - **Registration Teal** (`--color-teal`, `#2AA7C8` light / `#5CC7E8` dark): the second ink. The halftone field, the monogram ghost, and every registration mark. Used sparingly — its rarity is what makes it a signature. **Never set type in it**: on the bone ground it measures 2.50:1, below every WCAG threshold. It is a mark, not a word.
@@ -148,8 +160,8 @@ ramp; semantic colors appear only on status and error states.
 - **Secondary Ink** (`--color-ink-secondary`, `#6C6759` / `#A8A18E`): meta and secondary text.
 
 ### Semantic
-- **Positive** (`--color-positive`, `#4E7A44` / `#9DBB7F`): status "Live".
-- **Warning** (`--color-warning`, `#9A6516` / `#E0A33E`): status "WIP".
+- **Positive** (`--color-positive`, `#4A7441` / `#9DBB7F`): status "Live". One step darker than the original `#4E7A44` (4.45:1) so the 10px pill clears AA at 4.82:1.
+- **Warning** (`--color-warning`, `#94600F` / `#E0A33E`): status "WIP". One step darker than the original `#9A6516` (4.39:1); now 4.73:1.
 - **Error** (`--color-error`, `#C0392B` / `#E86254`): error state.
 
 Full light/dark reference (dark values are theme-aware by default via
@@ -163,12 +175,14 @@ Full light/dark reference (dark values are theme-aware by default via
 | `--color-hairline` | `#D9D3C6` | `#39352C` | dividers, borders |
 | `--color-ink` | `#232019` | `#EDE8DC` | primary text |
 | `--color-ink-secondary` | `#6C6759` | `#A8A18E` | secondary/meta text |
-| `--color-brand` | `#D63A86` | `#F06AA6` | primary accent — links, hero mark, "New" tag |
+| `--color-brand` | `#D63A86` | `#F06AA6` | primary accent — display-size links and marks |
 | `--color-brand-bright` | `#B82E70` | `#F582B5` | hover state for brand |
+| `--color-brand-strong` | `#B82E70` | `#F06AA6` | brand for small text (≤14px links at rest), "New" tag ground, mobile active nav |
+| `--color-brand-strong-hover` | `#D63A86` | `#F582B5` | hover state for brand-strong |
 | `--color-teal` | `#2AA7C8` | `#5CC7E8` | second ink — halftone, ghost, registration marks. Never type |
 | `--color-teal-ink` | `#1A6F86` | `#5CC7E8` | teal as text — labels, enumerations, attributions, permalink marks |
-| `--color-positive` | `#4E7A44` | `#9DBB7F` | status: live |
-| `--color-warning` | `#9A6516` | `#E0A33E` | status: WIP |
+| `--color-positive` | `#4A7441` | `#9DBB7F` | status: live |
+| `--color-warning` | `#94600F` | `#E0A33E` | status: WIP |
 | `--color-error` | `#C0392B` | `#E86254` | error state |
 
 ### Named Rules
@@ -196,7 +210,7 @@ functional grotesque for everything operational. The contrast is the point; the
 two are never blurred.
 
 ### Hierarchy
-- **Display** (Merriweather 800, 56px — 34px ≤860px, 30px ≤420px — line-height 1.1, letter-spacing -0.02em): the one hero headline per page.
+- **Display** (Merriweather 800, 56px — 40px in the 861–1000px tablet band, 34px ≤860px, 30px ≤420px — line-height 1.1, letter-spacing -0.02em): the one hero headline per page.
 - **Headline** (Merriweather 700, 22px): section headings (`## Writing`, `## Apps`).
 - **Title** (Merriweather 700, 21px/1.28; also 18–20px across app names, the subscribe line, and nav): content titles — post rows, app rows, wordmark.
 - **Body** (Inter 400, 17px/1.6): intro and body copy. **Dek** (Inter 400, 15px/1.53, secondary ink) carries deks and secondary copy. Cap prose measure at 65–75ch.
@@ -246,11 +260,11 @@ Sheet."
 
 ### Buttons
 - **Shape:** n/a — the system uses text links, not filled buttons. If a filled button ever becomes necessary, it inherits `--radius-card` (8px) and the two-ink palette; it does not introduce a new shape or a third color.
-- **Text link (primary action):** `--color-brand`, no underline at rest.
-- **Hover / Focus:** shifts to `--color-brand-bright` over 150ms ease. Keep a visible focus style for keyboard users.
+- **Text link (primary action):** `--color-brand` at display sizes; `--color-brand-strong` at rest when the link is small text (≤14px, and any text under ~19px that isn't WCAG-large).
+- **Hover / Focus:** brand links shift to `--color-brand-bright`, brand-strong links to `--color-brand-strong-hover`, both over 150ms ease. Keyboard focus gets the global 2px brand `:focus-visible` ring.
 
 ### Chips
-- **"New" tag:** `--color-brand` background, `--color-paper` text, 2px radius, 2px 6px padding, Inter 700 10px uppercase, 0.12em tracking. Marks the newest *essay*, not the newest entry — link posts can run weekly, and an unscoped tag would camp on whichever link ran most recently instead of surfacing the newest long-form piece (`newestEssayId` in `src/lib/links.ts`).
+- **"New" tag:** `--color-brand-strong` background (paper text needs 4.5:1 at 10px; brand only manages 3.88:1 in light), `--color-paper` text, 2px radius, 2px 6px padding, Inter 700 10px uppercase, 0.12em tracking. Marks the newest *essay*, not the newest entry — link posts can run weekly, and an unscoped tag would camp on whichever link ran most recently instead of surfacing the newest long-form piece (`newestEssayId` in `src/lib/links.ts`).
 - **Status pill:** a 6px dot + Inter 600 10px uppercase label. `--color-positive` for "Live", `--color-warning` for "WIP". Color is never the only signal — the text label always states the status.
 
 ### Cards / Containers
@@ -264,7 +278,10 @@ essay's 21px, so a busy link week never outranks the long-form. The source
 domain replaces the reading time in the meta line. Two marks in
 `--color-teal-ink`: a trailing ↗ on the headline (decorative, `aria-hidden`)
 and a ★ below the remark that is the permalink back to our copy — the only
-route home once the headline points away.
+route home once the headline points away. The ★ carries a visible
+"Permalink" word (10px/600 uppercase, 0.12em — the `.now-panel__row-label`
+recipe) and a ≥24px hit target; its accessible name is
+`Permalink — <post title>`.
 
 ### Pull quote
 `blockquote` inside `.prose`. Set on `--color-surface` with `--radius-card`,
@@ -278,14 +295,18 @@ exposed in Keystatic as the `cite` block's "Attribution" input.
 - No form inputs ship today. When one is added: `--color-surface` fill, 1px `--color-hairline` stroke, `--radius-card` (8px). Focus shifts the border to `--color-brand` (no glow — flat press). Error state uses `--color-error` on the border and message.
 
 ### Navigation
-- **Rail nav:** Merriweather 700 19px/1.15. A 12px fixed-width marker slot shows `→` in `--color-brand` when active (`aria-current="page"`) and is empty otherwise — active and default share the same ink text; only the marker and hover differ. Hover: `--color-brand-bright`, 150ms ease.
-- **Mobile (≤860px):** the rail nav becomes a horizontal wrapping row above the hero; the marker slot is hidden and the active item is colored brand instead.
+- **Rail nav:** Merriweather 700 19px/1.15. A 12px fixed-width marker slot shows `→` in `--color-brand` on the visually-current item and is empty otherwise — active and default share the same ink text; only the marker and hover differ. Hover: `--color-brand-bright`, 150ms ease. The visual marker (`data-current`, set by the page's `current` prop) and `aria-current="page"` are deliberately split: home shows the marker on Writing because home *is* the writing stream, but only the link whose href matches the real URL claims `aria-current` — assistive tech is never told home is `/writing`.
+- **Keyboard:** a global `:focus-visible` ring — 2px `--color-brand` outline, 3px offset, no glow (flat press) — and a skip link in `Base.astro` (`href="#main"`; every page's main landmark carries `id="main"`), parked above the viewport until focused. `::selection` prints in `--color-brand-strong` with paper text (4.5:1+ both schemes).
+- **Touch (≤1000px):** collapsed nav links carry 6px and Elsewhere links 4px vertical padding, lifting the wrapping rows past WCAG 2.5.8's 24px target floor (measured 29px / 32px at 375).
+- **Essay rows:** the whole-row anchor puts the `h3` first in DOM (its accessible name leads with the title, not the date); `order` in `global.css` restores the visual stack of meta above title. Decorative glyphs (`↗`, the `→` marker, `/` separators) are `aria-hidden`.
+- **Link-preview card:** every page ships canonical + OG/Twitter meta and dual-scheme `theme-color` from `Base.astro`; the shared `og:image` is `/public/og/card.png` — a 1200×630 riso print of the misregistered wordmark on bone with the halftone field and registration marks, i.e. the hero's exact recipe at card scale. Regenerate it in the same two inks if the wordmark or palette ever changes.
+- **Collapsed (≤1000px):** the rail nav becomes a horizontal wrapping row above the hero; the marker slot is hidden and the active item is colored brand instead.
 - **Stream filter (`.stream__filter`):** `All · Essays · Links`, set in `.label` typography (Inter 600 11px uppercase, 0.14em tracking). Lives in the stream head's "Latest first" slot on the three archive views only (`/writing`, `/essays`, `/links`) — the home stream keeps "Latest first". `aria-current="page"` is set, so it is sound for assistive tech, but it is a **deliberate second idiom**, not an oversight to reconcile with the rail: it signals the current view by colour alone — `--color-ink` active, `--color-ink-secondary` default, no marker glyph — where the rail nav rule above holds active and default to the same ink and differs only by marker and hover. Scoped to this control; don't carry it into the rail.
 
 ### Component measurements
 - **Writing post row** — 22px 0 padding, 1px hairline bottom border. Meta row: 8px gap, 9px margin-bottom. Title: serif 700 21px/1.28, hovers to `--color-brand-bright`. Dek: 15px/1.53, max-width 440px, 7px margin-top.
 - **App row + status pill** — 20px 0 padding, 14px gap. Index number: 22px fixed slot, serif 700 15px teal-ink. Name: serif 700 18px. Status: 6px dot + 10px/600 uppercase label. Dek: 14px/1.5.
-- **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal-ink 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Closing link 13px/600 brand → brand-bright. Links through to `/now` for the longer version.
+- **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal-ink 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Values honour real newlines (`white-space: pre-line`) so two builds in flight read as two lines. Closing link 13px/600 brand-strong → brand-strong-hover. Links through to `/now` for the longer version.
 
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a

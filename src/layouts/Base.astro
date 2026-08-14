@@ -6,6 +6,13 @@ interface Props {
   description?: string;
 }
 const { title, description = 'Product, design & small software — a working notebook.' } = Astro.props;
+
+/* The whole audience arrives by link, so the preview card is the first
+   surface most visitors ever see of this site. Canonical + OG/Twitter meta
+   resolve against `site` in astro.config; the card itself is a static
+   riso print at /og/card.png — same two inks, slightly out of register. */
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og/card.png', Astro.site);
 ---
 <!doctype html>
 <html lang="en">
@@ -16,6 +23,21 @@ const { title, description = 'Product, design & small software — a working not
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F1E6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#191712" />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Gaspery" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Gaspery. — a working notebook, printed in two inks, slightly out of register." />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {/* Autodiscovery. A linked post's headline points at the source, so the ★
         in a feed item is the only route back here — which assumes a reader can
@@ -35,6 +57,7 @@ const { title, description = 'Product, design & small software — a working not
     />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <svg width="0" height="0" style="position: absolute" aria-hidden="true">
       <!-- Riso-duotone photo filter: grayscale, then remapped ink -> paper.
            Paired with a full-bleed teal halftone overlay (.riso-photo in

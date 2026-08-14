@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+
+/* The whole audience arrives by link, so a mangled or stale one lands here.
+   The page is a blank leaf in the notebook: same press, one quiet joke,
+   two ways back. Astro serves this with a real 404 status. */
+---
+<Base
+  title="Blank page — Alex Holley"
+  description="Nothing is printed at this address."
+>
+  <main class="app-page" id="main">
+    <Hero
+      eyebrow="Nothing printed at this address"
+      title="Blank page."
+      intro="There's no page here — the link may be old, or the type was set wrong. Everything that made the run is back in the notebook."
+    />
+    <nav class="paths" aria-label="Ways back">
+      <a class="more-link" href="/">Back to the notebook <span>→</span></a>
+      <a class="more-link" href="/writing">The writing archive <span>→</span></a>
+    </nav>
+  </main>
+</Base>
+
+<style>
+  .paths { display: flex; flex-direction: column; }
+</style>

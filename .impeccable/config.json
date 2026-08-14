@@ -1,0 +1,86 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "10px",
+        "createdAt": "2026-08-14T12:09:26.465Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "13px",
+        "createdAt": "2026-08-14T12:09:26.539Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "14px",
+        "createdAt": "2026-08-14T12:09:26.598Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "15px",
+        "createdAt": "2026-08-14T12:09:26.645Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "18px",
+        "createdAt": "2026-08-14T12:09:26.726Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "19px",
+        "createdAt": "2026-08-14T12:09:26.808Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "20px",
+        "createdAt": "2026-08-14T12:09:26.871Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "24px",
+        "createdAt": "2026-08-14T12:09:26.922Z",
+        "reason": "DESIGN.md §3 'Sizes in real use' documents this step as an intentional convention size (wordmark 24, subscribe 20, nav 19, app name 18, dek 15, more-links 14, currently 13, pills 10)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "12px",
+        "createdAt": "2026-08-14T12:18:50.284Z",
+        "reason": "DESIGN.md §3 documents the label range as 11-12px (colophon meta line)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "createdAt": "2026-08-14T12:18:50.324Z",
+        "reason": "alpha stop inside .halftone mask-image — masks use only the alpha channel, no colour renders"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.5)",
+        "createdAt": "2026-08-14T12:18:50.362Z",
+        "reason": "alpha stop inside .halftone mask-image — masks use only the alpha channel, no colour renders"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "32px",
+        "createdAt": "2026-08-14T12:25:26.408Z",
+        "reason": "established sub-page display size: About/Now page titles and the article title clamp() floor all share 32px; predates this session"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-14T12:28:47.427Z",
+        "reason": "DESIGN.md locked identity: Inter is the documented body face (Printed-Heading Rule); brand.md identity-preservation applies to committed fonts"
+      }
+    ]
+  }
+}
