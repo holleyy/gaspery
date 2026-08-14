@@ -12,8 +12,8 @@ colors:
   brand-bright: "#B82E70"
   brand-strong: "#B82E70"
   brand-strong-hover: "#D63A86"
-  teal: "#2AA7C8"
-  teal-ink: "#1A6F86"
+  teal: "#2FA68E"
+  teal-ink: "#16755F"
   positive: "#4A7441"
   warning: "#94600F"
   error: "#C0392B"
@@ -148,8 +148,8 @@ ramp; semantic colors appear only on status and error states.
 - **Brand Strong** (`--color-brand-strong`, `#B82E70` light / `#F06AA6` dark): the same ink pressed harder. Brand is 3.88:1 on bone — fine at WCAG-large sizes, short of AA below ~19px — so small-text links at rest (more-links, prose links, page-end links, the skip link), the "New" tag ground, and the mobile active nav take this 5.09:1 press; hover lifts to **Brand Strong Hover** (`--color-brand-strong-hover`, `#D63A86` / `#F582B5`). In dark, brand already clears 6.24:1, so both resolve to the ordinary dark brand ramp and nothing changes there.
 
 ### Secondary
-- **Registration Teal** (`--color-teal`, `#2AA7C8` light / `#5CC7E8` dark): the second ink. The halftone field, the monogram ghost, and every registration mark. Used sparingly — its rarity is what makes it a signature. **Never set type in it**: on the bone ground it measures 2.50:1, below every WCAG threshold. It is a mark, not a word.
-- **Teal Ink** (`--color-teal-ink`, `#1A6F86` light / `#5CC7E8` dark): the same ink darkened enough to be read. 5.09:1 on bone — the weight of the secondary ink — and unchanged in dark, where display teal already clears 9.20:1. Used for the small set of teal things that are text: app enumerations, Now-panel field labels, quote attributions, and the ↗ / ★ marks on linked posts.
+- **Registration Teal** (`--color-teal`, `#2FA68E` light / `#63CCAF` dark): the second ink, pressed as **verdigris** — oxidized copper rather than electric cyan (repressed 2026-08: the cyan axis had become the saturated AI-dashboard accent; verdigris reads print and patina, and magenta + green-teal is a classic risograph pairing). The halftone field, the monogram ghost, and every registration mark. Used sparingly — its rarity is what makes it a signature. **Never set type in it**: on the bone ground it measures 2.68:1, below every WCAG threshold. It is a mark, not a word.
+- **Teal Ink** (`--color-teal-ink`, `#16755F` light / `#63CCAF` dark): the same ink darkened enough to be read. 4.98:1 on bone — the weight of the secondary ink — and unchanged in dark, where the display pressing already clears 9.2:1. Used for the small set of teal things that are text: app enumerations, Now-panel field labels, quote attributions, and the ↗ / ★ marks on linked posts.
 
 ### Neutral
 - **Bone Paper** (`--color-paper`, `#F6F1E6` / `#191712`): the page ground.
@@ -179,8 +179,8 @@ Full light/dark reference (dark values are theme-aware by default via
 | `--color-brand-bright` | `#B82E70` | `#F582B5` | hover state for brand |
 | `--color-brand-strong` | `#B82E70` | `#F06AA6` | brand for small text (≤14px links at rest), "New" tag ground, mobile active nav |
 | `--color-brand-strong-hover` | `#D63A86` | `#F582B5` | hover state for brand-strong |
-| `--color-teal` | `#2AA7C8` | `#5CC7E8` | second ink — halftone, ghost, registration marks. Never type |
-| `--color-teal-ink` | `#1A6F86` | `#5CC7E8` | teal as text — labels, enumerations, attributions, permalink marks |
+| `--color-teal` | `#2FA68E` | `#63CCAF` | second ink (verdigris) — halftone, ghost, registration marks. Never type |
+| `--color-teal-ink` | `#16755F` | `#63CCAF` | teal as text — labels, enumerations, attributions, permalink marks |
 | `--color-positive` | `#4A7441` | `#9DBB7F` | status: live |
 | `--color-warning` | `#94600F` | `#E0A33E` | status: WIP |
 | `--color-error` | `#C0392B` | `#E86254` | error state |

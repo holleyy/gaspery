@@ -162,7 +162,7 @@ export default config({
       schema: {
         hero: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow' }),
+            eyebrow: fields.text({ label: 'Eyebrow (leave empty to hide)' }),
             title: fields.text({ label: 'Title', multiline: true }),
             intro: fields.text({ label: 'Intro', multiline: true }),
           },

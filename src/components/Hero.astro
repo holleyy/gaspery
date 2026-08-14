@@ -1,6 +1,8 @@
 ---
+/* eyebrow is optional — the homepage runs without one (the intro carries the
+   "working notebook" line); the 404 still uses it as its diagnosis line. */
 interface Props {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   intro: string;
 }
@@ -9,10 +11,12 @@ const { eyebrow, title, intro } = Astro.props;
 <section class="hero">
   <div class="halftone" aria-hidden="true"></div>
 
-  <div class="eyebrow">
-    <span class="dot"></span>
-    <span class="label">{eyebrow}</span>
-  </div>
+  {eyebrow && (
+    <div class="eyebrow">
+      <span class="dot"></span>
+      <span class="label">{eyebrow}</span>
+    </div>
+  )}
 
   <div class="hero-title">
     {/* Two stacked copies = the deliberate misregistration. Ghost is decorative. */}
