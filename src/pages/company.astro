@@ -1,0 +1,70 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Rail from '../components/Rail.astro';
+import RegistrationMark from '../components/RegistrationMark.astro';
+import Imprint from '../components/Imprint.astro';
+
+/* The organisation's own page. Deliberately separate from /about: that one is
+   Alex, this one is the company, and an App Store reviewer needs the second
+   without having to read the first. Linked from the imprint in every page
+   footer rather than from the rail nav, so it is one click from anywhere
+   without taking a slot in a four-item index. */
+const entry = await getEntry('company', 'index');
+if (!entry) throw new Error('Missing company singleton at src/content/company/index.mdoc');
+const { Content } = await render(entry);
+---
+<Base title={`${entry.data.title} · Alex Holley`} description={entry.data.dek}>
+  <div class="page">
+    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="" />
+
+    <main class="main" id="main">
+      <section class="company-page">
+        <h1 class="company-page__title">{entry.data.title}</h1>
+        <p class="company-page__dek">{entry.data.dek}</p>
+
+        <div class="company-page__prose">
+          <Content />
+        </div>
+
+        <div class="company-page__end">
+          <RegistrationMark size={14} />
+          <a href="/">Back to the notebook →</a>
+        </div>
+
+        <Imprint />
+      </section>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .company-page { max-width: 640px; display: flex; flex-direction: column; }
+  .company-page__title {
+    font-family: var(--font-serif); font-weight: 800;
+    font-size: clamp(32px, 5vw, 44px); line-height: 1.12; letter-spacing: -0.02em;
+  }
+  .company-page__dek {
+    margin-top: 14px; font-size: 18px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 520px;
+  }
+  .company-page__prose {
+    margin-top: 36px; padding-top: 28px; border-top: 2px solid var(--color-ink);
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .company-page__prose :global(p) { font-size: var(--text-body); line-height: 1.7; max-width: 62ch; }
+  /* The only structural difference from /about: this page has sections. */
+  .company-page__prose :global(h2) {
+    font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title);
+    line-height: 1.28; margin-top: 12px;
+  }
+  .company-page__prose :global(a) {
+    color: var(--color-brand-strong); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .company-page__prose :global(a:hover) { color: var(--color-brand-strong-hover); }
+  .company-page__end {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
+  }
+  .company-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+  .company-page__end a:hover { color: var(--color-brand-strong-hover); }
+</style>

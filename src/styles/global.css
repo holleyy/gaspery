@@ -426,7 +426,13 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   padding-top: 18px; border-top: 1px solid var(--color-hairline);
 }
 .imprint p { font-size: 12px; line-height: 1.5; color: var(--color-ink-secondary); max-width: 60ch; }
-.imprint__name { color: var(--color-ink); font-weight: 600; }
+/* The company name is the route to the company page, from any page's foot. */
+.imprint__name {
+  color: var(--color-ink); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 2px;
+  transition: color .15s ease;
+}
+.imprint__name:hover { color: var(--color-brand-strong); }
 
 /* Honest stand-in for real product imagery — never a fake screenshot. */
 .media-placeholder {

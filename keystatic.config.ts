@@ -143,6 +143,16 @@ export default config({
         content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
       },
     }),
+    company: singleton({
+      label: 'Company page',
+      path: 'src/content/company/',
+      format: { contentField: 'content' },
+      schema: {
+        title: fields.text({ label: 'Title' }),
+        dek: fields.text({ label: 'Dek', multiline: true }),
+        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+      },
+    }),
     now: singleton({
       label: 'Now page',
       path: 'src/data/now/',
