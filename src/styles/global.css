@@ -398,6 +398,23 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
 .app-page__lede { display: flex; flex-direction: column; gap: 22px; font-size: var(--text-body); line-height: 1.7; color: var(--color-ink); }
 .app-page__lede p { max-width: 62ch; margin: 0; }
 
+/* An app page carrying real screenshots breaks out of the 680px reading
+   measure: a Mac window shrunk into a prose column is a smudge, not proof.
+   The prose keeps its own caps (standfirst 56ch, lede 62ch), so only the
+   images take the extra room. */
+.app-page--wide { max-width: 1160px; }
+@media (min-width: 1001px) {
+  .app-page--wide .app-editorial__spread { gap: 56px; }
+  .app-page--wide .app-editorial__media { flex: 1 1 560px; }
+  .app-page--wide .app-editorial__text  { flex: 1 1 360px; }
+}
+
+/* App screenshots. The source assets are cut-out windows on transparency,
+   so they print straight onto the bone ground — no frame, no card, and no
+   duotone (the apps already render in these two inks). */
+.app-shot { margin: 0; }
+.app-shot img { width: 100%; height: auto; }
+
 /* The legal imprint that closes an app page — the App Store-facing line. */
 .app-page__imprint { padding-top: 20px; border-top: 1px solid var(--color-hairline); }
 

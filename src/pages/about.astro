@@ -8,7 +8,7 @@ const entry = await getEntry('about', 'index');
 if (!entry) throw new Error('Missing about singleton at src/content/about/index.mdoc');
 const { Content } = await render(entry);
 ---
-<Base title={`${entry.data.title} — Alex Holley`} description={entry.data.dek}>
+<Base title={`${entry.data.title} · Alex Holley`} description={entry.data.dek}>
   <div class="page">
     <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="About" />
 

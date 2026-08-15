@@ -13,7 +13,7 @@ const posts = (await getCollection('writing'))
 const newestId = newestEssayId(posts);
 const postProps = posts.map((p) => toPostProps(p, newestId));
 ---
-<Base title="Essays — Alex Holley" description="The long-form writing, newest first.">
+<Base title="Essays · Alex Holley" description="The long-form writing, newest first.">
   <div class="page">
     <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
 

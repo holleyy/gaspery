@@ -39,7 +39,7 @@ const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pathname;
 ---
 <aside class="rail">
-  <a class="identity" href="/" aria-label={`${name} — home`}>
+  <a class="identity" href="/" aria-label={`${name}, home`}>
     <div class="monogram">
       <div class="monogram__ghost"></div>
       <div class="monogram__ink">{monogram}</div>
@@ -76,7 +76,7 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
 
   <div class="colophon">
     <RegistrationMark size={16} />
-    <p>Set in Merriweather &amp; Inter. Printed here in two inks — magenta &amp; teal, occasionally out of register.</p>
+    <p>Set in Merriweather &amp; Inter. Printed here in two inks, magenta &amp; teal, occasionally out of register.</p>
     {/* The imprint. Quiet on purpose — the legal entity is here for App Store
         review and Companies House, not for visitors. Stacked like a
         publisher's colophon: entity line, place line. */}

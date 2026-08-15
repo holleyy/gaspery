@@ -58,10 +58,16 @@ work is the case for working together.
 ## Brand Personality
 
 Quiet and precise, crafted and tactile, opinionated and essayistic, warm and
-personal — four notes held at once. First person, dry-witted, generous but never
+personal, four notes held at once. First person, dry-witted, generous but never
 salesy. It should read like a person at a desk, not a brand: print-shop
 metaphors, restraint as a method, and a stated allergy to products, funnels, and
 growth-speak.
+
+**No em dashes.** House rule, applied across every visible surface (essays,
+deks, alt text, page titles, feed, the share card). Reach for a full stop, a
+colon, a comma, or parentheses instead; the short-sentence rhythm is the voice
+anyway, and the dash had become the tell. Page titles and meta lines use the
+site's own middot separator (`Writing · Alex Holley`).
 
 ## Anti-references
 
