@@ -24,11 +24,13 @@
      darkening (brand is 6.24:1 there), so both resolve to the dark brand ramp. */
   --color-brand-strong:       #B82E70;
   --color-brand-strong-hover: #D63A86;
-  --color-teal:           #2AA7C8;
-  /* Teal as *text*. Display teal is 2.50:1 on the bone ground — it can only
-     ever be a mark, never a word. This is the same ink darkened to 5.09:1,
-     matching the secondary ink's weight. Dark needs no darkening. */
-  --color-teal-ink:       #1A6F86;
+  /* The second ink, pressed as verdigris (2026-08: moved off the electric
+     cyan axis — oxidized copper reads print, not dashboard). */
+  --color-teal:           #2FA68E;
+  /* Teal as *text*. Display verdigris is 2.68:1 on the bone ground — it can
+     only ever be a mark, never a word. This is the same ink darkened to
+     4.98:1, matching the secondary ink's weight. Dark needs no darkening. */
+  --color-teal-ink:       #16755F;
   /* One step darker than the original pressings (#4E7A44 / #9A6516, which sat
      at 4.45:1 and 4.39:1) so the 10px status pills clear AA's 4.5:1. */
   --color-positive:       #4A7441;
@@ -71,8 +73,8 @@
     --color-brand-bright:   #F582B5;
     --color-brand-strong:       #F06AA6;
     --color-brand-strong-hover: #F582B5;
-    --color-teal:           #5CC7E8;
-    --color-teal-ink:       #5CC7E8;   /* 9.20:1 on the dark ground already */
+    --color-teal:           #63CCAF;
+    --color-teal-ink:       #63CCAF;   /* 9.2:1 on the dark ground already */
     --color-positive:       #9DBB7F;
     --color-warning:        #E0A33E;
     --color-error:          #E86254;
