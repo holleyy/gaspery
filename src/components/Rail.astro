@@ -77,9 +77,9 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
   <div class="colophon">
     <RegistrationMark size={16} />
     <p>Set in Merriweather &amp; Inter. Printed here in two inks, magenta &amp; teal, occasionally out of register.</p>
-    {/* The imprint. Quiet on purpose — the legal entity is here for App Store
-        review and Companies House, not for visitors. Stacked like a
-        publisher's colophon: entity line, place line. */}
-    <div class="label">© MMXXVI Gaspery Limited<br />London</div>
+    {/* The print colophon's own sign-off. The legal entity lives in the
+        statutory <Imprint /> at the foot of the page instead, so the company
+        is never stated twice on one screen. */}
+    <div class="label">© MMXXVI · London</div>
   </div>
 </aside>

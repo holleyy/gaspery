@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AppPageHeader from '../../components/AppPageHeader.astro';
+import Imprint from '../../components/Imprint.astro';
 import QuietAppBody from '../../components/QuietAppBody.astro';
 import EditorialAppBody from '../../components/EditorialAppBody.astro';
 
@@ -42,8 +43,8 @@ const { Content } = await render(page);
       <EditorialAppBody spreads={page.data.spreads ?? []}><Content /></EditorialAppBody>
     )}
 
-    {/* The imprint — the legal entity for App Store review, same quiet line
-        as the rail colophon. App pages are the marketing URLs Apple sees. */}
-    <footer class="app-page__imprint label">© MMXXVI Gaspery Limited · London</footer>
+    {/* App pages are the marketing URLs App Store review actually visits, so
+        the full statutory imprint closes them. */}
+    <footer><Imprint /></footer>
   </main>
 </Base>

@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import RegistrationMark from '../../components/RegistrationMark.astro';
+import Imprint from '../../components/Imprint.astro';
 import { isLink, sourceDomain } from '../../lib/links';
 
 export async function getStaticPaths() {
@@ -48,6 +49,8 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
         : <RegistrationMark size={14} />}
       <a href="/">Back to the notebook →</a>
     </div>
+
+    <Imprint />
   </main>
 </Base>
 
