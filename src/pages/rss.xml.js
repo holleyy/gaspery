@@ -36,8 +36,8 @@ export async function GET(context) {
   const site = context.site.href.replace(/\/$/, '');
 
   return rss({
-    title: 'Alex Holley — a working notebook',
-    description: 'Product, design & small software — a working notebook.',
+    title: 'Alex Holley · a working notebook',
+    description: 'Product, design & small software. A working notebook.',
     site: context.site,
     items: posts.map((post) => {
       // Built by hand, independently of @astrojs/rss's own `createCanonicalURL`

@@ -57,6 +57,12 @@ const appPages = defineCollection({
         z.object({
           heading: z.string(),
           body: z.string(),
+          /* A real screenshot for this spread, served from /public (e.g.
+             "/shots/grod/agenda.webp"). Omit and the spread falls back to
+             the honest "screenshot coming soon" placeholder — never a fake
+             one. `alt` is required alongside it. */
+          image: z.string().optional(),
+          alt: z.string().optional(),
         })
       )
       .optional(),

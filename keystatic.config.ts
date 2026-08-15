@@ -98,6 +98,11 @@ export default config({
           fields.object({
             heading: fields.text({ label: 'Heading' }),
             body: fields.text({ label: 'Body', multiline: true }),
+            image: fields.text({
+              label: 'Screenshot path',
+              description: 'e.g. /shots/grod/agenda.webp — leave empty for the "coming soon" placeholder',
+            }),
+            alt: fields.text({ label: 'Screenshot alt text', multiline: true }),
           }),
           { label: 'Spreads', itemLabel: (props) => props.fields.heading.value },
         ),

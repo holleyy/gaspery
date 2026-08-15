@@ -308,6 +308,21 @@ exposed in Keystatic as the `cite` block's "Attribution" input.
 - **App row + status pill** — 20px 0 padding, 14px gap. Index number: 22px fixed slot, serif 700 15px teal-ink. Name: serif 700 18px. Status: 6px dot + 10px/600 uppercase label. Dek: 14px/1.5.
 - **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal-ink 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Values honour real newlines (`white-space: pre-line`) so two builds in flight read as two lines. Closing link 13px/600 brand-strong → brand-strong-hover. Links through to `/now` for the longer version.
 
+### App screenshots
+Real product shots on an app page, set per spread in the page's frontmatter
+(`image` + `alt`; omit both and the spread keeps the honest "screenshot coming
+soon" placeholder, never a fake one). The source assets are cut-out windows on
+transparency, so they print straight onto the bone ground: no frame, no card,
+and deliberately **no riso-duotone** — the apps already render in these two
+inks, and filtering a UI would cost legibility to prove a point the screenshot
+is already making. Dimensions are stated on the `<img>` so the row never
+reflows, and they lazy-load.
+
+An editorial app page carrying screenshots takes `.app-page--wide` (1160px
+instead of the 680px reading measure), and its spreads run media-dominant
+(560/360). The prose keeps its own caps, so only the images take the extra
+room: a Mac window shrunk into a prose column is a smudge, not proof.
+
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a
 generic layout. Reuse them deliberately; don't invent competing ones.
