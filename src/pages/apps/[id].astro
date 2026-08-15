@@ -39,5 +39,9 @@ const { Content } = await render(page);
     ) : (
       <EditorialAppBody spreads={page.data.spreads ?? []}><Content /></EditorialAppBody>
     )}
+
+    {/* The imprint — the legal entity for App Store review, same quiet line
+        as the rail colophon. App pages are the marketing URLs Apple sees. */}
+    <footer class="app-page__imprint label">© MMXXVI Gaspery Limited · London</footer>
   </main>
 </Base>
