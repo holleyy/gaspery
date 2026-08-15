@@ -375,6 +375,9 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
 /* Site footer (subscribe + registration marks) */
 .site-footer {
   margin-top: 8px; padding-top: 26px; border-top: 2px solid var(--color-ink);
+  display: flex; flex-direction: column; gap: 26px;
+}
+.site-footer__top {
   display: flex; justify-content: space-between; align-items: flex-end;
   flex-wrap: wrap; gap: 18px 40px;
 }
@@ -415,8 +418,21 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
 .app-shot { margin: 0; }
 .app-shot img { width: 100%; height: auto; }
 
-/* The legal imprint that closes an app page — the App Store-facing line. */
-.app-page__imprint { padding-top: 20px; border-top: 1px solid var(--color-hairline); }
+/* The statutory imprint that closes every page. Set plainly, not in the
+   `.label` voice: it has to be read by a company registrar and an App Store
+   reviewer, so legibility beats decoration. Quiet by size and ink only. */
+.imprint {
+  display: flex; flex-direction: column; gap: 2px;
+  padding-top: 18px; border-top: 1px solid var(--color-hairline);
+}
+.imprint p { font-size: 12px; line-height: 1.5; color: var(--color-ink-secondary); max-width: 60ch; }
+/* The company name is the route to the company page, from any page's foot. */
+.imprint__name {
+  color: var(--color-ink); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 2px;
+  transition: color .15s ease;
+}
+.imprint__name:hover { color: var(--color-brand-strong); }
 
 /* Honest stand-in for real product imagery — never a fake screenshot. */
 .media-placeholder {

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Rail from '../components/Rail.astro';
 import RegistrationMark from '../components/RegistrationMark.astro';
+import Imprint from '../components/Imprint.astro';
 import now from '../data/now/index.json';
 import { renderInline } from '../lib/inlineMarkdoc';
 
@@ -34,6 +35,8 @@ const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getU
           <RegistrationMark size={14} />
           <a href="/">Back to the notebook →</a>
         </div>
+
+        <Imprint />
       </section>
     </main>
   </div>

@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Rail from '../components/Rail.astro';
 import RegistrationMark from '../components/RegistrationMark.astro';
+import Imprint from '../components/Imprint.astro';
 
 const entry = await getEntry('about', 'index');
 if (!entry) throw new Error('Missing about singleton at src/content/about/index.mdoc');
@@ -25,6 +26,8 @@ const { Content } = await render(entry);
           <RegistrationMark size={14} />
           <a href="/">Back to the notebook →</a>
         </div>
+
+        <Imprint />
       </section>
     </main>
   </div>

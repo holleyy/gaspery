@@ -308,6 +308,34 @@ exposed in Keystatic as the `cite` block's "Attribution" input.
 - **App row + status pill** — 20px 0 padding, 14px gap. Index number: 22px fixed slot, serif 700 15px teal-ink. Name: serif 700 18px. Status: 6px dot + 10px/600 uppercase label. Dek: 14px/1.5.
 - **Now panel** — closes the Apps stream: 18px top padding, 1px hairline top border, 12px gap. Head: 7px teal dot + `.label` "Now". Four rows (Building/Reading/Watching/Listening), each a teal-ink 10px/600 uppercase row-label over a 15px value line; every row after the first gets an 11px-padded hairline divider above it. Values honour real newlines (`white-space: pre-line`) so two builds in flight read as two lines. Closing link 13px/600 brand-strong → brand-strong-hover. Links through to `/now` for the longer version.
 
+### Company page
+`/company` is the organisation's own page, deliberately separate from `/about`:
+that one is Alex, this one is Gaspery Limited, and an App Store reviewer needs
+the second without having to read the first. Same shape as the about page (640px
+column, serif title, dek, hairline-ruled prose) with one addition, serif `h2`
+section heads, because this page has sections. Content is a Keystatic singleton
+like about's.
+
+It is reached from the imprint in every page's footer rather than from the rail
+nav: one click from anywhere, without taking a fifth slot in a four-item index
+that is doing fine.
+
+### Imprint
+`Imprint.astro`, the statutory trading disclosure, closing every page: the site
+footer on the list pages, and the foot of the column on app pages, essays,
+about, now, and the 404. Registered name, company number, place of
+registration, and registered office, because a UK limited company has to state
+them, and because Apple's Developer Program checks the site for the entity the
+enrolment is under.
+
+Deliberately **not** in the `.label` voice: 12px, secondary ink, sentence case,
+no tracking, no roman numerals, the company name alone in full ink. It has to
+be read by a registrar and an App Store reviewer, so legibility beats
+decoration; it stays quiet by size and colour instead. The facts live in that
+one component, verified against the Companies House record. The rail colophon
+keeps only the print sign-off (`© MMXXVI · London`), so the entity is never
+stated twice on one screen.
+
 ### App screenshots
 Real product shots on an app page, set per spread in the page's frontmatter
 (`image` + `alt`; omit both and the spread keeps the honest "screenshot coming

@@ -78,4 +78,14 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { writing, apps, appPages, about };
+// Company page singleton — the organisation's own page, kept separate from
+// `about` so the personal writing and the legal entity never blur together.
+const company = defineCollection({
+  loader: glob({ pattern: '**/*.mdoc', base: './src/content/company' }),
+  schema: z.object({
+    title: z.string(),
+    dek: z.string(),
+  }),
+});
+
+export const collections = { writing, apps, appPages, about, company };
