@@ -65,7 +65,14 @@ export default config({
             },
           },
         }),
-        date: fields.date({ label: 'Date' }),
+        date: fields.date({
+          label: 'Date',
+          // Required here so an empty date picker can't be saved. Zod's schema
+          // (src/content.config.ts) has `date` as non-optional, so a dateless
+          // entry commits fine and then fails the site's deploy — same trap
+          // `sourceUrl` above guards against.
+          validation: { isRequired: true },
+        }),
         readingTime: fields.text({
           label: 'Reading time',
           description: 'Essays only. Leave empty on a link post.',
