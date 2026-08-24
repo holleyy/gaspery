@@ -34,6 +34,29 @@ const cite = block({
 });
 const writingComponents = { ...risoPhotoComponents, cite };
 
+// Where an uploaded body image lands. Without this, Keystatic writes the file
+// beside the entry as `src/content/<coll>/<slug>/content/<name>` but references
+// it by bare filename, which resolves against `src/content/<coll>/` — so Astro
+// can't find it and the upload fails the deploy. Pinning directory/publicPath
+// sends uploads to /public, where the hand-placed images already live
+// (e.g. /writing/so-well-planned-it-feels-unplanned/1.jpg).
+const bodyImages = (folder: string) => ({
+  image: {
+    directory: `public/${folder}`,
+    publicPath: `/${folder}/`,
+    // A macOS screenshot arrives as "Screenshot 2026-08-24 at 01.23.36.png";
+    // the spaces come back URL-encoded in the markup. Slugify so the reference
+    // stays readable and needs no escaping.
+    transformFilename: (name: string) => {
+      const dot = name.lastIndexOf('.');
+      const stem = dot === -1 ? name : name.slice(0, dot);
+      const ext = dot === -1 ? '' : name.slice(dot).toLowerCase();
+      const slug = stem.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      return `${slug || 'image'}${ext}`;
+    },
+  },
+});
+
 export default config({
   storage: import.meta.env.DEV
     ? { kind: 'local' }
@@ -83,7 +106,11 @@ export default config({
           multiline: true,
         }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
-        content: fields.markdoc({ label: 'Body', components: writingComponents }),
+        content: fields.markdoc({
+          label: 'Body',
+          components: writingComponents,
+          options: bodyImages('writing'),
+        }),
       },
     }),
     appPages: collection({
@@ -113,7 +140,11 @@ export default config({
           }),
           { label: 'Spreads', itemLabel: (props) => props.fields.heading.value },
         ),
-        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+        content: fields.markdoc({
+          label: 'Body',
+          components: risoPhotoComponents,
+          options: bodyImages('apps'),
+        }),
       },
     }),
     apps: collection({
@@ -147,7 +178,11 @@ export default config({
       schema: {
         title: fields.text({ label: 'Title' }),
         dek: fields.text({ label: 'Dek', multiline: true }),
-        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+        content: fields.markdoc({
+          label: 'Body',
+          components: risoPhotoComponents,
+          options: bodyImages('about'),
+        }),
       },
     }),
     company: singleton({
@@ -157,7 +192,11 @@ export default config({
       schema: {
         title: fields.text({ label: 'Title' }),
         dek: fields.text({ label: 'Dek', multiline: true }),
-        content: fields.markdoc({ label: 'Body', components: risoPhotoComponents }),
+        content: fields.markdoc({
+          label: 'Body',
+          components: risoPhotoComponents,
+          options: bodyImages('company'),
+        }),
       },
     }),
     now: singleton({
