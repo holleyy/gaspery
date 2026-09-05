@@ -1,0 +1,110 @@
+---
+/* Three radios, not a two-state switch: `system` has to stay reachable, or
+   a reader who once tapped the toggle can never hand control back to their
+   OS. Native radios bring keyboard support, grouping, and screen-reader
+   semantics with no focus management to write.
+
+   Rendered hidden and unhidden by the script below, so a reader without
+   JavaScript is never shown a control that cannot do anything. */
+---
+<fieldset class="theme-toggle" hidden>
+  <legend class="sr-only">Theme</legend>
+  <label><input type="radio" name="theme" value="light" /><span>Light</span></label>
+  <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+  <label><input type="radio" name="theme" value="system" /><span>Auto</span></label>
+</fieldset>
+
+<script>
+  import { THEME_STORAGE_KEY, readPreference } from '../lib/theme';
+
+  const root = document.documentElement;
+  const group = document.querySelector<HTMLFieldSetElement>('.theme-toggle');
+
+  /* The meta tag is corrected on every change, and — in the `system` state —
+     whenever the OS itself flips, so the browser chrome never disagrees
+     with the page. */
+  function syncThemeColor() {
+    const dark =
+      root.dataset.theme === 'dark' ||
+      (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', dark ? '#191712' : '#F6F1E6');
+  }
+
+  if (group) {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(THEME_STORAGE_KEY);
+    } catch {
+      /* Private mode. Fall through to `system`, which is the default. */
+    }
+
+    const current = readPreference(stored);
+    const checked = group.querySelector<HTMLInputElement>(`input[value="${current}"]`);
+    if (checked) checked.checked = true;
+    group.hidden = false;
+
+    group.addEventListener('change', (event) => {
+      const input = event.target as HTMLInputElement;
+      if (input.name !== 'theme') return;
+      const next = readPreference(input.value);
+
+      try {
+        if (next === 'system') localStorage.removeItem(THEME_STORAGE_KEY);
+        else localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {
+        /* Preference will not survive the page, but the page still flips. */
+      }
+
+      if (next === 'system') delete root.dataset.theme;
+      else root.dataset.theme = next;
+      syncThemeColor();
+    });
+  }
+
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', syncThemeColor);
+</script>
+
+<style>
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .theme-toggle label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-ink-secondary);
+    cursor: pointer;
+  }
+  /* The radio itself is hidden, but focusable — the ring lands on the label
+     via :focus-within, so keyboard users still see where they are. */
+  .theme-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .theme-toggle label:hover { color: var(--color-ink); }
+  .theme-toggle label:focus-within {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+  .theme-toggle input:checked + span {
+    color: var(--color-brand-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
