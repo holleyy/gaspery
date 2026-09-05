@@ -98,6 +98,20 @@
    prose paragraph to x=0 while lists (which have no such override) centred
    correctly. Prose sat 50px left of every block heading on the page. */
 .feature__body > p { font-size: 18px; line-height: 1.7; margin: 0 auto 20px; }
+/* A list's inline padding carries two things the other prose elements' does
+   not: the page gutter AND the marker column. `list-style-position` is
+   `outside`, so markers paint to the left of the content box — and setting
+   this padding to the bare gutter (which also overrode the UA's 40px list
+   padding) left them nothing to sit in. On a phone the gutter is 22px, so
+   list text aligned correctly with the paragraph above it while the bullets
+   hung at roughly 8px, outboard of every other line on the page and hard
+   against the screen edge. The extra em is the marker's own column, sized so
+   the bullet's left edge lands flush with the prose text edge rather than
+   outboard of it: a bullet's advance measures 23px against this element's
+   17px em, and 1.35em is that advance. Both scale with font-size, so the
+   alignment holds wherever the gutter clamp lands. */
+.feature__body > ul,
+.feature__body > ol { padding-inline-start: calc(var(--feature-pad) + 1.35em); }
 .feature__body > h2 {
   font-family: var(--font-serif);
   font-weight: 800;
