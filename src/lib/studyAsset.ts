@@ -10,8 +10,9 @@ import { resolve, sep } from 'node:path';
    - A path that resolves outside public/studies/ (e.g. "/../.env") is a
      containment escape. That is never legitimate authoring — it's a
      security boundary, not a typo — so it still throws and fails the build.
-   - A non-.svg path (for readStudySvg) or a file that doesn't exist is an
-     ordinary content mistake: a renamed file, a pasted screenshot path, a
+   - A non-.svg path (for readStudySvg), a path whose extension isn't a
+     recognised raster image type (for readStudyRaster), or a file that
+     doesn't exist is an ordinary content mistake: a renamed file, a
      typo. Throwing for these is exactly what has frozen this site's
      Cloudflare build before, with nothing in the Keystatic editor to
      explain why — the author saves cleanly and the deploy dies. So each
@@ -57,14 +58,24 @@ export function readStudySvg(src: unknown, label: string): string | undefined {
    src>. But `src` is still author input reaching a public page, so it
    still has to clear the same public/studies/ containment boundary before
    a caller is allowed to trust it — this is that check for the non-SVG
-   path. Returns `src` unchanged (ready to hand to <img>) once containment
-   and existence both hold, or `undefined` for a contained path that simply
-   names a file that isn't there — the same non-throwing, ordinary-mistake
+   path. Mirrors readStudySvg's own extension gate: only a recognised
+   raster image extension (.webp, .png, .jpg, .jpeg, .avif) is accepted,
+   so a path that resolves inside public/studies/ but names something else
+   entirely (a stray .json, a .txt) does not fall through into an <img
+   src> and render as a broken image. Returns `src` unchanged (ready to
+   hand to <img>) once containment, extension, and existence all hold, or
+   `undefined` for a contained path that fails either the extension check
+   or the existence check — the same non-throwing, ordinary-mistake
    contract as readStudySvg. */
+const RASTER_EXTENSIONS = ['.webp', '.png', '.jpg', '.jpeg', '.avif'];
+
 export function readStudyRaster(src: unknown, label: string): string | undefined {
   if (typeof src !== 'string') {
     return undefined;
   }
   const full = resolveStudyPath(src, label);
+  if (!RASTER_EXTENSIONS.some((ext) => src.endsWith(ext))) {
+    return undefined;
+  }
   return existsSync(full) ? src : undefined;
 }
