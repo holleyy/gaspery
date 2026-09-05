@@ -18,7 +18,7 @@
   import { THEME_STORAGE_KEY, readPreference } from '../lib/theme';
 
   const root = document.documentElement;
-  const group = document.querySelector<HTMLFieldSetElement>('.theme-toggle');
+  const groups = document.querySelectorAll<HTMLFieldSetElement>('.theme-toggle');
 
   /* The meta tag is corrected on every change, and — in the `system` state —
      whenever the OS itself flips, so the browser chrome never disagrees
@@ -32,7 +32,11 @@
       ?.setAttribute('content', dark ? '#191712' : '#F6F1E6');
   }
 
-  if (group) {
+  // Every instance shares `name="theme"` and none sits inside a `<form>`,
+  // so the browser treats them as one radio group document-wide and keeps
+  // their checked states in sync on its own — each instance below only
+  // needs to set its own initial state and hidden flag.
+  for (const group of groups) {
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(THEME_STORAGE_KEY);
@@ -47,6 +51,9 @@
 
     group.addEventListener('change', (event) => {
       const input = event.target as HTMLInputElement;
+      // Guards against a future non-theme control being added to this
+      // fieldset — every focusable descendant today is one of the three
+      // theme radios, so this branch is currently unreachable.
       if (input.name !== 'theme') return;
       const next = readPreference(input.value);
 
@@ -69,7 +76,12 @@
 </script>
 
 <style>
-  .theme-toggle {
+  /* Scoped to :not([hidden]) so the `hidden` attribute — origin: user-agent,
+     `display: none` — isn't beaten by this author-origin `display: flex`.
+     Origin is resolved before specificity, so an unscoped rule here would
+     make the fieldset visible from first paint regardless of JavaScript,
+     defeating the whole point of rendering it hidden. */
+  .theme-toggle:not([hidden]) {
     display: flex;
     align-items: center;
     gap: 10px;

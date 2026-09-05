@@ -132,3 +132,20 @@ test('theme-color is a single unconditional tag, not media-scoped', () => {
   assert.equal(tags.length, 1);
   assert.doesNotMatch(tags[0], /media=/);
 });
+
+const themeToggle = readFileSync(
+  new URL('../src/components/ThemeToggle.astro', import.meta.url),
+  'utf8'
+);
+
+test("the toggle's display rule is scoped to :not([hidden])", () => {
+  // The `hidden` attribute is implemented by the UA stylesheet as
+  // `display: none` at user-agent origin. Origin is resolved before
+  // specificity, so an author-origin `.theme-toggle { display: flex; }`
+  // rule — unscoped — would beat it outright, making the fieldset visible
+  // from first paint whether or not the unhiding script has run yet. This
+  // pins the fix: the display declaration must live behind :not([hidden]),
+  // and there must be no bare, unguarded rule fighting it.
+  assert.match(themeToggle, /\.theme-toggle:not\(\[hidden\]\)\s*\{[^}]*display:/);
+  assert.doesNotMatch(themeToggle, /\.theme-toggle\s*\{[^}]*display:/);
+});
