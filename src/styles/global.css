@@ -537,7 +537,8 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   .elsewhere a { justify-content: flex-start; gap: 5px; padding: 4px 0; }
   .site-footer { order: 6; flex-direction: column; align-items: flex-start; gap: 18px; }
   .pulse      { order: 7; }
-  .colophon   { order: 8; }
+  .theme-group { order: 8; }
+  .colophon   { order: 9; }
 
   :root { --text-hero: 34px; }
   .hero-title .ink, .hero-title .ghost { line-height: 1.18; }
