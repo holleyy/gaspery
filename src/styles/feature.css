@@ -10,13 +10,18 @@
    full-bleed. Prose and art direction interleave without the author
    thinking about it.
 
-   This file is injected via a `?url` <link>, not imported through Astro's
-   component-scoped <style> — see FeatureArticle.astro's frontmatter for
-   why. That means none of these rules are scoped: everything here is
-   global CSS, and the `.feature-*` / `.feature__*` prefix is the only
-   thing standing between these selectors and the rest of the site's.
-   Treat that prefix as a contract, not a convention — an unprefixed
-   selector added here leaks sitewide.
+   This file is read as a string (`?raw`) and inlined by FeatureArticle
+   into a <style set:html> — it is NOT imported through Astro's
+   component-scoped <style>, and there is no <link> to it. See that
+   component's frontmatter for why; the short version is that a normal
+   import lands in the shared route chunk and changes every writing post.
+
+   That means none of these rules are scoped: everything here is global
+   CSS, and the `.feature-*` / `.feature__*` prefix is the only thing
+   standing between these selectors and the rest of the page's. Treat
+   that prefix as a contract, not a convention — an unprefixed selector
+   added here leaks across the whole page it renders on, shared chrome
+   like <Imprint /> included.
    ===================================================================== */
 
 .feature {
