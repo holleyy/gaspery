@@ -57,12 +57,24 @@
   --rail-w:   232px;
   --gutter:   88px;
   --margin:   96px;
+
+  /* Drives form controls, scrollbars, and the canvas. Overridden per state
+     below so they follow an explicit choice, not just the OS. */
+  color-scheme: light dark;
 }
 
-/* Riso — dark appearance (project's `riso.dark` palette). Theme-aware
-   by default; the halftone blend flips multiply -> screen below. */
+/* Riso — dark appearance (project's `riso.dark` palette). Declared twice on
+   purpose: once behind the media query, for a reader who has expressed no
+   preference for this site, and once behind [data-theme='dark'] for one who
+   has. The `:not([data-theme='light'])` guard is what lets an explicit light
+   choice beat an OS that says dark.
+
+   light-dark() would collapse these into one block, but it cannot carry the
+   mix-blend-mode flips further down this file — so it would leave two
+   mechanisms in play for one idea. One obvious mechanism is worth the
+   duplication; tests/theme.test.ts asserts the two blocks never drift. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --color-paper:          #191712;
     --color-surface:        #1E1C18;
     --color-surface-raised: #29261F;
@@ -74,12 +86,33 @@
     --color-brand-strong:       #F06AA6;
     --color-brand-strong-hover: #F582B5;
     --color-teal:           #63CCAF;
-    --color-teal-ink:       #63CCAF;   /* 9.2:1 on the dark ground already */
+    --color-teal-ink:       #63CCAF;
     --color-positive:       #9DBB7F;
     --color-warning:        #E0A33E;
     --color-error:          #E86254;
   }
 }
+
+:root[data-theme='dark'] {
+  --color-paper:          #191712;
+  --color-surface:        #1E1C18;
+  --color-surface-raised: #29261F;
+  --color-hairline:       #39352C;
+  --color-ink:            #EDE8DC;
+  --color-ink-secondary:  #A8A18E;
+  --color-brand:          #F06AA6;
+  --color-brand-bright:   #F582B5;
+  --color-brand-strong:       #F06AA6;
+  --color-brand-strong-hover: #F582B5;
+  --color-teal:           #63CCAF;
+  --color-teal-ink:       #63CCAF;
+  --color-positive:       #9DBB7F;
+  --color-warning:        #E0A33E;
+  --color-error:          #E86254;
+}
+
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark']  { color-scheme: dark; }
 
 /* ---- Reset / base --------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -241,7 +274,8 @@ img, svg { display: block; max-width: 100%; }
           mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
   pointer-events: none; z-index: 1;
 }
-@media (prefers-color-scheme: dark) { .halftone { mix-blend-mode: screen; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .halftone { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .halftone { mix-blend-mode: screen; }
 
 /* Riso-duotone photography — a photo run through the same press as
    everything else. The image itself is piped through the ink/paper duotone
@@ -262,7 +296,8 @@ img, svg { display: block; max-width: 100%; }
   pointer-events: none;
   transition: opacity .5s cubic-bezier(0.25, 1, 0.5, 1);
 }
-@media (prefers-color-scheme: dark) { .riso-photo::after { mix-blend-mode: screen; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .riso-photo::after { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .riso-photo::after { mix-blend-mode: screen; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .riso-photo::after { display: none; } }
 /* Hover reveals the real photo underneath -- the print lifts to show what it
    was made from. */

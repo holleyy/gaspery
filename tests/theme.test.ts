@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 // The `.ts` extension is required here and only here: Node's native type
 // stripping runs this file directly, and ESM in Node needs explicit
 // extensions. Astro/Vite files import the same module extensionless.
@@ -54,4 +55,55 @@ test('resolveTheme treats a corrupt stored value as system, and never throws', (
   assert.equal(resolveTheme('aubergine', true), 'dark');
   assert.equal(resolveTheme('aubergine', false), 'light');
   assert.equal(resolveTheme(42, false), 'light');
+});
+
+const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+
+/** Pull the custom-property declarations out of the rule that starts at
+    `selector`. Assumes no nested braces inside the block, which holds for
+    both token blocks. */
+function tokensIn(selector: string): Record<string, string> {
+  const start = css.indexOf(selector);
+  assert.notEqual(start, -1, `selector not found in global.css: ${selector}`);
+  const open = css.indexOf('{', start);
+  const close = css.indexOf('}', open);
+  const body = css.slice(open + 1, close);
+  return Object.fromEntries(
+    [...body.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(([, name, value]) => [name, value.trim()])
+  );
+}
+
+test('the two dark token blocks declare identical values', () => {
+  // The dark palette is written twice — once behind the media query, once
+  // behind the attribute — because light-dark() cannot carry the
+  // mix-blend-mode flips further down the file, and one mechanism beats two.
+  // This is the guard that makes that duplication safe.
+  const viaMedia = tokensIn(":root:not([data-theme='light'])");
+  const viaAttribute = tokensIn(":root[data-theme='dark']");
+
+  assert.ok(Object.keys(viaMedia).length > 0, 'media-query dark block declared no tokens');
+  assert.deepEqual(viaAttribute, viaMedia);
+});
+
+test('both blend-mode flips are duplicated for the attribute state', () => {
+  // Same duplication, same reason. A forced dark appearance must flip the
+  // halftone to `screen` or the print sits inverted on the dark ground.
+  for (const target of ['.halftone', '.riso-photo::after']) {
+    assert.match(
+      css,
+      new RegExp(`:root\\[data-theme='dark'\\]\\s*${target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{[^}]*mix-blend-mode:\\s*screen`),
+      `no attribute-state blend flip for ${target}`
+    );
+    assert.match(
+      css,
+      new RegExp(`:root:not\\(\\[data-theme='light'\\]\\)\\s*${target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`),
+      `media-query blend flip for ${target} is not guarded against an explicit light choice`
+    );
+  }
+});
+
+test('color-scheme is declared for all three states', () => {
+  assert.match(css, /:root\s*\{[^}]*color-scheme:\s*light dark/);
+  assert.match(css, /:root\[data-theme='light'\]\s*\{[^}]*color-scheme:\s*light\s*;/);
+  assert.match(css, /:root\[data-theme='dark'\]\s*\{[^}]*color-scheme:\s*dark\s*;/);
 });
