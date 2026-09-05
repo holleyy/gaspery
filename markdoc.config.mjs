@@ -122,5 +122,23 @@ export default defineMarkdocConfig({
         items: { type: Array, required: true },
       },
     },
+    glyphs: {
+      render: component('./src/components/feature/Glyphs.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        standfirst: { type: String },
+        marks: { type: Array, required: true },
+        note: { type: String },
+      },
+    },
+    scaleProof: {
+      render: component('./src/components/feature/ScaleProof.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        rungs: { type: Array, required: true },
+      },
+    },
   },
 });

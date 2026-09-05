@@ -81,6 +81,16 @@ const featureComponents = {
           num: fields.text({ label: 'Number', description: 'e.g. "01" — rendered in the secondary ink.' }),
           key: fields.text({ label: 'Key', description: 'e.g. "Name" — rendered after the number.' }),
           glyph: fields.text({ label: 'Glyph path', description: 'Optional SVG, e.g. /studies/grod-icon/mb-idle.svg' }),
+          ink: fields.select({
+            label: 'Glyph ink',
+            description: 'Tints the inlined glyph via currentColor. Leave unset to inherit the surrounding text colour.',
+            options: [
+              { label: 'Brand', value: 'brand' },
+              { label: 'Teal', value: 'teal' },
+              { label: 'Aubergine', value: 'aubergine' },
+            ],
+            defaultValue: 'brand',
+          }),
           heading: fields.text({ label: 'Heading' }),
           body: fields.text({ label: 'Body', multiline: true }),
         }),
@@ -99,6 +109,38 @@ const featureComponents = {
           job: fields.text({ label: 'Job' }),
         }),
         { label: 'Swatches', itemLabel: (props) => props.fields.hex.value },
+      ),
+    },
+  }),
+  glyphs: block({
+    label: 'Glyphs',
+    description: 'A family of small marks, shown on both a light and a dark ground.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      standfirst: fields.text({ label: 'Standfirst', multiline: true }),
+      marks: fields.array(
+        fields.object({
+          src: fields.text({ label: 'SVG path', validation: { isRequired: true } }),
+          label: fields.text({ label: 'State label' }),
+        }),
+        { label: 'Marks', itemLabel: (props) => props.fields.label.value || props.fields.src.value },
+      ),
+      note: fields.text({ label: 'Note', multiline: true }),
+    },
+  }),
+  scaleProof: block({
+    label: 'Scale proof',
+    description: 'One artwork at descending sizes. Each rung points at its own derivative.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      rungs: fields.array(
+        fields.object({
+          src: fields.text({ label: 'Image path', validation: { isRequired: true } }),
+          size: fields.text({ label: 'Rendered size in px', description: 'e.g. 128' }),
+          label: fields.text({ label: 'Label' }),
+          caption: fields.text({ label: 'Caption', multiline: true }),
+        }),
+        { label: 'Rungs', itemLabel: (props) => props.fields.label.value || props.fields.size.value },
       ),
     },
   }),

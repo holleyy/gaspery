@@ -1,4 +1,5 @@
 ---
+import { readFileSync } from 'node:fs';
 /* One component, one variant axis. `columns=1` stacks rows with the heading
    above; `columns>1` puts the heading BESIDE the grid in a left column, which
    is what gives the display type room to run several lines deep. That
@@ -14,6 +15,10 @@ interface Item {
   num?: string;
   key?: string;
   glyph?: string;
+  /* Sets `color` on the inlined mark via `.spec__glyph[data-ink]`. The three
+     reading marks (and the menu-bar marks) are drawn with stroke="currentColor"
+     with no literal colour, precisely so this can tint them per item. */
+  ink?: 'brand' | 'teal' | 'aubergine';
   heading?: string;
   body?: string;
 }
@@ -33,6 +38,16 @@ const { columns = 1, heading, standfirst, detail, items = [] } = Astro.props;
    a fractional or out-of-range value from ever reaching the grid. */
 const columnCount = Math.max(1, Math.min(Math.trunc(Number(columns)) || 1, items.length || 1));
 const beside = columnCount > 1;
+
+/* Inlined, not <img src>: an externally-referenced SVG is an isolated
+   document and does not inherit currentColor, so a `stroke="currentColor"`
+   glyph would render in whatever colour the file itself resolves to,
+   ignoring `ink` entirely. Build-time read of files we ship ourselves,
+   same approach as Glyphs.astro. */
+const withGlyph = items.map((item) => ({
+  ...item,
+  glyphSvg: item.glyph ? readFileSync(`public${item.glyph}`, 'utf8') : undefined,
+}));
 ---
 <section class="spec" data-beside={beside ? '' : undefined}>
   <div class="feature-wrap spec__layout">
@@ -44,9 +59,9 @@ const beside = columnCount > 1;
       </div>
     )}
     <ul class="spec__list" style={`--spec-columns:${columnCount}`}>
-      {items.map((item) => (
+      {withGlyph.map((item) => (
         <li class="spec__item">
-          {item.glyph && <img class="spec__glyph" src={item.glyph} alt="" width="120" height="120" loading="lazy" />}
+          {item.glyphSvg && <span class="spec__glyph" data-ink={item.ink} set:html={item.glyphSvg} />}
           {(item.num || item.key) && (
             <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
           )}
@@ -106,8 +121,8 @@ const beside = columnCount > 1;
     height: auto;
     align-self: center;
     margin: 44px 0;
-    object-fit: contain;
   }
+  .spec[data-beside] .spec__glyph svg { width: 100%; height: auto; }
   .spec[data-beside] .feature-key,
   .spec[data-beside] .spec__heading,
   .spec[data-beside] .spec__body { padding-inline: 26px; }
@@ -117,6 +132,17 @@ const beside = columnCount > 1;
   .spec__heading { font-family: var(--font-serif); font-size: 20px; font-weight: 700; margin: 10px 0 9px; }
   .spec__body { font-size: 15px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 52ch; }
   .spec:not([data-beside]) .spec__body { font-size: 17px; }
+
+  /* Inlined <svg>, not <img>: currentColor resolves from `color` here, which
+     is why an item's `ink` can tint the mark at all — see the frontmatter
+     comment above `withGlyph`. */
+  .spec__glyph { display: inline-block; }
+  .spec__glyph svg { display: block; }
+  .spec:not([data-beside]) .spec__glyph { width: 120px; height: 120px; }
+  .spec:not([data-beside]) .spec__glyph svg { width: 100%; height: 100%; }
+  .spec__glyph[data-ink='brand']     { color: var(--color-brand-strong); }
+  .spec__glyph[data-ink='teal']      { color: var(--color-teal-ink); }
+  .spec__glyph[data-ink='aubergine'] { color: var(--grod-aubergine); }
 
   @media (max-width: 1000px) {
     .spec[data-beside] .spec__layout { grid-template-columns: 1fr; }
