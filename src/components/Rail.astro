@@ -44,7 +44,11 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
 /* The homepage has no other headline now that the Hero is gone, so the
    wordmark's ink copy is its <h1>. Everywhere else the page's own title
    is the h1 and the wordmark stays a div. The ghost is decorative on
-   every page and is never a heading. */
+   every page and is never a heading.
+   The h1 therefore sits inside the rail <aside>, not <main>. That is the
+   ordinary masthead pattern — the site title as h1 in the site header —
+   and the rail IS the masthead on every page; a hidden duplicate h1 in
+   <main> would say the same words twice to a screen reader. */
 const isHome = pathname === '/';
 ---
 <aside class="rail">

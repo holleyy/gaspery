@@ -87,9 +87,12 @@ test('collapsed layout keeps the rail dots inside the viewport', () => {
   assert.doesNotMatch(collapsed, /\n\s*\.halftone\s*\{/);
 });
 
-test('plate and wordmark sit above the dots', () => {
+test('text block sits above the dots; the plate keeps its blend', () => {
   assert.match(css, /\.identity\s*\{[^}]*position:\s*relative/);
-  assert.match(css, /\.monogram\s*\{[^}]*z-index:\s*1/);
+  assert.match(css, /\.identity__text\s*\{[^}]*z-index:\s*1/);
+  // No z-index on .monogram: it would open a stacking context and isolate
+  // the plate ghost's multiply blend, which AppPageHeader's plate relies on.
+  assert.match(css, /\.monogram \{ position: relative; width: 46px; height: 46px; \}/);
 });
 
 test('homepage has no Hero; the rail is the only masthead', () => {

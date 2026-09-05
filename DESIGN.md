@@ -138,13 +138,14 @@ problem and solve it with weight, size, and space instead. Restraint is the
 method, not an absence of ideas. As `PRODUCT.md` puts it, "the craft is the
 credential": the system earns trust by being visibly, precisely made.
 
-The feel is quiet, exact, crafted, and warmly personal — a working notebook, not
-a marketing site. Density is generous: a lot of bone whitespace, a two-column
-layout (a sticky identity rail beside a wide main column), and content set in
-rows divided by hairlines rather than boxed into cards. The one loud moment per
-page is the misregistered wordmark in the rail (the hero headline, on the 404); everything else is composed and calm.
-Print character carries the warmth — ink, paper, and registration marks — not a
-tinted-neutral "cozy" background.
+The feel is quiet, exact, crafted, and warmly personal — a working notebook,
+not a marketing site. Density is generous: a lot of bone whitespace, a
+two-column layout (a sticky identity rail beside a wide main column), and
+content set in rows divided by hairlines rather than boxed into cards. The one
+loud moment per page is the misregistered wordmark in the rail (the hero
+headline, on the 404); everything else is composed and calm. Print character
+carries the warmth — ink, paper, and registration marks — not a tinted-neutral
+"cozy" background.
 
 What it explicitly rejects (from `PRODUCT.md`'s anti-references): the generic
 SaaS/startup landing (gradient hero, feature grid, "Get started free"); the

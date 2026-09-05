@@ -190,9 +190,13 @@ img, svg { display: block; max-width: 100%; }
 
 /* Identity */
 .identity { display: flex; flex-direction: column; gap: 18px; position: relative; }
-/* Text block and plate are lifted above the dots (z-index 0). */
+/* The text block is lifted above the dots (z-index 0). The plate is not
+   given a z-index on purpose: that would open a stacking context and
+   isolate its ghost's multiply blend — AppPageHeader reuses .monogram and
+   its plate must keep blending into the page ground. Tree order already
+   paints the plate above the dots. */
 .identity__text { position: relative; z-index: 1; }
-.monogram { position: relative; width: 46px; height: 46px; z-index: 1; }
+.monogram { position: relative; width: 46px; height: 46px; }
 .monogram__ink,
 .monogram__ghost {
   position: absolute; inset: 0; width: 46px; height: 46px; border-radius: 2px;
