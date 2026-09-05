@@ -12,15 +12,24 @@ interface Props {
   heading?: string;
   accent?: string;
   lede?: string;
+  /* A feature post uses Plate more than once (a hero, then any number of
+     mid-article plates), but a page may only have one <h1> — every other
+     page on the site has exactly one. Default to 2 so a plate is safe by
+     default; the caller sets `level={1}` on the single plate that is
+     actually the page's hero. */
+  level?: 1 | 2;
 }
-const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede } = Astro.props;
+const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede, level = 2 } = Astro.props;
+// Capitalized so Astro treats it as a dynamic tag rather than literal text —
+// same pattern as `const Tag = app.url ? 'a' : 'div'` in AppsList.astro.
+const Heading = level === 1 ? 'h1' : 'h2';
 ---
 <section class="plate">
   <div class="feature-wrap plate__grid" data-solo={src ? undefined : ''}>
     <div class="plate__copy">
       {eyebrow && <p class="feature-eyebrow">{eyebrow}</p>}
       {heading && (
-        <h1 class="feature-h">{heading}{accent && <><br /><em>{accent}</em></>}</h1>
+        <Heading class="feature-h">{heading}{accent && <><br /><em>{accent}</em></>}</Heading>
       )}
       {lede && <p class="plate__lede">{lede}</p>}
     </div>

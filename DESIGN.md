@@ -154,7 +154,7 @@ view); and anything loud or maximalist. Nothing that trades craft or restraint
 for reach.
 
 **Key Characteristics:**
-- **Two inks, one ground.** Magenta + teal over bone paper. No third accent, ever.
+- **Two inks, one ground, in chrome.** Magenta + teal over bone paper. No third accent in chrome, ever — a feature study may still print a subject's own ink as its subject matter (see The Identity Exception, §2).
 - **Serif prints, sans functions.** Merriweather for anything that should read as printed; Inter for everything operational.
 - **Flat by tone, not shadow.** Depth comes from `paper → surface → surface-raised` layering and hairlines; there are no box-shadows.
 - **One loud moment.** The misregistered headline is spent once per page; the rest is quiet.
@@ -231,15 +231,26 @@ Full light/dark reference (dark values are theme-aware by default via
 | `--color-error` | `#C0392B` | `#E86254` | error state |
 
 ### Named Rules
-**The Two-Ink Rule.** Every screen prints in exactly two inks — magenta and teal
-— over one bone ground. A third accent color is never introduced; hierarchy is
-solved with weight, size, and space. Teal is the rarer ink, and it comes in two
-weights of the same colour: `--color-teal` for marks that are *printed* rather
-than read — halftone, ghost, registration marks, status dots — and
-`--color-teal-ink` for the small set of labels and markers that are *read*:
-enumerations, field labels, attributions, and printer's marks that happen to
-carry a link. Teal is never body copy, and never an ordinary hyperlink. Magenta
-remains the link ink.
+**The Two-Ink Rule.** Every screen's chrome prints in exactly two inks —
+magenta and teal — over one bone ground. A third accent color is never
+introduced into chrome; hierarchy there is solved with weight, size, and
+space. Teal is the rarer ink, and it comes in two weights of the same colour:
+`--color-teal` for marks that are *printed* rather than read — halftone,
+ghost, registration marks, status dots — and `--color-teal-ink` for the small
+set of labels and markers that are *read*: enumerations, field labels,
+attributions, and printer's marks that happen to carry a link. Teal is never
+body copy, and never an ordinary hyperlink. Magenta remains the link ink.
+
+**The Identity Exception.** A third ink may appear on a page, but only inside
+a study whose subject *is* that identity — never in site chrome. The first
+instance is `--grod-aubergine` (`src/styles/feature.css`), GRØD's own third
+ink: declared on `:root` inside the feature format's stylesheet, not in
+`global.css`, so it can never leak into ordinary pages. It surfaces only as
+the subject itself — described in prose, printed as one of the app's own
+colours in a `Swatches` chip, or used to tint a `Spec` glyph (`ink:
+'aubergine'`) when a reading is specifically about that identity's colour.
+Chrome — the rail, the meta row, the imprint, every page outside a study —
+stays two inks, always.
 
 **The Token Rule.** Dark values are theme-aware by default. Never hardcode a
 light value where a token exists — the token already carries its dark twin.
@@ -269,7 +280,7 @@ line) · 19/700 serif (nav item) · 18/700 serif (app name) · 14/600 sans ("mor
 links) · 13/600 sans (currently link) · 10/700 sans upper (tag/status pill).
 
 ### The feature format's scale
-The feature format (`.feature`, see Signature motifs in §5) runs a display
+The feature format (`.feature`) runs a display
 scale above the reading column's — declared as `featureDisplay` /
 `featureSection` / `featureBody` / `meta` in the frontmatter above, and applied
 only inside `.feature`; every page outside it keeps the `display` / `headline`
@@ -436,7 +447,7 @@ generic layout. Reuse them deliberately; don't invent competing ones.
 - **Do** pair every status color with a text label — color is never the only signal.
 
 ### Don't:
-- **Don't** introduce a third ink or accent color. Two inks and a ground; solve hierarchy with weight, size, and space.
+- **Don't** introduce a third ink or accent color into chrome. Two inks and a ground there; solve hierarchy with weight, size, and space — a study's own subject-matter ink is the one sanctioned exception (see The Identity Exception, §2).
 - **Don't** add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule).
 - **Don't** scatter the misregistration across headlines by reflex — spend it once by default (see The Single-Impression Rule), and never let meaning depend on a blend mode.
 - **Don't** hardcode a light color value where a token exists — the token carries its dark twin.

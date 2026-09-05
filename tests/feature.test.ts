@@ -27,7 +27,11 @@ test('every feature field is optional in Zod', () => {
   // CMS and then fails the Cloudflare build, with nothing in the editor to
   // explain it. That froze this site's deploys once already. The format's
   // fields degrade honestly instead — so none of them may be required.
-  for (const field of ['eyebrow', 'heroImage', 'heroAlt', 'app']) {
+  // heroImage/heroAlt were removed: the hero was a dead field pair (read by
+  // nothing — the actual hero comes from the first `plate` block's own
+  // `src`/`alt`) with Keystatic help text promising behaviour ("leave empty
+  // and the hero plate is omitted") that was never true.
+  for (const field of ['eyebrow', 'app']) {
     const declaration = zodSchema.match(new RegExp(`\\b${field}:\\s*z\\.[^,]+`));
     assert.ok(declaration, `${field} is not declared in the Zod schema`);
     assert.match(declaration[0], /\.optional\(\)/, `${field} must be .optional() in Zod`);

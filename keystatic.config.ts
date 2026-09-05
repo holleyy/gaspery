@@ -50,6 +50,12 @@ const featureComponents = {
       heading: fields.text({ label: 'Display heading' }),
       accent: fields.text({ label: 'Heading accent line', description: 'Rendered italic in the brand ink, on its own line.' }),
       lede: fields.text({ label: 'Lede', multiline: true }),
+      level: fields.integer({
+        label: 'Heading level',
+        description: 'Only the opening hero plate on a page should be 1. Leave every other plate at 2 — a page may only have one <h1>.',
+        defaultValue: 2,
+        validation: { min: 1, max: 2 },
+      }),
     },
   }),
   band: block({
@@ -70,9 +76,9 @@ const featureComponents = {
   }),
   spec: block({
     label: 'Spec',
-    description: 'Numbered readings. One column stacks; three or four put the heading beside the grid.',
+    description: 'Numbered readings. One column stacks; two or three put the heading beside the grid.',
     schema: {
-      columns: fields.integer({ label: 'Columns', defaultValue: 1 }),
+      columns: fields.integer({ label: 'Columns', defaultValue: 1, validation: { min: 1, max: 3 } }),
       heading: fields.text({ label: 'Heading' }),
       standfirst: fields.text({ label: 'Standfirst', multiline: true }),
       detail: fields.text({ label: 'Detail', multiline: true }),
@@ -80,7 +86,10 @@ const featureComponents = {
         fields.object({
           num: fields.text({ label: 'Number', description: 'e.g. "01" — rendered in the secondary ink.' }),
           key: fields.text({ label: 'Key', description: 'e.g. "Name" — rendered after the number.' }),
-          glyph: fields.text({ label: 'Glyph path', description: 'Optional SVG, e.g. /studies/grod-icon/mb-idle.svg' }),
+          glyph: fields.text({
+            label: 'Glyph path',
+            description: 'Optional. Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+          }),
           ink: fields.select({
             label: 'Glyph ink',
             description: 'Tints the inlined glyph via currentColor. "Inherit" (the default) leaves it taking the ambient text colour — pick a tint only when the glyph should carry an explicit colour of its own.',
@@ -95,7 +104,7 @@ const featureComponents = {
           heading: fields.text({ label: 'Heading' }),
           body: fields.text({ label: 'Body', multiline: true }),
         }),
-        { label: 'Items', itemLabel: (props) => props.fields.heading.value || props.fields.key.value },
+        { label: 'Items', itemLabel: (props) => props.fields.heading.value || props.fields.key.value || props.fields.num.value },
       ),
     },
   }),
@@ -121,7 +130,11 @@ const featureComponents = {
       standfirst: fields.text({ label: 'Standfirst', multiline: true }),
       marks: fields.array(
         fields.object({
-          src: fields.text({ label: 'SVG path', validation: { isRequired: true } }),
+          src: fields.text({
+            label: 'SVG path',
+            description: 'Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+            validation: { isRequired: true },
+          }),
           label: fields.text({ label: 'State label' }),
         }),
         { label: 'Marks', itemLabel: (props) => props.fields.label.value || props.fields.src.value },
@@ -137,7 +150,7 @@ const featureComponents = {
       rungs: fields.array(
         fields.object({
           src: fields.text({ label: 'Image path', validation: { isRequired: true } }),
-          size: fields.text({ label: 'Rendered size in px', description: 'e.g. 128' }),
+          size: fields.integer({ label: 'Rendered size in px', description: 'e.g. 128' }),
           label: fields.text({ label: 'Label' }),
           caption: fields.text({ label: 'Caption', multiline: true }),
         }),
@@ -232,15 +245,6 @@ export default config({
         eyebrow: fields.text({
           label: 'Eyebrow',
           description: 'Feature template only. e.g. "Identity study 01".',
-        }),
-        heroImage: fields.text({
-          label: 'Hero image path',
-          description: 'Feature template only. e.g. /studies/grod-icon/primary.webp — leave empty and the hero plate is omitted.',
-        }),
-        heroAlt: fields.text({
-          label: 'Hero alt text',
-          description: 'Feature template only. Required whenever a hero image is set.',
-          multiline: true,
         }),
         app: fields.text({
           label: 'Related app',

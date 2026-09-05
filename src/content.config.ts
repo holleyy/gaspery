@@ -22,14 +22,12 @@ const writing = defineCollection({
          had; "feature" is the full-bleed, art-directed treatment — same idea
          as appPages' quiet/editorial. */
       template: z.enum(['standard', 'feature']).default('standard'),
-      /* Feature-only, and all optional on purpose. A feature post missing its
-         hero renders without the plate, the way an appPages spread without a
-         screenshot falls back to the honest placeholder. Requiring any of
-         these in Zod without also requiring them in Keystatic is how this
-         site's deploys froze in August. */
+      /* Feature-only, and both optional on purpose. Requiring either in Zod
+         without also requiring it in Keystatic is how this site's deploys
+         froze in August. There is no separate hero-image field: the hero is
+         the first `plate` block's own `src`, set in the body content, same
+         as any other plate. */
       eyebrow: z.string().optional(),
-      heroImage: z.string().optional(),
-      heroAlt: z.string().optional(),
       app: z.string().optional(),
     })
     .superRefine((v, ctx) => {

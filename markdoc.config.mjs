@@ -87,6 +87,9 @@ export default defineMarkdocConfig({
         heading: { type: String },
         accent: { type: String },
         lede: { type: String },
+        // 1 for the single hero plate on a page, 2 (Plate.astro's default)
+        // for every other plate — a page must have exactly one <h1>.
+        level: { type: Number },
       },
     },
     band: {

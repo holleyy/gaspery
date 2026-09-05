@@ -20,11 +20,18 @@ const strips = [
    document and does not inherit currentColor, so on the ink strip the marks
    would render dark-on-dark. Build-time read of files we ship ourselves —
    `mark.src` is a Keystatic text field (author input), so `readStudySvg`
-   confirms it stays under public/studies/ before anything is read. */
-const inlined = marks.map((mark) => ({
-  ...mark,
-  svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
-}));
+   confirms it stays under public/studies/ before anything is read.
+
+   `readStudySvg` returns undefined for a wrong extension or a missing file
+   (see the comment on that function) rather than throwing — the filter
+   below is what turns that into "the mark drops out of both strips" instead
+   of an icon-less label sitting next to a missing glyph. */
+const inlined = marks
+  .map((mark) => ({
+    ...mark,
+    svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
+  }))
+  .filter((mark): mark is typeof mark & { svg: string } => typeof mark.svg === 'string');
 ---
 <section class="glyphs">
   <div class="feature-wrap">

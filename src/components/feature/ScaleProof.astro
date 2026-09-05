@@ -4,7 +4,7 @@
    1.5MB and this block would otherwise ship it once per rung. */
 interface Props {
   heading?: string;
-  rungs: { src: string; size?: string; label?: string; caption?: string }[];
+  rungs: { src: string; size?: number; label?: string; caption?: string }[];
 }
 const { heading, rungs = [] } = Astro.props;
 ---

@@ -76,8 +76,9 @@
    gets bundled into every writing page — feature or not — since Astro
    registers a component's styles whenever its tag appears in the compiled
    template, regardless of which runtime branch actually renders it. This
-   file is only ever linked when a feature post renders (see
-   FeatureArticle.astro's explicit <link>), so the rule only reaches pages
+   file is only ever inlined when a feature post renders — via
+   FeatureArticle.astro's `<style set:html={featureCss}>`, not a <link>;
+   see that file's frontmatter for why — so the rule only reaches pages
    that need it. */
 .feature__meta > .theme-toggle { margin-left: auto; }
 
