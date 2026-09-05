@@ -107,3 +107,28 @@ test('color-scheme is declared for all three states', () => {
   assert.match(css, /:root\[data-theme='light'\]\s*\{[^}]*color-scheme:\s*light\s*;/);
   assert.match(css, /:root\[data-theme='dark'\]\s*\{[^}]*color-scheme:\s*dark\s*;/);
 });
+
+const baseLayout = readFileSync(new URL('../src/layouts/Base.astro', import.meta.url), 'utf8');
+
+test('the pre-paint script reads the same storage key the module exports', () => {
+  // Base.astro runs before the bundle exists, so it cannot import
+  // THEME_STORAGE_KEY and repeats the literal instead. This is the seam
+  // where the two could silently drift apart.
+  const match = baseLayout.match(/localStorage\.getItem\(\s*['"]([^'"]+)['"]\s*\)/);
+  assert.ok(match, 'Base.astro does not read localStorage in its inline script');
+  assert.equal(match[1], THEME_STORAGE_KEY);
+});
+
+test('the pre-paint script is inline, so it runs before first paint', () => {
+  // A bundled or deferred script runs after paint, which is exactly the
+  // flash of the wrong appearance this exists to prevent.
+  assert.match(baseLayout, /<script is:inline>/);
+});
+
+test('theme-color is a single unconditional tag, not media-scoped', () => {
+  // Two media-scoped tags cannot follow an explicit override — the browser
+  // chrome would sit light above a dark page.
+  const tags = baseLayout.match(/<meta name="theme-color"[^>]*>/g) ?? [];
+  assert.equal(tags.length, 1);
+  assert.doesNotMatch(tags[0], /media=/);
+});
