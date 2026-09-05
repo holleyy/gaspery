@@ -27,7 +27,13 @@
 .feature {
   --feature-max: 1180px;
   --feature-pad: clamp(22px, 5vw, 48px);
-  --feature-measure: 68ch;
+  /* Font-invariant on purpose. `ch` resolves against each element's OWN
+     font-size, so one declared measure became a different physical width for
+     every element using it: 767px on 18px prose, 726px on a list, and 1540px
+     on a 34px h2 — wider than the page, so headings never centred and ran
+     full-bleed. 48rem is the prose width that produced (68ch at 18px =
+     767.4px), now shared by every prose element so they align to one edge. */
+  --feature-measure: 48rem;
 
   /* Specimen grounds, deliberately fixed in both appearances. A Glyphs strip
      depicts somewhere else — a menu bar, a phone wallpaper — so it is content,
@@ -87,7 +93,11 @@
   margin-inline: auto;
   padding-inline: var(--feature-pad);
 }
-.feature__body > p { font-size: 18px; line-height: 1.7; margin: 0 0 20px; }
+/* `auto`, not 0, in the inline positions — the shorthand here overrides the
+   `margin-inline: auto` set above it, and `margin: 0 0 20px` pinned every
+   prose paragraph to x=0 while lists (which have no such override) centred
+   correctly. Prose sat 50px left of every block heading on the page. */
+.feature__body > p { font-size: 18px; line-height: 1.7; margin: 0 auto 20px; }
 .feature__body > h2 {
   font-family: var(--font-serif);
   font-weight: 800;
