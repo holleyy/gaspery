@@ -7,12 +7,13 @@ interface Props {
   src?: string;
   alt?: string;
   caption?: string;
+  captionLead?: string;
   eyebrow?: string;
   heading?: string;
   accent?: string;
   lede?: string;
 }
-const { src, alt = '', caption, eyebrow, heading, accent, lede } = Astro.props;
+const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede } = Astro.props;
 ---
 <section class="plate">
   <div class="feature-wrap plate__grid" data-solo={src ? undefined : ''}>
@@ -26,7 +27,20 @@ const { src, alt = '', caption, eyebrow, heading, accent, lede } = Astro.props;
     {src && (
       <figure class="plate__figure">
         <img src={src} alt={alt} width="640" height="640" loading="eager" decoding="async" />
-        {caption && <figcaption set:html={caption} />}
+        {/* Two plain-text fields, not one field with `set:html`: `caption`
+           is a Keystatic text field, and nothing in the GUI would signal
+           that it's actually live HTML. RisoPhoto's `set:html` (the
+           precedent once cited for this) escapes its caption *before*
+           injecting it — its raw-HTML sink exists for whitespace fidelity,
+           not markup pass-through. `captionLead` covers the one legitimate
+           need for markup (a bold lead-in) without opening an HTML sink. */}
+        {(captionLead || caption) && (
+          <figcaption>
+            {captionLead && <b>{captionLead}</b>}
+            {captionLead && caption ? ' ' : ''}
+            {caption}
+          </figcaption>
+        )}
       </figure>
     )}
   </div>

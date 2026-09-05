@@ -42,6 +42,9 @@ const featureComponents = {
     schema: {
       src: fields.text({ label: 'Image path', description: 'e.g. /studies/grod-icon/primary-1024.webp' }),
       alt: fields.text({ label: 'Alt text', multiline: true }),
+      // Split from `caption` so a bold lead-in never needs raw HTML in a
+      // plain text field — see the comment on Plate.astro's figcaption.
+      captionLead: fields.text({ label: 'Caption lead-in', description: 'Bold lead-in, e.g. "Primary — Listening Ø."' }),
       caption: fields.text({ label: 'Caption', multiline: true }),
       eyebrow: fields.text({ label: 'Eyebrow' }),
       heading: fields.text({ label: 'Display heading' }),
@@ -58,6 +61,11 @@ const featureComponents = {
         itemLabel: (props) => props.value,
       }),
       note: fields.text({ label: 'Note', multiline: true }),
+      accentIndex: fields.integer({
+        label: 'Accent index',
+        description: 'Which word to pick out in brand ink, zero-based (0 = first word). Defaults to the second word.',
+        defaultValue: 1,
+      }),
     },
   }),
 };

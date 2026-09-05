@@ -70,8 +70,15 @@ test('every registered feature block tag is declared selfClosing', () => {
   //
   // Each tag's slice runs to the START OF THE NEXT tag, not a fixed window —
   // otherwise a missing `selfClosing` would be masked by the next tag's.
+  // A raw `indexOf(\`${tag}: {\`)` would match a substring of a longer tag
+  // name (e.g. "plate: {" inside "template: {"). No collision exists today,
+  // but that's exactly the kind of latent false-pass a guard shouldn't have.
+  // Word-bound the tag name so each match is the tag's own declaration.
   const starts = FEATURE_TAGS
-    .map((tag) => [tag, markdocConfig.indexOf(`${tag}: {`)])
+    .map((tag) => {
+      const match = markdocConfig.match(new RegExp(`\\b${tag}:\\s*\\{`));
+      return [tag, match ? match.index : -1];
+    })
     .filter(([, at]) => at >= 0)
     .sort((a, b) => a[1] - b[1]);
 

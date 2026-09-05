@@ -4,15 +4,21 @@
 interface Props {
   words: string[];
   note?: string;
+  accentIndex?: number;
 }
-const { words = [], note } = Astro.props;
+const { words = [], note, accentIndex = 1 } = Astro.props;
 ---
-<section class="band">
-  <div class="feature-wrap band__inner">
-    {words.map((word, i) => <p class="band__word" data-accent={i === 1 ? '' : undefined}>{word}</p>)}
-    {note && <span class="band__note">{note}</span>}
-  </div>
-</section>
+{/* An empty `words` array with the strip still rendered is a full-width
+   block of ink carrying no content — worse than rendering nothing, so
+   skip the section entirely rather than let it degrade to that. */}
+{words.length > 0 && (
+  <section class="band">
+    <div class="feature-wrap band__inner">
+      {words.map((word, i) => <p class="band__word" data-accent={i === accentIndex ? '' : undefined}>{word}</p>)}
+      {note && <span class="band__note">{note}</span>}
+    </div>
+  </section>
+)}
 
 <style>
   .band {

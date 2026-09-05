@@ -82,6 +82,7 @@ export default defineMarkdocConfig({
         src: { type: String },
         alt: { type: String },
         caption: { type: String },
+        captionLead: { type: String },
         eyebrow: { type: String },
         heading: { type: String },
         accent: { type: String },
@@ -94,6 +95,7 @@ export default defineMarkdocConfig({
       attributes: {
         words: { type: Array, required: true },
         note: { type: String },
+        accentIndex: { type: Number },
       },
     },
   },
