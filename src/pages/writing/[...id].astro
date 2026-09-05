@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import RegistrationMark from '../../components/RegistrationMark.astro';
 import Imprint from '../../components/Imprint.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 import { isLink, sourceDomain } from '../../lib/links';
 
 export async function getStaticPaths() {
@@ -25,6 +26,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
       <span class="label">{fmt.toUpperCase()}</span>
       <span class="sep" aria-hidden="true">/</span>
       <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
+      <ThemeToggle />
     </div>
 
     {/* .article__dek below must stay outside this ternary — moving it into
@@ -71,6 +73,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
   .back:hover { color: var(--color-brand-strong-hover); }
   .article__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .article__meta .sep { color: var(--color-hairline); }
+  .article__meta > :global(.theme-toggle) { margin-left: auto; }
   .article__title {
     font-family: var(--font-serif);
     font-weight: 800;

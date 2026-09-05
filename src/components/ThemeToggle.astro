@@ -1,0 +1,131 @@
+---
+/* Three radios, not a two-state switch: `system` has to stay reachable, or
+   a reader who once tapped the toggle can never hand control back to their
+   OS. Native radios bring keyboard support, grouping, and screen-reader
+   semantics with no focus management to write.
+
+   Rendered hidden and unhidden by the script below, so a reader without
+   JavaScript is never shown a control that cannot do anything. */
+---
+<fieldset class="theme-toggle" hidden>
+  <legend class="sr-only">Appearance</legend>
+  <label><input type="radio" name="theme" value="light" /><span>Light</span></label>
+  <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+  <label><input type="radio" name="theme" value="system" /><span>Auto</span></label>
+</fieldset>
+
+<script>
+  import { THEME_STORAGE_KEY, readPreference, resolveTheme } from '../lib/theme';
+
+  const root = document.documentElement;
+  const group = document.querySelector<HTMLFieldSetElement>('.theme-toggle');
+
+  /* The meta tag is corrected on every change, and — in the `system` state —
+     whenever the OS itself flips, so the browser chrome never disagrees
+     with the page. */
+  function syncThemeColor() {
+    const dark =
+      resolveTheme(root.dataset.theme ?? null, window.matchMedia('(prefers-color-scheme: dark)').matches) ===
+      'dark';
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', dark ? '#191712' : '#F6F1E6');
+  }
+
+  // This component is single-instance per page: every radio shares
+  // `name="theme"` with no `<form>` ancestor, so two mounted copies would
+  // form one native radio group across both — the browser enforces mutual
+  // exclusivity, not mirroring, so they'd fight over which one is checked
+  // instead of staying in sync. scripts/verify-parity.sh enforces exactly
+  // one `.theme-toggle` per built page, so that case cannot arise.
+  if (group) {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(THEME_STORAGE_KEY);
+    } catch {
+      /* Private mode. Fall through to `system`, which is the default. */
+    }
+
+    const current = readPreference(stored);
+    const checked = group.querySelector<HTMLInputElement>(`input[value="${current}"]`);
+    if (checked) checked.checked = true;
+    // Some mounts (writing/[...id], apps/[id], 404) render the fieldset
+    // with no wrapping .theme-group, so unhiding the fieldset is enough
+    // there. Where the Rail wraps it, the wrapper carries its own `hidden`
+    // too (see src/components/Rail.astro) so a no-JS reader never sees an
+    // empty, ruled "Appearance" section — both must be unhidden, since each
+    // element's `hidden` attribute is independent of the other's.
+    group.hidden = false;
+    group.closest<HTMLElement>('.theme-group')?.removeAttribute('hidden');
+
+    group.addEventListener('change', (event) => {
+      const input = event.target as HTMLInputElement;
+      // Guards against a future non-theme control being added to this
+      // fieldset — every focusable descendant today is one of the three
+      // theme radios, so this branch is currently unreachable.
+      if (input.name !== 'theme') return;
+      const next = readPreference(input.value);
+
+      try {
+        if (next === 'system') localStorage.removeItem(THEME_STORAGE_KEY);
+        else localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {
+        /* Preference will not survive the page, but the page still flips. */
+      }
+
+      if (next === 'system') delete root.dataset.theme;
+      else root.dataset.theme = next;
+      syncThemeColor();
+    });
+  }
+
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', syncThemeColor);
+</script>
+
+<style>
+  /* Scoped to :not([hidden]) so the `hidden` attribute — origin: user-agent,
+     `display: none` — isn't beaten by this author-origin `display: flex`.
+     Origin is resolved before specificity, so an unscoped rule here would
+     make the fieldset visible from first paint regardless of JavaScript,
+     defeating the whole point of rendering it hidden. */
+  .theme-toggle:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .theme-toggle label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-ink-secondary);
+    cursor: pointer;
+  }
+  /* The radio itself is hidden, but focusable — the ring lands on the label
+     via :focus-within, so keyboard users still see where they are. */
+  .theme-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .theme-toggle label:hover { color: var(--color-ink); }
+  .theme-toggle label:focus-within {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+  .theme-toggle input:checked + span {
+    color: var(--color-brand-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

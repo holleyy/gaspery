@@ -22,9 +22,34 @@ const ogImage = new URL('/og/card.png', Astro.site);
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F1E6" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#191712" />
+    {/* One unconditional tag, corrected by the inline script below. The two
+        media-scoped tags this replaces could not follow an explicit choice —
+        a reader forcing dark on a light OS got light browser chrome above a
+        dark page. `color-scheme` now lives in global.css, declared per
+        state, for the same reason. */}
+    <meta name="theme-color" content="#F6F1E6" />
+
+    {/* Runs before first paint, which is why it is inline and unbundled: a
+        module script runs after paint and the flash of the wrong appearance
+        is the whole thing we are avoiding. It only *applies* a stored value
+        — all the logic lives in src/lib/theme.ts, which the interactive
+        control imports. The storage key is repeated here because this runs
+        before the bundle exists; tests/theme.test.ts pins the two together.
+        localStorage throws in some privacy modes, so a failure here must
+        leave the site rendering in the system appearance, not blank. */}
+    <script is:inline>
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem('theme'); } catch (e) {}
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.dataset.theme = stored;
+        }
+        var dark = stored === 'dark'
+          || (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#191712' : '#F6F1E6');
+      })();
+    </script>
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />

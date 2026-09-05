@@ -36,6 +36,10 @@
   --color-positive:       #4A7441;
   --color-warning:        #94600F;
   --color-error:          #C0392B;
+  /* The one accent that runs OPPOSITE the page. A full-bleed band's ground
+     is --color-ink, so it inverts with the scheme: a light page gives a
+     dark band, which needs the light pink. 5.66:1 light, 4.69:1 dark. */
+  --color-brand-on-ink:   #F06AA6;
 
   /* Type */
   --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
@@ -57,12 +61,24 @@
   --rail-w:   232px;
   --gutter:   88px;
   --margin:   96px;
+
+  /* Drives form controls, scrollbars, and the canvas. Overridden per state
+     below so they follow an explicit choice, not just the OS. */
+  color-scheme: light dark;
 }
 
-/* Riso — dark appearance (project's `riso.dark` palette). Theme-aware
-   by default; the halftone blend flips multiply -> screen below. */
+/* Riso — dark appearance (project's `riso.dark` palette). Declared twice on
+   purpose: once behind the media query, for a reader who has expressed no
+   preference for this site, and once behind [data-theme='dark'] for one who
+   has. The `:not([data-theme='light'])` guard is what lets an explicit light
+   choice beat an OS that says dark.
+
+   light-dark() would collapse these into one block, but it cannot carry the
+   mix-blend-mode flips further down this file — so it would leave two
+   mechanisms in play for one idea. One obvious mechanism is worth the
+   duplication; tests/theme.test.ts asserts the two blocks never drift. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --color-paper:          #191712;
     --color-surface:        #1E1C18;
     --color-surface-raised: #29261F;
@@ -74,12 +90,35 @@
     --color-brand-strong:       #F06AA6;
     --color-brand-strong-hover: #F582B5;
     --color-teal:           #63CCAF;
-    --color-teal-ink:       #63CCAF;   /* 9.2:1 on the dark ground already */
+    --color-teal-ink:       #63CCAF;
     --color-positive:       #9DBB7F;
     --color-warning:        #E0A33E;
     --color-error:          #E86254;
+    --color-brand-on-ink:   #B82E70;
   }
 }
+
+:root[data-theme='dark'] {
+  --color-paper:          #191712;
+  --color-surface:        #1E1C18;
+  --color-surface-raised: #29261F;
+  --color-hairline:       #39352C;
+  --color-ink:            #EDE8DC;
+  --color-ink-secondary:  #A8A18E;
+  --color-brand:          #F06AA6;
+  --color-brand-bright:   #F582B5;
+  --color-brand-strong:       #F06AA6;
+  --color-brand-strong-hover: #F582B5;
+  --color-teal:           #63CCAF;
+  --color-teal-ink:       #63CCAF;
+  --color-positive:       #9DBB7F;
+  --color-warning:        #E0A33E;
+  --color-error:          #E86254;
+  --color-brand-on-ink:   #B82E70;
+}
+
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark']  { color-scheme: dark; }
 
 /* ---- Reset / base --------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -165,8 +204,14 @@ img, svg { display: block; max-width: 100%; }
 .identity .label { margin-top: 6px; }
 .identity:hover .wordmark { color: var(--color-brand-bright); }
 
-/* Rail sections (nav + elsewhere) */
+/* Rail sections (nav + elsewhere + theme) */
 .rail-group { display: flex; flex-direction: column; gap: 14px; }
+/* Author-origin `display: flex` above beats the user-agent `[hidden]`
+   style regardless of specificity — origin is resolved before
+   specificity, same reasoning as .theme-toggle:not([hidden]) below. The
+   theme group is the only one of the three that is ever hidden (for a
+   reader without JavaScript), so this guard only ever engages for it. */
+.rail-group[hidden] { display: none; }
 .rail-group__title { padding-bottom: 4px; border-bottom: 1px solid var(--color-hairline); }
 
 .nav a {
@@ -241,7 +286,8 @@ img, svg { display: block; max-width: 100%; }
           mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
   pointer-events: none; z-index: 1;
 }
-@media (prefers-color-scheme: dark) { .halftone { mix-blend-mode: screen; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .halftone { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .halftone { mix-blend-mode: screen; }
 
 /* Riso-duotone photography — a photo run through the same press as
    everything else. The image itself is piped through the ink/paper duotone
@@ -262,7 +308,8 @@ img, svg { display: block; max-width: 100%; }
   pointer-events: none;
   transition: opacity .5s cubic-bezier(0.25, 1, 0.5, 1);
 }
-@media (prefers-color-scheme: dark) { .riso-photo::after { mix-blend-mode: screen; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .riso-photo::after { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .riso-photo::after { mix-blend-mode: screen; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .riso-photo::after { display: none; } }
 /* Hover reveals the real photo underneath -- the print lifts to show what it
    was made from. */
@@ -502,7 +549,8 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   .elsewhere a { justify-content: flex-start; gap: 5px; padding: 4px 0; }
   .site-footer { order: 6; flex-direction: column; align-items: flex-start; gap: 18px; }
   .pulse      { order: 7; }
-  .colophon   { order: 8; }
+  .theme-group { order: 8; }
+  .colophon   { order: 9; }
 
   :root { --text-hero: 34px; }
   .hero-title .ink, .hero-title .ghost { line-height: 1.18; }

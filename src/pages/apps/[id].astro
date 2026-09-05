@@ -5,6 +5,7 @@ import AppPageHeader from '../../components/AppPageHeader.astro';
 import Imprint from '../../components/Imprint.astro';
 import QuietAppBody from '../../components/QuietAppBody.astro';
 import EditorialAppBody from '../../components/EditorialAppBody.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('appPages');
@@ -33,7 +34,10 @@ const { Content } = await render(page);
   {/* The editorial template carries real screenshots, so it gets the wider
       stage; the quiet template stays at the reading measure. */}
   <main class:list={['app-page', page.data.template === 'editorial' && 'app-page--wide']} id="main">
-    <a class="app-page__back" href="/">&larr; Alex Holley</a>
+    <div class="app-page__topbar">
+      <a class="app-page__back" href="/">&larr; Alex Holley</a>
+      <ThemeToggle />
+    </div>
 
     <AppPageHeader name={app.data.name} meta={app.data.meta} status={app.data.status} />
 
@@ -48,3 +52,12 @@ const { Content } = await render(page);
     <footer><Imprint /></footer>
   </main>
 </Base>
+
+<style>
+  .app-page__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+</style>
