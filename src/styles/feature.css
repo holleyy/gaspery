@@ -28,6 +28,16 @@
   --feature-max: 1180px;
   --feature-pad: clamp(22px, 5vw, 48px);
   --feature-measure: 68ch;
+
+  /* Specimen grounds, deliberately fixed in both appearances. A Glyphs strip
+     depicts somewhere else — a menu bar, a phone wallpaper — so it is content,
+     the way a Swatches chip is, not site chrome. Themed tokens here made the
+     strip labelled "Light" render dark for a reader in dark mode, which is a
+     label contradicting the thing it labels. Do not add a dark override. */
+  --specimen-light: #E9E5DC;
+  --specimen-light-ink: #232019;
+  --specimen-dark: #232019;
+  --specimen-dark-ink: #F6F1E6;
 }
 
 /* Site chrome — deliberately the same weight as an ordinary post's. */
