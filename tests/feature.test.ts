@@ -28,16 +28,32 @@ test('every feature field is optional in Zod', () => {
   // explain it. That froze this site's deploys once already. The format's
   // fields degrade honestly instead — so none of them may be required.
   for (const field of ['eyebrow', 'heroImage', 'heroAlt', 'app']) {
-    const declaration = zodSchema.match(new RegExp(`${field}:\\s*z\\.[^,]+`));
+    const declaration = zodSchema.match(new RegExp(`\\b${field}:\\s*z\\.[^,]+`));
     assert.ok(declaration, `${field} is not declared in the Zod schema`);
     assert.match(declaration[0], /\.optional\(\)/, `${field} must be .optional() in Zod`);
   }
 });
 
 test('template is a flat select in Keystatic, not a conditional', () => {
+  // Scope this to the `writing` collection's own schema. Matching file-wide
+  // would also match appPages' pre-existing `template: fields.select(...)`,
+  // so the assertion would pass even if writing's `template` field were
+  // deleted outright — it would be guarding appPages, not writing.
+  const start = keystatic.indexOf('writing: collection(');
+  const end = keystatic.indexOf('appPages: collection(');
+  assert.ok(
+    start !== -1 && end !== -1 && start < end,
+    'could not locate the writing/appPages collection boundaries in keystatic.config.ts — did one get renamed?'
+  );
+  const writingSchema = keystatic.slice(start, end);
+
   // fields.conditional serialises to a nested { discriminant, value } object,
   // which would make `template` an object rather than a string and break the
   // parallel with appPages.
-  assert.match(keystatic, /template:\s*fields\.select\(/);
+  assert.match(writingSchema, /template:\s*fields\.select\(/);
+
+  // Deliberately file-wide, unlike the assertion above: a fields.conditional
+  // anywhere in this config — not just inside `writing` — would reintroduce
+  // the object-shaped `template` this test exists to rule out.
   assert.doesNotMatch(keystatic, /template:\s*fields\.conditional\(/);
 });
