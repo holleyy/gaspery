@@ -84,6 +84,7 @@ test('toPostProps maps an essay and flags it as new when it matches', () => {
     readingTime: '7 min',
     sourceUrl: undefined,
     isNew: true,
+    isFeature: false,
   });
 });
 

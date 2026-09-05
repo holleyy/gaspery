@@ -13,6 +13,16 @@ export function isLink<T extends LinkFields>(data: T): data is T & { sourceUrl: 
   return typeof data.sourceUrl === 'string' && data.sourceUrl.length > 0;
 }
 
+export type FeatureFields = { template?: string };
+
+/** A feature post is one whose body renders as an art-directed, full-bleed
+    layout instead of the reading column. Deliberately a plain boolean, not a
+    type predicate like `isLink`: nothing downstream needs `template` narrowed,
+    and the value carries no payload a caller would use. */
+export function isFeature(data: FeatureFields): boolean {
+  return data.template === 'feature';
+}
+
 /** True when the string parses as an http(s) URL. Must not throw: Zod's
     `.url()` marks a bad string dirty without aborting, so this predicate
     still runs on input that already failed URL parsing. */
@@ -36,6 +46,7 @@ export type WritingData = LinkFields & {
   date: Date;
   dek: string;
   readingTime?: string;
+  template?: string;
 };
 export type WritingEntry = { id: string; data: WritingData };
 
@@ -47,6 +58,7 @@ export type PostProps = {
   readingTime?: string;
   sourceUrl?: string;
   isNew: boolean;
+  isFeature: boolean;
 };
 
 /** The newest essay in a date-sorted list, or null if it holds none.
@@ -68,5 +80,6 @@ export function toPostProps(entry: WritingEntry, newestId: string | null): PostP
     readingTime: entry.data.readingTime,
     sourceUrl: entry.data.sourceUrl,
     isNew: entry.id === newestId,
+    isFeature: isFeature(entry.data),
   };
 }

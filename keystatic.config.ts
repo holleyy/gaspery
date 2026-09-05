@@ -106,6 +106,32 @@ export default config({
           multiline: true,
         }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
+        template: fields.select({
+          label: 'Template',
+          description: 'Standard is the reading column. Feature is the full-bleed, art-directed layout.',
+          options: [
+            { label: 'Standard', value: 'standard' },
+            { label: 'Feature', value: 'feature' },
+          ],
+          defaultValue: 'standard',
+        }),
+        eyebrow: fields.text({
+          label: 'Eyebrow',
+          description: 'Feature template only. e.g. "Identity study 01".',
+        }),
+        heroImage: fields.text({
+          label: 'Hero image path',
+          description: 'Feature template only. e.g. /studies/grod-icon/primary.webp — leave empty and the hero plate is omitted.',
+        }),
+        heroAlt: fields.text({
+          label: 'Hero alt text',
+          description: 'Feature template only. Required whenever a hero image is set.',
+          multiline: true,
+        }),
+        app: fields.text({
+          label: 'Related app',
+          description: 'Feature template only. An app id, e.g. "grod" — links the study back to its app page.',
+        }),
         content: fields.markdoc({
           label: 'Body',
           components: writingComponents,
