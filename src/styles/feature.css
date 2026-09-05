@@ -1,0 +1,152 @@
+/* =====================================================================
+   Feature posts — the art-directed body.
+
+   A framed takeover: site chrome top and bottom, the post's own world
+   between. Same two inks, same typefaces, a much wider stage and a
+   display scale the reading column never needs.
+
+   The container is full width, so its own text children are constrained
+   to a reading measure here and the block components opt out by being
+   full-bleed. Prose and art direction interleave without the author
+   thinking about it.
+
+   This file is read as a string (`?raw`) and inlined by FeatureArticle
+   into a <style set:html> — it is NOT imported through Astro's
+   component-scoped <style>, and there is no <link> to it. See that
+   component's frontmatter for why; the short version is that a normal
+   import lands in the shared route chunk and changes every writing post.
+
+   That means none of these rules are scoped: everything here is global
+   CSS, and the `.feature-*` / `.feature__*` prefix is the only thing
+   standing between these selectors and the rest of the page's. Treat
+   that prefix as a contract, not a convention — an unprefixed selector
+   added here leaks across the whole page it renders on, shared chrome
+   like <Imprint /> included.
+   ===================================================================== */
+
+.feature {
+  --feature-max: 1180px;
+  --feature-pad: clamp(22px, 5vw, 48px);
+  --feature-measure: 68ch;
+}
+
+/* The study's own third ink — not a site token. The sanctioned exception to
+   the site's two inks (brand/teal), present because this piece is ABOUT the
+   GRØD identity, which carries its own aubergine. Declared here, not in
+   global.css, so it can never leak into ordinary chrome.
+
+   This has to live on :root, not scoped to `.feature` — a declaration on
+   `.feature` itself would apply on every element inside it unconditionally,
+   in every theme, and would shadow (not merely lose a specificity contest
+   to) the dark override below: an element only inherits a custom property
+   from an ancestor when nothing between it and that ancestor sets the same
+   property, and `.feature` sits between every block here and :root. Same
+   three-state pattern global.css uses for its own tokens: once behind the
+   media query for a reader with no stored preference, and once behind
+   [data-theme='dark'] for one who has chosen. Without a dark value this ink
+   would stay #48234F on a dark ink strip and vanish into it. */
+:root {
+  --grod-aubergine: #48234F;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --grod-aubergine: #C79BD0;
+  }
+}
+:root[data-theme='dark'] {
+  --grod-aubergine: #C79BD0;
+}
+
+/* Site chrome — deliberately the same weight as an ordinary post's. */
+.feature__frame {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 56px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.feature__back { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+.feature__back:hover { color: var(--color-brand-strong-hover); }
+.feature__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.feature__meta .sep { color: var(--color-hairline); }
+/* Push the theme control to the end of the meta row, the same way the
+   standard article template does. Lives here rather than in a scoped
+   <style> on FeatureArticle.astro: a component's own <style> block still
+   gets bundled into every writing page — feature or not — since Astro
+   registers a component's styles whenever its tag appears in the compiled
+   template, regardless of which runtime branch actually renders it. This
+   file is only ever inlined when a feature post renders — via
+   FeatureArticle.astro's `<style set:html={featureCss}>`, not a <link>;
+   see that file's frontmatter for why — so the rule only reaches pages
+   that need it. */
+.feature__meta > .theme-toggle { margin-left: auto; }
+
+/* The stage. */
+.feature__body { margin-top: 8px; }
+
+/* Prose between blocks stays at a reading measure; blocks go full-bleed. */
+.feature__body > p,
+.feature__body > h2,
+.feature__body > h3,
+.feature__body > ul,
+.feature__body > ol,
+.feature__body > blockquote {
+  max-width: var(--feature-measure);
+  margin-inline: auto;
+  padding-inline: var(--feature-pad);
+}
+.feature__body > p { font-size: 18px; line-height: 1.7; margin: 0 0 20px; }
+.feature__body > h2 {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 48px auto 14px;
+}
+.feature__body > a { color: var(--color-brand-strong); }
+
+/* Shared block furniture. */
+.feature-wrap { max-width: var(--feature-max); margin: 0 auto; padding-inline: var(--feature-pad); }
+.feature-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-secondary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.feature-eyebrow::before { content: ''; width: 28px; height: 2px; background: currentColor; flex: none; }
+.feature-key {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  display: block;
+}
+.feature-key b { color: var(--color-ink-secondary); font-weight: 600; }
+.feature-h {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(30px, 3.8vw, 56px);
+  line-height: 1.04;
+}
+
+.feature__end {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 680px;
+  margin: 64px auto 0;
+  padding: 24px 24px 0;
+  border-top: 1px solid var(--color-hairline);
+}
+.feature__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }

@@ -10,6 +10,7 @@ interface Post {
   readingTime?: string;
   sourceUrl?: string;
   isNew?: boolean;
+  isFeature?: boolean;
 }
 interface Props {
   posts: Post[];
@@ -52,6 +53,7 @@ const FILTERS = [
         <span class="sep" aria-hidden="true">/</span>
         <span class="label">{sourceDomain(post.sourceUrl)}</span>
         {post.isNew && <span class="tag-new">New</span>}
+        {post.isFeature && <span class="tag-study">Study</span>}
       </div>
       <h3><a href={post.sourceUrl}>{post.title}</a><span class="post__out" aria-hidden="true">↗</span></h3>
       <p class="post__dek">{post.dek}</p>
@@ -67,6 +69,7 @@ const FILTERS = [
         <span class="sep" aria-hidden="true">/</span>
         <span class="label">{post.readingTime}</span>
         {post.isNew && <span class="tag-new">New</span>}
+        {post.isFeature && <span class="tag-study">Study</span>}
       </div>
       <p class="post__dek">{post.dek}</p>
     </a>

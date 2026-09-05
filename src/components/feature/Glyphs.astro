@@ -1,0 +1,79 @@
+---
+import { readStudySvg } from '../../lib/studyAsset';
+/* A family of small monochrome marks shown on both grounds they must survive.
+   The SVGs are drawn with stroke="currentColor", so one file renders dark on
+   the paper strip and light on the ink strip — which is exactly the macOS
+   template-icon contract the marks are studying. */
+interface Props {
+  heading?: string;
+  standfirst?: string;
+  marks: { src: string; label?: string }[];
+  note?: string;
+}
+const { heading, standfirst, marks = [], note } = Astro.props;
+const strips = [
+  { key: 'paper', context: 'Light menu bar' },
+  { key: 'ink', context: 'Dark menu bar' },
+];
+
+/* Inlined, not <img src>: an externally-referenced SVG is an isolated
+   document and does not inherit currentColor, so on the ink strip the marks
+   would render dark-on-dark. Build-time read of files we ship ourselves —
+   `mark.src` is a Keystatic text field (author input), so `readStudySvg`
+   confirms it stays under public/studies/ before anything is read.
+
+   `readStudySvg` returns undefined for a wrong extension or a missing file
+   (see the comment on that function) rather than throwing — the filter
+   below is what turns that into "the mark drops out of both strips" instead
+   of an icon-less label sitting next to a missing glyph. */
+const inlined = marks
+  .map((mark) => ({
+    ...mark,
+    svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
+  }))
+  .filter((mark): mark is typeof mark & { svg: string } => typeof mark.svg === 'string');
+---
+<section class="glyphs">
+  <div class="feature-wrap">
+    {heading && <h2 class="feature-h">{heading}</h2>}
+    {standfirst && <p class="glyphs__standfirst">{standfirst}</p>}
+
+    {strips.map((strip) => (
+      <div class:list={['glyphs__strip', `glyphs__strip--${strip.key}`]}>
+        <span class="glyphs__context">{strip.context}</span>
+        {inlined.map((mark) => (
+          <span class="glyphs__state">
+            <span class="glyphs__mark" set:html={mark.svg} />
+            {mark.label}
+          </span>
+        ))}
+      </div>
+    ))}
+
+    {note && <p class="glyphs__note">{note}</p>}
+  </div>
+</section>
+
+<style>
+  .glyphs { padding: 0 0 80px; }
+  .glyphs__standfirst { margin: 20px 0 32px; color: var(--color-ink-secondary); max-width: 56ch; }
+  .glyphs__strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px clamp(20px, 3vw, 34px);
+    padding: 16px 22px;
+    border-radius: var(--radius-card);
+    margin-bottom: 12px;
+  }
+  .glyphs__strip--paper { background: var(--color-surface); border: 1px solid var(--color-hairline); color: var(--color-ink); }
+  .glyphs__strip--ink { background: var(--color-ink); color: var(--color-paper); }
+  .glyphs__context {
+    font-family: var(--font-mono);
+    font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    opacity: 0.6; min-width: 118px;
+  }
+  .glyphs__state { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; }
+  .glyphs__mark svg { width: 28px; height: 22px; display: block; }
+  .glyphs__note { margin-top: 14px; font-size: 13px; color: var(--color-ink-secondary); }
+</style>

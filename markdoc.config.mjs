@@ -70,5 +70,78 @@ export default defineMarkdocConfig({
         return new Markdoc.Tag('cite', {}, [text]);
       },
     },
+    /* Feature-post blocks. Every one is `selfClosing`: a paired tag parses
+       inside a <p>, and a full-bleed section inside a paragraph is invalid
+       HTML that collapses the layout. Their repeatable content rides as
+       array-of-object attributes, which Markdoc round-trips cleanly and
+       Keystatic edits as a form. */
+    plate: {
+      render: component('./src/components/feature/Plate.astro'),
+      selfClosing: true,
+      attributes: {
+        src: { type: String },
+        alt: { type: String },
+        caption: { type: String },
+        captionLead: { type: String },
+        eyebrow: { type: String },
+        heading: { type: String },
+        accent: { type: String },
+        lede: { type: String },
+        // 1 for the single hero plate on a page, 2 (Plate.astro's default)
+        // for every other plate — a page must have exactly one <h1>.
+        level: { type: Number },
+      },
+    },
+    band: {
+      render: component('./src/components/feature/Band.astro'),
+      selfClosing: true,
+      attributes: {
+        words: { type: Array, required: true },
+        note: { type: String },
+        accentIndex: { type: Number },
+      },
+    },
+    spec: {
+      render: component('./src/components/feature/Spec.astro'),
+      selfClosing: true,
+      attributes: {
+        // Keystatic's matching field is fields.integer, not Number — this
+        // declaration only validates that a number arrived, not that it's a
+        // whole number in range. Spec.astro's `columnCount` clamp is what
+        // actually reconciles the two; don't remove the clamp thinking this
+        // type declaration alone covers it.
+        columns: { type: Number },
+        heading: { type: String },
+        standfirst: { type: String },
+        detail: { type: String },
+        items: { type: Array, required: true },
+      },
+    },
+    swatches: {
+      render: component('./src/components/feature/Swatches.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        items: { type: Array, required: true },
+      },
+    },
+    glyphs: {
+      render: component('./src/components/feature/Glyphs.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        standfirst: { type: String },
+        marks: { type: Array, required: true },
+        note: { type: String },
+      },
+    },
+    scaleProof: {
+      render: component('./src/components/feature/ScaleProof.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        rungs: { type: Array, required: true },
+      },
+    },
   },
 });

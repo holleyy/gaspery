@@ -32,7 +32,134 @@ const cite = block({
     text: fields.text({ label: 'Attribution', validation: { isRequired: true } }),
   },
 });
-const writingComponents = { ...risoPhotoComponents, cite };
+// Feature-post blocks. `block()` not `wrapper()`: a wrapper compiles to a
+// paired Markdoc tag, which parses inside a <p> — fatal for a full-bleed
+// section. Same reason `cite` above is a block().
+const featureComponents = {
+  plate: block({
+    label: 'Plate',
+    description: 'Full-bleed artwork, optionally carrying the display headline.',
+    schema: {
+      src: fields.text({ label: 'Image path', description: 'e.g. /studies/grod-icon/primary-1024.webp' }),
+      alt: fields.text({ label: 'Alt text', multiline: true }),
+      // Split from `caption` so a bold lead-in never needs raw HTML in a
+      // plain text field — see the comment on Plate.astro's figcaption.
+      captionLead: fields.text({ label: 'Caption lead-in', description: 'Bold lead-in, e.g. "Primary — Listening Ø."' }),
+      caption: fields.text({ label: 'Caption', multiline: true }),
+      eyebrow: fields.text({ label: 'Eyebrow' }),
+      heading: fields.text({ label: 'Display heading' }),
+      accent: fields.text({ label: 'Heading accent line', description: 'Rendered italic in the brand ink, on its own line.' }),
+      lede: fields.text({ label: 'Lede', multiline: true }),
+      level: fields.integer({
+        label: 'Heading level',
+        description: 'Only the opening hero plate on a page should be 1. Leave every other plate at 2 — a page may only have one <h1>.',
+        defaultValue: 2,
+        validation: { min: 1, max: 2 },
+      }),
+    },
+  }),
+  band: block({
+    label: 'Band',
+    description: 'The one full-bleed inversion in a piece. Use it once.',
+    schema: {
+      words: fields.array(fields.text({ label: 'Word' }), {
+        label: 'Words',
+        itemLabel: (props) => props.value,
+      }),
+      note: fields.text({ label: 'Note', multiline: true }),
+      accentIndex: fields.integer({
+        label: 'Accent index',
+        description: 'Which word to pick out in brand ink, zero-based (0 = first word). Defaults to the second word.',
+        defaultValue: 1,
+      }),
+    },
+  }),
+  spec: block({
+    label: 'Spec',
+    description: 'Numbered readings. One column stacks; two or three put the heading beside the grid.',
+    schema: {
+      columns: fields.integer({ label: 'Columns', defaultValue: 1, validation: { min: 1, max: 3 } }),
+      heading: fields.text({ label: 'Heading' }),
+      standfirst: fields.text({ label: 'Standfirst', multiline: true }),
+      detail: fields.text({ label: 'Detail', multiline: true }),
+      items: fields.array(
+        fields.object({
+          num: fields.text({ label: 'Number', description: 'e.g. "01" — rendered in the secondary ink.' }),
+          key: fields.text({ label: 'Key', description: 'e.g. "Name" — rendered after the number.' }),
+          glyph: fields.text({
+            label: 'Glyph path',
+            description: 'Optional. Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+          }),
+          ink: fields.select({
+            label: 'Glyph ink',
+            description: 'Tints the inlined glyph via currentColor. "Inherit" (the default) leaves it taking the ambient text colour — pick a tint only when the glyph should carry an explicit colour of its own.',
+            options: [
+              { label: 'Inherit', value: 'inherit' },
+              { label: 'Brand', value: 'brand' },
+              { label: 'Teal', value: 'teal' },
+              { label: 'Aubergine', value: 'aubergine' },
+            ],
+            defaultValue: 'inherit',
+          }),
+          heading: fields.text({ label: 'Heading' }),
+          body: fields.text({ label: 'Body', multiline: true }),
+        }),
+        { label: 'Items', itemLabel: (props) => props.fields.heading.value || props.fields.key.value || props.fields.num.value },
+      ),
+    },
+  }),
+  swatches: block({
+    label: 'Swatches',
+    description: 'Ink chips. These print the subject’s own colours, not the site’s.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      items: fields.array(
+        fields.object({
+          hex: fields.text({ label: 'Hex', validation: { isRequired: true } }),
+          job: fields.text({ label: 'Job' }),
+        }),
+        { label: 'Swatches', itemLabel: (props) => props.fields.hex.value },
+      ),
+    },
+  }),
+  glyphs: block({
+    label: 'Glyphs',
+    description: 'A family of small marks, shown on both a light and a dark ground.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      standfirst: fields.text({ label: 'Standfirst', multiline: true }),
+      marks: fields.array(
+        fields.object({
+          src: fields.text({
+            label: 'SVG path',
+            description: 'Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+            validation: { isRequired: true },
+          }),
+          label: fields.text({ label: 'State label' }),
+        }),
+        { label: 'Marks', itemLabel: (props) => props.fields.label.value || props.fields.src.value },
+      ),
+      note: fields.text({ label: 'Note', multiline: true }),
+    },
+  }),
+  scaleProof: block({
+    label: 'Scale proof',
+    description: 'One artwork at descending sizes. Each rung points at its own derivative.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      rungs: fields.array(
+        fields.object({
+          src: fields.text({ label: 'Image path', validation: { isRequired: true } }),
+          size: fields.integer({ label: 'Rendered size in px', description: 'e.g. 128' }),
+          label: fields.text({ label: 'Label' }),
+          caption: fields.text({ label: 'Caption', multiline: true }),
+        }),
+        { label: 'Rungs', itemLabel: (props) => props.fields.label.value || props.fields.size.value },
+      ),
+    },
+  }),
+};
+const writingComponents = { ...risoPhotoComponents, cite, ...featureComponents };
 
 // Where an uploaded body image lands. Without this, Keystatic writes the file
 // beside the entry as `src/content/<coll>/<slug>/content/<name>` but references
@@ -106,6 +233,23 @@ export default config({
           multiline: true,
         }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
+        template: fields.select({
+          label: 'Template',
+          description: 'Standard is the reading column. Feature is the full-bleed, art-directed layout.',
+          options: [
+            { label: 'Standard', value: 'standard' },
+            { label: 'Feature', value: 'feature' },
+          ],
+          defaultValue: 'standard',
+        }),
+        eyebrow: fields.text({
+          label: 'Eyebrow',
+          description: 'Feature template only. e.g. "Identity study 01".',
+        }),
+        app: fields.text({
+          label: 'Related app',
+          description: 'Feature template only. An app id, e.g. "grod" — links the study back to its app page.',
+        }),
         content: fields.markdoc({
           label: 'Body',
           components: writingComponents,

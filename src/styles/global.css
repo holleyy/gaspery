@@ -44,6 +44,7 @@
   /* Type */
   --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
   --font-sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --text-hero:  56px;
   --text-title: 22px;
@@ -350,6 +351,13 @@ a.post .post__dek { order: 3; }
 .tag-new {
   font-family: var(--font-sans); font-weight: 700; font-size: 10px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--color-paper); background: var(--color-brand-strong);
+  padding: 2px 6px; border-radius: 2px;
+}
+/* The stream and a feature post's own meta row both carry this. Teal rather
+   than brand, so it reads as a category and not as urgency the way New does. */
+.tag-study {
+  font-family: var(--font-sans); font-weight: 700; font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--color-paper); background: var(--color-teal-ink);
   padding: 2px 6px; border-radius: 2px;
 }
 .post h3 { font-family: var(--font-serif); font-weight: 700; font-size: 21px; line-height: 1.28; transition: color .15s ease; }

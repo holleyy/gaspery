@@ -18,6 +18,17 @@ const writing = defineCollection({
       readingTime: z.string().optional(),
       dek: z.string(),
       draft: z.boolean().default(false),
+      /* Which body renders. "standard" is the reading column every post has
+         had; "feature" is the full-bleed, art-directed treatment — same idea
+         as appPages' quiet/editorial. */
+      template: z.enum(['standard', 'feature']).default('standard'),
+      /* Feature-only, and both optional on purpose. Requiring either in Zod
+         without also requiring it in Keystatic is how this site's deploys
+         froze in August. There is no separate hero-image field: the hero is
+         the first `plate` block's own `src`, set in the body content, same
+         as any other plate. */
+      eyebrow: z.string().optional(),
+      app: z.string().optional(),
     })
     .superRefine((v, ctx) => {
       /* Only essays carry a reading time; a linked post has nothing to time. */

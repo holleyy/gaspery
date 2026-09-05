@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+import Imprint from './Imprint.astro';
+import { isLink, sourceDomain } from '../lib/links';
+/* The `?raw` suffix keeps this out of Vite's CSS module graph, for the same
+   reason `?url` would: a plain `import '../styles/feature.css'` bundles
+   into whichever chunk its importer belongs to, and every writing post
+   shares one compiled route (src/pages/writing/[...id].astro). Astro's
+   per-page stylesheet is tiny enough today to stay inlined below its 4kB
+   auto-inline threshold; adding feature.css's rules to that same chunk
+   tips it over and flips every post — feature or not — from an inlined
+   <style> to a linked file, changing pages the parity gate must see as
+   untouched. `?raw` imports the file as a plain string instead, rendered
+   below via `<style set:html={...}>` only when this component actually
+   renders, so a non-feature post's bundle is unaffected — and, unlike
+   `?url`, it inlines the CSS rather than adding a render-blocking linked
+   stylesheet inside <body>. The tradeoff: `?raw` skips Vite's normal
+   PostCSS/minify pass, so this ~3kB file ships unminified. */
+import featureCss from '../styles/feature.css?raw';
+
+/* Derived from the `writing` collection itself rather than hand-declared:
+   a structural copy of the schema is a third hand-maintained shape (Zod,
+   Keystatic, and this) and this repo has already lost a deploy to that
+   drift. The failure is asymmetric for a hand-copy, too — a dropped
+   required field errors at the call site, but a dropped optional one
+   (eyebrow, readingTime, app) still type-checks while the meta segment
+   it feeds silently vanishes. */
+interface Props {
+  post: CollectionEntry<'writing'>;
+}
+const { post } = Astro.props;
+const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+/* `post.data.app` is the `apps` collection's id (its filename, e.g. "grod"),
+   not a display name — resolve the real entry so names like GRØD survive.
+   `.toUpperCase()` on the raw id cannot recover the Ø. */
+const app = post.data.app ? await getEntry('apps', post.data.app) : undefined;
+---
+<style set:html={featureCss}></style>
+<main class="feature" id="main">
+  {/* Site chrome, deliberately the same weight as an ordinary post's — the
+      takeover happens between these two, not instead of them. */}
+  <div class="feature__frame">
+    <a class="feature__back" href="/">&larr; Alex Holley</a>
+    <div class="feature__meta">
+      <span class="label">{fmt.toUpperCase()}</span>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
+      {post.data.eyebrow && (
+        <>
+          <span class="sep" aria-hidden="true">/</span>
+          <span class="label">{post.data.eyebrow}</span>
+        </>
+      )}
+      <span class="tag-study">Study</span>
+      {/* Injected by the caller, not imported here: a second static import
+          of ThemeToggle inside this route's compiled graph (it's already
+          imported once by src/pages/writing/[...id].astro for the standard
+          branch) causes the bundler to split its styles into a shared chunk
+          instead of each page's own inline block, changing every writing
+          post. Do not "fix" this by importing ThemeToggle directly — see
+          the fuller explanation in [...id].astro. */}
+      <slot name="theme-toggle" />
+    </div>
+  </div>
+
+  <div class="feature__body">
+    <slot />
+  </div>
+
+  <div class="feature__end">
+    {post.data.app
+      ? <a href={`/apps/${post.data.app}`}>More about {app?.data.name ?? post.data.app} &rarr;</a>
+      : <a href="/">Back to the notebook &rarr;</a>}
+  </div>
+
+  <Imprint />
+</main>
