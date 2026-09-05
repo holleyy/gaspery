@@ -14,4 +14,11 @@ export default defineConfig({
 
   integrations: [sitemap(), react(), markdoc({ typographer: true }), keystatic()],
   adapter: cloudflare(),
+
+  /* /apps/afterframe/ was live before the app was renamed. The route id is
+     the content filename, so renaming the file moves the URL; without this
+     anyone holding the old link gets a 404. Permanent, because the move is. */
+  redirects: {
+    '/apps/afterframe': { status: 301, destination: '/apps/aftershot' },
+  },
 });

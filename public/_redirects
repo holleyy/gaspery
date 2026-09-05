@@ -1,0 +1,9 @@
+# /apps/afterframe/ (trailing slash) was the app's canonical, live URL before
+# it was renamed to Aftershot — see astro.config.mjs's `redirects` entry for
+# the non-slash form. /apps/* is excluded from the Worker (dist/_routes.json),
+# so Cloudflare's static-asset layer matches these rules as literal strings
+# with no trailing-slash normalization; the config-generated rule alone would
+# 404 on this exact form. Kept as a raw rule here because Astro's `redirects`
+# config collapses a trailing-slash key onto the same route as the non-slash
+# one, so it cannot express this as a second config entry.
+/apps/afterframe/    /apps/aftershot/    301
