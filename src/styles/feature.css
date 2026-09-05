@@ -30,33 +30,6 @@
   --feature-measure: 68ch;
 }
 
-/* The study's own third ink — not a site token. The sanctioned exception to
-   the site's two inks (brand/teal), present because this piece is ABOUT the
-   GRØD identity, which carries its own aubergine. Declared here, not in
-   global.css, so it can never leak into ordinary chrome.
-
-   This has to live on :root, not scoped to `.feature` — a declaration on
-   `.feature` itself would apply on every element inside it unconditionally,
-   in every theme, and would shadow (not merely lose a specificity contest
-   to) the dark override below: an element only inherits a custom property
-   from an ancestor when nothing between it and that ancestor sets the same
-   property, and `.feature` sits between every block here and :root. Same
-   three-state pattern global.css uses for its own tokens: once behind the
-   media query for a reader with no stored preference, and once behind
-   [data-theme='dark'] for one who has chosen. Without a dark value this ink
-   would stay #48234F on a dark ink strip and vanish into it. */
-:root {
-  --grod-aubergine: #48234F;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --grod-aubergine: #C79BD0;
-  }
-}
-:root[data-theme='dark'] {
-  --grod-aubergine: #C79BD0;
-}
-
 /* Site chrome — deliberately the same weight as an ordinary post's. */
 .feature__frame {
   max-width: 680px;

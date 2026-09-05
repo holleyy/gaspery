@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 // The `.ts` extension is required here and only here: Node's native type
 // stripping runs this file directly, and ESM in Node needs explicit
 // extensions. Astro/Vite files import the same module extensionless.
@@ -102,4 +102,53 @@ test('the blocks registered so far include plate and band', () => {
   for (const tag of ['plate', 'band']) {
     assert.match(markdocConfig, new RegExp(`\\b${tag}:\\s*\\{`), `${tag} is not registered`);
   }
+});
+
+const glyphsSrc = readFileSync(new URL('../src/components/feature/Glyphs.astro', import.meta.url), 'utf8');
+const specSrc = readFileSync(new URL('../src/components/feature/Spec.astro', import.meta.url), 'utf8');
+const featureCss = readFileSync(new URL('../src/styles/feature.css', import.meta.url), 'utf8');
+
+test('Glyphs takes its strip labels as content, not hardcoded words', () => {
+  // The block's idea — one mark proved on both grounds — is general. Its words
+  // were not: "Light menu bar" is meaningless for a study of an app icon that
+  // has no menu bar. A second study inheriting the first one's labels is the
+  // failure this guards.
+  assert.doesNotMatch(glyphsSrc, /menu bar/i, 'Glyphs still hardcodes menu-bar labels');
+  assert.match(glyphsSrc, /grounds/, 'Glyphs should take a `grounds` prop');
+});
+
+test('every scale-proof rung’s label matches its declared size', () => {
+  // GRØD shipped "256 PX" under an image rendering at 160px, at every width,
+  // through three rounds of verification that checked layout, contrast, block
+  // nesting and page weight — every generic property except the single claim
+  // that section makes to a reader. This is that lesson made mechanical: the
+  // one thing a scale proof asserts is now asserted back.
+  const dir = new URL('../src/content/writing/', import.meta.url);
+  let checked = 0;
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.mdoc'))) {
+    const src = readFileSync(new URL(file, dir), 'utf8');
+    for (const block of src.matchAll(/\{%\s*scaleProof[\s\S]*?\/%\}/g)) {
+      for (const rung of block[0].matchAll(/\{[^{}]*\}/g)) {
+        const size = rung[0].match(/"size":\s*"?(\d+)"?/);
+        const label = rung[0].match(/"label":\s*"([^"]*)"/);
+        if (!size || !label) continue;
+        const claimed = label[1].match(/\d+/);
+        if (!claimed) continue; // e.g. "Secondary" — the label claims no size
+        assert.equal(
+          claimed[0],
+          size[1],
+          `${file}: rung labelled "${label[1]}" renders at ${size[1]}px`
+        );
+        checked++;
+      }
+    }
+  }
+  assert.ok(checked > 0, 'no scale-proof rungs were found to check');
+});
+
+test('no app’s private ink is baked into the format', () => {
+  // A study's own colour is content. Shipping one study's third ink as a
+  // permanent option in every future study's CMS dropdown is not.
+  assert.doesNotMatch(specSrc, /aubergine/i, 'Spec still names a specific study’s ink');
+  assert.doesNotMatch(featureCss, /grod/i, 'feature.css still carries a study-specific token');
 });

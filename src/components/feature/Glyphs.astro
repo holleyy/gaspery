@@ -9,11 +9,16 @@ interface Props {
   standfirst?: string;
   marks: { src: string; label?: string }[];
   note?: string;
+  /* The two grounds are fixed — paper and ink are the site's two — but what
+     they are CALLED is the study's business. GRØD proves a menu-bar glyph;
+     Aftershot proves an app icon against a light and a dark field. Same
+     shape, different words, so the words are content. */
+  grounds?: { paper?: string; ink?: string };
 }
-const { heading, standfirst, marks = [], note } = Astro.props;
+const { heading, standfirst, marks = [], note, grounds } = Astro.props;
 const strips = [
-  { key: 'paper', context: 'Light menu bar' },
-  { key: 'ink', context: 'Dark menu bar' },
+  { key: 'paper', context: grounds?.paper ?? 'Light ground' },
+  { key: 'ink', context: grounds?.ink ?? 'Dark ground' },
 ];
 
 /* Inlined, not <img src>: an externally-referenced SVG is an isolated
