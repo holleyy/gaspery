@@ -132,8 +132,8 @@ const featureComponents = {
       marks: fields.array(
         fields.object({
           src: fields.text({
-            label: 'SVG path',
-            description: 'Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+            label: 'Mark path',
+            description: 'A file under /studies/. An .svg (e.g. /studies/grod-icon/mb-idle.svg) is inlined and tints to the strip via currentColor; anything else (e.g. /studies/aftershot-icon/icon-120.webp) renders as a plain image with its own fixed colours. A missing file is silently ignored either way.',
             validation: { isRequired: true },
           }),
           label: fields.text({ label: 'State label' }),

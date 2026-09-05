@@ -1,9 +1,25 @@
 ---
-import { readStudySvg } from '../../lib/studyAsset';
-/* A family of small monochrome marks shown on both grounds they must survive.
-   The SVGs are drawn with stroke="currentColor", so one file renders dark on
-   the paper strip and light on the ink strip — which is exactly the macOS
-   template-icon contract the marks are studying. */
+import { readStudySvg, readStudyRaster } from '../../lib/studyAsset';
+/* A family of small marks shown on both grounds they must survive. Two mark
+   shapes, two read paths — chosen per mark by its own extension, not a prop
+   the author sets, so an existing GRØD entry (all .svg) keeps taking the
+   first path with no change to its content:
+
+   - .svg: inlined, same as always. These are drawn with
+     stroke="currentColor", so one file renders dark on the paper strip and
+     light on the ink strip — the macOS template-icon contract the GRØD
+     marks are studying. An externally-referenced SVG document does not
+     inherit currentColor, so inlining is the only way that contract works.
+   - anything else: an <img src>. An opaque raster (a .webp app icon, say)
+     has its own fixed colours already baked in — there is nothing for it to
+     inherit, and no way to inline a non-SVG format as markup regardless.
+     This is the Aftershot icon study's shape: one raster mark proved on a
+     dark field and a light one.
+
+   Both paths still run every mark's `src` through the same
+   public/studies/ containment guard (see src/lib/studyAsset.ts) before
+   anything reaches the page — inlining the bytes for one shape, trusting
+   the browser to fetch the other. */
 interface Props {
   heading?: string;
   standfirst?: string;
@@ -25,22 +41,25 @@ const strips = [
   { key: 'ink', context: grounds?.ink || 'Dark ground' },
 ];
 
-/* Inlined, not <img src>: an externally-referenced SVG is an isolated
-   document and does not inherit currentColor, so on the ink strip the marks
-   would render dark-on-dark. Build-time read of files we ship ourselves —
-   `mark.src` is a Keystatic text field (author input), so `readStudySvg`
-   confirms it stays under public/studies/ before anything is read.
-
-   `readStudySvg` returns undefined for a wrong extension or a missing file
-   (see the comment on that function) rather than throwing — the filter
-   below is what turns that into "the mark drops out of both strips" instead
-   of an icon-less label sitting next to a missing glyph. */
+/* `mark.src` is a Keystatic text field (author input): every mark, whichever
+   shape it turns out to be, has its path checked before anything reaches
+   the page. `readStudySvg`/`readStudyRaster` each return undefined for an
+   ordinary content mistake (wrong extension, missing file) rather than
+   throwing — the filter below is what turns that into "the mark drops out
+   of both strips" instead of an icon-less label sitting next to a missing
+   glyph. A containment escape still throws in either reader, same as
+   before. */
 const inlined = marks
-  .map((mark) => ({
-    ...mark,
-    svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
-  }))
-  .filter((mark): mark is typeof mark & { svg: string } => typeof mark.svg === 'string');
+  .map((mark) => {
+    const label = `Glyphs mark "${mark.label ?? mark.src}"`;
+    const isSvg = typeof mark.src === 'string' && mark.src.endsWith('.svg');
+    return {
+      ...mark,
+      svg: isSvg ? readStudySvg(mark.src, label) : undefined,
+      raster: isSvg ? undefined : readStudyRaster(mark.src, label),
+    };
+  })
+  .filter((mark) => typeof mark.svg === 'string' || typeof mark.raster === 'string');
 ---
 <section class="glyphs">
   <div class="feature-wrap">
@@ -52,7 +71,9 @@ const inlined = marks
         <span class="glyphs__context">{strip.context}</span>
         {inlined.map((mark) => (
           <span class="glyphs__state">
-            <span class="glyphs__mark" set:html={mark.svg} />
+            {typeof mark.svg === 'string'
+              ? <span class="glyphs__mark" set:html={mark.svg} />
+              : <span class="glyphs__mark glyphs__mark--raster"><img src={mark.raster} alt="" loading="lazy" /></span>}
             {mark.label}
           </span>
         ))}
@@ -84,5 +105,10 @@ const inlined = marks
   }
   .glyphs__state { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; }
   .glyphs__mark svg { width: 28px; height: 22px; display: block; }
+  /* Square, not 28x22 like the SVG marks above — an app icon's aspect ratio
+     is 1:1. Left unmasked, same as this study's other two blocks (Plate,
+     ScaleProof): the production asset ships with no baked corner radius,
+     and this strip is a size comparison, not a Home Screen mockup. */
+  .glyphs__mark--raster img { width: 28px; height: 28px; display: block; }
   .glyphs__note { margin-top: 14px; font-size: 13px; color: var(--color-ink-secondary); }
 </style>
