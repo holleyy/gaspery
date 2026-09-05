@@ -18,7 +18,7 @@
   import { THEME_STORAGE_KEY, readPreference } from '../lib/theme';
 
   const root = document.documentElement;
-  const groups = document.querySelectorAll<HTMLFieldSetElement>('.theme-toggle');
+  const group = document.querySelector<HTMLFieldSetElement>('.theme-toggle');
 
   /* The meta tag is corrected on every change, and — in the `system` state —
      whenever the OS itself flips, so the browser chrome never disagrees
@@ -32,11 +32,13 @@
       ?.setAttribute('content', dark ? '#191712' : '#F6F1E6');
   }
 
-  // Every instance shares `name="theme"` and none sits inside a `<form>`,
-  // so the browser treats them as one radio group document-wide and keeps
-  // their checked states in sync on its own — each instance below only
-  // needs to set its own initial state and hidden flag.
-  for (const group of groups) {
+  // This component is single-instance per page: every radio shares
+  // `name="theme"` with no `<form>` ancestor, so two mounted copies would
+  // form one native radio group across both — the browser enforces mutual
+  // exclusivity, not mirroring, so they'd fight over which one is checked
+  // instead of staying in sync. The mounting task verifies exactly one
+  // `.theme-toggle` per built page, so that case cannot arise.
+  if (group) {
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(THEME_STORAGE_KEY);
