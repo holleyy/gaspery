@@ -83,6 +83,11 @@ typography:
     fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     fontSize: "18px"
     lineHeight: 1.7
+  featureDetail:
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontSize: "16px"
+    lineHeight: 1.62
+    note: "A Spec section's supporting paragraph — a step below featureBody, so the standfirst above it stays dominant."
 rounded:
   sm: "2px"
   card: "8px"
