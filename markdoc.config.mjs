@@ -70,5 +70,31 @@ export default defineMarkdocConfig({
         return new Markdoc.Tag('cite', {}, [text]);
       },
     },
+    /* Feature-post blocks. Every one is `selfClosing`: a paired tag parses
+       inside a <p>, and a full-bleed section inside a paragraph is invalid
+       HTML that collapses the layout. Their repeatable content rides as
+       array-of-object attributes, which Markdoc round-trips cleanly and
+       Keystatic edits as a form. */
+    plate: {
+      render: component('./src/components/feature/Plate.astro'),
+      selfClosing: true,
+      attributes: {
+        src: { type: String },
+        alt: { type: String },
+        caption: { type: String },
+        eyebrow: { type: String },
+        heading: { type: String },
+        accent: { type: String },
+        lede: { type: String },
+      },
+    },
+    band: {
+      render: component('./src/components/feature/Band.astro'),
+      selfClosing: true,
+      attributes: {
+        words: { type: Array, required: true },
+        note: { type: String },
+      },
+    },
   },
 });

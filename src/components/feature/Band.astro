@@ -1,0 +1,43 @@
+---
+/* The one full-bleed inversion in a piece. Its job is to break the reading
+   rhythm exactly once, so a second Band in one post is a smell. */
+interface Props {
+  words: string[];
+  note?: string;
+}
+const { words = [], note } = Astro.props;
+---
+<section class="band">
+  <div class="feature-wrap band__inner">
+    {words.map((word, i) => <p class="band__word" data-accent={i === 1 ? '' : undefined}>{word}</p>)}
+    {note && <span class="band__note">{note}</span>}
+  </div>
+</section>
+
+<style>
+  .band {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: clamp(44px, 5vw, 64px) 0;
+    margin: 8px 0 72px;
+  }
+  .band__inner { display: flex; flex-wrap: wrap; gap: 18px clamp(28px, 4vw, 56px); align-items: baseline; }
+  .band__word {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(28px, 4.4vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  /* The band's ground is --color-ink, which inverts with the scheme — so the
+     accent has to run opposite the page. --color-brand measures 2.3:1 here. */
+  .band__word[data-accent] { color: var(--color-brand-on-ink); }
+  .band__note {
+    flex: 1;
+    min-width: 200px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.75;
+  }
+</style>

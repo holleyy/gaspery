@@ -32,7 +32,36 @@ const cite = block({
     text: fields.text({ label: 'Attribution', validation: { isRequired: true } }),
   },
 });
-const writingComponents = { ...risoPhotoComponents, cite };
+// Feature-post blocks. `block()` not `wrapper()`: a wrapper compiles to a
+// paired Markdoc tag, which parses inside a <p> — fatal for a full-bleed
+// section. Same reason `cite` above is a block().
+const featureComponents = {
+  plate: block({
+    label: 'Plate',
+    description: 'Full-bleed artwork, optionally carrying the display headline.',
+    schema: {
+      src: fields.text({ label: 'Image path', description: 'e.g. /studies/grod-icon/primary-1024.webp' }),
+      alt: fields.text({ label: 'Alt text', multiline: true }),
+      caption: fields.text({ label: 'Caption', multiline: true }),
+      eyebrow: fields.text({ label: 'Eyebrow' }),
+      heading: fields.text({ label: 'Display heading' }),
+      accent: fields.text({ label: 'Heading accent line', description: 'Rendered italic in the brand ink, on its own line.' }),
+      lede: fields.text({ label: 'Lede', multiline: true }),
+    },
+  }),
+  band: block({
+    label: 'Band',
+    description: 'The one full-bleed inversion in a piece. Use it once.',
+    schema: {
+      words: fields.array(fields.text({ label: 'Word' }), {
+        label: 'Words',
+        itemLabel: (props) => props.value,
+      }),
+      note: fields.text({ label: 'Note', multiline: true }),
+    },
+  }),
+};
+const writingComponents = { ...risoPhotoComponents, cite, ...featureComponents };
 
 // Where an uploaded body image lands. Without this, Keystatic writes the file
 // beside the entry as `src/content/<coll>/<slug>/content/<name>` but references

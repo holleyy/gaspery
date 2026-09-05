@@ -1,0 +1,65 @@
+---
+/* A full-bleed artwork with its caption, optionally carrying the piece's
+   display headline — which is what makes it the hero. Given no `src` it
+   renders the copy alone rather than an empty frame or a fake placeholder,
+   the same honest degradation appPages uses for a missing screenshot. */
+interface Props {
+  src?: string;
+  alt?: string;
+  caption?: string;
+  eyebrow?: string;
+  heading?: string;
+  accent?: string;
+  lede?: string;
+}
+const { src, alt = '', caption, eyebrow, heading, accent, lede } = Astro.props;
+---
+<section class="plate">
+  <div class="feature-wrap plate__grid" data-solo={src ? undefined : ''}>
+    <div class="plate__copy">
+      {eyebrow && <p class="feature-eyebrow">{eyebrow}</p>}
+      {heading && (
+        <h1 class="feature-h">{heading}{accent && <><br /><em>{accent}</em></>}</h1>
+      )}
+      {lede && <p class="plate__lede">{lede}</p>}
+    </div>
+    {src && (
+      <figure class="plate__figure">
+        <img src={src} alt={alt} width="640" height="640" loading="eager" decoding="async" />
+        {caption && <figcaption set:html={caption} />}
+      </figure>
+    )}
+  </div>
+</section>
+
+<style>
+  .plate { padding: 56px 0 80px; }
+  .plate__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.85fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+  .plate__grid[data-solo] { grid-template-columns: minmax(0, 1fr); }
+  .plate__copy :global(.feature-h) em { font-style: italic; color: var(--color-brand-strong); }
+  .plate__lede {
+    margin-top: 24px;
+    font-size: clamp(18px, 1.6vw, 21px);
+    line-height: 1.5;
+    color: var(--color-ink-secondary);
+    max-width: 34em;
+  }
+  .plate__figure { margin: 0; }
+  .plate__figure img { width: 100%; height: auto; }
+  .plate__figure figcaption {
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-hairline);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-secondary);
+  }
+  @media (max-width: 900px) {
+    .plate__grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

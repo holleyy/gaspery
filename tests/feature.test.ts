@@ -57,3 +57,38 @@ test('template is a flat select in Keystatic, not a conditional', () => {
   // the object-shaped `template` this test exists to rule out.
   assert.doesNotMatch(keystatic, /template:\s*fields\.conditional\(/);
 });
+
+const markdocConfig = readFileSync(new URL('../markdoc.config.mjs', import.meta.url), 'utf8');
+
+const FEATURE_TAGS = ['plate', 'band', 'spec', 'swatches', 'glyphs', 'scaleProof'];
+
+test('every registered feature block tag is declared selfClosing', () => {
+  // A paired {% tag %}…{% /tag %} is parsed inside a <p>; a self-closing
+  // {% tag /%} lands at block level. A full-bleed section inside a paragraph
+  // is invalid HTML and collapses the layout. Verified against Markdoc
+  // directly before this format was designed.
+  //
+  // Each tag's slice runs to the START OF THE NEXT tag, not a fixed window —
+  // otherwise a missing `selfClosing` would be masked by the next tag's.
+  const starts = FEATURE_TAGS
+    .map((tag) => [tag, markdocConfig.indexOf(`${tag}: {`)])
+    .filter(([, at]) => at >= 0)
+    .sort((a, b) => a[1] - b[1]);
+
+  assert.ok(starts.length > 0, 'no feature block tags are registered at all');
+
+  starts.forEach(([tag, start], i) => {
+    const end = i + 1 < starts.length ? starts[i + 1][1] : markdocConfig.length;
+    assert.match(
+      markdocConfig.slice(start, end),
+      /selfClosing:\s*true/,
+      `${tag} must be selfClosing, or it renders inside a <p>`
+    );
+  });
+});
+
+test('the blocks registered so far include plate and band', () => {
+  for (const tag of ['plate', 'band']) {
+    assert.match(markdocConfig, new RegExp(`\\b${tag}:\\s*\\{`), `${tag} is not registered`);
+  }
+});
