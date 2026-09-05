@@ -1,0 +1,66 @@
+---
+import Imprint from './Imprint.astro';
+import { isLink, sourceDomain } from '../lib/links';
+/* The `?url` suffix keeps this out of Vite's CSS module graph — a plain
+   `import '../styles/feature.css'` bundles into whichever chunk its
+   importer belongs to, and every writing post shares one compiled route
+   (src/pages/writing/[...id].astro). Astro's per-page stylesheet is tiny
+   enough today to stay inlined below its 4kB auto-inline threshold; adding
+   feature.css's rules to that same chunk tips it over and flips every post
+   — feature or not — from an inlined <style> to a linked file, changing
+   pages the parity gate must see as untouched. `?url` resolves to this
+   file's own hashed asset URL instead, linked explicitly below only when
+   this component actually renders, so a non-feature post's bundle is
+   unaffected. */
+import featureCssHref from '../styles/feature.css?url';
+
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      date: Date;
+      dek: string;
+      eyebrow?: string;
+      readingTime?: string;
+      sourceUrl?: string;
+      app?: string;
+    };
+  };
+}
+const { post } = Astro.props;
+const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+---
+<link rel="stylesheet" href={featureCssHref} />
+<main class="feature" id="main">
+  {/* Site chrome, deliberately the same weight as an ordinary post's — the
+      takeover happens between these two, not instead of them. */}
+  <div class="feature__frame">
+    <a class="feature__back" href="/">&larr; Alex Holley</a>
+    <div class="feature__meta">
+      <span class="label">{fmt.toUpperCase()}</span>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
+      {post.data.eyebrow && (
+        <>
+          <span class="sep" aria-hidden="true">/</span>
+          <span class="label">{post.data.eyebrow}</span>
+        </>
+      )}
+      <span class="tag-study">Study</span>
+      <slot name="theme-toggle" />
+    </div>
+  </div>
+
+  <div class="feature__body">
+    <slot />
+  </div>
+
+  <div class="feature__end">
+    {post.data.app
+      ? <a href={`/apps/${post.data.app}`}>More about {post.data.app.toUpperCase()} &rarr;</a>
+      : <a href="/">Back to the notebook &rarr;</a>}
+  </div>
+
+  <Imprint />
+</main>

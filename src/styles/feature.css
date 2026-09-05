@@ -1,0 +1,111 @@
+/* =====================================================================
+   Feature posts — the art-directed body.
+
+   A framed takeover: site chrome top and bottom, the post's own world
+   between. Same two inks, same typefaces, a much wider stage and a
+   display scale the reading column never needs.
+
+   The container is full width, so its own text children are constrained
+   to a reading measure here and the block components opt out by being
+   full-bleed. Prose and art direction interleave without the author
+   thinking about it.
+   ===================================================================== */
+
+.feature {
+  --feature-max: 1180px;
+  --feature-pad: clamp(22px, 5vw, 48px);
+  --feature-measure: 68ch;
+}
+
+/* Site chrome — deliberately the same weight as an ordinary post's. */
+.feature__frame {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 56px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.feature__back { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+.feature__back:hover { color: var(--color-brand-strong-hover); }
+.feature__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.feature__meta .sep { color: var(--color-hairline); }
+/* Push the theme control to the end of the meta row, the same way the
+   standard article template does. Lives here rather than in a scoped
+   <style> on FeatureArticle.astro: a component's own <style> block still
+   gets bundled into every writing page — feature or not — since Astro
+   registers a component's styles whenever its tag appears in the compiled
+   template, regardless of which runtime branch actually renders it. This
+   file is only ever linked when a feature post renders (see
+   FeatureArticle.astro's explicit <link>), so the rule only reaches pages
+   that need it. */
+.feature__meta > .theme-toggle { margin-left: auto; }
+
+/* The stage. */
+.feature__body { margin-top: 8px; }
+
+/* Prose between blocks stays at a reading measure; blocks go full-bleed. */
+.feature__body > p,
+.feature__body > h2,
+.feature__body > h3,
+.feature__body > ul,
+.feature__body > ol,
+.feature__body > blockquote {
+  max-width: var(--feature-measure);
+  margin-inline: auto;
+  padding-inline: var(--feature-pad);
+}
+.feature__body > p { font-size: 18px; line-height: 1.7; margin: 0 0 20px; }
+.feature__body > h2 {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 48px auto 14px;
+}
+.feature__body > a { color: var(--color-brand-strong); }
+
+/* Shared block furniture. */
+.feature-wrap { max-width: var(--feature-max); margin: 0 auto; padding-inline: var(--feature-pad); }
+.feature-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-secondary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.feature-eyebrow::before { content: ''; width: 28px; height: 2px; background: currentColor; flex: none; }
+.feature-key {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  display: block;
+}
+.feature-key b { color: var(--color-ink-secondary); font-weight: 600; }
+.feature-h {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(30px, 3.8vw, 56px);
+  line-height: 1.04;
+}
+
+.feature__end {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 680px;
+  margin: 64px auto 0;
+  padding: 24px 24px 0;
+  border-top: 1px solid var(--color-hairline);
+}
+.feature__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }

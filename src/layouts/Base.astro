@@ -4,8 +4,19 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  mono?: boolean;
 }
-const { title, description = 'Product, design & small software. A working notebook.' } = Astro.props;
+const { title, description = 'Product, design & small software. A working notebook.', mono = false } = Astro.props;
+
+/* IBM Plex Mono is the feature format's meta face — eyebrows and the
+   `01 / NAME` keys. Only feature pages request it; every other page's
+   font payload is unchanged. */
+const families = [
+  'family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..600',
+  'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+];
+if (mono) families.push('family=IBM+Plex+Mono:wght@400;600');
+const fontsHref = `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap`;
 
 /* The whole audience arrives by link, so the preview card is the first
    surface most visitors ever see of this site. Canonical + OG/Twitter meta
@@ -77,7 +88,7 @@ const ogImage = new URL('/og/card.png', Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..600&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      href={fontsHref}
       rel="stylesheet"
     />
   </head>

@@ -4,7 +4,8 @@ import Base from '../../layouts/Base.astro';
 import RegistrationMark from '../../components/RegistrationMark.astro';
 import Imprint from '../../components/Imprint.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
-import { isLink, sourceDomain } from '../../lib/links';
+import FeatureArticle from '../../components/FeatureArticle.astro';
+import { isLink, isFeature, sourceDomain } from '../../lib/links';
 
 export async function getStaticPaths() {
   /* Drafts stay reachable under `astro dev` so a post can be previewed at its
@@ -17,8 +18,27 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+/* The `{' '}` wrapping the ternary below is not decorative: Astro trims
+   whitespace-only text immediately touching a `{}` expression when that
+   expression is a tag's only child, and this ternary replaces the literal
+   <main> that used to sit there directly as <Base>'s only child. Losing
+   that whitespace is a byte-for-byte diff on every existing page —
+   scripts/verify-parity.sh catches it — so it is restored explicitly.
+
+   ThemeToggle is passed into FeatureArticle as a slot, not imported inside
+   FeatureArticle.astro itself: a second static import of ThemeToggle within
+   this route's own compiled graph is enough for the bundler to split its
+   styles into a shared chunk instead of this page's own inline block,
+   flipping every writing post's <style> — feature or not. One import here
+   keeps that decision exactly as it was. */
 ---
-<Base title={`${post.data.title} · Alex Holley`} description={post.data.dek}>
+<Base title={`${post.data.title} · Alex Holley`} description={post.data.dek} mono={isFeature(post.data)}>
+  {' '}{isFeature(post.data) ? (
+    <FeatureArticle post={post}>
+      <ThemeToggle slot="theme-toggle" />
+      <Content />
+    </FeatureArticle>
+  ) : (
   <main class="article" id="main">
     <a class="back" href="/">← Alex Holley</a>
 
@@ -54,6 +74,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
 
     <Imprint />
   </main>
+  )}{' '}
 </Base>
 
 <style>
