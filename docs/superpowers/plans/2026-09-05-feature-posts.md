@@ -1205,15 +1205,44 @@ content. Site chrome around them stays on site tokens."
 
 ---
 
-### Task 6: Glyphs and ScaleProof
+### Task 6: Glyphs, ScaleProof, and the reading marks
 
 **Files:**
 - Create: `src/components/feature/Glyphs.astro`, `src/components/feature/ScaleProof.astro`
+- Create: `public/studies/grod-icon/read-{name,attention,direction}.svg`
+- Modify: `src/components/feature/Spec.astro` (inline glyphs, per-item ink)
 - Modify: `markdoc.config.mjs`, `keystatic.config.ts`, `src/content/writing/grod-listening-o.mdoc`
 
 **Interfaces:**
 - Consumes: the menu-bar SVGs and webp derivatives (Task 2).
 - Produces: the `glyphs` and `scaleProof` tags — completing the six-block vocabulary.
+
+- [ ] **Step 0: Create the three reading marks, and make Spec able to show them**
+
+Task 2 produced only the five `mb-*.svg` menu-bar marks. The Construction section in Task 7 needs three more — the Ø as circle-and-slash, the ◎ as concentric rings, the ↗ as an arrow — which existed only as inline SVG in the design comp.
+
+Create them at `public/studies/grod-icon/read-{name,attention,direction}.svg`, `viewBox="0 0 120 120"`, `stroke="currentColor"`, `fill="none"`, **no literal colour**:
+
+```
+read-name:      <circle cx="60" cy="60" r="42" stroke-width="7"/>
+                <path d="M27 93 L93 27" stroke-width="7" stroke-linecap="round"/>
+read-attention: <circle cx="60" cy="60" r="42" stroke-width="7"/>
+                <circle cx="60" cy="60" r="21" stroke-width="7"/>
+read-direction: <path d="M26 94 L90 30" stroke-width="7" stroke-linecap="round"/>
+                <path d="M60 28 H92 V60" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+```
+
+`Spec` currently renders `item.glyph` with `<img src>`. An externally-referenced SVG is an isolated document: it cannot inherit `currentColor`, so those marks would render as nothing. Change `Spec` to read and inline them the same way `Glyphs` does below, and give each item an optional `ink` — `brand` | `teal` | `aubergine` — that sets `color` on the inlined mark:
+
+```css
+.spec__glyph[data-ink='brand']     { color: var(--color-brand-strong); }
+.spec__glyph[data-ink='teal']      { color: var(--color-teal-ink); }
+.spec__glyph[data-ink='aubergine'] { color: var(--grod-aubergine); }
+```
+
+`--grod-aubergine` does not exist yet. Add it to `feature.css` (not `global.css`) as `#48234F`, with a dark-scheme value of `#C79BD0` under the same three-state pattern `global.css` uses, and a comment noting it is the study's own third ink — the sanctioned exception to the site's two, present because the piece is *about* that identity.
+
+Register `ink` in `markdoc.config.mjs`'s `spec` attributes and in its Keystatic item schema as a select with those three options.
 
 - [ ] **Step 1: Write Glyphs**
 
