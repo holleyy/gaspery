@@ -91,3 +91,19 @@ test('plate and wordmark sit above the dots', () => {
   assert.match(css, /\.identity\s*\{[^}]*position:\s*relative/);
   assert.match(css, /\.monogram\s*\{[^}]*z-index:\s*1/);
 });
+
+test('homepage has no Hero; the rail is the only masthead', () => {
+  const index = read('src/pages/index.astro');
+  assert.doesNotMatch(index, /Hero/);
+  const home = JSON.parse(read('src/data/home/index.json'));
+  assert.equal('hero' in home, false);
+  assert.ok(home.nowSummary, 'nowSummary must survive');
+  const keystatic = read('keystatic.config.ts');
+  const homeSingleton = keystatic.slice(keystatic.indexOf('home: singleton('), keystatic.indexOf('sidebar: singleton('));
+  assert.doesNotMatch(homeSingleton, /hero:/);
+});
+
+test('404 keeps its Hero', () => {
+  assert.match(read('src/pages/404.astro'), /<Hero\b/);
+  assert.match(read('src/components/Hero.astro'), /class="halftone"/);
+});

@@ -390,14 +390,6 @@ export default config({
       path: 'src/data/home/',
       format: { data: 'json' },
       schema: {
-        hero: fields.object(
-          {
-            eyebrow: fields.text({ label: 'Eyebrow (leave empty to hide)' }),
-            title: fields.text({ label: 'Title', multiline: true }),
-            intro: fields.text({ label: 'Intro', multiline: true }),
-          },
-          { label: 'Hero' },
-        ),
         nowSummary: fields.object(
           {
             building: fields.text({ label: 'Building', multiline: true }),

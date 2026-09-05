@@ -579,7 +579,6 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
                 padding: 6px 0; }
   .nav a .marker { display: none; }
   .nav a[data-current] { color: var(--color-brand-strong); }
-  .hero       { order: 3; }
   .streams    { order: 4; grid-template-columns: 1fr; gap: 40px; }
   .elsewhere-group { order: 5; }
   .elsewhere  { display: flex; flex-wrap: wrap; gap: 10px 22px; }
