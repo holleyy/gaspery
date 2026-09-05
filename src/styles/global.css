@@ -36,6 +36,10 @@
   --color-positive:       #4A7441;
   --color-warning:        #94600F;
   --color-error:          #C0392B;
+  /* The one accent that runs OPPOSITE the page. A full-bleed band's ground
+     is --color-ink, so it inverts with the scheme: a light page gives a
+     dark band, which needs the light pink. 5.66:1 light, 4.69:1 dark. */
+  --color-brand-on-ink:   #F06AA6;
 
   /* Type */
   --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
@@ -90,6 +94,7 @@
     --color-positive:       #9DBB7F;
     --color-warning:        #E0A33E;
     --color-error:          #E86254;
+    --color-brand-on-ink:   #B82E70;
   }
 }
 
@@ -109,6 +114,7 @@
   --color-positive:       #9DBB7F;
   --color-warning:        #E0A33E;
   --color-error:          #E86254;
+  --color-brand-on-ink:   #B82E70;
 }
 
 :root[data-theme='light'] { color-scheme: light; }
