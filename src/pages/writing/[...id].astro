@@ -30,7 +30,12 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
    this route's own compiled graph is enough for the bundler to split its
    styles into a shared chunk instead of this page's own inline block,
    flipping every writing post's <style> — feature or not. One import here
-   keeps that decision exactly as it was. */
+   keeps that decision exactly as it was.
+
+   The standard branch below (<main class="article">...</main>) is emitted
+   verbatim, indentation included, and must stay that way: a formatter pass
+   that reindents it changes every existing writing page's HTML, the same
+   class of break as the whitespace this comment already defends. */
 ---
 <Base title={`${post.data.title} · Alex Holley`} description={post.data.dek} mono={isFeature(post.data)}>
   {' '}{isFeature(post.data) ? (

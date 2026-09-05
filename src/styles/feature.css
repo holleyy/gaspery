@@ -9,6 +9,14 @@
    to a reading measure here and the block components opt out by being
    full-bleed. Prose and art direction interleave without the author
    thinking about it.
+
+   This file is injected via a `?url` <link>, not imported through Astro's
+   component-scoped <style> — see FeatureArticle.astro's frontmatter for
+   why. That means none of these rules are scoped: everything here is
+   global CSS, and the `.feature-*` / `.feature__*` prefix is the only
+   thing standing between these selectors and the rest of the site's.
+   Treat that prefix as a contract, not a convention — an unprefixed
+   selector added here leaks sitewide.
    ===================================================================== */
 
 .feature {
