@@ -1520,9 +1520,11 @@ category and not as urgency."
 - Consumes: the finished format.
 - Produces: an accurate design system and a meaningful parity gate.
 
-- [ ] **Step 1: Record the mono face**
+- [ ] **Step 1: Record the mono face AND the format's display scale**
 
-`DESIGN.md`'s `typography:` block documents `display`, `headline`, `title`, `body`. Add a `meta` entry for the format's third face:
+`DESIGN.md`'s `typography:` block documents `display`, `headline`, `title`, `body` — a scale drawn for the reading column. The feature format deliberately runs above it, and the design tooling correctly reports the difference as drift because nothing documents it. Both halves get recorded.
+
+The mono face, the format's third typeface:
 
 ```yaml
   meta:
@@ -1533,7 +1535,30 @@ category and not as urgency."
     textTransform: "uppercase"
 ```
 
-Add a line noting it is requested only on feature pages, so ordinary pages carry two faces as before.
+And the scale itself. Note what is genuinely new versus what is not: `featureDisplay`'s **maximum is 56px, the existing `display` step** — the format reaches it through a clamp rather than adding a step above it. The clamp minimum is a responsive floor, not a new size. What *is* new is a section heading above `headline`, and an 18px body a step above the column's 17px:
+
+```yaml
+  featureDisplay:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(30px, 3.8vw, 56px)"
+    fontWeight: 800
+    lineHeight: 1.04
+    letterSpacing: "-0.03em"
+    note: "Tops out at the documented display step; the clamp floor is a responsive minimum, not a new step."
+  featureSection:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(26px, 3vw, 34px)"
+    fontWeight: 800
+    lineHeight: 1.15
+  featureBody:
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontSize: "18px"
+    lineHeight: 1.7
+```
+
+Add a line noting the mono face is requested only on feature pages, so ordinary pages carry two faces as before, and that the `feature*` steps apply only inside `.feature`.
+
+**Then confirm the drift reports actually clear**, rather than assuming the documentation was sufficient — run `/impeccable audit` (or the project's design hook) over `src/styles/feature.css` and report what remains. Anything still flagged is either a real step you failed to document or a genuine design problem; say which.
 
 - [ ] **Step 2: Isolate what this branch changed**
 
