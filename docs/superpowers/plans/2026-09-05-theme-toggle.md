@@ -872,12 +872,30 @@ Expected: a `ROUTE SET CHANGED` block plus `CHANGED:` lines for every page.
 
 - [ ] **Step 2: Confirm every change is accounted for**
 
-Two categories are expected, and **nothing else**:
+**Correction, found during execution:** the baseline was far staler than this plan
+assumed — captured 2026-07-24, before the Keystatic migration landed. It differs from
+current `main` by canonical/OG/Twitter meta, the skip link, `·` vs `—` in titles,
+`brand-strong` tokens, and eight route changes. So "read the parity diff and confirm
+only the toggle changed" is **not a usable check**: the noise dwarfs the signal.
 
-1. **Route set** — `writing/blonde-turns-10`, `writing/let-a-website-be-a-worry-stone` and `writing/this-isn-t-a-teaser` are new since the baseline was taken. Pre-existing staleness, not this work.
-2. **Per page** — the inline `<script>` in `<head>`, the single `theme-color` meta replacing two, and one `fieldset.theme-toggle`.
+Use this instead — it isolates the branch exactly:
 
-Read the diff. If a line falls outside those two categories, stop and investigate — that is a real regression, and re-snapshotting would bury it.
+```bash
+git worktree add --detach <tmp> $(git merge-base main HEAD)
+ln -s "$(git rev-parse --show-toplevel)/node_modules" <tmp>/node_modules
+(cd <tmp> && npm run build)
+```
+
+Then compare `dist/` against `<tmp>/dist/` and confirm every difference is one of:
+the `color-scheme` meta removed, two `theme-color` metas collapsed to one, the
+pre-paint inline script, Astro's bundled control script, `fieldset.theme-toggle`,
+its scoped CSS rules, the `.theme-group` / `.app-page__topbar` wrappers, and the
+`.colophon` order bump 8→9. Anything else is a real regression and re-snapshotting
+would bury it.
+
+Strip those from both builds and the remainder must be byte-identical up to
+tag-adjacent whitespace. When this was run: **20 pages compared, 0 unexplained
+differences.**
 
 - [ ] **Step 3: Re-snapshot**
 
