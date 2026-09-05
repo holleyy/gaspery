@@ -37,7 +37,15 @@ const chips = items.filter(
 <style>
   .swatches { padding: 0 0 80px; }
   .swatches__heading { margin-bottom: 40px; }
-  .swatches__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  /* auto-fit, not a fixed repeat(4, 1fr): GRØD ships four inks and fills the
+     row, but Aftershot ships three — a fixed 4-track grid left the row a
+     chip short, the same dead-space shape `Plate`'s `data-figure-only` was
+     added to remove. The `minmax(max(...))` term caps auto-fit at four
+     columns: past four items the per-column minimum grows to `(100% - 3
+     gaps) / 4`, which is wider than any fifth column could fit inside, so
+     the grid never exceeds this row's intended width no matter how many
+     chips a future study ships. */
+  .swatches__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(max(180px, calc((100% - 60px) / 4)), 1fr)); gap: 20px; }
   .swatch { border: 1px solid var(--color-hairline); border-radius: var(--radius-card); overflow: hidden; }
   /* Every chip, not just pale ones. This palette runs #000000 to #F2F1EE:
      without an edge the near-white chip vanishes on the bone ground and the

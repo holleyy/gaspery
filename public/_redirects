@@ -13,9 +13,14 @@
 # every test still passed, and the only symptom would be the old URL quietly
 # 404ing in production.
 #
-# /apps/* is excluded from the Worker (see dist/_routes.json), so Cloudflare's
-# static-asset layer matches these as literal strings with no trailing-slash
-# normalisation — which is why both forms need their own line.
+# This site deploys as a Cloudflare Worker, not Pages (see wrangler.jsonc:
+# `main` is dist/_worker.js/index.js, with `assets.directory` pointing at
+# dist/) — dist/_routes.json is a Pages artifact and plays no part here.
+# Workers Static Assets reads and honours public/_redirects directly, and
+# matches these as literal strings with no trailing-slash normalisation —
+# which is why both forms need their own line. Verified under `wrangler dev`
+# (the Worker runtime, not `wrangler pages dev`): both /apps/afterframe/ and
+# /apps/afterframe 301 to the right place.
 #
 # scripts/verify-parity.sh asserts both rules survive into dist/_redirects.
 /apps/afterframe/    /apps/aftershot/    301

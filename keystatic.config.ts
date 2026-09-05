@@ -140,6 +140,10 @@ const featureComponents = {
         }),
         { label: 'Marks', itemLabel: (props) => props.fields.label.value || props.fields.src.value },
       ),
+      markSize: fields.integer({
+        label: 'Mark size (px)',
+        description: 'The size in pixels the specimen is proved at, e.g. 120 for a Home Screen icon. Leave empty for the GRØD default of 28px (a menu-bar glyph).',
+      }),
       note: fields.text({ label: 'Note', multiline: true }),
     },
   }),

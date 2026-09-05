@@ -38,6 +38,14 @@
   --specimen-light-ink: #232019;
   --specimen-dark: #232019;
   --specimen-dark-ink: #F6F1E6;
+  /* The dark specimen strip's own edge. --specimen-dark (#232019) sits only
+     1.10:1 from the dark-mode page ground (#191712) — close enough that an
+     unbordered strip loses its edge entirely in that appearance. This has to
+     be its own fixed token, not --color-hairline: that token is themed, and
+     its dark-mode value is itself close to #232019 for the same reason. A
+     translucent light overlay blended against the always-#232019 background
+     stays visibly separate from the page in every appearance. */
+  --specimen-dark-hairline: rgba(246, 241, 230, 0.2);
 }
 
 /* Site chrome — deliberately the same weight as an ordinary post's. */

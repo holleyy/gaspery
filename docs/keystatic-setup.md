@@ -80,7 +80,7 @@ small, harmless reformatting diff (the rendered site is unaffected):
 
 - **Now page** entries gain a trailing newline on each body.
 - **Apps** deks may reflow to a YAML block scalar (`>-`).
-- **Quiet app pages** (pls fix., Afterframe) gain an empty `spreads: []` line — Keystatic
+- **Quiet app pages** (pls fix., Aftershot) gain an empty `spreads: []` line — Keystatic
   can't represent an absent list. (If this ever bothers you, it can be removed with a
   small schema change; ask and it's a quick follow-up.)
 

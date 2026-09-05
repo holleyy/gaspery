@@ -30,8 +30,20 @@ interface Props {
      Aftershot proves an app icon against a light and a dark field. Same
      shape, different words, so the words are content. */
   grounds?: { paper?: string; ink?: string };
+  /* The other half of "same shape, different words": the mark's SIZE is also
+     the study's business, not the format's. GRØD proves a 28px menu-bar
+     glyph; Aftershot proves a 120px Home Screen icon — a block that renders
+     every mark at 28px regardless would let a study claim a size its own
+     pixels don't show. Defaults to 28 so GRØD, which never sets this prop,
+     is pixel-identical to before this existed. */
+  markSize?: number;
 }
-const { heading, standfirst, marks = [], note, grounds } = Astro.props;
+const { heading, standfirst, marks = [], note, grounds, markSize } = Astro.props;
+// `??`, not `||`: mirrors ScaleProof's `rung.size ?? 64` — 0 isn't a
+// meaningful mark size, but nullish coalescing is still the correct operator
+// for a numeric prop that may arrive as `null` from an untouched Keystatic
+// field.
+const size = markSize ?? 28;
 /* `||`, not `??`: an untouched Keystatic sub-field can arrive as an empty
    string rather than an absent key, and `??` would let that through as a
    blank label — defeating the whole point of having a neutral default. No
@@ -61,7 +73,7 @@ const inlined = marks
   })
   .filter((mark) => typeof mark.svg === 'string' || typeof mark.raster === 'string');
 ---
-<section class="glyphs">
+<section class="glyphs" style={`--glyph-mark-size: ${size}px`}>
   <div class="feature-wrap">
     {heading && <h2 class="feature-h">{heading}</h2>}
     {standfirst && <p class="glyphs__standfirst">{standfirst}</p>}
@@ -97,18 +109,35 @@ const inlined = marks
     margin-bottom: 12px;
   }
   .glyphs__strip--paper { background: var(--specimen-light); color: var(--specimen-light-ink); border: 1px solid var(--color-hairline); }
-  .glyphs__strip--ink { background: var(--specimen-dark); color: var(--specimen-dark-ink); }
+  /* The ink strip's own background (--specimen-dark, #232019) is a fixed
+     specimen token, not a themed one — but the page it sits on IS themed,
+     and in dark mode the page ground (--color-paper, #191712) sits within
+     1.10:1 of that fixed background. Reusing --color-hairline here would not
+     fix that: --color-hairline is itself themed, and its dark-mode value
+     (#39352C) is close enough to #232019 to disappear against it too — the
+     same failure, borrowed from the wrong token. --specimen-dark-hairline is
+     a fixed edge, blended once against the fixed --specimen-dark background,
+     so the strip keeps a visible boundary in both appearances. */
+  .glyphs__strip--ink { background: var(--specimen-dark); color: var(--specimen-dark-ink); border: 1px solid var(--specimen-dark-hairline); }
   .glyphs__context {
     font-family: var(--font-mono);
     font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
     opacity: 0.6; min-width: 118px;
   }
   .glyphs__state { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; }
-  .glyphs__mark svg { width: 28px; height: 22px; display: block; }
-  /* Square, not 28x22 like the SVG marks above — an app icon's aspect ratio
-     is 1:1. Left unmasked, same as this study's other two blocks (Plate,
-     ScaleProof): the production asset ships with no baked corner radius,
-     and this strip is a size comparison, not a Home Screen mockup. */
-  .glyphs__mark--raster img { width: 28px; height: 28px; display: block; }
+  /* `height: auto`, not a second hardcoded number: these SVGs carry no
+     width/height attributes, only a viewBox (GRØD's menu-bar marks are
+     28x22), so setting width alone and letting height follow the intrinsic
+     aspect ratio is what makes `--glyph-mark-size` (default 28, set from the
+     `markSize` prop) apply correctly to a non-square mark without this
+     component knowing its aspect ratio. At the default 28px this renders
+     pixel-identical to the old fixed 28x22. */
+  .glyphs__mark svg { width: var(--glyph-mark-size, 28px); height: auto; display: block; }
+  /* Square, not the SVG marks' aspect ratio above — an app icon's aspect
+     ratio is 1:1, so both dimensions track the same size variable. Left
+     unmasked, same as this study's other two blocks (Plate, ScaleProof): the
+     production asset ships with no baked corner radius, and this strip is a
+     size comparison, not a Home Screen mockup. */
+  .glyphs__mark--raster img { width: var(--glyph-mark-size, 28px); height: var(--glyph-mark-size, 28px); display: block; }
   .glyphs__note { margin-top: 14px; font-size: 13px; color: var(--color-ink-secondary); }
 </style>

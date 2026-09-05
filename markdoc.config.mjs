@@ -134,6 +134,7 @@ export default defineMarkdocConfig({
         marks: { type: Array, required: true },
         note: { type: String },
         grounds: { type: Object },
+        markSize: { type: Number },
       },
     },
     scaleProof: {
