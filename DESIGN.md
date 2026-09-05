@@ -157,7 +157,7 @@ for reach.
 - **Two inks, one ground, in chrome.** Magenta + teal over bone paper. No third accent in chrome, ever — a feature study may still print a subject's own ink as its subject matter (see The Identity Exception, §2).
 - **Serif prints, sans functions.** Merriweather for anything that should read as printed; Inter for everything operational.
 - **Flat by tone, not shadow.** Depth comes from `paper → surface → surface-raised` layering and hairlines; there are no box-shadows.
-- **One loud moment.** The misregistered headline is spent once per page; the rest is quiet.
+- **One loud moment.** The misregistered headline is spent once per page — the rail masthead everywhere, the Hero on the 404 — the rest is quiet.
 - **Accessibility-gated ink.** Every blend-mode effect degrades to solid ink under `prefers-reduced-transparency` / `prefers-contrast: more`; meaning never depends on a blend.
 
 **Layout.** The page is a two-column grid inside a centered max width; one
@@ -172,16 +172,18 @@ collapsed range.
 | `--gutter` | 88px | rail ↔ main gap |
 
 Collapse at **1000px**: the two-column grid becomes one column (identity +
-horizontal nav on top, then hero, streams, elsewhere, subscribe, colophon).
-The rail, gutter, and margins are 320px of fixed overhead, so below ~1080px
-the apps column cannot hold its longest name + status pill — the two-column
-grid has no honest room under 1000px. Inside the collapsed range, a **tablet
-band (861–1000px)** sets the column as a centered 768px notebook measure with
-a 40px hero and 56px/32px padding; **≤860px** keeps the 375px-designed mobile
-values (24px padding, 34px hero), and the type-only **420px** step shrinks
-the hero to 30px. Flex rows that pair a fixed label with variable text
-(`.stream__head`, `.app__head`, `.post__meta`, `.site-footer`) wrap instead
-of overflowing when a future long value outgrows its row.
+horizontal nav on top, then streams, elsewhere, subscribe, colophon); the rail
+masthead itself steps from 38px to 32px at this same breakpoint. The rail,
+gutter, and margins are 320px of fixed overhead, so below ~1080px the apps
+column cannot hold its longest name + status pill — the two-column grid has
+no honest room under 1000px. Inside the collapsed range, a **tablet band
+(861–1000px)** sets the column as a centered 768px notebook measure with
+56px/32px padding (the 404's Hero steps down to 40px here); **≤860px** keeps
+the 375px-designed mobile values (24px padding; the 404's Hero at 34px), and
+the type-only **420px** step shrinks the 404's Hero to 30px. Flex rows that
+pair a fixed label with variable text (`.stream__head`, `.app__head`,
+`.post__meta`, `.site-footer`) wrap instead of overflowing when a future long
+value outgrows its row.
 
 ## 2. Colors
 
@@ -286,7 +288,7 @@ two are never blurred.
 - **Display** (Merriweather 800, 56px — 40px in the 861–1000px tablet band, 34px ≤860px, 30px ≤420px — line-height 1.1, letter-spacing -0.02em): the one hero headline on the 404.
 - **Masthead** (Merriweather 400, 38px — 32px ≤1000px — line-height 1.1, letter-spacing -0.01em, on a 2px magenta ghost): the rail wordmark, "Gaspery.", on every page. Regular weight because the G plate above it already carries the heavy mark; 2px not 3px because at this weight a 3px shift is wider than the stroke and reads as an outline. Class `.rail-wordmark`, deliberately not `.wordmark`.
 - **Headline** (Merriweather 700, 22px): section headings (`## Writing`, `## Apps`).
-- **Title** (Merriweather 700, 21px/1.28; also 18–20px across app names, the subscribe line, and nav): content titles — post rows, app rows, wordmark.
+- **Title** (Merriweather 700, 21px/1.28; also 18–20px across app names, the subscribe line, and nav): content titles — post rows, app rows, app-page wordmark.
 - **Body** (Inter 400, 17px/1.6): intro and body copy. **Dek** (Inter 400, 15px/1.53, secondary ink) carries deks and secondary copy. Cap prose measure at 65–75ch.
 - **Label** (Inter 600, 11–12px, uppercase, letter-spacing 0.14em, secondary ink): eyebrows, meta lines, status pills.
 
@@ -324,10 +326,12 @@ read as printed — display, headings, titles, the wordmark. Sans (Inter) carrie
 everything functional — body, meta, labels, UI. The two are never swapped, and a
 heading is never set in sans "to be modern."
 
-**The Single-Impression Rule.** By default, the misregistration is spent once
-per page — on the single most important headline. Its power is scarcity: a
-second offset headline of equal weight halves the impact of both. Break it only
-on purpose — a distinct page *type*, or a spread where a second region genuinely
+**The Single-Impression Rule.** The misregistration is spent once per page —
+the rail masthead everywhere at 2px, the Hero on the 404 at 3px, never both on
+the same page. (The G plate's own 3px teal ghost is a printed mark, not a
+headline, and sits outside this count.) Its power is scarcity: a second
+offset headline of equal weight halves the impact of both. Break it only on
+purpose — a distinct page *type*, or a spread where a second region genuinely
 earns its own loud moment — never as decoration or reflex. The test: if you
 can't say what the second impression is *for*, it stays in register.
 
@@ -335,9 +339,10 @@ can't say what the second impression is *for*, it stays in register.
 
 This system is flat. There are no box-shadows anywhere in `global.css`. Depth is
 conveyed tonally — the `paper → surface → surface-raised` neutral ramp, separated
-by 1px hairlines — and, at the hero, by the misregistration offset, which reads
-as a second ink laid slightly off the first, i.e. as *print*, not as a floating
-surface. No blur, no glow, no drop shadow.
+by 1px hairlines — and, at the rail masthead (and, on the 404, the Hero), by
+the misregistration offset, which reads as a second ink laid slightly off the
+first, i.e. as *print*, not as a floating surface. No blur, no glow, no drop
+shadow.
 
 ### Named Rules
 **The Flat Press Rule.** Surfaces never lift off the page. If something needs to
@@ -450,7 +455,7 @@ room: a Mac window shrunk into a prose column is a smudge, not proof.
 The four devices that make a new page read as part of this system rather than a
 generic layout. Reuse them deliberately; don't invent competing ones.
 
-- **Misregistration** — the one loud print moment, spent on one headline per page. Two stacked copies of the same text: the base copy normal, a second copy offset `translate(3px, 3px)`, colored `--color-brand`, set to `mix-blend-mode: multiply`. Under `prefers-reduced-transparency: reduce` or `prefers-contrast: more`, the offset copy is hidden entirely — meaning must never depend on the blend.
+- **Misregistration** — the one loud print moment, spent on one headline per page. Two stacked copies of the same text: the base copy normal, a second copy offset and colored `--color-brand`, set to `mix-blend-mode: multiply`. The offset is `translate(3px, 3px)` on the 404's Hero (Merriweather 800); the rail masthead, set in the lighter Merriweather 400, drops to `translate(2px, 2px)` — at that weight a 3px shift is wider than the stroke and reads as an outline rather than a registration mark. Under `prefers-reduced-transparency: reduce` or `prefers-contrast: more`, the offset copy is hidden entirely — meaning must never depend on the blend.
 - **Halftone dot field** — a `radial-gradient(--color-teal 1.1px, transparent 1.5px)` at `7px 7px`, `mix-blend-mode: multiply` (flips to `screen` in dark mode), masked to fade out radially. Decorative only, beside a masthead — the rail's identity block, or the 404's hero — never load-bearing for content.
 - **Registration mark** (`RegistrationMark.astro`) — a crosshair (teal stroke) plus a ring (brand stroke), default 16px, stroke-width 1. Three variants: `full`, `cross`, `ring`. The connective thread between sections — rail, stream headers, footer.
 - **Riso-duotone photography** (`.riso-photo`, filter defined once in `Base.astro`) — the treatment for real photographs, introduced with the site's first (the running essay). The image is piped through an SVG `feColorMatrix` grayscale + `feComponentTransfer` duotone remap (ink → paper, the site's own tokens, fixed to light-mode values on purpose — a photographic negative is a bad dark-mode adaptation), then the *same* halftone dot recipe above is laid over it full-bleed and unmasked (`mix-blend-mode: multiply`, flips to `screen` in dark mode). Under the accessibility gate the halftone drops out and the duotone photo stands alone, still fully legible. A photo run through the same press as everything else, not a full-color image dropped in.
