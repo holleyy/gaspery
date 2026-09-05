@@ -41,7 +41,13 @@ const { columns = 1, heading, standfirst, detail, items = [] } = Astro.props;
    markdoc.config.mjs) — the clamp, not the type declaration, is what keeps
    a fractional or out-of-range value from ever reaching the grid. */
 const columnCount = Math.max(1, Math.min(Math.trunc(Number(columns)) || 1, items.length || 1));
-const beside = columnCount > 1;
+/* Beside-layout only up to three columns, and that ceiling is load-bearing.
+   The heading column takes roughly 45% of the width, so at four the
+   remainder splits into ~156px tracks — about 20 characters a line, which
+   is a ransom note rather than prose. Above three, this falls back to the
+   stacked rows `columns=1` uses, which is the readable shape at this
+   measure; prefer asking for 1 outright over relying on that. */
+const beside = columnCount > 1 && columnCount <= 3;
 
 /* Inlined, not <img src>: an externally-referenced SVG is an isolated
    document and does not inherit currentColor, so a `stroke="currentColor"`
