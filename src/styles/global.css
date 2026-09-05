@@ -593,8 +593,10 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   .hero-title .ghost { transform: translate(2px, 2px); }
   .rail-wordmark__ink, .rail-wordmark__ghost { font-size: 32px; }
   .hero .halftone { width: 150px; height: 120px; top: -8px; }
-  /* right: -24px meets the page's 24px side padding exactly, so the dots
-     touch the viewport edge without creating horizontal scroll. */
+  /* The collapsed identity block shrink-wraps to its tagline rather than
+     spanning the viewport, so right: -24px hangs the field just past the
+     text's end. It never reaches the viewport edge and cannot cause
+     horizontal scroll. */
   .identity .halftone { width: 150px; height: 120px; top: -36px; right: -24px; }
   .post__dek { max-width: none; }
   .app-page { padding: 36px 24px 40px; gap: 32px; }

@@ -128,3 +128,11 @@ test('the chrome says Gaspery; only content and the colophon name Alex', () => {
     assert.doesNotMatch(read(f), /<Rail[^>]*\bname=/, `${f} overrides the rail name`);
   }
 });
+
+test('the wordmark ink copy is the h1 on the homepage only', () => {
+  // The Hero used to be the homepage's h1. Every other page has its own.
+  assert.match(rail, /const isHome = pathname === '\/';/);
+  assert.match(rail, /isHome\s*\?\s*<h1 class="rail-wordmark__ink">\{name\}<\/h1>\s*:\s*<div class="rail-wordmark__ink">\{name\}<\/div>/);
+  // The ghost is never a heading.
+  assert.doesNotMatch(rail, /<h1 class="rail-wordmark__ghost"/);
+});
