@@ -1,9 +1,22 @@
-# /apps/afterframe/ (trailing slash) was the app's canonical, live URL before
-# it was renamed to Aftershot — see astro.config.mjs's `redirects` entry for
-# the non-slash form. /apps/* is excluded from the Worker (dist/_routes.json),
-# so Cloudflare's static-asset layer matches these rules as literal strings
-# with no trailing-slash normalization; the config-generated rule alone would
-# 404 on this exact form. Kept as a raw rule here because Astro's `redirects`
-# config collapses a trailing-slash key onto the same route as the non-slash
-# one, so it cannot express this as a second config entry.
+# /apps/afterframe was the app's live URL before it was renamed to Aftershot,
+# and the canonical form carried a trailing slash. The route id is the content
+# filename, so renaming the file moved the URL; without these, anyone holding
+# the old link gets a 404. Permanent, because the move is.
+#
+# Both forms are raw rules here rather than split between this file and
+# Astro's `redirects` config. Two reasons. The config cannot express a
+# trailing-slash-only key at all — it collapses one onto the non-slash route —
+# so the live URL could never have been covered there. And relying on the
+# Cloudflare adapter to APPEND its generated rules onto this file is real but
+# undocumented internal behaviour, pinned behind a caret range: a routine
+# dependency bump could drop the redirect while the build still succeeded and
+# every test still passed, and the only symptom would be the old URL quietly
+# 404ing in production.
+#
+# /apps/* is excluded from the Worker (see dist/_routes.json), so Cloudflare's
+# static-asset layer matches these as literal strings with no trailing-slash
+# normalisation — which is why both forms need their own line.
+#
+# scripts/verify-parity.sh asserts both rules survive into dist/_redirects.
 /apps/afterframe/    /apps/aftershot/    301
+/apps/afterframe     /apps/aftershot     301
