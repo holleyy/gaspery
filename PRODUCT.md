@@ -67,7 +67,7 @@ growth-speak.
 deks, alt text, page titles, feed, the share card). Reach for a full stop, a
 colon, a comma, or parentheses instead; the short-sentence rhythm is the voice
 anyway, and the dash had become the tell. Page titles and meta lines use the
-site's own middot separator (`Writing · Alex Holley`).
+site's own middot separator (`Writing · Gaspery`).
 
 ## Anti-references
 

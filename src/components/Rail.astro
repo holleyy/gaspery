@@ -8,17 +8,19 @@ import sidebar from '../data/sidebar/index.json';
 interface NavItem { label: string; href: string; }
 interface Link { label: string; href: string; }
 interface Props {
-  name: string;
-  role: string;
-  monogram: string;
+  name?: string;
+  role?: string;
+  monogram?: string;
   current?: string;
   nav?: NavItem[];
   elsewhere?: Link[];
 }
 const {
-  name,
-  role,
-  monogram,
+  /* The rail is the site's masthead, so the identity defaults to the
+     imprint. Pages pass only `current`; the props stay overridable. */
+  name = 'Gaspery.',
+  role = 'Words, design, tools & links',
+  monogram = 'G',
   current = 'Writing',
   nav = [
     { label: 'Writing', href: '/writing' },
@@ -38,15 +40,32 @@ const pulse = isPulseEnabled() ? await getLatestPost() : null;
    should never be told home is /writing. */
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pathname;
+
+/* The homepage has no other headline now that the Hero is gone, so the
+   wordmark's ink copy is its <h1>. Everywhere else the page's own title
+   is the h1 and the wordmark stays a div. The ghost is decorative on
+   every page and is never a heading.
+   The h1 therefore sits inside the rail <aside>, not <main>. That is the
+   ordinary masthead pattern — the site title as h1 in the site header —
+   and the rail IS the masthead on every page; a hidden duplicate h1 in
+   <main> would say the same words twice to a screen reader. */
+const isHome = pathname === '/';
 ---
 <aside class="rail">
-  <a class="identity" href="/" aria-label={`${name}, home`}>
+  <a class="identity" href="/" aria-label={`${name.replace(/\.$/, '')}, home`}>
+    <div class="halftone" aria-hidden="true"></div>
     <div class="monogram">
       <div class="monogram__ghost"></div>
       <div class="monogram__ink">{monogram}</div>
     </div>
-    <div>
-      <div class="wordmark">{name}</div>
+    <div class="identity__text">
+      <div class="rail-wordmark">
+        {/* Two stacked copies = the deliberate misregistration. Ghost is decorative. */}
+        <div class="rail-wordmark__ghost" aria-hidden="true">{name}</div>
+        {isHome
+          ? <h1 class="rail-wordmark__ink">{name}</h1>
+          : <div class="rail-wordmark__ink">{name}</div>}
+      </div>
       <div class="label">{role}</div>
     </div>
   </a>
@@ -83,9 +102,11 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
   <div class="colophon">
     <RegistrationMark size={16} />
     <p>Set in Merriweather &amp; Inter. Printed here in two inks, magenta &amp; teal, occasionally out of register.</p>
-    {/* The print colophon's own sign-off. The legal entity lives in the
-        statutory <Imprint /> at the foot of the page instead, so the company
-        is never stated twice on one screen. */}
+    {/* The print colophon's own sign-off: the author, then the run. The
+        legal entity is stated once, in the statutory <Imprint /> at the foot
+        of the page; the wordmark above is the brand mark, not the legal
+        name, so the two may share a screen. */}
+    <div class="label">Alex Holley</div>
     <div class="label">© MMXXVI · London</div>
   </div>
 </aside>

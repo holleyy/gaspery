@@ -1,0 +1,141 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, readdirSync } from 'node:fs';
+
+const read = (rel: string) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8');
+const rail = read('src/components/Rail.astro');
+const css = read('src/styles/global.css');
+
+test('Rail defaults to the Gaspery identity so pages pass only `current`', () => {
+  assert.match(rail, /name = 'Gaspery\.'/);
+  assert.match(rail, /role = 'Words, design, tools & links'/);
+  assert.match(rail, /monogram = 'G'/);
+});
+
+test('rail wordmark is two stacked copies with a decorative ghost', () => {
+  // Same construction as the hero title: the ghost is aria-hidden so
+  // assistive tech reads "Gaspery." once, not twice.
+  assert.match(rail, /class="rail-wordmark__ghost" aria-hidden="true"/);
+  assert.match(rail, /class="rail-wordmark__ink"/);
+  // The rail must not fall back to the app-page wordmark class.
+  assert.doesNotMatch(rail, /class="wordmark"/);
+});
+
+test('home link is labelled without the wordmark full stop', () => {
+  assert.match(rail, /aria-label=\{`\$\{name\.replace\(\/\\\.\$\/, ''\)\}, home`\}/);
+});
+
+test('colophon signs off with the author on their own label line', () => {
+  assert.match(rail, /<div class="label">Alex Holley<\/div>\s*<div class="label">© MMXXVI · London<\/div>/);
+});
+
+test('rail wordmark is set at Regular with a 2px ghost, and is not .wordmark', () => {
+  const block = css.match(/\.rail-wordmark__ink,\s*\.rail-wordmark__ghost\s*\{([^}]*)\}/);
+  assert.ok(block, 'no shared rail-wordmark rule');
+  assert.match(block![1], /font-weight:\s*400/);
+  assert.match(block![1], /font-size:\s*38px/);
+  assert.match(block![1], /letter-spacing:\s*-0\.01em/);
+  assert.match(css, /\.rail-wordmark__ghost\s*\{[^}]*transform:\s*translate\(2px,\s*2px\)/);
+  // The app-page wordmark keeps its rule exactly.
+  assert.match(css, /\.wordmark \{ font-family: var\(--font-serif\); font-weight: 700; font-size: 24px; line-height: 1\.15; letter-spacing: -0\.01em; transition: color \.15s ease; \}/);
+});
+
+test('rail wordmark drops to 32px when the layout collapses', () => {
+  const collapsed = css.slice(css.indexOf('@media (max-width: 1000px)'));
+  assert.match(collapsed, /\.rail-wordmark__ink,\s*\.rail-wordmark__ghost\s*\{[^}]*font-size:\s*32px/);
+});
+
+test('accessibility gate hides the rail ghost alongside the hero ghost', () => {
+  // Pinned to the multi-line gate block (the riso-photo gate is a one-liner
+  // earlier in the file and must not satisfy this).
+  assert.match(
+    css,
+    /\(prefers-contrast: more\)\s*\{\s*\.hero-title \.ghost \{ display: none; \}\s*\.rail-wordmark__ghost \{ display: none; \}/
+  );
+});
+
+test('rail identity carries the halftone dots', () => {
+  assert.match(rail, /<a class="identity"[^>]*>\s*<div class="halftone" aria-hidden="true"><\/div>/);
+});
+
+test('halftone placement is scoped: recipe unscoped, position per host', () => {
+  const recipe = css.match(/\n\.halftone\s*\{([^}]*)\}/);
+  assert.ok(recipe, 'unscoped .halftone rule missing');
+  assert.match(recipe![1], /background-image:\s*radial-gradient\(var\(--color-teal\)/);
+  assert.doesNotMatch(recipe![1], /\btop:/);
+  assert.doesNotMatch(recipe![1], /\bwidth:/);
+
+  const hero = css.match(/\.hero \.halftone\s*\{([^}]*)\}/);
+  assert.ok(hero, '.hero .halftone missing');
+  assert.match(hero![1], /top:\s*-20px/);
+  assert.match(hero![1], /width:\s*320px/);
+
+  const identity = css.match(/\.identity \.halftone\s*\{([^}]*)\}/);
+  assert.ok(identity, '.identity .halftone missing');
+  assert.match(identity![1], /top:\s*-58px/);
+  assert.match(identity![1], /right:\s*-48px/);
+  assert.match(identity![1], /width:\s*170px/);
+  assert.match(identity![1], /height:\s*120px/);
+});
+
+test('collapsed layout keeps the rail dots inside the viewport', () => {
+  const collapsed = css.slice(css.indexOf('@media (max-width: 1000px)'));
+  assert.match(collapsed, /\.identity \.halftone\s*\{[^}]*right:\s*-24px/);
+  assert.match(collapsed, /\.identity \.halftone\s*\{[^}]*top:\s*-36px/);
+  assert.match(collapsed, /\.hero \.halftone\s*\{[^}]*top:\s*-8px/);
+  // The old unscoped override would drag the hero's values onto the rail.
+  assert.doesNotMatch(collapsed, /\n\s*\.halftone\s*\{/);
+});
+
+test('text block sits above the dots; the plate keeps its blend', () => {
+  assert.match(css, /\.identity\s*\{[^}]*position:\s*relative/);
+  assert.match(css, /\.identity__text\s*\{[^}]*z-index:\s*1/);
+  // No z-index on .monogram: it would open a stacking context and isolate
+  // the plate ghost's multiply blend, which AppPageHeader's plate relies on.
+  assert.match(css, /\.monogram \{ position: relative; width: 46px; height: 46px; \}/);
+});
+
+test('homepage has no Hero; the rail is the only masthead', () => {
+  const index = read('src/pages/index.astro');
+  assert.doesNotMatch(index, /Hero/);
+  const home = JSON.parse(read('src/data/home/index.json'));
+  assert.equal('hero' in home, false);
+  assert.ok(home.nowSummary, 'nowSummary must survive');
+  const keystatic = read('keystatic.config.ts');
+  const homeSingleton = keystatic.slice(keystatic.indexOf('home: singleton('), keystatic.indexOf('sidebar: singleton('));
+  assert.doesNotMatch(homeSingleton, /hero:/);
+});
+
+test('404 keeps its Hero', () => {
+  assert.match(read('src/pages/404.astro'), /<Hero\b/);
+  assert.match(read('src/components/Hero.astro'), /class="halftone"/);
+});
+
+test('the chrome says Gaspery; only content and the colophon name Alex', () => {
+  const walk = (dir: string): string[] =>
+    readdirSync(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true }).flatMap((d) =>
+      d.isDirectory() ? walk(`${dir}/${d.name}`) : [`${dir}/${d.name}`]);
+  const chrome = [...walk('src/pages'), ...walk('src/layouts'), ...walk('src/components')]
+    .filter((f) => !f.endsWith('Rail.astro'));
+  for (const f of chrome) {
+    assert.doesNotMatch(read(f), /Alex Holley/, `${f} still names Alex Holley`);
+  }
+  assert.match(read('src/pages/index.astro'), /title="Gaspery · a working notebook"/);
+  assert.match(read('src/pages/rss.xml.js'), /title: 'Gaspery · a working notebook'/);
+  assert.match(read('src/layouts/Base.astro'), /title="Gaspery · a working notebook"/);
+  for (const f of ['src/pages/writing/[...id].astro', 'src/pages/apps/[id].astro', 'src/components/FeatureArticle.astro']) {
+    assert.match(read(f), /Gaspery<\/a>/, `${f} back link`);
+  }
+  // Pages pass only `current`; the identity comes from Rail's defaults.
+  for (const f of walk('src/pages')) {
+    assert.doesNotMatch(read(f), /<Rail[^>]*\bname=/, `${f} overrides the rail name`);
+  }
+});
+
+test('the wordmark ink copy is the h1 on the homepage only', () => {
+  // The Hero used to be the homepage's h1. Every other page has its own.
+  assert.match(rail, /const isHome = pathname === '\/';/);
+  assert.match(rail, /isHome\s*\?\s*<h1 class="rail-wordmark__ink">\{name\}<\/h1>\s*:\s*<div class="rail-wordmark__ink">\{name\}<\/div>/);
+  // The ghost is never a heading.
+  assert.doesNotMatch(rail, /<h1 class="rail-wordmark__ghost"/);
+});

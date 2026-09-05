@@ -89,7 +89,7 @@ test('the two dark token blocks declare identical values', () => {
 test('both blend-mode flips are duplicated for the attribute state', () => {
   // Same duplication, same reason. A forced dark appearance must flip the
   // halftone to `screen` or the print sits inverted on the dark ground.
-  for (const target of ['.halftone', '.riso-photo::after']) {
+  for (const target of ['.halftone', '.riso-photo::after', '.rail-wordmark__ghost']) {
     assert.match(
       css,
       new RegExp(`:root\\[data-theme='dark'\\]\\s*${target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{[^}]*mix-blend-mode:\\s*screen`),

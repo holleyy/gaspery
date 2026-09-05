@@ -189,7 +189,13 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* Identity */
-.identity { display: flex; flex-direction: column; gap: 18px; }
+.identity { display: flex; flex-direction: column; gap: 18px; position: relative; }
+/* The text block is lifted above the dots (z-index 0). The plate is not
+   given a z-index on purpose: that would open a stacking context and
+   isolate its ghost's multiply blend — AppPageHeader reuses .monogram and
+   its plate must keep blending into the page ground. Tree order already
+   paints the plate above the dots. */
+.identity__text { position: relative; z-index: 1; }
 .monogram { position: relative; width: 46px; height: 46px; }
 .monogram__ink,
 .monogram__ghost {
@@ -204,6 +210,26 @@ img, svg { display: block; max-width: 100%; }
 .wordmark { font-family: var(--font-serif); font-weight: 700; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; transition: color .15s ease; }
 .identity .label { margin-top: 6px; }
 .identity:hover .wordmark { color: var(--color-brand-bright); }
+
+/* Rail wordmark — the site's masthead. Merriweather Regular riding a 2px
+   magenta ghost: the hero's misregistration at rail scale. At weight 400 a
+   3px shift is wider than the stroke and reads as an outline, hence 2px.
+   Its own class, not .wordmark: AppPageHeader reuses .wordmark at 24/700. */
+.rail-wordmark { position: relative; z-index: 1; }
+.rail-wordmark__ink,
+.rail-wordmark__ghost {
+  font-family: var(--font-serif); font-weight: 400;
+  font-size: 38px; line-height: 1.1; letter-spacing: -0.01em;
+}
+.rail-wordmark__ink { position: relative; z-index: 1; transition: color .15s ease; }
+.rail-wordmark__ghost {
+  position: absolute; inset: 0; transform: translate(2px, 2px);
+  color: var(--color-brand); mix-blend-mode: multiply;
+  z-index: 0; pointer-events: none;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .rail-wordmark__ghost { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .rail-wordmark__ghost { mix-blend-mode: screen; }
+.identity:hover .rail-wordmark__ink { color: var(--color-brand-bright); }
 
 /* Rail sections (nav + elsewhere + theme) */
 .rail-group { display: flex; flex-direction: column; gap: 14px; }
@@ -277,16 +303,23 @@ img, svg { display: block; max-width: 100%; }
 }
 .hero-intro { position: relative; z-index: 2; max-width: 600px; font-size: var(--text-body); line-height: 1.65; }
 
-/* Halftone dot field — teal, multiply on light / screen on dark, fading out. */
+/* Halftone dot field — teal, multiply on light / screen on dark, fading out.
+   The recipe is shared; where it sits depends on the host. */
 .halftone {
-  position: absolute; top: -20px; right: -6px; width: 320px; height: 200px;
+  position: absolute;
   background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px);
   background-size: 7px 7px;
   mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
           mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
-  pointer-events: none; z-index: 1;
+  pointer-events: none;
 }
+/* In the Hero (404 only now) it balances the 56px headline. */
+.hero .halftone { top: -20px; right: -6px; width: 320px; height: 200px; z-index: 1; }
+/* In the rail it bleeds off the identity block's top-right corner, behind
+   the wordmark (z-index: 1) and the plate, which carries no z-index and is
+   painted above by tree order — see the .identity__text note. */
+.identity .halftone { top: -58px; right: -48px; width: 170px; height: 120px; z-index: 0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .halftone { mix-blend-mode: screen; } }
 :root[data-theme='dark'] .halftone { mix-blend-mode: screen; }
 
@@ -520,6 +553,7 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
    as flat shapes (spec §5.2, a v1 gate, not later polish). */
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .hero-title .ghost { display: none; }
+  .rail-wordmark__ghost { display: none; }
   .halftone { display: none; }
   .monogram__ghost { mix-blend-mode: normal; opacity: 1; }
 }
@@ -550,7 +584,6 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
                 padding: 6px 0; }
   .nav a .marker { display: none; }
   .nav a[data-current] { color: var(--color-brand-strong); }
-  .hero       { order: 3; }
   .streams    { order: 4; grid-template-columns: 1fr; gap: 40px; }
   .elsewhere-group { order: 5; }
   .elsewhere  { display: flex; flex-wrap: wrap; gap: 10px 22px; }
@@ -563,7 +596,13 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   :root { --text-hero: 34px; }
   .hero-title .ink, .hero-title .ghost { line-height: 1.18; }
   .hero-title .ghost { transform: translate(2px, 2px); }
-  .halftone { width: 150px; height: 120px; top: -8px; }
+  .rail-wordmark__ink, .rail-wordmark__ghost { font-size: 32px; }
+  .hero .halftone { width: 150px; height: 120px; top: -8px; }
+  /* The collapsed identity block shrink-wraps to its tagline rather than
+     spanning the viewport, so right: -24px hangs the field just past the
+     text's end. It never reaches the viewport edge and cannot cause
+     horizontal scroll. */
+  .identity .halftone { width: 150px; height: 120px; top: -36px; right: -24px; }
   .post__dek { max-width: none; }
   .app-page { padding: 36px 24px 40px; gap: 32px; }
   .app-editorial__spread, .app-editorial__spread--reverse { flex-direction: column; }

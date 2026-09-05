@@ -119,10 +119,10 @@ whole site builds from content, and the feed carries both essays and link
 posts. What you'll actually want to change if you're reusing this as your own
 theme:
 
-- **Name, role, monogram:** hardcoded as `Rail` props on every page (e.g.
-  `<Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" ... />`
-  in `src/pages/index.astro`) rather than pulled from content — find-and-replace
-  across `src/pages/*.astro`.
+- **Name, role, monogram:** set once as the defaults of `name`, `role` and
+  `monogram` in `src/components/Rail.astro` (currently `Gaspery.`, `Words,
+  design, tools & links`, `G`) — pages pass only `current`. The author's name
+  in the colophon lives in that same file.
 - **Elsewhere links:** Email/GitHub/Bluesky/Mastodon/Letterboxd/RSS live in
   `src/data/sidebar/index.json`, also editable at `/keystatic` → Sidebar.
 - **Subscribe button:** `src/components/Footer.astro` is an honest stand-in —

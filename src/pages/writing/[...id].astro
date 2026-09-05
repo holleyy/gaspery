@@ -37,7 +37,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
    that reindents it changes every existing writing page's HTML, the same
    class of break as the whitespace this comment already defends. */
 ---
-<Base title={`${post.data.title} · Alex Holley`} description={post.data.dek} mono={isFeature(post.data)}>
+<Base title={`${post.data.title} · Gaspery`} description={post.data.dek} mono={isFeature(post.data)}>
   {' '}{isFeature(post.data) ? (
     <FeatureArticle post={post}>
       <ThemeToggle slot="theme-toggle" />
@@ -45,7 +45,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
     </FeatureArticle>
   ) : (
   <main class="article" id="main">
-    <a class="back" href="/">← Alex Holley</a>
+    <a class="back" href="/">← Gaspery</a>
 
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>

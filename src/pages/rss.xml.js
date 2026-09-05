@@ -36,7 +36,7 @@ export async function GET(context) {
   const site = context.site.href.replace(/\/$/, '');
 
   return rss({
-    title: 'Alex Holley · a working notebook',
+    title: 'Gaspery · a working notebook',
     description: 'Product, design & small software. A working notebook.',
     site: context.site,
     items: posts.map((post) => {
