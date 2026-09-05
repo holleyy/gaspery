@@ -697,7 +697,9 @@ const { src, alt = '', caption, eyebrow, heading, accent, lede } = Astro.props;
     {src && (
       <figure class="plate__figure">
         <img src={src} alt={alt} width="640" height="640" loading="eager" decoding="async" />
-        {caption && <figcaption set:html={caption} />}
+        {(captionLead || caption) && (
+          <figcaption>{captionLead && <b>{captionLead}</b>}{captionLead && caption ? ' ' : ''}{caption}</figcaption>
+        )}
       </figure>
     )}
   </div>
@@ -736,7 +738,9 @@ const { src, alt = '', caption, eyebrow, heading, accent, lede } = Astro.props;
 </style>
 ```
 
-`set:html` on the caption is deliberate — captions carry a `<b>` lead-in. It is author-controlled build-time content, the same trust boundary `RisoPhoto.astro` already documents.
+**Correction, found in review:** an earlier draft rendered the caption through `set:html` so it could carry a bold lead-in, justified as "the same trust boundary `RisoPhoto.astro` documents". That justification was wrong — `RisoPhoto` *escapes* its caption before injecting, precisely so literal HTML is never interpreted. Rendering a plain Keystatic text field as live HTML is the opposite of that precedent.
+
+`captionLead` is a separate field instead. It gives the same typography with no injection surface, and it is clearer in the CMS than asking an author to type `<b>` into a text box.
 
 - [ ] **Step 4: Write Band**
 
@@ -941,6 +945,13 @@ Create `src/components/feature/Spec.astro`:
    asymmetry is not a special case — it is what makes the multi-column form
    work at all. */
 interface Item {
+  /* `num` and `key` are separate fields, not one string carrying markup.
+     An earlier draft rendered `key` through set:html so a caption could
+     bold its number — but that makes a plain Keystatic text field a live
+     HTML sink, and the RisoPhoto precedent cited for it actually ESCAPES
+     before injecting. Two fields give the same typography with no
+     injection surface. */
+  num?: string;
   key?: string;
   glyph?: string;
   heading?: string;
@@ -969,7 +980,9 @@ const beside = columns > 1;
       {items.map((item) => (
         <li class="spec__item">
           {item.glyph && <img class="spec__glyph" src={item.glyph} alt="" width="120" height="120" loading="lazy" />}
-          {item.key && <span class="feature-key" set:html={item.key} />}
+          {(item.num || item.key) && (
+            <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
+          )}
           {item.heading && <h3 class="spec__heading">{item.heading}</h3>}
           {item.body && <p class="spec__body">{item.body}</p>}
         </li>
@@ -1132,7 +1145,8 @@ In `keystatic.config.ts`, add to `featureComponents`:
       detail: fields.text({ label: 'Detail', multiline: true }),
       items: fields.array(
         fields.object({
-          key: fields.text({ label: 'Key', description: 'e.g. "<b>01</b> / Name"' }),
+          num: fields.text({ label: 'Number', description: 'e.g. "01" — rendered in the secondary ink.' }),
+          key: fields.text({ label: 'Key', description: 'e.g. "Name" — rendered after the number.' }),
           glyph: fields.text({ label: 'Glyph path', description: 'Optional SVG, e.g. /studies/grod-icon/mb-idle.svg' }),
           heading: fields.text({ label: 'Heading' }),
           body: fields.text({ label: 'Body', multiline: true }),
@@ -1162,7 +1176,7 @@ In `keystatic.config.ts`, add to `featureComponents`:
 Append to `src/content/writing/grod-listening-o.mdoc`:
 
 ```markdoc
-{% spec columns=1 heading="The G was the start. The Ø made it ours." standfirst="How the mark arrived at itself, in four moves." items=[{"key":"<b>01</b> / Preserve","heading":"Keep the useful grammar","body":"The first idea already held three relevant cues: a letter, a recording target, and a needle. The work was not to replace that thought, but to make it unmistakable."},{"key":"<b>02</b> / Enlarge","heading":"Let the mark fill the object","body":"Early frames spent too much space on cream surround and layered bevels. The chosen form grows until the symbol, rather than the container, owns the Dock."},{"key":"<b>03</b> / Name","heading":"Move from G to Ø","body":"The wildcard became the answer. The slash in GRØD's Ø already carries direction. Turn its centre into a listening aperture and the name becomes the mechanism."},{"key":"<b>04</b> / Print","heading":"Trade clinical polish for memory","body":"Warm paper, dense ink, halftone edges, and slight misregistration make the icon feel handled. The software is precise. The identity is allowed to feel human."}] /%}
+{% spec columns=1 heading="The G was the start. The Ø made it ours." standfirst="How the mark arrived at itself, in four moves." items=[{"num":"01","key":"Preserve","heading":"Keep the useful grammar","body":"The first idea already held three relevant cues: a letter, a recording target, and a needle. The work was not to replace that thought, but to make it unmistakable."},{"num":"02","key":"Enlarge","heading":"Let the mark fill the object","body":"Early frames spent too much space on cream surround and layered bevels. The chosen form grows until the symbol, rather than the container, owns the Dock."},{"num":"03","key":"Name","heading":"Move from G to Ø","body":"The wildcard became the answer. The slash in GRØD's Ø already carries direction. Turn its centre into a listening aperture and the name becomes the mechanism."},{"num":"04","key":"Print","heading":"Trade clinical polish for memory","body":"Warm paper, dense ink, halftone edges, and slight misregistration make the icon feel handled. The software is precise. The identity is allowed to feel human."}] /%}
 
 {% swatches heading="Colour with a job." items=[{"hex":"#D41467","job":"Recording energy"},{"hex":"#168A96","job":"Signal and echo"},{"hex":"#48234F","job":"Direction and depth"},{"hex":"#F3E7CF","job":"Warm paper"}] /%}
 ```
