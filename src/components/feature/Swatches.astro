@@ -1,0 +1,38 @@
+---
+/* The one block that legitimately prints inks other than the site's own: the
+   chips ARE the subject matter. The rule the format follows is that an app's
+   colours may appear inside a study about that identity, never in chrome. */
+interface Props {
+  heading?: string;
+  items: { hex: string; job?: string }[];
+}
+const { heading, items = [] } = Astro.props;
+---
+<section class="swatches">
+  <div class="feature-wrap">
+    {heading && <h2 class="feature-h swatches__heading">{heading}</h2>}
+    <ul class="swatches__grid">
+      {items.map((item) => (
+        <li class="swatch">
+          <div class="swatch__chip" style={`background:${item.hex}`}></div>
+          <div class="swatch__body">
+            <div class="swatch__hex">{item.hex.toUpperCase()}</div>
+            {item.job && <div class="swatch__job">{item.job}</div>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .swatches { padding: 0 0 80px; }
+  .swatches__heading { margin-bottom: 40px; }
+  .swatches__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .swatch { border: 1px solid var(--color-hairline); border-radius: var(--radius-card); overflow: hidden; }
+  .swatch__chip { height: 120px; }
+  .swatch__body { padding: 14px 16px 18px; }
+  .swatch__hex { font-family: var(--font-mono); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; }
+  .swatch__job { font-size: 13px; color: var(--color-ink-secondary); margin-top: 2px; }
+  @media (max-width: 900px) { .swatches__grid { grid-template-columns: repeat(2, 1fr); } }
+</style>

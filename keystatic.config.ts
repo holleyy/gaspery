@@ -68,6 +68,40 @@ const featureComponents = {
       }),
     },
   }),
+  spec: block({
+    label: 'Spec',
+    description: 'Numbered readings. One column stacks; three or four put the heading beside the grid.',
+    schema: {
+      columns: fields.integer({ label: 'Columns', defaultValue: 1 }),
+      heading: fields.text({ label: 'Heading' }),
+      standfirst: fields.text({ label: 'Standfirst', multiline: true }),
+      detail: fields.text({ label: 'Detail', multiline: true }),
+      items: fields.array(
+        fields.object({
+          num: fields.text({ label: 'Number', description: 'e.g. "01" — rendered in the secondary ink.' }),
+          key: fields.text({ label: 'Key', description: 'e.g. "Name" — rendered after the number.' }),
+          glyph: fields.text({ label: 'Glyph path', description: 'Optional SVG, e.g. /studies/grod-icon/mb-idle.svg' }),
+          heading: fields.text({ label: 'Heading' }),
+          body: fields.text({ label: 'Body', multiline: true }),
+        }),
+        { label: 'Items', itemLabel: (props) => props.fields.heading.value || props.fields.key.value },
+      ),
+    },
+  }),
+  swatches: block({
+    label: 'Swatches',
+    description: 'Ink chips. These print the subject’s own colours, not the site’s.',
+    schema: {
+      heading: fields.text({ label: 'Heading' }),
+      items: fields.array(
+        fields.object({
+          hex: fields.text({ label: 'Hex', validation: { isRequired: true } }),
+          job: fields.text({ label: 'Job' }),
+        }),
+        { label: 'Swatches', itemLabel: (props) => props.fields.hex.value },
+      ),
+    },
+  }),
 };
 const writingComponents = { ...risoPhotoComponents, cite, ...featureComponents };
 

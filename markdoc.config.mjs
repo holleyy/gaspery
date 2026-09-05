@@ -98,5 +98,24 @@ export default defineMarkdocConfig({
         accentIndex: { type: Number },
       },
     },
+    spec: {
+      render: component('./src/components/feature/Spec.astro'),
+      selfClosing: true,
+      attributes: {
+        columns: { type: Number },
+        heading: { type: String },
+        standfirst: { type: String },
+        detail: { type: String },
+        items: { type: Array, required: true },
+      },
+    },
+    swatches: {
+      render: component('./src/components/feature/Swatches.astro'),
+      selfClosing: true,
+      attributes: {
+        heading: { type: String },
+        items: { type: Array, required: true },
+      },
+    },
   },
 });

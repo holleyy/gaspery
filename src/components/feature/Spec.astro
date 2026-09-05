@@ -1,0 +1,121 @@
+---
+/* One component, one variant axis. `columns=1` stacks rows with the heading
+   above; `columns>1` puts the heading BESIDE the grid in a left column, which
+   is what gives the display type room to run several lines deep. That
+   asymmetry is not a special case — it is what makes the multi-column form
+   work at all. */
+interface Item {
+  /* `num` and `key` are separate fields, not one string carrying markup.
+     An earlier draft rendered `key` through set:html so a caption could
+     bold its number — but that makes a plain Keystatic text field a live
+     HTML sink, and the RisoPhoto precedent cited for it actually ESCAPES
+     before injecting. Two fields give the same typography with no
+     injection surface. */
+  num?: string;
+  key?: string;
+  glyph?: string;
+  heading?: string;
+  body?: string;
+}
+interface Props {
+  columns?: number;
+  heading?: string;
+  standfirst?: string;
+  detail?: string;
+  items: Item[];
+}
+const { columns = 1, heading, standfirst, detail, items = [] } = Astro.props;
+const beside = columns > 1;
+---
+<section class="spec" data-beside={beside ? '' : undefined}>
+  <div class="feature-wrap spec__layout">
+    {(heading || standfirst || detail) && (
+      <div class="spec__head">
+        {heading && <h2 class="feature-h">{heading}</h2>}
+        {standfirst && <p class="spec__standfirst">{standfirst}</p>}
+        {detail && <p class="spec__detail">{detail}</p>}
+      </div>
+    )}
+    <ul class="spec__list" style={`--spec-columns:${columns}`}>
+      {items.map((item) => (
+        <li class="spec__item">
+          {item.glyph && <img class="spec__glyph" src={item.glyph} alt="" width="120" height="120" loading="lazy" />}
+          {(item.num || item.key) && (
+            <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
+          )}
+          {item.heading && <h3 class="spec__heading">{item.heading}</h3>}
+          {item.body && <p class="spec__body">{item.body}</p>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .spec { padding: 0 0 80px; }
+  .spec__standfirst {
+    font-family: var(--font-serif);
+    font-size: clamp(19px, 2vw, 30px);
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    margin-top: 24px;
+  }
+  .spec__detail { margin-top: 22px; font-size: 16px; line-height: 1.62; color: var(--color-ink-secondary); max-width: 46ch; }
+  .spec__list { list-style: none; margin: 0; padding: 0; display: grid; }
+
+  /* columns=1 — heading above, hairline rows. */
+  .spec:not([data-beside]) .spec__head { margin-bottom: 44px; }
+  .spec:not([data-beside]) .spec__item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 44px;
+    padding: 30px 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .spec:not([data-beside]) .spec__item:last-child { border-bottom: 1px solid var(--color-hairline); }
+
+  /* columns>1 — heading beside, tall ruled columns. No cards: hairlines and
+     vertical void, so the marks carry the section rather than boxes. */
+  .spec[data-beside] .spec__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: clamp(36px, 5vw, 72px);
+    align-items: start;
+  }
+  .spec[data-beside] .spec__list {
+    grid-template-columns: repeat(var(--spec-columns), 1fr);
+    border: 1px solid var(--color-hairline);
+  }
+  .spec[data-beside] .spec__item {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 0;
+  }
+  .spec[data-beside] .spec__item + .spec__item { border-left: 1px solid var(--color-hairline); }
+  .spec[data-beside] .spec__glyph {
+    flex: 1;
+    width: clamp(72px, 8vw, 112px);
+    height: auto;
+    align-self: center;
+    margin: 44px 0;
+    object-fit: contain;
+  }
+  .spec[data-beside] .feature-key,
+  .spec[data-beside] .spec__heading,
+  .spec[data-beside] .spec__body { padding-inline: 26px; }
+  .spec[data-beside] .feature-key { padding-top: 22px; border-top: 1px solid var(--color-hairline); }
+  .spec[data-beside] .spec__body { padding-bottom: 30px; }
+
+  .spec__heading { font-family: var(--font-serif); font-size: 20px; font-weight: 700; margin: 10px 0 9px; }
+  .spec__body { font-size: 15px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 52ch; }
+  .spec:not([data-beside]) .spec__body { font-size: 17px; }
+
+  @media (max-width: 1000px) {
+    .spec[data-beside] .spec__layout { grid-template-columns: 1fr; }
+    .spec[data-beside] .spec__list { grid-template-columns: 1fr; }
+    .spec[data-beside] .spec__item { min-height: 0; }
+    .spec[data-beside] .spec__item + .spec__item { border-left: 0; border-top: 1px solid var(--color-hairline); }
+    .spec:not([data-beside]) .spec__item { grid-template-columns: 1fr; gap: 10px; }
+  }
+</style>
