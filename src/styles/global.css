@@ -189,8 +189,10 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* Identity */
-.identity { display: flex; flex-direction: column; gap: 18px; }
-.monogram { position: relative; width: 46px; height: 46px; }
+.identity { display: flex; flex-direction: column; gap: 18px; position: relative; }
+/* Text block and plate are lifted above the dots (z-index 0). */
+.identity__text { position: relative; z-index: 1; }
+.monogram { position: relative; width: 46px; height: 46px; z-index: 1; }
 .monogram__ink,
 .monogram__ghost {
   position: absolute; inset: 0; width: 46px; height: 46px; border-radius: 2px;
@@ -297,16 +299,22 @@ img, svg { display: block; max-width: 100%; }
 }
 .hero-intro { position: relative; z-index: 2; max-width: 600px; font-size: var(--text-body); line-height: 1.65; }
 
-/* Halftone dot field — teal, multiply on light / screen on dark, fading out. */
+/* Halftone dot field — teal, multiply on light / screen on dark, fading out.
+   The recipe is shared; where it sits depends on the host. */
 .halftone {
-  position: absolute; top: -20px; right: -6px; width: 320px; height: 200px;
+  position: absolute;
   background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px);
   background-size: 7px 7px;
   mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
           mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%);
-  pointer-events: none; z-index: 1;
+  pointer-events: none;
 }
+/* In the Hero (404 only now) it balances the 56px headline. */
+.hero .halftone { top: -20px; right: -6px; width: 320px; height: 200px; z-index: 1; }
+/* In the rail it bleeds off the identity block's top-right corner, behind
+   the plate and wordmark (both z-index: 1). */
+.identity .halftone { top: -58px; right: -48px; width: 170px; height: 120px; z-index: 0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .halftone { mix-blend-mode: screen; } }
 :root[data-theme='dark'] .halftone { mix-blend-mode: screen; }
 
@@ -585,7 +593,10 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   .hero-title .ink, .hero-title .ghost { line-height: 1.18; }
   .hero-title .ghost { transform: translate(2px, 2px); }
   .rail-wordmark__ink, .rail-wordmark__ghost { font-size: 32px; }
-  .halftone { width: 150px; height: 120px; top: -8px; }
+  .hero .halftone { width: 150px; height: 120px; top: -8px; }
+  /* right: -24px meets the page's 24px side padding exactly, so the dots
+     touch the viewport edge without creating horizontal scroll. */
+  .identity .halftone { width: 150px; height: 120px; top: -36px; right: -24px; }
   .post__dek { max-width: none; }
   .app-page { padding: 36px 24px 40px; gap: 32px; }
   .app-editorial__spread, .app-editorial__spread--reverse { flex-direction: column; }

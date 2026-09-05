@@ -53,3 +53,41 @@ test('accessibility gate hides the rail ghost alongside the hero ghost', () => {
     /\(prefers-contrast: more\)\s*\{\s*\.hero-title \.ghost \{ display: none; \}\s*\.rail-wordmark__ghost \{ display: none; \}/
   );
 });
+
+test('rail identity carries the halftone dots', () => {
+  assert.match(rail, /<a class="identity"[^>]*>\s*<div class="halftone" aria-hidden="true"><\/div>/);
+});
+
+test('halftone placement is scoped: recipe unscoped, position per host', () => {
+  const recipe = css.match(/\n\.halftone\s*\{([^}]*)\}/);
+  assert.ok(recipe, 'unscoped .halftone rule missing');
+  assert.match(recipe![1], /background-image:\s*radial-gradient\(var\(--color-teal\)/);
+  assert.doesNotMatch(recipe![1], /\btop:/);
+  assert.doesNotMatch(recipe![1], /\bwidth:/);
+
+  const hero = css.match(/\.hero \.halftone\s*\{([^}]*)\}/);
+  assert.ok(hero, '.hero .halftone missing');
+  assert.match(hero![1], /top:\s*-20px/);
+  assert.match(hero![1], /width:\s*320px/);
+
+  const identity = css.match(/\.identity \.halftone\s*\{([^}]*)\}/);
+  assert.ok(identity, '.identity .halftone missing');
+  assert.match(identity![1], /top:\s*-58px/);
+  assert.match(identity![1], /right:\s*-48px/);
+  assert.match(identity![1], /width:\s*170px/);
+  assert.match(identity![1], /height:\s*120px/);
+});
+
+test('collapsed layout keeps the rail dots inside the viewport', () => {
+  const collapsed = css.slice(css.indexOf('@media (max-width: 1000px)'));
+  assert.match(collapsed, /\.identity \.halftone\s*\{[^}]*right:\s*-24px/);
+  assert.match(collapsed, /\.identity \.halftone\s*\{[^}]*top:\s*-36px/);
+  assert.match(collapsed, /\.hero \.halftone\s*\{[^}]*top:\s*-8px/);
+  // The old unscoped override would drag the hero's values onto the rail.
+  assert.doesNotMatch(collapsed, /\n\s*\.halftone\s*\{/);
+});
+
+test('plate and wordmark sit above the dots', () => {
+  assert.match(css, /\.identity\s*\{[^}]*position:\s*relative/);
+  assert.match(css, /\.monogram\s*\{[^}]*z-index:\s*1/);
+});

@@ -43,6 +43,7 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
 ---
 <aside class="rail">
   <a class="identity" href="/" aria-label={`${name.replace(/\.$/, '')}, home`}>
+    <div class="halftone" aria-hidden="true"></div>
     <div class="monogram">
       <div class="monogram__ghost"></div>
       <div class="monogram__ink">{monogram}</div>
