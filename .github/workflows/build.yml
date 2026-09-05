@@ -1,0 +1,38 @@
+# Runs the same build Cloudflare Workers Builds runs, before it runs it.
+#
+# The gap this closes: content saved through Keystatic is committed straight to
+# `main`, and a schema mismatch between keystatic.config.ts and the Zod schema
+# in src/content.config.ts surfaces only at build time. A date-less post did
+# exactly that in August 2026 (fixed in 1f76fbc) and the site quietly stopped
+# deploying for two days, with nothing in the editor to explain why.
+#
+# Field-level validation alone cannot close it — `readingTime` is required only
+# for essays (see the superRefine in src/content.config.ts), and Keystatic's
+# flat fields cannot express a conditional requirement. Building on push can.
+name: Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Unit tests first: they are fast, and a failure here is cheaper to read
+      # than the same problem surfacing as a build error.
+      - run: npm test
+
+      # The deploy gate. Any content entry that violates the collection schema
+      # fails here rather than in Cloudflare.
+      - run: npm run build
