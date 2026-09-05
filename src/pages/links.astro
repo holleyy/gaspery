@@ -14,9 +14,9 @@ const posts = (await getCollection('writing'))
 const newestId = newestEssayId(posts);
 const postProps = posts.map((p) => toPostProps(p, newestId));
 ---
-<Base title="Links · Alex Holley" description="Things worth pointing at, newest first.">
+<Base title="Links · Gaspery" description="Things worth pointing at, newest first.">
   <div class="page">
-    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="Writing" />
+    <Rail current="Writing" />
 
     <main class="main" id="main">
       <WritingList posts={postProps} showMore={false} filter="links" />

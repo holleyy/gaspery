@@ -107,3 +107,24 @@ test('404 keeps its Hero', () => {
   assert.match(read('src/pages/404.astro'), /<Hero\b/);
   assert.match(read('src/components/Hero.astro'), /class="halftone"/);
 });
+
+test('the chrome says Gaspery; only content and the colophon name Alex', () => {
+  const walk = (dir: string): string[] =>
+    readdirSync(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true }).flatMap((d) =>
+      d.isDirectory() ? walk(`${dir}/${d.name}`) : [`${dir}/${d.name}`]);
+  const chrome = [...walk('src/pages'), ...walk('src/layouts'), ...walk('src/components')]
+    .filter((f) => !f.endsWith('Rail.astro'));
+  for (const f of chrome) {
+    assert.doesNotMatch(read(f), /Alex Holley/, `${f} still names Alex Holley`);
+  }
+  assert.match(read('src/pages/index.astro'), /title="Gaspery · a working notebook"/);
+  assert.match(read('src/pages/rss.xml.js'), /title: 'Gaspery · a working notebook'/);
+  assert.match(read('src/layouts/Base.astro'), /title="Gaspery · a working notebook"/);
+  for (const f of ['src/pages/writing/[...id].astro', 'src/pages/apps/[id].astro', 'src/components/FeatureArticle.astro']) {
+    assert.match(read(f), /Gaspery<\/a>/, `${f} back link`);
+  }
+  // Pages pass only `current`; the identity comes from Rail's defaults.
+  for (const f of walk('src/pages')) {
+    assert.doesNotMatch(read(f), /<Rail[^>]*\bname=/, `${f} overrides the rail name`);
+  }
+});

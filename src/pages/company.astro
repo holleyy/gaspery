@@ -14,9 +14,9 @@ const entry = await getEntry('company', 'index');
 if (!entry) throw new Error('Missing company singleton at src/content/company/index.mdoc');
 const { Content } = await render(entry);
 ---
-<Base title={`${entry.data.title} · Alex Holley`} description={entry.data.dek}>
+<Base title={`${entry.data.title} · Gaspery`} description={entry.data.dek}>
   <div class="page">
-    <Rail name="Alex Holley" role="Words, design, tools & links" monogram="A" current="" />
+    <Rail current="" />
 
     <main class="main" id="main">
       <section class="company-page">
