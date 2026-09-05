@@ -20,12 +20,19 @@ interface Props {
   level?: 1 | 2;
 }
 const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede, level = 2 } = Astro.props;
+
+/* The mirror of `data-solo`. A plate with a `src` and no copy — "here is the
+   mark, look at it" — otherwise keeps its copy column and renders 551px of
+   nothing beside a squeezed image, which is the same dead-box shape a Spec
+   with too many columns produces. If there is nothing to say, the figure
+   takes the whole stage. */
+const hasCopy = Boolean(eyebrow || heading || lede);
 // Capitalized so Astro treats it as a dynamic tag rather than literal text —
 // same pattern as `const Tag = app.url ? 'a' : 'div'` in AppsList.astro.
 const Heading = level === 1 ? 'h1' : 'h2';
 ---
 <section class="plate">
-  <div class="feature-wrap plate__grid" data-solo={src ? undefined : ''}>
+  <div class="feature-wrap plate__grid" data-solo={src ? undefined : ''} data-figure-only={hasCopy ? undefined : ''}>
     <div class="plate__copy">
       {eyebrow && <p class="feature-eyebrow">{eyebrow}</p>}
       {heading && (
@@ -64,6 +71,8 @@ const Heading = level === 1 ? 'h1' : 'h2';
     align-items: center;
   }
   .plate__grid[data-solo] { grid-template-columns: minmax(0, 1fr); }
+  .plate__grid[data-figure-only] { grid-template-columns: minmax(0, 1fr); }
+  .plate__grid[data-figure-only] .plate__figure { max-width: 640px; margin-inline: auto; }
   .plate__copy :global(.feature-h) em { font-style: italic; color: var(--color-brand-strong); }
   .plate__lede {
     margin-top: 24px;
