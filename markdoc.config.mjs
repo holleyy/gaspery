@@ -102,6 +102,11 @@ export default defineMarkdocConfig({
       render: component('./src/components/feature/Spec.astro'),
       selfClosing: true,
       attributes: {
+        // Keystatic's matching field is fields.integer, not Number — this
+        // declaration only validates that a number arrived, not that it's a
+        // whole number in range. Spec.astro's `columnCount` clamp is what
+        // actually reconciles the two; don't remove the clamp thinking this
+        // type declaration alone covers it.
         columns: { type: Number },
         heading: { type: String },
         standfirst: { type: String },

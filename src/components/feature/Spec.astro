@@ -25,7 +25,14 @@ interface Props {
   items: Item[];
 }
 const { columns = 1, heading, standfirst, detail, items = [] } = Astro.props;
-const beside = columns > 1;
+/* Clamped, not trusted: `columns` is author input and the grid is ruled, so
+   an over-count leaves empty bordered tracks and a fractional value voids
+   the whole grid-template-columns declaration. This is also what reconciles
+   this file's `columns: number` with Keystatic's `fields.integer` (see
+   markdoc.config.mjs) — the clamp, not the type declaration, is what keeps
+   a fractional or out-of-range value from ever reaching the grid. */
+const columnCount = Math.max(1, Math.min(Math.trunc(Number(columns)) || 1, items.length || 1));
+const beside = columnCount > 1;
 ---
 <section class="spec" data-beside={beside ? '' : undefined}>
   <div class="feature-wrap spec__layout">
@@ -36,7 +43,7 @@ const beside = columns > 1;
         {detail && <p class="spec__detail">{detail}</p>}
       </div>
     )}
-    <ul class="spec__list" style={`--spec-columns:${columns}`}>
+    <ul class="spec__list" style={`--spec-columns:${columnCount}`}>
       {items.map((item) => (
         <li class="spec__item">
           {item.glyph && <img class="spec__glyph" src={item.glyph} alt="" width="120" height="120" loading="lazy" />}

@@ -7,14 +7,23 @@ interface Props {
   items: { hex: string; job?: string }[];
 }
 const { heading, items = [] } = Astro.props;
+
+/* A swatch without a colour is not a swatch, so an invalid item is dropped
+   rather than rendered as a blank chip or allowed to throw. Keystatic marks
+   `hex` required, but that only guards the CMS path — a hand-edited .mdoc
+   reaches here unchecked, and a build that dies on content is how this site
+   has frozen before. */
+const chips = items.filter(
+  (item) => item && typeof item.hex === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(item.hex.trim())
+);
 ---
 <section class="swatches">
   <div class="feature-wrap">
     {heading && <h2 class="feature-h swatches__heading">{heading}</h2>}
     <ul class="swatches__grid">
-      {items.map((item) => (
+      {chips.map((item) => (
         <li class="swatch">
-          <div class="swatch__chip" style={`background:${item.hex}`}></div>
+          <div class="swatch__chip" style={{ background: item.hex }}></div>
           <div class="swatch__body">
             <div class="swatch__hex">{item.hex.toUpperCase()}</div>
             {item.job && <div class="swatch__job">{item.job}</div>}
