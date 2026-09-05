@@ -1,5 +1,5 @@
 ---
-import { readFileSync } from 'node:fs';
+import { readStudySvg } from '../../lib/studyAsset';
 /* One component, one variant axis. `columns=1` stacks rows with the heading
    above; `columns>1` puts the heading BESIDE the grid in a left column, which
    is what gives the display type room to run several lines deep. That
@@ -17,8 +17,12 @@ interface Item {
   glyph?: string;
   /* Sets `color` on the inlined mark via `.spec__glyph[data-ink]`. The three
      reading marks (and the menu-bar marks) are drawn with stroke="currentColor"
-     with no literal colour, precisely so this can tint them per item. */
-  ink?: 'brand' | 'teal' | 'aubergine';
+     with no literal colour, precisely so this can tint them per item.
+     'inherit' (Keystatic's default — see keystatic.config.ts) is not one of
+     the three tint values: it means "leave `data-ink` off, keep ambient
+     currentColor", so a CMS save that never touched this field can't
+     silently start tinting a glyph that was previously ambient. */
+  ink?: 'inherit' | 'brand' | 'teal' | 'aubergine';
   heading?: string;
   body?: string;
 }
@@ -43,10 +47,18 @@ const beside = columnCount > 1;
    document and does not inherit currentColor, so a `stroke="currentColor"`
    glyph would render in whatever colour the file itself resolves to,
    ignoring `ink` entirely. Build-time read of files we ship ourselves,
-   same approach as Glyphs.astro. */
+   same approach as Glyphs.astro — `item.glyph` is a Keystatic text field
+   (author input), so `readStudySvg` confirms containment under
+   public/studies/ before anything is read. */
 const withGlyph = items.map((item) => ({
   ...item,
-  glyphSvg: item.glyph ? readFileSync(`public${item.glyph}`, 'utf8') : undefined,
+  glyphSvg: item.glyph
+    ? readStudySvg(item.glyph, `Spec item "${item.heading ?? item.key ?? item.glyph}"`)
+    : undefined,
+  // Only a real tint reaches `data-ink`. 'inherit' and any unset value both
+  // leave the attribute off, so the mark keeps taking ambient currentColor —
+  // see the comment on `Item.ink` above for why that has to be the default.
+  dataInk: item.ink === 'brand' || item.ink === 'teal' || item.ink === 'aubergine' ? item.ink : undefined,
 }));
 ---
 <section class="spec" data-beside={beside ? '' : undefined}>
@@ -61,7 +73,7 @@ const withGlyph = items.map((item) => ({
     <ul class="spec__list" style={`--spec-columns:${columnCount}`}>
       {withGlyph.map((item) => (
         <li class="spec__item">
-          {item.glyphSvg && <span class="spec__glyph" data-ink={item.ink} set:html={item.glyphSvg} />}
+          {item.glyphSvg && <span class="spec__glyph" data-ink={item.dataInk} set:html={item.glyphSvg} />}
           {(item.num || item.key) && (
             <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
           )}

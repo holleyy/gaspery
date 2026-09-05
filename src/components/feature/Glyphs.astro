@@ -1,5 +1,5 @@
 ---
-import { readFileSync } from 'node:fs';
+import { readStudySvg } from '../../lib/studyAsset';
 /* A family of small monochrome marks shown on both grounds they must survive.
    The SVGs are drawn with stroke="currentColor", so one file renders dark on
    the paper strip and light on the ink strip — which is exactly the macOS
@@ -18,10 +18,12 @@ const strips = [
 
 /* Inlined, not <img src>: an externally-referenced SVG is an isolated
    document and does not inherit currentColor, so on the ink strip the marks
-   would render dark-on-dark. Build-time read of files we ship ourselves. */
+   would render dark-on-dark. Build-time read of files we ship ourselves —
+   `mark.src` is a Keystatic text field (author input), so `readStudySvg`
+   confirms it stays under public/studies/ before anything is read. */
 const inlined = marks.map((mark) => ({
   ...mark,
-  svg: readFileSync(`public${mark.src}`, 'utf8'),
+  svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
 }));
 ---
 <section class="glyphs">

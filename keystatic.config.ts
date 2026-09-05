@@ -83,13 +83,14 @@ const featureComponents = {
           glyph: fields.text({ label: 'Glyph path', description: 'Optional SVG, e.g. /studies/grod-icon/mb-idle.svg' }),
           ink: fields.select({
             label: 'Glyph ink',
-            description: 'Tints the inlined glyph via currentColor. Leave unset to inherit the surrounding text colour.',
+            description: 'Tints the inlined glyph via currentColor. "Inherit" (the default) leaves it taking the ambient text colour — pick a tint only when the glyph should carry an explicit colour of its own.',
             options: [
+              { label: 'Inherit', value: 'inherit' },
               { label: 'Brand', value: 'brand' },
               { label: 'Teal', value: 'teal' },
               { label: 'Aubergine', value: 'aubergine' },
             ],
-            defaultValue: 'brand',
+            defaultValue: 'inherit',
           }),
           heading: fields.text({ label: 'Heading' }),
           body: fields.text({ label: 'Body', multiline: true }),
