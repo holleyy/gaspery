@@ -15,14 +15,12 @@ interface Item {
   num?: string;
   key?: string;
   glyph?: string;
-  /* Sets `color` on the inlined mark via `.spec__glyph[data-ink]`. The three
-     reading marks (and the menu-bar marks) are drawn with stroke="currentColor"
-     with no literal colour, precisely so this can tint them per item.
-     'inherit' (Keystatic's default — see keystatic.config.ts) is not one of
-     the three tint values: it means "leave `data-ink` off, keep ambient
-     currentColor", so a CMS save that never touched this field can't
-     silently start tinting a glyph that was previously ambient. */
-  ink?: 'inherit' | 'brand' | 'teal' | 'aubergine';
+  /* A named site token (scheme-aware, resolved in CSS) or a literal hex —
+     a study's own ink is content, the same as a Swatches chip. `inkDark`
+     is the dark-scheme counterpart for a hex that would not survive the
+     ground inverting; omit it and `ink` is used in both. */
+  ink?: string;
+  inkDark?: string;
   heading?: string;
   body?: string;
 }
@@ -56,15 +54,23 @@ const beside = columnCount > 1 && columnCount <= 3;
    same approach as Glyphs.astro — `item.glyph` is a Keystatic text field
    (author input), so `readStudySvg` confirms containment under
    public/studies/ before anything is read. */
+const HEX = /^#[0-9a-fA-F]{3,8}$/;
 const withGlyph = items.map((item) => ({
   ...item,
   glyphSvg: item.glyph
     ? readStudySvg(item.glyph, `Spec item "${item.heading ?? item.key ?? item.glyph}"`)
     : undefined,
-  // Only a real tint reaches `data-ink`. 'inherit' and any unset value both
-  // leave the attribute off, so the mark keeps taking ambient currentColor —
-  // see the comment on `Item.ink` above for why that has to be the default.
-  dataInk: item.ink === 'brand' || item.ink === 'teal' || item.ink === 'aubergine' ? item.ink : undefined,
+  // Only a named site token reaches `data-ink`. 'inherit' and any unset value
+  // both leave the attribute off, so the mark keeps taking ambient
+  // currentColor — see the comment on `Item.ink` above for why that has to
+  // be the default. A hex takes the `inkStyle` path below instead.
+  dataInk: item.ink === 'brand' || item.ink === 'teal' ? item.ink : undefined,
+  // A study's own ink, supplied inline via a custom property rather than a
+  // fixed set of `[data-ink]` selectors — see the CSS rule below for why a
+  // dark counterpart matters.
+  inkStyle: HEX.test(item.ink ?? '')
+    ? { '--spec-ink': item.ink, '--spec-ink-dark': HEX.test(item.inkDark ?? '') ? item.inkDark : item.ink }
+    : undefined,
 }));
 ---
 <section class="spec" data-beside={beside ? '' : undefined}>
@@ -79,7 +85,7 @@ const withGlyph = items.map((item) => ({
     <ul class="spec__list" style={`--spec-columns:${columnCount}`}>
       {withGlyph.map((item) => (
         <li class="spec__item">
-          {item.glyphSvg && <span class="spec__glyph" data-ink={item.dataInk} set:html={item.glyphSvg} />}
+          {item.glyphSvg && <span class="spec__glyph" data-ink={item.dataInk} style={item.inkStyle} set:html={item.glyphSvg} />}
           {(item.num || item.key) && (
             <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
           )}
@@ -158,9 +164,16 @@ const withGlyph = items.map((item) => ({
   .spec__glyph svg { display: block; }
   .spec:not([data-beside]) .spec__glyph { width: 120px; height: 120px; }
   .spec:not([data-beside]) .spec__glyph svg { width: 100%; height: 100%; }
-  .spec__glyph[data-ink='brand']     { color: var(--color-brand-strong); }
-  .spec__glyph[data-ink='teal']      { color: var(--color-teal-ink); }
-  .spec__glyph[data-ink='aubergine'] { color: var(--grod-aubergine); }
+  .spec__glyph[data-ink='brand'] { color: var(--color-brand-strong); }
+  .spec__glyph[data-ink='teal']  { color: var(--color-teal-ink); }
+  /* A study's own ink, supplied inline. Same three-state shape as the
+     palette in global.css — without the guard, forcing light on a dark OS
+     would still get the dark ink. */
+  .spec__glyph[style*='--spec-ink'] { color: var(--spec-ink); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .spec__glyph[style*='--spec-ink'] { color: var(--spec-ink-dark, var(--spec-ink)); }
+  }
+  :root[data-theme='dark'] .spec__glyph[style*='--spec-ink'] { color: var(--spec-ink-dark, var(--spec-ink)); }
 
   @media (max-width: 1000px) {
     .spec[data-beside] .spec__layout { grid-template-columns: 1fr; }

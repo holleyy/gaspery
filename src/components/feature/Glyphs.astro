@@ -1,39 +1,79 @@
 ---
-import { readStudySvg } from '../../lib/studyAsset';
-/* A family of small monochrome marks shown on both grounds they must survive.
-   The SVGs are drawn with stroke="currentColor", so one file renders dark on
-   the paper strip and light on the ink strip — which is exactly the macOS
-   template-icon contract the marks are studying. */
+import { readStudySvg, readStudyRaster } from '../../lib/studyAsset';
+/* A family of small marks shown on both grounds they must survive. Two mark
+   shapes, two read paths — chosen per mark by its own extension, not a prop
+   the author sets, so an existing GRØD entry (all .svg) keeps taking the
+   first path with no change to its content:
+
+   - .svg: inlined, same as always. These are drawn with
+     stroke="currentColor", so one file renders dark on the paper strip and
+     light on the ink strip — the macOS template-icon contract the GRØD
+     marks are studying. An externally-referenced SVG document does not
+     inherit currentColor, so inlining is the only way that contract works.
+   - anything else: an <img src>. An opaque raster (a .webp app icon, say)
+     has its own fixed colours already baked in — there is nothing for it to
+     inherit, and no way to inline a non-SVG format as markup regardless.
+     This is the Aftershot icon study's shape: one raster mark proved on a
+     dark field and a light one.
+
+   Both paths still run every mark's `src` through the same
+   public/studies/ containment guard (see src/lib/studyAsset.ts) before
+   anything reaches the page — inlining the bytes for one shape, trusting
+   the browser to fetch the other. */
 interface Props {
   heading?: string;
   standfirst?: string;
   marks: { src: string; label?: string }[];
   note?: string;
+  /* The two grounds are fixed — paper and ink are the site's two — but what
+     they are CALLED is the study's business. GRØD proves a menu-bar glyph;
+     Aftershot proves an app icon against a light and a dark field. Same
+     shape, different words, so the words are content. */
+  grounds?: { paper?: string; ink?: string };
+  /* The other half of "same shape, different words": the mark's SIZE is also
+     the study's business, not the format's. GRØD proves a 28px menu-bar
+     glyph; Aftershot proves a 120px Home Screen icon — a block that renders
+     every mark at 28px regardless would let a study claim a size its own
+     pixels don't show. Defaults to 28 so GRØD, which never sets this prop,
+     is pixel-identical to before this existed. */
+  markSize?: number;
 }
-const { heading, standfirst, marks = [], note } = Astro.props;
+const { heading, standfirst, marks = [], note, grounds, markSize } = Astro.props;
+// `??`, not `||`: mirrors ScaleProof's `rung.size ?? 64` — 0 isn't a
+// meaningful mark size, but nullish coalescing is still the correct operator
+// for a numeric prop that may arrive as `null` from an untouched Keystatic
+// field.
+const size = markSize ?? 28;
+/* `||`, not `??`: an untouched Keystatic sub-field can arrive as an empty
+   string rather than an absent key, and `??` would let that through as a
+   blank label — defeating the whole point of having a neutral default. No
+   author ever wants a deliberately empty ground label. */
 const strips = [
-  { key: 'paper', context: 'Light menu bar' },
-  { key: 'ink', context: 'Dark menu bar' },
+  { key: 'paper', context: grounds?.paper || 'Light ground' },
+  { key: 'ink', context: grounds?.ink || 'Dark ground' },
 ];
 
-/* Inlined, not <img src>: an externally-referenced SVG is an isolated
-   document and does not inherit currentColor, so on the ink strip the marks
-   would render dark-on-dark. Build-time read of files we ship ourselves —
-   `mark.src` is a Keystatic text field (author input), so `readStudySvg`
-   confirms it stays under public/studies/ before anything is read.
-
-   `readStudySvg` returns undefined for a wrong extension or a missing file
-   (see the comment on that function) rather than throwing — the filter
-   below is what turns that into "the mark drops out of both strips" instead
-   of an icon-less label sitting next to a missing glyph. */
+/* `mark.src` is a Keystatic text field (author input): every mark, whichever
+   shape it turns out to be, has its path checked before anything reaches
+   the page. `readStudySvg`/`readStudyRaster` each return undefined for an
+   ordinary content mistake (wrong extension, missing file) rather than
+   throwing — the filter below is what turns that into "the mark drops out
+   of both strips" instead of an icon-less label sitting next to a missing
+   glyph. A containment escape still throws in either reader, same as
+   before. */
 const inlined = marks
-  .map((mark) => ({
-    ...mark,
-    svg: readStudySvg(mark.src, `Glyphs mark "${mark.label ?? mark.src}"`),
-  }))
-  .filter((mark): mark is typeof mark & { svg: string } => typeof mark.svg === 'string');
+  .map((mark) => {
+    const label = `Glyphs mark "${mark.label ?? mark.src}"`;
+    const isSvg = typeof mark.src === 'string' && mark.src.endsWith('.svg');
+    return {
+      ...mark,
+      svg: isSvg ? readStudySvg(mark.src, label) : undefined,
+      raster: isSvg ? undefined : readStudyRaster(mark.src, label),
+    };
+  })
+  .filter((mark) => typeof mark.svg === 'string' || typeof mark.raster === 'string');
 ---
-<section class="glyphs">
+<section class="glyphs" style={`--glyph-mark-size: ${size}px`}>
   <div class="feature-wrap">
     {heading && <h2 class="feature-h">{heading}</h2>}
     {standfirst && <p class="glyphs__standfirst">{standfirst}</p>}
@@ -43,7 +83,9 @@ const inlined = marks
         <span class="glyphs__context">{strip.context}</span>
         {inlined.map((mark) => (
           <span class="glyphs__state">
-            <span class="glyphs__mark" set:html={mark.svg} />
+            {typeof mark.svg === 'string'
+              ? <span class="glyphs__mark" set:html={mark.svg} />
+              : <span class="glyphs__mark glyphs__mark--raster"><img src={mark.raster} alt="" loading="lazy" /></span>}
             {mark.label}
           </span>
         ))}
@@ -66,14 +108,50 @@ const inlined = marks
     border-radius: var(--radius-card);
     margin-bottom: 12px;
   }
-  .glyphs__strip--paper { background: var(--color-surface); border: 1px solid var(--color-hairline); color: var(--color-ink); }
-  .glyphs__strip--ink { background: var(--color-ink); color: var(--color-paper); }
+  .glyphs__strip--paper { background: var(--specimen-light); color: var(--specimen-light-ink); border: 1px solid var(--color-hairline); }
+  /* The ink strip's own background (--specimen-dark, #232019) is a fixed
+     specimen token, not a themed one — but the page it sits on IS themed,
+     and in dark mode the page ground (--color-paper, #191712) sits within
+     1.10:1 of that fixed background. Reusing --color-hairline here would not
+     fix that: --color-hairline is itself themed, and its dark-mode value
+     (#39352C) is close enough to #232019 to disappear against it too — the
+     same failure, borrowed from the wrong token. --specimen-dark-hairline is
+     a fixed edge, blended once against the fixed --specimen-dark background,
+     so the strip keeps a visible boundary in both appearances. */
+  .glyphs__strip--ink { background: var(--specimen-dark); color: var(--specimen-dark-ink); border: 1px solid var(--specimen-dark-hairline); }
   .glyphs__context {
     font-family: var(--font-mono);
     font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
     opacity: 0.6; min-width: 118px;
   }
   .glyphs__state { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; }
-  .glyphs__mark svg { width: 28px; height: 22px; display: block; }
+  /* `height: auto`, not a second hardcoded number: these SVGs carry no
+     width/height attributes, only a viewBox (GRØD's menu-bar marks are
+     28x22), so setting width alone and letting height follow the intrinsic
+     aspect ratio is what makes `--glyph-mark-size` (default 28, set from the
+     `markSize` prop) apply correctly to a non-square mark without this
+     component knowing its aspect ratio. At the default 28px this renders
+     pixel-identical to the old fixed 28x22. */
+  /* Size the WRAPPER, and let the SVG fill it — do not size the SVG directly.
+     global.css sets `img, svg { max-width: 100% }` sitewide. An injected SVG
+     carries only a viewBox, so with an unsized wrapper that 100% resolves
+     against a zero-width box and clamps the mark to 0x0 — invisible — no
+     matter what `width` this rule asks for. That shipped: every mark in this
+     block rendered at 0x0 on a page whose whole point is showing them, and it
+     survived review because the checks measured the marks' COLOUR, which is
+     perfectly well-defined on an element with no size.
+     Spec's glyphs never hit it only because they size their wrapper. */
+  /* `flex: none` so the mark never shrinks. The strip is a flex row, and at
+     an intermediate width a squeezed mark loses width while its height
+     attribute holds — a square icon rendering 96x120. Distorting the artwork
+     is not a defect a study about that artwork can afford. */
+  .glyphs__mark { display: block; flex: none; width: var(--glyph-mark-size, 28px); }
+  .glyphs__mark :global(svg) { width: 100%; height: auto; display: block; }
+  /* Square, not the SVG marks' aspect ratio above — an app icon's aspect
+     ratio is 1:1, so both dimensions track the same size variable. Left
+     unmasked, same as this study's other two blocks (Plate, ScaleProof): the
+     production asset ships with no baked corner radius, and this strip is a
+     size comparison, not a Home Screen mockup. */
+  .glyphs__mark--raster img { width: var(--glyph-mark-size, 28px); height: var(--glyph-mark-size, 28px); display: block; }
   .glyphs__note { margin-top: 14px; font-size: 13px; color: var(--color-ink-secondary); }
 </style>

@@ -90,16 +90,13 @@ const featureComponents = {
             label: 'Glyph path',
             description: 'Optional. Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
           }),
-          ink: fields.select({
+          ink: fields.text({
             label: 'Glyph ink',
-            description: 'Tints the inlined glyph via currentColor. "Inherit" (the default) leaves it taking the ambient text colour — pick a tint only when the glyph should carry an explicit colour of its own.',
-            options: [
-              { label: 'Inherit', value: 'inherit' },
-              { label: 'Brand', value: 'brand' },
-              { label: 'Teal', value: 'teal' },
-              { label: 'Aubergine', value: 'aubergine' },
-            ],
-            defaultValue: 'inherit',
+            description: 'Tints the inlined glyph via currentColor. Leave empty to keep the ambient text colour, or set \'brand\', \'teal\', or a hex like #E08A5B.',
+          }),
+          inkDark: fields.text({
+            label: 'Glyph ink (dark scheme)',
+            description: 'Optional. The dark-scheme counterpart for a hex `ink` that would not survive the ground inverting — omit it and `ink` is used in both.',
           }),
           heading: fields.text({ label: 'Heading' }),
           body: fields.text({ label: 'Body', multiline: true }),
@@ -128,17 +125,25 @@ const featureComponents = {
     schema: {
       heading: fields.text({ label: 'Heading' }),
       standfirst: fields.text({ label: 'Standfirst', multiline: true }),
+      grounds: fields.object({
+        paper: fields.text({ label: 'Light-ground label', description: 'What the light strip is called in this study, e.g. "Light menu bar".' }),
+        ink: fields.text({ label: 'Dark-ground label', description: 'What the dark strip is called in this study, e.g. "Dark menu bar".' }),
+      }, { label: 'Ground labels' }),
       marks: fields.array(
         fields.object({
           src: fields.text({
-            label: 'SVG path',
-            description: 'Must be an .svg file under /studies/, e.g. /studies/grod-icon/mb-idle.svg — anything else (wrong extension, missing file) is silently ignored.',
+            label: 'Mark path',
+            description: 'A file under /studies/. An .svg (e.g. /studies/grod-icon/mb-idle.svg) is inlined and tints to the strip via currentColor; anything else (e.g. /studies/aftershot-icon/icon-120.webp) renders as a plain image with its own fixed colours. A missing file is silently ignored either way.',
             validation: { isRequired: true },
           }),
           label: fields.text({ label: 'State label' }),
         }),
         { label: 'Marks', itemLabel: (props) => props.fields.label.value || props.fields.src.value },
       ),
+      markSize: fields.integer({
+        label: 'Mark size (px)',
+        description: 'The size in pixels the specimen is proved at, e.g. 120 for a Home Screen icon. Leave empty for the GRØD default of 28px (a menu-bar glyph).',
+      }),
       note: fields.text({ label: 'Note', multiline: true }),
     },
   }),

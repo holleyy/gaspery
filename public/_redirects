@@ -1,0 +1,27 @@
+# /apps/afterframe was the app's live URL before it was renamed to Aftershot,
+# and the canonical form carried a trailing slash. The route id is the content
+# filename, so renaming the file moved the URL; without these, anyone holding
+# the old link gets a 404. Permanent, because the move is.
+#
+# Both forms are raw rules here rather than split between this file and
+# Astro's `redirects` config. Two reasons. The config cannot express a
+# trailing-slash-only key at all — it collapses one onto the non-slash route —
+# so the live URL could never have been covered there. And relying on the
+# Cloudflare adapter to APPEND its generated rules onto this file is real but
+# undocumented internal behaviour, pinned behind a caret range: a routine
+# dependency bump could drop the redirect while the build still succeeded and
+# every test still passed, and the only symptom would be the old URL quietly
+# 404ing in production.
+#
+# This site deploys as a Cloudflare Worker, not Pages (see wrangler.jsonc:
+# `main` is dist/_worker.js/index.js, with `assets.directory` pointing at
+# dist/) — dist/_routes.json is a Pages artifact and plays no part here.
+# Workers Static Assets reads and honours public/_redirects directly, and
+# matches these as literal strings with no trailing-slash normalisation —
+# which is why both forms need their own line. Verified under `wrangler dev`
+# (the Worker runtime, not `wrangler pages dev`): both /apps/afterframe/ and
+# /apps/afterframe 301 to the right place.
+#
+# scripts/verify-parity.sh asserts both rules survive into dist/_redirects.
+/apps/afterframe/    /apps/aftershot/    301
+/apps/afterframe     /apps/aftershot     301

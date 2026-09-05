@@ -28,33 +28,24 @@
   --feature-max: 1180px;
   --feature-pad: clamp(22px, 5vw, 48px);
   --feature-measure: 68ch;
-}
 
-/* The study's own third ink — not a site token. The sanctioned exception to
-   the site's two inks (brand/teal), present because this piece is ABOUT the
-   GRØD identity, which carries its own aubergine. Declared here, not in
-   global.css, so it can never leak into ordinary chrome.
-
-   This has to live on :root, not scoped to `.feature` — a declaration on
-   `.feature` itself would apply on every element inside it unconditionally,
-   in every theme, and would shadow (not merely lose a specificity contest
-   to) the dark override below: an element only inherits a custom property
-   from an ancestor when nothing between it and that ancestor sets the same
-   property, and `.feature` sits between every block here and :root. Same
-   three-state pattern global.css uses for its own tokens: once behind the
-   media query for a reader with no stored preference, and once behind
-   [data-theme='dark'] for one who has chosen. Without a dark value this ink
-   would stay #48234F on a dark ink strip and vanish into it. */
-:root {
-  --grod-aubergine: #48234F;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --grod-aubergine: #C79BD0;
-  }
-}
-:root[data-theme='dark'] {
-  --grod-aubergine: #C79BD0;
+  /* Specimen grounds, deliberately fixed in both appearances. A Glyphs strip
+     depicts somewhere else — a menu bar, a phone wallpaper — so it is content,
+     the way a Swatches chip is, not site chrome. Themed tokens here made the
+     strip labelled "Light" render dark for a reader in dark mode, which is a
+     label contradicting the thing it labels. Do not add a dark override. */
+  --specimen-light: #E9E5DC;
+  --specimen-light-ink: #232019;
+  --specimen-dark: #232019;
+  --specimen-dark-ink: #F6F1E6;
+  /* The dark specimen strip's own edge. --specimen-dark (#232019) sits only
+     1.10:1 from the dark-mode page ground (#191712) — close enough that an
+     unbordered strip loses its edge entirely in that appearance. This has to
+     be its own fixed token, not --color-hairline: that token is themed, and
+     its dark-mode value is itself close to #232019 for the same reason. A
+     translucent light overlay blended against the always-#232019 background
+     stays visibly separate from the page in every appearance. */
+  --specimen-dark-hairline: rgba(246, 241, 230, 0.2);
 }
 
 /* Site chrome — deliberately the same weight as an ordinary post's. */

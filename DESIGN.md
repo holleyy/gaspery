@@ -242,15 +242,32 @@ attributions, and printer's marks that happen to carry a link. Teal is never
 body copy, and never an ordinary hyperlink. Magenta remains the link ink.
 
 **The Identity Exception.** A third ink may appear on a page, but only inside
-a study whose subject *is* that identity — never in site chrome. The first
-instance is `--grod-aubergine` (`src/styles/feature.css`), GRØD's own third
-ink: declared on `:root` inside the feature format's stylesheet, not in
-`global.css`, so it can never leak into ordinary pages. It surfaces only as
-the subject itself — described in prose, printed as one of the app's own
-colours in a `Swatches` chip, or used to tint a `Spec` glyph (`ink:
-'aubergine'`) when a reading is specifically about that identity's colour.
+a study whose subject *is* that identity — never in site chrome. A study
+supplies that ink itself, as content, rather than the stylesheet registering
+it as a token: a `Spec` item's `ink` field takes either a named site token
+(`brand`, `teal`) or a literal hex, with an optional `inkDark` as the
+dark-scheme counterpart for a hex that would not survive the ground
+inverting — omit it and `ink` is used in both. GRØD's own third ink is the
+first instance: its Direction glyph carries `ink: "#48234F"`, `inkDark:
+"#C79BD0"` inline in the post's own content, not a token declared anywhere in
+CSS. A study's ink surfaces only as the subject itself — described in prose,
+printed as one of the app's own colours in a `Swatches` chip, or used to tint
+a `Spec` glyph when a reading is specifically about that identity's colour.
 Chrome — the rail, the meta row, the imprint, every page outside a study —
 stays two inks, always.
+
+**Specimen Grounds.** `--specimen-light` / `--specimen-light-ink` /
+`--specimen-dark` / `--specimen-dark-ink` (`src/styles/feature.css`) are the
+two fixed grounds a `Glyphs` strip renders its marks against — a menu bar, a
+phone wallpaper, whatever environment the study is proving a mark inside.
+Like a `Swatches` chip, they're content a study supplies, not site chrome,
+and they are deliberately theme-invariant: a strip labelled "Light" has to
+read as light no matter the reader's own theme, so these four tokens must
+**never** gain a `prefers-color-scheme` or `[data-theme]` override — themed
+values here previously made a "Light" strip render dark for a reader in dark
+mode, a label contradicting the thing it labels. Don't confuse them with the
+site's own `--color-surface` / `--color-ink` chrome tokens, which are
+theme-aware by design.
 
 **The Token Rule.** Dark values are theme-aware by default. Never hardcode a
 light value where a token exists — the token already carries its dark twin.
