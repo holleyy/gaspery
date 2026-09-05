@@ -75,7 +75,7 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
 
   {pulse && <Pulse post={pulse} />}
 
-  <div class="theme-group rail-group">
+  <div class="theme-group rail-group" hidden>
     <div class="rail-group__title label">Appearance</div>
     <ThemeToggle />
   </div>

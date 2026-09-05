@@ -82,6 +82,7 @@ test('the two dark token blocks declare identical values', () => {
   const viaAttribute = tokensIn(":root[data-theme='dark']");
 
   assert.ok(Object.keys(viaMedia).length > 0, 'media-query dark block declared no tokens');
+  assert.ok(Object.keys(viaAttribute).length > 0, 'attribute dark block declared no tokens');
   assert.deepEqual(viaAttribute, viaMedia);
 });
 
@@ -148,4 +149,62 @@ test("the toggle's display rule is scoped to :not([hidden])", () => {
   // and there must be no bare, unguarded rule fighting it.
   assert.match(themeToggle, /\.theme-toggle:not\(\[hidden\]\)\s*\{[^}]*display:/);
   assert.doesNotMatch(themeToggle, /\.theme-toggle\s*\{[^}]*display:/);
+});
+
+test('the theme-color hex literals match the real --color-paper token, not just each other', () => {
+  // Base.astro and ThemeToggle.astro each hardcode #191712/#F6F1E6 rather
+  // than reading --color-paper — a script can't read a custom property
+  // before the element carrying it has painted. Nothing pins those
+  // literals to the actual token, so a repaint of --color-paper could
+  // silently desync the browser chrome from the page.
+  //
+  // The light value can't use tokensIn(':root'): `indexOf(':root')` matches
+  // by prefix, and ':root:not(...)' / ":root[data-theme='dark']" both start
+  // with the same five characters. This anchors on `:root` immediately
+  // followed by `{`, which neither of those can match.
+  const baseRootBlock = css.match(/:root\s*\{([^}]*)\}/);
+  assert.ok(baseRootBlock, 'base :root block not found in global.css');
+  const lightPaperMatch = baseRootBlock[1].match(/--color-paper\s*:\s*([^;]+);/);
+  assert.ok(lightPaperMatch, '--color-paper not declared in the base :root block');
+  const lightPaper = lightPaperMatch[1].trim();
+
+  const darkPaper = tokensIn(":root[data-theme='dark']")['--color-paper'];
+  assert.ok(darkPaper, '--color-paper not declared in the dark attribute block');
+
+  for (const [name, source] of [
+    ['Base.astro', baseLayout],
+    ['ThemeToggle.astro', themeToggle],
+  ] as const) {
+    assert.ok(source.includes(lightPaper), `${name} is missing the light --color-paper literal ${lightPaper}`);
+    assert.ok(source.includes(darkPaper), `${name} is missing the dark --color-paper literal ${darkPaper}`);
+  }
+});
+
+const designMd = readFileSync(new URL('../DESIGN.md', import.meta.url), 'utf8');
+
+test("DESIGN.md's colorsDark matches the real dark token block", () => {
+  // A fourth unguarded copy of the dark palette, alongside the two CSS
+  // blocks (pinned above) and the two JS hex literals (pinned above that).
+  // YAML keys are the CSS custom-property names minus the `--color-`
+  // prefix, e.g. `paper:` <-> `--color-paper`.
+  const start = designMd.indexOf('colorsDark:');
+  assert.notEqual(start, -1, 'colorsDark: not found in DESIGN.md front-matter');
+  const end = designMd.indexOf('typography:', start);
+  assert.notEqual(end, -1, 'typography: not found after colorsDark: in DESIGN.md front-matter');
+  const body = designMd.slice(start, end);
+
+  const entries = [...body.matchAll(/^\s+([\w-]+):\s*"(#[0-9a-fA-F]{6})"/gm)];
+  assert.ok(entries.length > 0, 'colorsDark declared no colors');
+  const designColors = Object.fromEntries(entries.map(([, key, value]) => [`--color-${key}`, value]));
+
+  const cssColors = tokensIn(":root[data-theme='dark']");
+
+  assert.deepEqual(Object.keys(designColors).sort(), Object.keys(cssColors).sort());
+  for (const key of Object.keys(designColors)) {
+    assert.equal(
+      designColors[key].toLowerCase(),
+      cssColors[key].toLowerCase(),
+      `${key} differs between DESIGN.md (${designColors[key]}) and global.css (${cssColors[key]})`
+    );
+  }
 });

@@ -204,8 +204,14 @@ img, svg { display: block; max-width: 100%; }
 .identity .label { margin-top: 6px; }
 .identity:hover .wordmark { color: var(--color-brand-bright); }
 
-/* Rail sections (nav + elsewhere) */
+/* Rail sections (nav + elsewhere + theme) */
 .rail-group { display: flex; flex-direction: column; gap: 14px; }
+/* Author-origin `display: flex` above beats the user-agent `[hidden]`
+   style regardless of specificity — origin is resolved before
+   specificity, same reasoning as .theme-toggle:not([hidden]) below. The
+   theme group is the only one of the three that is ever hidden (for a
+   reader without JavaScript), so this guard only ever engages for it. */
+.rail-group[hidden] { display: none; }
 .rail-group__title { padding-bottom: 4px; border-bottom: 1px solid var(--color-hairline); }
 
 .nav a {

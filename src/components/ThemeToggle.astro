@@ -8,14 +8,14 @@
    JavaScript is never shown a control that cannot do anything. */
 ---
 <fieldset class="theme-toggle" hidden>
-  <legend class="sr-only">Theme</legend>
+  <legend class="sr-only">Appearance</legend>
   <label><input type="radio" name="theme" value="light" /><span>Light</span></label>
   <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
   <label><input type="radio" name="theme" value="system" /><span>Auto</span></label>
 </fieldset>
 
 <script>
-  import { THEME_STORAGE_KEY, readPreference } from '../lib/theme';
+  import { THEME_STORAGE_KEY, readPreference, resolveTheme } from '../lib/theme';
 
   const root = document.documentElement;
   const group = document.querySelector<HTMLFieldSetElement>('.theme-toggle');
@@ -25,8 +25,8 @@
      with the page. */
   function syncThemeColor() {
     const dark =
-      root.dataset.theme === 'dark' ||
-      (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      resolveTheme(root.dataset.theme ?? null, window.matchMedia('(prefers-color-scheme: dark)').matches) ===
+      'dark';
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', dark ? '#191712' : '#F6F1E6');
@@ -36,8 +36,8 @@
   // `name="theme"` with no `<form>` ancestor, so two mounted copies would
   // form one native radio group across both — the browser enforces mutual
   // exclusivity, not mirroring, so they'd fight over which one is checked
-  // instead of staying in sync. The mounting task verifies exactly one
-  // `.theme-toggle` per built page, so that case cannot arise.
+  // instead of staying in sync. scripts/verify-parity.sh enforces exactly
+  // one `.theme-toggle` per built page, so that case cannot arise.
   if (group) {
     let stored: string | null = null;
     try {
@@ -49,7 +49,14 @@
     const current = readPreference(stored);
     const checked = group.querySelector<HTMLInputElement>(`input[value="${current}"]`);
     if (checked) checked.checked = true;
+    // Some mounts (writing/[...id], apps/[id], 404) render the fieldset
+    // with no wrapping .theme-group, so unhiding the fieldset is enough
+    // there. Where the Rail wraps it, the wrapper carries its own `hidden`
+    // too (see src/components/Rail.astro) so a no-JS reader never sees an
+    // empty, ruled "Appearance" section — both must be unhidden, since each
+    // element's `hidden` attribute is independent of the other's.
     group.hidden = false;
+    group.closest<HTMLElement>('.theme-group')?.removeAttribute('hidden');
 
     group.addEventListener('change', (event) => {
       const input = event.target as HTMLInputElement;

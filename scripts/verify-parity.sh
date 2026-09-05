@@ -37,5 +37,16 @@ while IFS= read -r f; do
   fi
 done < <(find dist -name '*.html' | sort)
 
+# The theme control is single-instance per page (see ThemeToggle.astro):
+# two mounted copies would share one native radio group via `name="theme"`
+# and fight over which is checked instead of staying in sync.
+while IFS= read -r f; do
+  count=$(grep -o 'class="theme-toggle"' "$f" | wc -l | tr -d ' ')
+  if [ "$count" -ne 1 ]; then
+    echo "THEME TOGGLE COUNT WRONG: $f has $count, expected 1"
+    fail=1
+  fi
+done < <(find dist -name '*.html' | sort)
+
 [ $fail -eq 0 ] && echo "PARITY OK — all pages match baseline"
 exit $fail
