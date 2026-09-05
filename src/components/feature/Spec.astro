@@ -89,8 +89,19 @@ const withGlyph = items.map((item) => ({
           {(item.num || item.key) && (
             <span class="feature-key">{item.num && <b>{item.num}</b>}{item.num && item.key ? ' / ' : ''}{item.key}</span>
           )}
-          {item.heading && <h3 class="spec__heading">{item.heading}</h3>}
-          {item.body && <p class="spec__body">{item.body}</p>}
+          {/* Heading and body share ONE element so the stacked layout's
+              `190px 1fr` grid sees exactly two children: the key, then the
+              text. Flat siblings let grid auto-placement drop the body into
+              column 1 row 2 — wrapping it in the narrow key column with the
+              wide column left empty beside it. `display: contents` in the
+              beside layout keeps that flex column laying out exactly as it
+              did. */}
+          {(item.heading || item.body) && (
+            <div class="spec__text">
+              {item.heading && <h3 class="spec__heading">{item.heading}</h3>}
+              {item.body && <p class="spec__body">{item.body}</p>}
+            </div>
+          )}
         </li>
       ))}
     </ul>
@@ -156,6 +167,7 @@ const withGlyph = items.map((item) => ({
   .spec__heading { font-family: var(--font-serif); font-size: 20px; font-weight: 700; margin: 10px 0 9px; }
   .spec__body { font-size: 15px; line-height: 1.55; color: var(--color-ink-secondary); max-width: 52ch; }
   .spec:not([data-beside]) .spec__body { font-size: 17px; }
+  .spec[data-beside] .spec__text { display: contents; }
 
   /* Inlined <svg>, not <img>: currentColor resolves from `color` here, which
      is why an item's `ink` can tint the mark at all — see the frontmatter
