@@ -142,7 +142,7 @@ The feel is quiet, exact, crafted, and warmly personal — a working notebook, n
 a marketing site. Density is generous: a lot of bone whitespace, a two-column
 layout (a sticky identity rail beside a wide main column), and content set in
 rows divided by hairlines rather than boxed into cards. The one loud moment per
-page is the misregistered hero headline; everything else is composed and calm.
+page is the misregistered wordmark in the rail (the hero headline, on the 404); everything else is composed and calm.
 Print character carries the warmth — ink, paper, and registration marks — not a
 tinted-neutral "cozy" background.
 
@@ -283,7 +283,8 @@ functional grotesque for everything operational. The contrast is the point; the
 two are never blurred.
 
 ### Hierarchy
-- **Display** (Merriweather 800, 56px — 40px in the 861–1000px tablet band, 34px ≤860px, 30px ≤420px — line-height 1.1, letter-spacing -0.02em): the one hero headline per page.
+- **Display** (Merriweather 800, 56px — 40px in the 861–1000px tablet band, 34px ≤860px, 30px ≤420px — line-height 1.1, letter-spacing -0.02em): the one hero headline on the 404.
+- **Masthead** (Merriweather 400, 38px — 32px ≤1000px — line-height 1.1, letter-spacing -0.01em, on a 2px magenta ghost): the rail wordmark, "Gaspery.", on every page. Regular weight because the G plate above it already carries the heavy mark; 2px not 3px because at this weight a 3px shift is wider than the stroke and reads as an outline. Class `.rail-wordmark`, deliberately not `.wordmark`.
 - **Headline** (Merriweather 700, 22px): section headings (`## Writing`, `## Apps`).
 - **Title** (Merriweather 700, 21px/1.28; also 18–20px across app names, the subscribe line, and nav): content titles — post rows, app rows, wordmark.
 - **Body** (Inter 400, 17px/1.6): intro and body copy. **Dek** (Inter 400, 15px/1.53, secondary ink) carries deks and secondary copy. Cap prose measure at 65–75ch.
@@ -292,7 +293,7 @@ two are never blurred.
 Sizes in real use that aren't tokenized — kept consistent by convention rather
 than a variable. Reuse these rather than picking new ones:
 
-24/700 serif (wordmark) · 21/700 serif (post title) · 20/700 serif (subscribe
+24/700 serif (app-page wordmark) · 21/700 serif (post title) · 20/700 serif (subscribe
 line) · 19/700 serif (nav item) · 18/700 serif (app name) · 14/600 sans ("more"
 links) · 13/600 sans (currently link) · 10/700 sans upper (tag/status pill).
 
@@ -393,8 +394,8 @@ exposed in Keystatic as the `cite` block's "Attribution" input.
 - **Keyboard:** a global `:focus-visible` ring — 2px `--color-brand` outline, 3px offset, no glow (flat press) — and a skip link in `Base.astro` (`href="#main"`; every page's main landmark carries `id="main"`), parked above the viewport until focused. `::selection` prints in `--color-brand-strong` with paper text (4.5:1+ both schemes).
 - **Touch (≤1000px):** collapsed nav links carry 6px and Elsewhere links 4px vertical padding, lifting the wrapping rows past WCAG 2.5.8's 24px target floor (measured 29px / 32px at 375).
 - **Essay rows:** the whole-row anchor puts the `h3` first in DOM (its accessible name leads with the title, not the date); `order` in `global.css` restores the visual stack of meta above title. Decorative glyphs (`↗`, the `→` marker, `/` separators) are `aria-hidden`.
-- **Link-preview card:** every page ships canonical + OG/Twitter meta and dual-scheme `theme-color` from `Base.astro`; the shared `og:image` is `/public/og/card.png` — a 1200×630 riso print of the misregistered wordmark on bone with the halftone field and registration marks, i.e. the hero's exact recipe at card scale. Regenerate it in the same two inks if the wordmark or palette ever changes.
-- **Collapsed (≤1000px):** the rail nav becomes a horizontal wrapping row above the hero; the marker slot is hidden and the active item is colored brand instead.
+- **Link-preview card:** every page ships canonical + OG/Twitter meta and dual-scheme `theme-color` from `Base.astro`; the shared `og:image` is `/public/og/card.png` — a 1200×630 riso print of the misregistered wordmark on bone with the halftone field and registration marks, i.e. the hero's exact recipe at card scale. Regenerate it in the same two inks if the wordmark or palette ever changes. The card keeps the 56/800 hero recipe on purpose: the rail wordmark is its rail-scale cousin, not a replacement.
+- **Collapsed (≤1000px):** the rail nav becomes a horizontal wrapping row above the streams; the marker slot is hidden and the active item is colored brand instead.
 - **Stream filter (`.stream__filter`):** `All · Essays · Links`, set in `.label` typography (Inter 600 11px uppercase, 0.14em tracking). Lives in the stream head's "Latest first" slot on the three archive views only (`/writing`, `/essays`, `/links`) — the home stream keeps "Latest first". `aria-current="page"` is set, so it is sound for assistive tech, but it is a **deliberate second idiom**, not an oversight to reconcile with the rail: it signals the current view by colour alone — `--color-ink` active, `--color-ink-secondary` default, no marker glyph — where the rail nav rule above holds active and default to the same ink and differs only by marker and hover. Scoped to this control; don't carry it into the rail.
 
 ### Component measurements
@@ -450,7 +451,7 @@ The four devices that make a new page read as part of this system rather than a
 generic layout. Reuse them deliberately; don't invent competing ones.
 
 - **Misregistration** — the one loud print moment, spent on one headline per page. Two stacked copies of the same text: the base copy normal, a second copy offset `translate(3px, 3px)`, colored `--color-brand`, set to `mix-blend-mode: multiply`. Under `prefers-reduced-transparency: reduce` or `prefers-contrast: more`, the offset copy is hidden entirely — meaning must never depend on the blend.
-- **Halftone dot field** — a `radial-gradient(--color-teal 1.1px, transparent 1.5px)` at `7px 7px`, `mix-blend-mode: multiply` (flips to `screen` in dark mode), masked to fade out radially. Decorative only, near a hero — never load-bearing for content.
+- **Halftone dot field** — a `radial-gradient(--color-teal 1.1px, transparent 1.5px)` at `7px 7px`, `mix-blend-mode: multiply` (flips to `screen` in dark mode), masked to fade out radially. Decorative only, beside a masthead — the rail's identity block, or the 404's hero — never load-bearing for content.
 - **Registration mark** (`RegistrationMark.astro`) — a crosshair (teal stroke) plus a ring (brand stroke), default 16px, stroke-width 1. Three variants: `full`, `cross`, `ring`. The connective thread between sections — rail, stream headers, footer.
 - **Riso-duotone photography** (`.riso-photo`, filter defined once in `Base.astro`) — the treatment for real photographs, introduced with the site's first (the running essay). The image is piped through an SVG `feColorMatrix` grayscale + `feComponentTransfer` duotone remap (ink → paper, the site's own tokens, fixed to light-mode values on purpose — a photographic negative is a bad dark-mode adaptation), then the *same* halftone dot recipe above is laid over it full-bleed and unmasked (`mix-blend-mode: multiply`, flips to `screen` in dark mode). Under the accessibility gate the halftone drops out and the duotone photo stands alone, still fully legible. A photo run through the same press as everything else, not a full-color image dropped in.
 
