@@ -1,6 +1,7 @@
 ---
 import RegistrationMark from './RegistrationMark.astro';
 import Pulse from './Pulse.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import { isPulseEnabled, getLatestPost } from '../lib/bskyPulse';
 import sidebar from '../data/sidebar/index.json';
 
@@ -73,6 +74,11 @@ const isCurrentPage = (href: string) => (href.replace(/\/+$/, '') || '/') === pa
   </div>
 
   {pulse && <Pulse post={pulse} />}
+
+  <div class="theme-group rail-group">
+    <div class="rail-group__title label">Appearance</div>
+    <ThemeToggle />
+  </div>
 
   <div class="colophon">
     <RegistrationMark size={16} />
