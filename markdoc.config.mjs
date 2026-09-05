@@ -90,6 +90,10 @@ export default defineMarkdocConfig({
         // 1 for the single hero plate on a page, 2 (Plate.astro's default)
         // for every other plate — a page must have exactly one <h1>.
         level: { type: Number },
+        // 'icon' masks the artwork to the iOS superellipse. Optional here and
+        // optional in keystatic.config.ts — the two must agree, or a field
+        // the GUI writes happily gets rejected at build time on Cloudflare.
+        shape: { type: String, matches: ['icon', 'none'] },
       },
     },
     band: {
@@ -142,6 +146,8 @@ export default defineMarkdocConfig({
       selfClosing: true,
       attributes: {
         heading: { type: String },
+        // Must stay in step with keystatic.config.ts's option list.
+        shape: { type: String, matches: ['icon', 'none'] },
         rungs: { type: Array, required: true },
       },
     },

@@ -4,11 +4,17 @@
    1.5MB and this block would otherwise ship it once per rung. */
 interface Props {
   heading?: string;
+  /* Opt-in for the same reason Plate's is: artwork that already carries its
+     own silhouette must not be masked again. GRØD's mark is a cream squircle
+     baked into the file — masking it a second time clips its own corners and
+     rings transparent space. Aftershot's is a bare black square that needs
+     the shape supplied. */
+  shape?: 'icon' | 'none';
   rungs: { src: string; size?: number; label?: string; caption?: string }[];
 }
-const { heading, rungs = [] } = Astro.props;
+const { heading, shape, rungs = [] } = Astro.props;
 ---
-<section class="ladder">
+<section class="ladder" data-shape={shape === 'icon' ? 'icon' : undefined}>
   <div class="feature-wrap">
     {heading && <h2 class="feature-h ladder__heading">{heading}</h2>}
     <ul class="ladder__rungs">
@@ -63,6 +69,21 @@ const { heading, rungs = [] } = Astro.props;
      a 15ch column — so "256 PX" sat under a 160px image at every width, on the
      one section whose entire job is showing true size. */
   .rung img { margin: 0 auto; max-width: none; }
+  /* App-icon shape. iOS masks to a superellipse; 22.37% of the side is the
+     standard approximation, and as a percentage one value holds at every
+     rung from 180px down to 29px without a per-size override.
+
+     The edge is a box-shadow ring, NOT a border. A 1px border would add 2px
+     to each rung's rendered box — a 29px mark would measure 31px under a
+     label reading "29 px", which is precisely the false-size claim this
+     section exists to avoid. box-shadow paints outside the box and changes
+     no geometry. It matters because a black-field icon (Aftershot's) has no
+     visible boundary at all against the dark ground — the same problem the
+     swatch hairlines solve. */
+  .ladder[data-shape='icon'] .rung img {
+    border-radius: 22.37%;
+    box-shadow: 0 0 0 1px var(--color-hairline);
+  }
   /* Sized to clear a label plus a three-line caption at the 15ch measure,
      which is the longest any rung currently runs. A caption longer than that
      would lift its mark off the shared baseline again — so if a future study

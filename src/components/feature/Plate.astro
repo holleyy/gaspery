@@ -18,8 +18,13 @@ interface Props {
      default; the caller sets `level={1}` on the single plate that is
      actually the page's hero. */
   level?: 1 | 2;
+  /* Opt-in, not automatic. Every plate on the site today happens to be an
+     app icon, but Plate is the generic "full-bleed artwork" block — a
+     photograph masked to a superellipse would be plainly wrong, so the
+     shape is something a post asks for rather than something it inherits. */
+  shape?: 'icon' | 'none';
 }
-const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede, level = 2 } = Astro.props;
+const { src, alt = '', caption, captionLead, eyebrow, heading, accent, lede, level = 2, shape } = Astro.props;
 
 /* The mirror of `data-solo`. A plate with a `src` and no copy — "here is the
    mark, look at it" — otherwise keeps its copy column and renders 551px of
@@ -42,7 +47,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
     </div>
     {src && (
       <figure class="plate__figure">
-        <img src={src} alt={alt} width="640" height="640" loading="eager" decoding="async" />
+        <img src={src} alt={alt} width="640" height="640" loading="eager" decoding="async" data-shape={shape === 'icon' ? 'icon' : undefined} />
         {/* Two plain-text fields, not one field with `set:html`: `caption`
            is a Keystatic text field, and nothing in the GUI would signal
            that it's actually live HTML. RisoPhoto's `set:html` (the
@@ -83,6 +88,14 @@ const Heading = level === 1 ? 'h1' : 'h2';
   }
   .plate__figure { margin: 0; }
   .plate__figure img { width: 100%; height: auto; }
+  /* Same superellipse approximation as ScaleProof's rungs — keep the two in
+     step, or the mark changes shape between the hero and the size ladder.
+     The ring is a box-shadow for consistency with those rungs, where a
+     border would have falsified the rendered size. */
+  .plate__figure img[data-shape='icon'] {
+    border-radius: 22.37%;
+    box-shadow: 0 0 0 1px var(--color-hairline);
+  }
   .plate__figure figcaption {
     margin-top: 16px;
     padding-top: 10px;

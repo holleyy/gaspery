@@ -56,6 +56,16 @@ const featureComponents = {
         defaultValue: 2,
         validation: { min: 1, max: 2 },
       }),
+      // Options must stay identical to markdoc.config.mjs's `matches` list.
+      shape: fields.select({
+        label: 'Artwork shape',
+        description: 'Icon masks the image to the iOS squircle with a hairline edge. Use it for app icons; leave photographs and other artwork square.',
+        options: [
+          { label: 'Square', value: 'none' },
+          { label: 'Icon (squircle)', value: 'icon' },
+        ],
+        defaultValue: 'none',
+      }),
     },
   }),
   band: block({
@@ -152,6 +162,16 @@ const featureComponents = {
     description: 'One artwork at descending sizes. Each rung points at its own derivative.',
     schema: {
       heading: fields.text({ label: 'Heading' }),
+      // Options must stay identical to markdoc.config.mjs's `matches` list.
+      shape: fields.select({
+        label: 'Artwork shape',
+        description: 'Icon masks each rung to the iOS squircle with a hairline edge. Leave square when the artwork already carries its own icon silhouette.',
+        options: [
+          { label: 'Square', value: 'none' },
+          { label: 'Icon (squircle)', value: 'icon' },
+        ],
+        defaultValue: 'none',
+      }),
       rungs: fields.array(
         fields.object({
           src: fields.text({ label: 'Image path', validation: { isRequired: true } }),
