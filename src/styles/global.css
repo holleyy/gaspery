@@ -317,7 +317,8 @@ img, svg { display: block; max-width: 100%; }
 /* In the Hero (404 only now) it balances the 56px headline. */
 .hero .halftone { top: -20px; right: -6px; width: 320px; height: 200px; z-index: 1; }
 /* In the rail it bleeds off the identity block's top-right corner, behind
-   the plate and wordmark (both z-index: 1). */
+   the wordmark (z-index: 1) and the plate, which carries no z-index and is
+   painted above by tree order — see the .identity__text note. */
 .identity .halftone { top: -58px; right: -48px; width: 170px; height: 120px; z-index: 0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .halftone { mix-blend-mode: screen; } }
 :root[data-theme='dark'] .halftone { mix-blend-mode: screen; }
