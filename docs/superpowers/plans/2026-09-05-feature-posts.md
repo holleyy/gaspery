@@ -1482,7 +1482,20 @@ The `.tag-study` rule already exists in `global.css` from Task 3.
 Fill in the remaining source sections against the original at
 `/Users/magneticadmin/.codex/visualizations/2026/07/22/019f8a3f-d83f-7c92-89c0-94c49d92702b/grod-icon-story/index.html`.
 
-Still missing after Tasks 4-6: the **Construction** section (`spec columns=3`, the three readings, with `glyph` paths pointing at the three drawn marks), the **secondary mark** (a second `plate`, with its use/don't-use pair as a `spec columns=2`), and the **internal specification** (`spec columns=4`).
+Still missing after Tasks 4-6: the **Construction** section (`spec columns=3`, the three readings), the **secondary mark** (a second `plate`, with its use/don't-use pair as a `spec columns=2`), and the **internal specification** (`spec columns=4`).
+
+**Gap found in Task 5's verification — the three reading glyphs do not exist.** Task 2 produced only the five `mb-*.svg` menu-bar marks. The three glyphs the Construction section needs (the Ø as circle-and-slash, the ◎ as concentric rings, the ↗ as an arrow) were only ever inline SVG in the design comp. Create them here, at `public/studies/grod-icon/read-{name,attention,direction}.svg`, `viewBox="0 0 120 120"`, drawn with `stroke="currentColor"` and no literal colour:
+
+```
+read-name:      <circle cx="60" cy="60" r="42" stroke-width="7" fill="none"/>
+                <path d="M27 93 L93 27" stroke-width="7" stroke-linecap="round" fill="none"/>
+read-attention: <circle cx="60" cy="60" r="42" stroke-width="7" fill="none"/>
+                <circle cx="60" cy="60" r="21" stroke-width="7" fill="none"/>
+read-direction: <path d="M26 94 L90 30" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <path d="M60 28 H92 V60" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+```
+
+`currentColor`, not baked hexes, for the reason Task 6 documents: an `<img>`-referenced SVG is an isolated document that cannot inherit page colour, and a literal ink would not survive the scheme inverting. Task 6 must therefore extend its inlining to `Spec`'s glyphs and give each item an optional `ink` (`brand` | `teal` | `aubergine`) that sets `color` on the inlined mark — three inks, matching the comp, adapting to light and dark. Aubergine is the one case of the study's own third ink, sanctioned by the colour rule above.
 
 The source's tenth section — the identity-status archive table — has no block and does not earn one. Hand-set it as prose, or cut it. Say which you chose and why in your report.
 
