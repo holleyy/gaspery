@@ -132,7 +132,21 @@ const inlined = marks
      `markSize` prop) apply correctly to a non-square mark without this
      component knowing its aspect ratio. At the default 28px this renders
      pixel-identical to the old fixed 28x22. */
-  .glyphs__mark svg { width: var(--glyph-mark-size, 28px); height: auto; display: block; }
+  /* Size the WRAPPER, and let the SVG fill it — do not size the SVG directly.
+     global.css sets `img, svg { max-width: 100% }` sitewide. An injected SVG
+     carries only a viewBox, so with an unsized wrapper that 100% resolves
+     against a zero-width box and clamps the mark to 0x0 — invisible — no
+     matter what `width` this rule asks for. That shipped: every mark in this
+     block rendered at 0x0 on a page whose whole point is showing them, and it
+     survived review because the checks measured the marks' COLOUR, which is
+     perfectly well-defined on an element with no size.
+     Spec's glyphs never hit it only because they size their wrapper. */
+  /* `flex: none` so the mark never shrinks. The strip is a flex row, and at
+     an intermediate width a squeezed mark loses width while its height
+     attribute holds — a square icon rendering 96x120. Distorting the artwork
+     is not a defect a study about that artwork can afford. */
+  .glyphs__mark { display: block; flex: none; width: var(--glyph-mark-size, 28px); }
+  .glyphs__mark :global(svg) { width: 100%; height: auto; display: block; }
   /* Square, not the SVG marks' aspect ratio above — an app icon's aspect
      ratio is 1:1, so both dimensions track the same size variable. Left
      unmasked, same as this study's other two blocks (Plate, ScaleProof): the
