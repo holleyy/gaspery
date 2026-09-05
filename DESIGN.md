@@ -61,6 +61,28 @@ typography:
     fontSize: "11px"
     fontWeight: 600
     letterSpacing: "0.14em"
+  meta:
+    fontFamily: "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace"
+    fontSize: "12px"
+    fontWeight: 600
+    letterSpacing: "0.14em"
+    textTransform: "uppercase"
+  featureDisplay:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(30px, 3.8vw, 56px)"
+    fontWeight: 800
+    lineHeight: 1.04
+    letterSpacing: "-0.03em"
+    note: "Tops out at the documented display step; the clamp floor is a responsive minimum, not a new step."
+  featureSection:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(26px, 3vw, 34px)"
+    fontWeight: 800
+    lineHeight: 1.15
+  featureBody:
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontSize: "18px"
+    lineHeight: 1.7
 rounded:
   sm: "2px"
   card: "8px"
@@ -240,6 +262,27 @@ than a variable. Reuse these rather than picking new ones:
 24/700 serif (wordmark) · 21/700 serif (post title) · 20/700 serif (subscribe
 line) · 19/700 serif (nav item) · 18/700 serif (app name) · 14/600 sans ("more"
 links) · 13/600 sans (currently link) · 10/700 sans upper (tag/status pill).
+
+### The feature format's scale
+The feature format (`.feature`, see Signature motifs in §5) runs a display
+scale above the reading column's — declared as `featureDisplay` /
+`featureSection` / `featureBody` / `meta` in the frontmatter above, and applied
+only inside `.feature`; every page outside it keeps the `display` / `headline`
+/ `title` / `body` steps unchanged.
+- **Feature Display** (Merriweather 800, `clamp(30px, 3.8vw, 56px)`,
+  line-height 1.04, letter-spacing -0.03em): the format's hero heading. Its
+  ceiling is 56px — the same value as the `display` step above — reached
+  through a clamp rather than a step above it; the clamp floor (30px) is a
+  responsive minimum, not an additional size.
+- **Feature Section** (Merriweather 800, `clamp(26px, 3vw, 34px)`,
+  line-height 1.15): section headings inside a feature body
+  (`.feature__body > h2`) — a genuinely new step, above `headline`'s 22px.
+- **Feature Body** (Inter 400, 18px/1.7): body copy inside a feature body — a
+  step above the reading column's 17px `body`.
+- **Meta** (IBM Plex Mono 600, 12px, uppercase, 0.14em tracking): eyebrows and
+  the `01` / `NAME` key labels. The format's third typeface, on top of the
+  Merriweather/Inter pairing above — requested only on feature pages, so
+  ordinary pages still carry two faces as before.
 
 ### Named Rules
 **The Printed-Heading Rule.** Serif (Merriweather) is reserved for what should
