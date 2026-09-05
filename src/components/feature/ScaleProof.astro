@@ -22,8 +22,13 @@ const { heading, rungs = [] } = Astro.props;
             style={`width:${rung.size ?? 64}px;height:${rung.size ?? 64}px`}
             loading="lazy"
           />
-          {rung.label && <span class="label rung__label">{rung.label}</span>}
-          {rung.caption && <small>{rung.caption}</small>}
+          {/* Label and caption share one block so it can be given a uniform
+              height — that is what puts every mark on a common baseline,
+              which is the whole way a size comparison reads. */}
+          <div class="rung__meta">
+            {rung.label && <span class="label rung__label">{rung.label}</span>}
+            {rung.caption && <small>{rung.caption}</small>}
+          </div>
         </li>
       ))}
     </ul>
@@ -33,9 +38,37 @@ const { heading, rungs = [] } = Astro.props;
 <style>
   .ladder { padding: 0 0 88px; }
   .ladder__heading { margin-bottom: 40px; }
-  .ladder__rungs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: clamp(24px, 3vw, 44px); align-items: flex-end; }
-  .rung { text-align: center; max-width: 15ch; }
-  .rung img { margin: 0 auto; }
+  /* One row, always — never wrapped. A scale proof argues by continuity: the
+     mark shrinking in an unbroken run, so the eye compares in a single sweep.
+     Wrapped, it stops being a ladder and becomes a grid of unrelated icons,
+     and the run reads as several gestures instead of one. Past the container's
+     width it scrolls horizontally; the overflow is contained by this list, so
+     the page itself never scrolls sideways. */
+  .ladder__rungs {
+    list-style: none; margin: 0; padding: 0 0 10px;
+    display: flex; flex-wrap: nowrap; gap: clamp(24px, 3vw, 44px);
+    align-items: flex-end;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+  }
+  .ladder__rungs > .rung { flex: 0 0 auto; scroll-snap-align: center; }
+  /* Bottom-aligned column with a uniform meta block, so every mark sits on
+     one baseline regardless of how many lines its caption runs to. Without
+     it a two-line caption lifts its mark above its neighbours and the run
+     stops reading as a descent. */
+  .rung { text-align: center; display: flex; flex-direction: column; justify-content: flex-end; }
+  /* The measure cap belongs on the caption, not the rung. While it sat on the
+     rung, the global `img { max-width: 100% }` shrank the 256px master to fit
+     a 15ch column — so "256 PX" sat under a 160px image at every width, on the
+     one section whose entire job is showing true size. */
+  .rung img { margin: 0 auto; max-width: none; }
+  /* Sized to clear a label plus a three-line caption at the 15ch measure,
+     which is the longest any rung currently runs. A caption longer than that
+     would lift its mark off the shared baseline again — so if a future study
+     needs one, raise this rather than letting the run go ragged. */
+  .rung__meta { min-height: 5.6em; max-width: 15ch; margin-inline: auto; }
   .rung__label { display: block; margin-top: 12px; }
   .rung small { display: block; font-size: 12px; color: var(--color-ink-secondary); margin-top: 4px; }
+
 </style>
