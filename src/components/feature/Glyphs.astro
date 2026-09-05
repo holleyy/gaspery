@@ -16,9 +16,13 @@ interface Props {
   grounds?: { paper?: string; ink?: string };
 }
 const { heading, standfirst, marks = [], note, grounds } = Astro.props;
+/* `||`, not `??`: an untouched Keystatic sub-field can arrive as an empty
+   string rather than an absent key, and `??` would let that through as a
+   blank label — defeating the whole point of having a neutral default. No
+   author ever wants a deliberately empty ground label. */
 const strips = [
-  { key: 'paper', context: grounds?.paper ?? 'Light ground' },
-  { key: 'ink', context: grounds?.ink ?? 'Dark ground' },
+  { key: 'paper', context: grounds?.paper || 'Light ground' },
+  { key: 'ink', context: grounds?.ink || 'Dark ground' },
 ];
 
 /* Inlined, not <img src>: an externally-referenced SVG is an isolated
