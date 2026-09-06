@@ -139,3 +139,11 @@ test('the wordmark ink copy is the h1 on the homepage only', () => {
   // The ghost is never a heading.
   assert.doesNotMatch(rail, /<h1 class="rail-wordmark__ghost"/);
 });
+
+test('collapsed rail blocks span the column so rules and dots anchor to the page edge', () => {
+  // The desktop grid's align-items: start leaks into the collapsed flex
+  // column and shrink-wraps the identity and nav to the tagline's width,
+  // leaving the nav rule and the dots keyed to a line of text.
+  const collapsed = css.slice(css.indexOf('@media (max-width: 1000px)'));
+  assert.match(collapsed, /\.page\s*\{[^}]*align-items:\s*stretch/);
+});

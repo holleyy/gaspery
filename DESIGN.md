@@ -42,6 +42,13 @@ typography:
     fontWeight: 800
     lineHeight: 1.1
     letterSpacing: "-0.02em"
+  masthead:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "38px"
+    fontWeight: 400
+    lineHeight: 1.1
+    letterSpacing: "-0.01em"
+    note: "The rail wordmark on every page, on a 2px magenta ghost; steps to 32px at the 1000px collapse."
   headline:
     fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
     fontSize: "22px"

@@ -570,6 +570,11 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
   .page {
     display: flex; flex-direction: column; gap: 34px;
     padding: 36px 24px 40px;
+    /* The desktop grid's align-items: start would otherwise shrink-wrap
+       every rail block to its own text: the nav rule stopped where the
+       tagline ended and the dots hung mid-page. Stretched, every hairline
+       runs the full column and the dot field bleeds off the page corner. */
+    align-items: stretch;
   }
   .rail, .main { display: contents; }
   .rail { position: static; }

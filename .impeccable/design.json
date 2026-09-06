@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-20T18:00:00Z",
+  "generatedAt": "2026-09-06T00:52:15Z",
   "title": "Design System: Riso Notebook",
   "extensions": {
     "colorMeta": {
@@ -9,28 +9,60 @@
         "displayName": "Editorial Magenta",
         "canonical": "#D63A86",
         "dark": "#F06AA6",
-        "tonalRamp": ["#3D1226", "#5E1B3A", "#822650", "#A82E67", "#D63A86", "#E85CA0", "#F189BE", "#F9C2DC"]
+        "tonalRamp": [
+          "#3D1226",
+          "#5E1B3A",
+          "#822650",
+          "#A82E67",
+          "#D63A86",
+          "#E85CA0",
+          "#F189BE",
+          "#F9C2DC"
+        ]
       },
       "teal": {
         "role": "secondary",
         "displayName": "Registration Teal",
         "canonical": "#2AA7C8",
         "dark": "#5CC7E8",
-        "tonalRamp": ["#0A2E38", "#114654", "#185F72", "#1F8299", "#2AA7C8", "#55BCD6", "#8AD3E5", "#C2E9F2"]
+        "tonalRamp": [
+          "#0A2E38",
+          "#114654",
+          "#185F72",
+          "#1F8299",
+          "#2AA7C8",
+          "#55BCD6",
+          "#8AD3E5",
+          "#C2E9F2"
+        ]
       },
       "paper": {
         "role": "neutral",
         "displayName": "Bone Paper",
         "canonical": "#F6F1E6",
         "dark": "#191712",
-        "tonalRamp": ["#232019", "#6C6759", "#D9D3C6", "#E9E5DC", "#F3EFE6", "#F6F1E6"]
+        "tonalRamp": [
+          "#232019",
+          "#6C6759",
+          "#D9D3C6",
+          "#E9E5DC",
+          "#F3EFE6",
+          "#F6F1E6"
+        ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Ink",
         "canonical": "#232019",
         "dark": "#EDE8DC",
-        "tonalRamp": ["#232019", "#6C6759", "#D9D3C6", "#E9E5DC", "#F3EFE6", "#F6F1E6"]
+        "tonalRamp": [
+          "#232019",
+          "#6C6759",
+          "#D9D3C6",
+          "#E9E5DC",
+          "#F3EFE6",
+          "#F6F1E6"
+        ]
       },
       "ink-secondary": {
         "role": "neutral",
@@ -58,23 +90,67 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "The one misregistered hero headline per page. Merriweather 800." },
-      "headline": { "displayName": "Headline", "purpose": "Section headings (Writing, Apps). Merriweather 700." },
-      "title": { "displayName": "Title", "purpose": "Content titles — post rows, app names, wordmark, subscribe line. Merriweather 700." },
-      "body": { "displayName": "Body", "purpose": "Intro and body copy (17px); dek is the 15px secondary-ink variant. Inter 400." },
-      "label": { "displayName": "Label", "purpose": "Eyebrows, meta lines, status pills. Inter 600, uppercase, 0.14em tracking." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "The one hero headline, on the 404 only. Merriweather 800, 3px ghost."
+      },
+      "masthead": {
+        "displayName": "Masthead",
+        "purpose": "The rail wordmark on every page — \"Gaspery.\" at Merriweather 400, 38px (32px ≤1000px), on a 2px magenta ghost. Class .rail-wordmark, not .wordmark."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings (Writing, Apps). Merriweather 700."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Content titles — post rows, app names, the app-page wordmark, subscribe line. Merriweather 700."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Intro and body copy (17px); dek is the 15px secondary-ink variant. Inter 400."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Eyebrows, meta lines, status pills. Inter 600, uppercase, 0.14em tracking."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "hover-color", "value": "color 0.15s ease", "purpose": "Link, heading, and nav hover shift to brand-bright. The only recurring transition." }
+      {
+        "name": "hover-color",
+        "value": "color 0.15s ease",
+        "purpose": "Link, heading, and nav hover shift to brand-bright. The only recurring transition."
+      }
     ],
     "breakpoints": [
-      { "name": "mobile", "value": "860px", "purpose": "Two-column rail+main collapses to a single stacked column." },
-      { "name": "mobile-sm", "value": "420px", "purpose": "Type-only step; shrinks the hero from 34px to 30px." }
+      {
+        "name": "collapse",
+        "value": "1000px",
+        "purpose": "Two-column rail + main collapses to a single stacked column; the rail masthead steps from 38px to 32px."
+      },
+      {
+        "name": "tablet-band",
+        "value": "861px–1000px",
+        "purpose": "Inside the collapsed range: a centered 768px notebook column with 56px/32px padding; the 404 Hero at 40px."
+      },
+      {
+        "name": "mobile-sm",
+        "value": "420px",
+        "purpose": "Type-only step; shrinks the 404's Hero from 34px to 30px."
+      }
     ],
     "accessibility": [
-      { "name": "reduced-transparency", "value": "prefers-reduced-transparency: reduce", "purpose": "Hides the misregistration ghost and halftone; blend effects drop to solid ink." },
-      { "name": "increased-contrast", "value": "prefers-contrast: more", "purpose": "Same gate as reduced-transparency — meaning never depends on a blend mode." }
+      {
+        "name": "reduced-transparency",
+        "value": "prefers-reduced-transparency: reduce",
+        "purpose": "Hides the misregistration ghost and halftone; blend effects drop to solid ink."
+      },
+      {
+        "name": "increased-contrast",
+        "value": "prefers-contrast: more",
+        "purpose": "Same gate as reduced-transparency — meaning never depends on a blend mode."
+      }
     ]
   },
   "components": [
@@ -82,8 +158,8 @@
       "name": "Monogram",
       "kind": "custom",
       "refersTo": "monogram",
-      "description": "The identity mark — a magenta ink square with a misregistered teal ghost behind it.",
-      "html": "<div class='ds-monogram'><span class='ds-monogram-ghost'></span><span class='ds-monogram-ink'>A</span></div>",
+      "description": "The identity mark — a magenta ink square carrying the G, with a misregistered teal ghost behind it. Reused by app-page headers with the app's initial.",
+      "html": "<div class='ds-monogram'><span class='ds-monogram-ghost'></span><span class='ds-monogram-ink'>G</span></div>",
       "css": ".ds-monogram { position: relative; width: 46px; height: 46px; } .ds-monogram-ghost, .ds-monogram-ink { position: absolute; inset: 0; width: 46px; height: 46px; border-radius: 2px; } .ds-monogram-ghost { transform: translate(3px, 3px); background: var(--color-teal); mix-blend-mode: multiply; } .ds-monogram-ink { background: var(--color-brand); color: var(--color-paper); display: flex; align-items: center; justify-content: center; font-family: Merriweather, Georgia, serif; font-weight: 900; font-size: 22px; }"
     },
     {
@@ -127,18 +203,26 @@
       "css": ".ds-post { display: block; padding: 22px 0; border-bottom: 1px solid var(--color-hairline); text-decoration: none; } .ds-post-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; } .ds-label { font-family: Inter, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-ink-secondary); } .ds-post-sep { color: var(--color-hairline); font-size: 11px; } .ds-post-tag { font-family: Inter, sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-paper); background: var(--color-brand); padding: 2px 6px; border-radius: 2px; } .ds-post-title { margin: 0; font-family: Merriweather, Georgia, serif; font-weight: 700; font-size: 21px; line-height: 1.28; color: var(--color-ink); transition: color 0.15s ease; } .ds-post:hover .ds-post-title { color: var(--color-brand-bright); } .ds-post-dek { margin: 7px 0 0; font-family: Inter, sans-serif; font-size: 15px; line-height: 1.53; color: var(--color-ink-secondary); max-width: 440px; }"
     },
     {
-      "name": "Hero Misregistration",
+      "name": "Rail Masthead",
+      "kind": "custom",
+      "refersTo": "rail-wordmark",
+      "description": "The site's masthead on every page: \"Gaspery.\" at Merriweather 400, 38px, on a 2px magenta ghost, over the tagline label. Regular weight because the G plate above it carries the heavy mark; 2px because at this weight 3px reads as an outline. The ink copy is the homepage's h1.",
+      "html": "<a class='ds-masthead' href='#'><span class='ds-masthead-wordmark'><span class='ds-masthead-ghost' aria-hidden='true'>Gaspery.</span><span class='ds-masthead-ink'>Gaspery.</span></span><span class='ds-masthead-label'>Words, design, tools &amp; links</span></a>",
+      "css": ".ds-masthead { display: inline-flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--color-ink); } .ds-masthead-wordmark { position: relative; display: block; } .ds-masthead-ink, .ds-masthead-ghost { display: block; font-family: Merriweather, Georgia, serif; font-weight: 400; font-size: 38px; line-height: 1.1; letter-spacing: -0.01em; } .ds-masthead-ink { position: relative; z-index: 1; transition: color .15s ease; } .ds-masthead-ghost { position: absolute; inset: 0; transform: translate(2px, 2px); color: var(--color-brand); mix-blend-mode: multiply; pointer-events: none; } .ds-masthead:hover .ds-masthead-ink { color: var(--color-brand-bright); } .ds-masthead-label { font-family: Inter, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-ink-secondary); } @media (prefers-color-scheme: dark) { .ds-masthead-ghost { mix-blend-mode: screen; } } @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .ds-masthead-ghost { display: none; } }"
+    },
+    {
+      "name": "Hero Misregistration (404)",
       "kind": "custom",
       "refersTo": "hero-title",
-      "description": "The one loud print moment — a headline riding a 3px magenta ghost in multiply. The ghost hides under the accessibility gate.",
-      "html": "<div class='ds-hero-title'><h1 class='ds-hero-ghost' aria-hidden='true'>Making small, sharp software.</h1><h1 class='ds-hero-ink'>Making small, sharp software.</h1></div>",
+      "description": "The 404's headline — Merriweather 800 riding a 3px magenta ghost in multiply. Ordinary pages carry the Rail Masthead instead; never both on one page. The ghost hides under the accessibility gate.",
+      "html": "<div class='ds-hero-title'><h1 class='ds-hero-ghost' aria-hidden='true'>Blank page.</h1><h1 class='ds-hero-ink'>Blank page.</h1></div>",
       "css": ".ds-hero-title { position: relative; max-width: 760px; } .ds-hero-ink, .ds-hero-ghost { margin: 0; font-family: Merriweather, Georgia, serif; font-weight: 800; font-size: 56px; line-height: 1.1; letter-spacing: -0.02em; color: var(--color-ink); } .ds-hero-ghost { position: absolute; inset: 0; transform: translate(3px, 3px); color: var(--color-brand); mix-blend-mode: multiply; z-index: -1; pointer-events: none; } @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .ds-hero-ghost { display: none; } }"
     },
     {
       "name": "Halftone Dot Field",
       "kind": "custom",
       "refersTo": "halftone",
-      "description": "Teal dot screen that fades out radially near a hero. Decorative only; multiply on light, screen on dark. Shown on a bone backing so the blend reads.",
+      "description": "Teal dot screen that fades out radially, bled off the corner of the rail's identity block (or the 404's hero). Decorative only; multiply on light, screen on dark. Shown on a bone backing so the blend reads.",
       "html": "<div class='ds-halftone-demo'><div class='ds-halftone' aria-hidden='true'></div></div>",
       "css": ".ds-halftone-demo { display: inline-block; padding: 12px; background: var(--color-paper); } .ds-halftone { width: 320px; height: 200px; background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px); background-size: 7px 7px; mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%); mask-image: radial-gradient(120% 120% at 92% 8%, #000 0%, rgba(0,0,0,.5) 34%, transparent 68%); } @media (prefers-color-scheme: dark) { .ds-halftone { mix-blend-mode: screen; } }"
     },
@@ -161,37 +245,67 @@
   ],
   "narrative": {
     "northStar": "The Proof Sheet",
-    "overview": "A proof sheet is the test pull a printer takes off the press to check registration and ink before the real run — the sheet where the craft is right there to see. That's this system: two spot inks, magenta and teal, on a warm bone ground, printed slightly out of register. The constraint is the point: with only two colors you solve hierarchy with weight, size, and space instead of reaching for a third. Restraint is the method, not an absence of ideas; \"the craft is the credential.\" The feel is quiet, exact, crafted, and warmly personal — a working notebook, not a marketing site. Generous bone whitespace, a two-column rail+main layout, content in hairline-divided rows rather than cards, and one loud moment per page: the misregistered hero headline.",
+    "overview": "A proof sheet is the test pull a printer takes off the press to check the registration and ink before committing to the run — the sheet where the craft is right there to see. That's this system: two spot inks, magenta and teal, on a warm bone ground, printed slightly out of register. The constraint is the whole point — with only two colors you stop reaching for a third to solve a hierarchy problem and solve it with weight, size, and space instead. Restraint is the method, not an absence of ideas. As `PRODUCT.md` puts it, \"the craft is the credential\": the system earns trust by being visibly, precisely made.\n\nThe feel is quiet, exact, crafted, and warmly personal — a working notebook, not a marketing site. Density is generous: a lot of bone whitespace, a two-column layout (a sticky identity rail beside a wide main column), and content set in rows divided by hairlines rather than boxed into cards. The one loud moment per page is the misregistered wordmark in the rail (the hero headline, on the 404); everything else is composed and calm. Print character carries the warmth — ink, paper, and registration marks — not a tinted-neutral \"cozy\" background.\n\nWhat it explicitly rejects (from `PRODUCT.md`'s anti-references): the generic SaaS/startup landing (gradient hero, feature grid, \"Get started free\"); the salesy funnel (pop-ups, urgency, subscribe-walls, growth hacks); the sterile minimalist portfolio template (a cold Dribbble/Behance grid with no point of view); and anything loud or maximalist. Nothing that trades craft or restraint for reach.",
     "keyCharacteristics": [
-      "Two inks, one ground — magenta + teal over bone paper, no third accent ever.",
-      "Serif prints, sans functions — Merriweather for anything printed, Inter for anything operational.",
-      "Flat by tone, not shadow — depth from paper/surface/surface-raised layering and hairlines.",
-      "One loud moment — the misregistered headline is spent once per page.",
-      "Accessibility-gated ink — blend effects degrade to solid ink; meaning never depends on a blend."
+      "Two inks, one ground, in chrome. Magenta + teal over bone paper. No third accent in chrome, ever — a feature study may still print a subject's own ink as its subject matter (see The Identity Exception, §2).",
+      "Serif prints, sans functions. Merriweather for anything that should read as printed; Inter for everything operational.",
+      "Flat by tone, not shadow. Depth comes from `paper → surface → surface-raised` layering and hairlines; there are no box-shadows.",
+      "One loud moment. The misregistered headline is spent once per page — the rail masthead everywhere, the Hero on the 404 — the rest is quiet.",
+      "Accessibility-gated ink. Every blend-mode effect degrades to solid ink under `prefers-reduced-transparency` / `prefers-contrast: more`; meaning never depends on a blend."
     ],
     "rules": [
-      { "name": "The Two-Ink Rule", "body": "Every screen prints in exactly two inks — magenta and teal — over one bone ground. No third accent; hierarchy is weight, size, and space. Teal is the rarer ink: halftone, ghost, and registration marks only.", "section": "colors" },
-      { "name": "The Token Rule", "body": "Dark values are theme-aware by default. Never hardcode a light value where a token exists — the token already carries its dark twin.", "section": "colors" },
-      { "name": "The Printed-Heading Rule", "body": "Serif (Merriweather) is reserved for what should read as printed — display, headings, titles, wordmark. Sans (Inter) carries everything functional. The two are never swapped.", "section": "typography" },
-      { "name": "The Single-Impression Rule", "body": "By default, the misregistration is spent once per page — on the single most important headline. Its power is scarcity: a second offset headline of equal weight halves the impact of both. Break it only on purpose — a distinct page type, or a spread where a second region genuinely earns its own loud moment — never as decoration or reflex. The test: if you can't say what the second impression is for, it stays in register.", "section": "typography" },
-      { "name": "The Flat Press Rule", "body": "Surfaces never lift off the page. Separate things by tonal layer or a hairline, never a shadow. The only apparent offset allowed is the misregistration, and that is ink, not elevation.", "section": "elevation" }
+      {
+        "name": "The Two-Ink Rule",
+        "body": "Every screen's chrome prints in exactly two inks — magenta and teal — over one bone ground. A third accent color is never introduced into chrome; hierarchy there is solved with weight, size, and space. Teal is the rarer ink, and it comes in two weights of the same colour: `--color-teal` for marks that are *printed* rather than read — halftone, ghost, registration marks, status dots — and `--color-teal-ink` for the small set of labels and markers that are *read*: enumerations, field labels, attributions, and printer's marks that happen to carry a link. Teal is never body copy, and never an ordinary hyperlink. Magenta remains the link ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Identity Exception",
+        "body": "A third ink may appear on a page, but only inside a study whose subject *is* that identity — never in site chrome. A study supplies that ink itself, as content, rather than the stylesheet registering it as a token: a `Spec` item's `ink` field takes either a named site token (`brand`, `teal`) or a literal hex, with an optional `inkDark` as the dark-scheme counterpart for a hex that would not survive the ground inverting — omit it and `ink` is used in both. GRØD's own third ink is the first instance: its Direction glyph carries `ink: \"#48234F\"`, `inkDark: \"#C79BD0\"` inline in the post's own content, not a token declared anywhere in CSS. A study's ink surfaces only as the subject itself — described in prose, printed as one of the app's own colours in a `Swatches` chip, or used to tint a `Spec` glyph when a reading is specifically about that identity's colour. Chrome — the rail, the meta row, the imprint, every page outside a study — stays two inks, always.",
+        "section": "colors"
+      },
+      {
+        "name": "Specimen Grounds",
+        "body": "`--specimen-light` / `--specimen-light-ink` / `--specimen-dark` / `--specimen-dark-ink` (`src/styles/feature.css`) are the two fixed grounds a `Glyphs` strip renders its marks against — a menu bar, a phone wallpaper, whatever environment the study is proving a mark inside. Like a `Swatches` chip, they're content a study supplies, not site chrome, and they are deliberately theme-invariant: a strip labelled \"Light\" has to read as light no matter the reader's own theme, so these four tokens must **never** gain a `prefers-color-scheme` or `[data-theme]` override — themed values here previously made a \"Light\" strip render dark for a reader in dark mode, a label contradicting the thing it labels. Don't confuse them with the site's own `--color-surface` / `--color-ink` chrome tokens, which are theme-aware by design.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token Rule",
+        "body": "Dark values are theme-aware by default. Never hardcode a light value where a token exists — the token already carries its dark twin.",
+        "section": "colors"
+      },
+      {
+        "name": "The Printed-Heading Rule",
+        "body": "Serif (Merriweather) is reserved for what should read as printed — display, headings, titles, the wordmark. Sans (Inter) carries everything functional — body, meta, labels, UI. The two are never swapped, and a heading is never set in sans \"to be modern.\"",
+        "section": "typography"
+      },
+      {
+        "name": "The Single-Impression Rule",
+        "body": "The misregistration is spent once per page — the rail masthead everywhere at 2px, the Hero on the 404 at 3px, never both on the same page. (The G plate's own 3px teal ghost is a printed mark, not a headline, and sits outside this count.) Its power is scarcity: a second offset headline of equal weight halves the impact of both. Break it only on purpose — a distinct page *type*, or a spread where a second region genuinely earns its own loud moment — never as decoration or reflex. The test: if you can't say what the second impression is *for*, it stays in register.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Press Rule",
+        "body": "Surfaces never lift off the page. If something needs to feel separate, change its tonal layer (`surface` / `surface-raised`) or divide it with a hairline — never add a shadow. The only apparent \"offset\" allowed is the misregistration, and that is ink, not elevation.",
+        "section": "elevation"
+      }
     ],
     "dos": [
-      "Do reuse an existing token before adding a new one; if nothing fits, add it here and to global.css together.",
-      "Do set anything printed in Merriweather and anything functional in Inter.",
-      "Do let new page types break from the two-column layout, but keep the same palette, type scale, and signature motifs — \"different structure, same ink.\"",
-      "Do check both color schemes and the accessibility gates before calling an illustrated component done.",
+      "Do reuse an existing token before adding a new one. If nothing fits, that's a real gap — add it here and to `global.css` together, never leave it implicit in one component's inline values.",
+      "Do set anything printed (display, headings, titles, wordmark) in Merriweather and anything functional (body, meta, labels) in Inter.",
+      "Do let new page *types* break from the two-column rail layout (the GRØD app page is the first test) — but keep the same palette, type scale, and signature motifs. \"Different structure, same ink,\" never \"different structure, different system.\"",
+      "Do check both color schemes and the accessibility gates (`prefers-reduced-transparency`, `prefers-contrast: more`) before calling any illustrated component done.",
       "Do pair every status color with a text label — color is never the only signal."
     ],
     "donts": [
-      "Don't introduce a third ink or accent color.",
-      "Don't add box-shadows, glows, or glassmorphism — the system is flat.",
+      "Don't introduce a third ink or accent color into chrome. Two inks and a ground there; solve hierarchy with weight, size, and space — a study's own subject-matter ink is the one sanctioned exception (see The Identity Exception, §2).",
+      "Don't add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule).",
       "Don't scatter the misregistration across headlines by reflex — spend it once by default (see The Single-Impression Rule), and never let meaning depend on a blend mode.",
-      "Don't hardcode a light color value where a token exists.",
+      "Don't hardcode a light color value where a token exists — the token carries its dark twin.",
       "Don't build a generic SaaS/startup landing: gradient hero, feature grid, \"Get started free.\"",
       "Don't add salesy-funnel patterns — pop-ups, urgency, subscribe-walls, growth hacks.",
-      "Don't flatten this into a sterile minimalist portfolio grid with no point of view, and don't go loud or maximalist.",
-      "Don't use a colored border-left/right stripe as an accent, or gradient text."
+      "Don't flatten this into a sterile minimalist portfolio grid with no point of view, and don't go loud or maximalist. Nothing that trades craft or restraint for reach.",
+      "Don't use a colored `border-left`/`border-right` stripe as an accent, or gradient text (`background-clip: text`) — neither belongs in this system or any."
     ]
   }
 }
