@@ -64,9 +64,12 @@ const updatedLabel = `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getU
     font-size: var(--text-body); line-height: 1.65; color: var(--color-ink-secondary); max-width: 60ch;
   }
   .now-page__entry :global(em) { font-style: italic; color: var(--color-ink); }
+  /* No rule above the end row, as on every writing page: the imprint below
+     draws the foot's one rule. The row sits off the prose by space alone,
+     at the essay page's 48px. */
   .now-page__end {
     display: flex; align-items: center; gap: 12px;
-    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
+    margin-top: 48px; padding-top: 24px;
   }
   .now-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
   .now-page__end a:hover { color: var(--color-brand-strong-hover); }

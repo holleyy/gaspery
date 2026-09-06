@@ -61,9 +61,12 @@ const { Content } = await render(entry);
     color: var(--color-brand-strong); text-decoration: underline; text-underline-offset: 2px;
   }
   .company-page__prose :global(a:hover) { color: var(--color-brand-strong-hover); }
+  /* No rule above the end row, as on every writing page: the imprint below
+     draws the foot's one rule. The row sits off the prose by space alone,
+     at the essay page's 48px. */
   .company-page__end {
     display: flex; align-items: center; gap: 12px;
-    margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--color-hairline);
+    margin-top: 48px; padding-top: 24px;
   }
   .company-page__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
   .company-page__end a:hover { color: var(--color-brand-strong-hover); }

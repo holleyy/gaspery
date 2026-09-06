@@ -204,4 +204,11 @@ test('the feature page closes its imprint inside the reading column', () => {
   const essayEnd = essayPage.match(/\.article__end\s*\{([^}]*)\}/);
   assert.ok(essayEnd, '.article__end rule missing');
   assert.doesNotMatch(essayEnd![1], /border-top/);
+  // About, Now, and Company close the same way.
+  for (const [file, cls] of [['about', 'about-page__end'], ['now', 'now-page__end'], ['company', 'company-page__end']]) {
+    const page = readFileSync(new URL(`../src/pages/${file}.astro`, import.meta.url), 'utf8');
+    const rule = page.match(new RegExp(`\\.${cls}\\s*\\{([^}]*)\\}`));
+    assert.ok(rule, `.${cls} rule missing`);
+    assert.doesNotMatch(rule![1], /border-top/, `${file}: end row still draws a rule`);
+  }
 });
