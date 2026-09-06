@@ -183,3 +183,16 @@ test('no app’s private ink is baked into the format', () => {
   assert.doesNotMatch(specSrc, /aubergine/i, 'Spec still names a specific study’s ink');
   assert.doesNotMatch(featureCss, /grod/i, 'feature.css still carries a study-specific token');
 });
+
+test('the feature page closes its imprint inside the reading column', () => {
+  // Every other page sets the imprint in its 680px column; a bare <Imprint />
+  // as a child of the full-width .feature main ran edge to edge.
+  const featureArticle = readFileSync(new URL('../src/components/FeatureArticle.astro', import.meta.url), 'utf8');
+  const featureCss = readFileSync(new URL('../src/styles/feature.css', import.meta.url), 'utf8');
+  assert.match(featureArticle, /<footer class="feature__foot">\s*<Imprint \/>\s*<\/footer>/);
+  const rule = featureCss.match(/\.feature__foot\s*\{([^}]*)\}/);
+  assert.ok(rule, '.feature__foot rule missing');
+  assert.match(rule![1], /max-width:\s*680px/);
+  assert.match(rule![1], /margin:\s*0 auto/);
+  assert.match(rule![1], /padding:\s*0 24px 96px/);
+});

@@ -165,3 +165,10 @@
   border-top: 1px solid var(--color-hairline);
 }
 .feature__end a { font-weight: 600; font-size: 14px; color: var(--color-brand-strong); }
+/* The imprint's column: the same 680px / 24px frame as the end row, with
+   the standard article's 96px bottom margin under it. */
+.feature__foot {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
+}

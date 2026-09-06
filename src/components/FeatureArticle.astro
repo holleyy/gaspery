@@ -74,5 +74,10 @@ const app = post.data.app ? await getEntry('apps', post.data.app) : undefined;
       : <a href="/">Back to the notebook &rarr;</a>}
   </div>
 
-  <Imprint />
+  {/* The statutory imprint, set in the same 680px column as the frame and
+      the end row above it. A bare <Imprint /> here is a child of the
+      full-width main and runs edge to edge. */}
+  <footer class="feature__foot">
+    <Imprint />
+  </footer>
 </main>
