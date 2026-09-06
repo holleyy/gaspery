@@ -199,4 +199,9 @@ test('the feature page closes its imprint inside the reading column', () => {
   const end = featureCss.match(/\.feature__end\s*\{([^}]*)\}/);
   assert.ok(end, '.feature__end rule missing');
   assert.doesNotMatch(end![1], /border-top/);
+  // The essay page's end row follows the same foot: one rule, the imprint's.
+  const essayPage = readFileSync(new URL('../src/pages/writing/[...id].astro', import.meta.url), 'utf8');
+  const essayEnd = essayPage.match(/\.article__end\s*\{([^}]*)\}/);
+  assert.ok(essayEnd, '.article__end rule missing');
+  assert.doesNotMatch(essayEnd![1], /border-top/);
 });
