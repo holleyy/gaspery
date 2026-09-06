@@ -211,4 +211,9 @@ test('the feature page closes its imprint inside the reading column', () => {
     assert.ok(rule, `.${cls} rule missing`);
     assert.doesNotMatch(rule![1], /border-top/, `${file}: end row still draws a rule`);
   }
+  // The editorial app page's closing row too.
+  const globalCss = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  const appClosing = globalCss.match(/\.app-editorial__closing\s*\{([^}]*)\}/);
+  assert.ok(appClosing, '.app-editorial__closing rule missing');
+  assert.doesNotMatch(appClosing![1], /border-top/);
 });
