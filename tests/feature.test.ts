@@ -195,4 +195,8 @@ test('the feature page closes its imprint inside the reading column', () => {
   assert.match(rule![1], /max-width:\s*680px/);
   assert.match(rule![1], /margin:\s*0 auto/);
   assert.match(rule![1], /padding:\s*0 24px 96px/);
+  // One rule at the foot: the imprint's. The end row draws none.
+  const end = featureCss.match(/\.feature__end\s*\{([^}]*)\}/);
+  assert.ok(end, '.feature__end rule missing');
+  assert.doesNotMatch(end![1], /border-top/);
 });
