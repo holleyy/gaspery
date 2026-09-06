@@ -545,7 +545,9 @@ a.app:hover .app__name { color: var(--color-brand-bright); }
 .app-editorial__text { flex: 1 1 320px; display: flex; flex-direction: column; gap: 10px; }
 .app-editorial__text h3 { font-family: var(--font-serif); font-weight: 700; font-size: var(--text-title); color: var(--color-ink); }
 .app-editorial__text p { font-size: var(--text-body); line-height: 1.6; color: var(--color-ink-secondary); margin: 0; }
-.app-editorial__closing { display: flex; align-items: center; gap: 10px; padding-top: 16px; border-top: 1px solid var(--color-hairline); }
+/* No rule above the closing row, as on every other page's foot: the imprint
+   below draws the one closing hairline. */
+.app-editorial__closing { display: flex; align-items: center; gap: 10px; padding-top: 16px; }
 
 /* ---- Overprint D2 accessibility gate --------------------------------
    Under reduced transparency or increased contrast, blend modes and the
