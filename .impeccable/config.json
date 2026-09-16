@@ -82,6 +82,24 @@
         "value": "inter",
         "createdAt": "2026-08-14T12:28:47.427Z",
         "reason": "DESIGN.md locked identity: Inter is the documented body face (Printed-Heading Rule); brand.md identity-preservation applies to committed fonts"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "28px",
+        "createdAt": "2026-09-16T17:49:09.241Z",
+        "reason": "User confirmed 28px is intentional: the studio wordmark, approved in the 2026-09-16 studio spec and recorded in DECISIONS.md"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "120px",
+        "createdAt": "2026-09-16T17:49:09.285Z",
+        "reason": "User confirmed 120px is intentional: the studio cloud's name ceiling, approved in the 2026-09-16 studio spec and recorded in DECISIONS.md"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "40px",
+        "createdAt": "2026-09-16T17:49:09.321Z",
+        "reason": "User confirmed 40px is intentional: the studio fallback proof cards, approved in the 2026-09-16 studio spec and recorded in DECISIONS.md"
       }
     ]
   }
