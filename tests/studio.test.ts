@@ -244,9 +244,10 @@ test('no em dashes in the page', () => {
 const parity = read('scripts/verify-parity.sh');
 
 test('the parity gate admits one studio switch in place of the theme toggle', () => {
-  // Original guarantee kept: no page ever carries two theme radio groups.
-  // New: a page may carry the studio switch instead of the theme toggle.
+  // Original guarantee kept and tightened: every page carries exactly one
+  // appearance control, of either kind. Two of a kind and one of each both
+  // fail, since each is a native radio group.
   assert.match(parity, /class="studio-switch"/);
-  assert.match(parity, /-gt 1/);
-  assert.match(parity, /-lt 1/);
+  assert.match(parity, /\$\(\(theme \+ studio\)\) -ne 1/);
+  assert.doesNotMatch(parity, /-gt 1/);
 });

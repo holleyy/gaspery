@@ -39,13 +39,13 @@ done < <(find dist -name '*.html' | sort)
 
 # Every page carries exactly one appearance control: the site's theme
 # toggle (ThemeToggle.astro) or, on /studio, the studio switch
-# (StudioSwitch.astro). Never two of either: each is a native radio group
-# and two mounted copies would fight over which is checked. Never none:
-# a page without a control cannot leave a forced appearance.
+# (StudioSwitch.astro). Never two of any kind, and never one of each:
+# each is a native radio group and two mounted controls would fight over
+# which is checked.
 while IFS= read -r f; do
   theme=$(grep -o 'class="theme-toggle"' "$f" | wc -l | tr -d ' ')
   studio=$(grep -o 'class="studio-switch"' "$f" | wc -l | tr -d ' ')
-  if [ "$theme" -gt 1 ] || [ "$studio" -gt 1 ] || [ $((theme + studio)) -lt 1 ]; then
+  if [ $((theme + studio)) -ne 1 ]; then
     echo "APPEARANCE CONTROL COUNT WRONG: $f has theme=$theme studio=$studio, expected exactly one of either"
     fail=1
   fi
