@@ -90,3 +90,68 @@ test('GRØD carries the one real proof and the file exists', () => {
   assert.equal(match[1], '/shots/grod/briefing.webp');
   assert.doesNotThrow(() => readFileSync(new URL(`../public${match[1]}`, import.meta.url)));
 });
+
+const studioCss = read('src/styles/studio.css');
+const globalCss = read('src/styles/global.css');
+
+/** Custom-property declarations in the rule starting at `selector`.
+    Assumes no nested braces inside the block. */
+function tokensIn(source: string, selector: string): Record<string, string> {
+  const start = source.indexOf(selector);
+  assert.notEqual(start, -1, `selector not found: ${selector}`);
+  const open = source.indexOf('{', start);
+  const close = source.indexOf('}', open);
+  return Object.fromEntries(
+    [...source.slice(open + 1, close).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(([, n, v]) => [n, v.trim()])
+  );
+}
+
+const PLATE = ":root:has(.studio-page):not([data-studio='light']):not([data-studio='dark'])";
+
+test('the plate block redeclares every token the dark block declares', () => {
+  // The plate wins over the OS dark palette by specificity, token by
+  // token. Any token it leaves out would leak the dark value through on a
+  // dark OS, so the two blocks must cover the same keys.
+  const plate = tokensIn(studioCss, PLATE);
+  const dark = tokensIn(globalCss, ":root[data-theme='dark']");
+  const colourKeys = Object.keys(plate).filter((k) => k.startsWith('--color-')).sort();
+  assert.deepEqual(colourKeys, Object.keys(dark).sort());
+});
+
+test('the plate ground is brand-strong and its type is paper, for 5.09:1', () => {
+  const plate = tokensIn(studioCss, PLATE);
+  const light = tokensIn(globalCss, ':root {');
+  assert.equal(plate['--color-paper'].toUpperCase(), light['--color-brand-strong'].toUpperCase());
+  assert.equal(plate['--color-ink'].toUpperCase(), light['--color-paper'].toUpperCase());
+  // No dimmed small text on the plate: secondary is full paper too.
+  assert.equal(plate['--color-ink-secondary'].toUpperCase(), light['--color-paper'].toUpperCase());
+  assert.match(studioCss, new RegExp(`${PLATE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{[^}]*color-scheme:\\s*light`));
+});
+
+test('the page-local ghost and plate inks are defined in all three states', () => {
+  const plate = tokensIn(studioCss, PLATE);
+  assert.equal(plate['--studio-ghost'], '#232019');
+  assert.equal(plate['--studio-plate'], '#232019');
+  assert.equal(plate['--studio-blend'], 'multiply');
+  // Light and dark resolve to the site's own inks, and the blend flips for
+  // dark both ways it can be reached, guarded against an explicit light.
+  const base = tokensIn(studioCss, ':root {');
+  assert.equal(base['--studio-ghost'], 'var(--color-brand)');
+  assert.equal(base['--studio-plate'], 'var(--color-teal)');
+  assert.equal(base['--studio-blend'], 'multiply');
+  assert.equal(tokensIn(studioCss, ":root:not([data-theme='light'])")['--studio-blend'], 'screen');
+  assert.equal(tokensIn(studioCss, ":root[data-theme='dark']")['--studio-blend'], 'screen');
+});
+
+test('the accessibility gate drops every studio blend effect', () => {
+  const gate = studioCss.slice(studioCss.indexOf('prefers-reduced-transparency'));
+  for (const target of ['.studio-name__ghost', '.studio-wm__ghost', '.studio-proof__plate']) {
+    assert.ok(gate.includes(target), `${target} is not gated`);
+  }
+});
+
+test('selection is readable on the plate', () => {
+  // global.css paints ::selection brand-strong on paper; on the plate both
+  // resolve to paper, so the page pins its own.
+  assert.match(studioCss, /\.studio-page ::selection\s*\{[^}]*background:\s*var\(--studio-ghost\)/);
+});

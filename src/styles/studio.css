@@ -1,0 +1,207 @@
+/* =====================================================================
+   /studio — the plate page. Loaded by src/pages/studio.astro only.
+   One screen: the app names as a wrapping cloud of large two-tone type,
+   a category beside each, a proof card that trails the cursor. The plate
+   (magenta ground, paper type, the black ink layer off register) is the
+   page's no-JavaScript state; a reader opts out to the site's light or
+   dark palette with the three-dot switch.
+   ===================================================================== */
+
+/* ---- Page-local inks ------------------------------------------------
+   The ghost under every name and the offset card under every proof read
+   these instead of brand and teal directly, so the plate can swap both
+   for the black ink without touching the site's tokens. Declared three
+   times like global.css declares dark: once for the base, once behind the
+   OS media query (guarded against an explicit light choice), once behind
+   the attribute. */
+:root {
+  --studio-ghost: var(--color-brand);
+  --studio-plate: var(--color-teal);
+  --studio-blend: multiply;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) { --studio-blend: screen; }
+}
+:root[data-theme='dark'] { --studio-blend: screen; }
+
+/* ---- The plate ------------------------------------------------------
+   Declared on :root, gated on the page's root element, beaten only by an
+   explicit opt-out attribute. (0,4,0) outranks both dark blocks in
+   global.css at (0,2,0), so under a dark OS every token below still
+   wins. Every token the dark block declares is redeclared here for that
+   reason: an omission would leak the dark value through.
+
+   Ground is brand-strong, "the same ink pressed harder": paper on the
+   display magenta is 3.88:1, short of AA for the 12px categories and the
+   14px foot links; on this press it is 5.09:1, so every word on the plate
+   clears 4.5:1 with no size exception. Secondary is full paper for the
+   same reason (paper at 72% measured 3.32:1). The only dimmed thing is
+   Top Secret's display-size name, by opacity, below. */
+:root:has(.studio-page):not([data-studio='light']):not([data-studio='dark']) {
+  --color-paper:          #B82E70;
+  --color-surface:        #A5285F;
+  --color-surface-raised: #C4327A;
+  --color-hairline:       #CC6C96;
+  --color-ink:            #F6F1E6;
+  --color-ink-secondary:  #F6F1E6;
+  --color-brand:          #F6F1E6;
+  --color-brand-bright:   #F6F1E6;
+  --color-brand-strong:       #F6F1E6;
+  --color-brand-strong-hover: #F6F1E6;
+  --color-teal:           #F6F1E6;
+  --color-teal-ink:       #F6F1E6;
+  --color-positive:       #F6F1E6;
+  --color-warning:        #F6F1E6;
+  --color-error:          #F6F1E6;
+  --color-brand-on-ink:   #232019;
+  --studio-ghost: #232019;
+  --studio-plate: #232019;
+  --studio-blend: multiply;
+  color-scheme: light;
+}
+
+/* global.css paints ::selection brand-strong on paper. On the plate both
+   are paper, so the page pins the black ink on paper instead; in light
+   and dark this resolves to brand on paper, the site's own. */
+.studio-page ::selection { background: var(--studio-ghost); color: var(--color-paper); }
+
+/* ---- Frame ---------------------------------------------------------- */
+.studio-page {
+  min-height: 100vh;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 40px var(--margin) 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top bar --------------------------------------------------------
+   Wordmark, the switch, the nav. The wordmark is the rail's recipe at
+   28px: Merriweather 400 on a 2px ghost. */
+.studio-top { display: flex; align-items: baseline; gap: 28px; }
+.studio-wm {
+  position: relative; display: inline-block;
+  font-family: var(--font-serif); font-weight: 400; font-size: 28px; line-height: 1.1; letter-spacing: -0.01em;
+}
+.studio-wm__ghost {
+  position: absolute; inset: 0; transform: translate(2px, 2px);
+  color: var(--studio-ghost); mix-blend-mode: var(--studio-blend); pointer-events: none;
+}
+.studio-wm__ink { position: relative; z-index: 1; transition: color .15s ease; }
+.studio-wm:hover .studio-wm__ink { color: var(--color-brand-bright); }
+.studio-top .studio-switch { margin-left: auto; }
+.studio-nav { display: flex; gap: 28px; }
+.studio-nav a {
+  font-family: var(--font-serif); font-weight: 700; font-size: 17px; line-height: 1.15;
+  transition: color .15s ease;
+}
+.studio-nav a:hover { color: var(--color-brand-bright); }
+.studio-nav a[aria-current] { color: var(--color-brand-strong); }
+/* On the plate there is no second ink to colour the current item with, so
+   it is underlined in paper instead. */
+:root:has(.studio-page):not([data-studio='light']):not([data-studio='dark']) .studio-nav a[aria-current] {
+  border-bottom: 2px solid currentColor;
+}
+
+/* ---- The cloud ------------------------------------------------------ */
+.studio-work { flex: 1; display: grid; align-content: center; padding: 48px 0; }
+.studio-cloud {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  column-gap: .42em; row-gap: .12em;
+  font-size: clamp(56px, 8.4vw, 120px);
+  max-width: 1120px;
+}
+.studio-item { display: inline-flex; align-items: baseline; gap: .14em; }
+
+/* The name, printed twice: the rail wordmark's misregistration at display
+   scale, on at rest. Hover pushes the ghost further off register; nothing
+   else moves. */
+.studio-name {
+  position: relative; display: inline-block;
+  font-family: var(--font-serif); font-weight: 400; font-size: 1em; line-height: 1; letter-spacing: -0.025em;
+}
+.studio-name__ghost {
+  position: absolute; inset: 0; transform: translate(.035em, .035em);
+  color: var(--studio-ghost); mix-blend-mode: var(--studio-blend); pointer-events: none;
+  transition: transform .35s cubic-bezier(.25, 1, .5, 1);
+}
+.studio-name__ink { position: relative; z-index: 1; }
+.studio-item:hover .studio-name__ghost { transform: translate(.07em, .07em); }
+/* Not a link (Top Secret). Secondary ink in light and dark; on the plate
+   secondary is paper, so the dim comes from opacity: 3.32:1 on the ground,
+   above the 3:1 floor for text this size. */
+.studio-name--dim .studio-name__ink { color: var(--color-ink-secondary); }
+:root:has(.studio-page):not([data-studio='light']):not([data-studio='dark']) .studio-name--dim .studio-name__ink { opacity: .72; }
+
+.studio-cat {
+  font-family: var(--font-mono); font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-ink-secondary); white-space: nowrap; margin-right: .1em;
+}
+
+/* ---- The proof ------------------------------------------------------
+   One fixed element, positioned by script, that trails the cursor. One
+   card per app is pre-rendered inside it; the script shows the matching
+   one. The offset card behind it is the monogram's misregistration at
+   card scale. */
+.studio-proof {
+  position: fixed; left: 0; top: 0; width: 400px;
+  pointer-events: none; z-index: 5;
+  opacity: 0; transform: rotate(-3deg) scale(.96);
+  transition: opacity .22s ease, transform .35s cubic-bezier(.25, 1, .5, 1);
+  will-change: transform;
+}
+.studio-proof.is-on { opacity: 1; transform: rotate(0) scale(1); }
+.studio-proof__plate {
+  position: absolute; inset: 0; transform: translate(8px, 8px);
+  background: var(--studio-plate); mix-blend-mode: var(--studio-blend); border-radius: 2px;
+}
+.studio-card {
+  position: relative; z-index: 1; display: none;
+  aspect-ratio: 3 / 2; border-radius: 2px; overflow: hidden;
+  /* Cards are always paper, whatever the page is: a proof is a print. */
+  background: #F6F1E6; border: 1px solid #D9D3C6; color: #232019;
+}
+.studio-card.is-on { display: block; }
+.studio-card img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.studio-card--blank.is-on { display: grid; place-items: center; text-align: center; }
+.studio-card__big { font-family: var(--font-serif); font-weight: 400; font-size: 40px; letter-spacing: -0.02em; line-height: 1.1; }
+.studio-card__label {
+  font-family: var(--font-mono); font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #6C6759; margin-top: 8px;
+}
+
+/* ---- Foot ----------------------------------------------------------- */
+.studio-foot {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
+  padding-top: 20px; border-top: 1px solid var(--color-hairline);
+}
+.studio-foot__line { font-family: var(--font-serif); font-weight: 400; font-size: 17px; margin: 0 0 12px; }
+.studio-foot__links { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; font-weight: 500; }
+.studio-foot__links a { color: var(--color-ink-secondary); transition: color .15s ease; }
+.studio-foot__links a:hover { color: var(--color-brand-bright); }
+.studio-imprint { margin-top: 28px; }
+
+/* ---- Accessibility gate --------------------------------------------
+   Same gate as global.css: every blend effect degrades to nothing and the
+   two-colour logic survives as flat shapes. The plate stays magenta with
+   paper type. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .studio-name__ghost, .studio-wm__ghost, .studio-proof__plate { display: none; }
+}
+
+/* ---- Collapse ------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .studio-page { padding: 36px 24px 32px; }
+  .studio-top { flex-wrap: wrap; gap: 16px 24px; }
+  .studio-top .studio-switch { order: 3; margin-left: 0; flex-basis: 100%; }
+  .studio-nav { margin-left: auto; gap: 18px; }
+  .studio-nav a { font-size: 15px; }
+  .studio-work { padding: 32px 0; }
+  .studio-cloud { flex-direction: column; align-items: flex-start; row-gap: .3em; font-size: clamp(40px, 11vw, 64px); }
+  /* Touch never shows the proof (the script ignores touch pointers) and
+     at these widths a fine pointer gets none either: the card would cover
+     the names. */
+  .studio-proof { display: none; }
+  .studio-foot { flex-direction: column; align-items: flex-start; }
+}
