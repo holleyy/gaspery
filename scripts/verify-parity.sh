@@ -37,13 +37,16 @@ while IFS= read -r f; do
   fi
 done < <(find dist -name '*.html' | sort)
 
-# The theme control is single-instance per page (see ThemeToggle.astro):
-# two mounted copies would share one native radio group via `name="theme"`
-# and fight over which is checked instead of staying in sync.
+# Every page carries exactly one appearance control: the site's theme
+# toggle (ThemeToggle.astro) or, on /studio, the studio switch
+# (StudioSwitch.astro). Never two of any kind, and never one of each:
+# each is a native radio group and two mounted controls would fight over
+# which is checked.
 while IFS= read -r f; do
-  count=$(grep -o 'class="theme-toggle"' "$f" | wc -l | tr -d ' ')
-  if [ "$count" -ne 1 ]; then
-    echo "THEME TOGGLE COUNT WRONG: $f has $count, expected 1"
+  theme=$(grep -o 'class="theme-toggle"' "$f" | wc -l | tr -d ' ')
+  studio=$(grep -o 'class="studio-switch"' "$f" | wc -l | tr -d ' ')
+  if [ $((theme + studio)) -ne 1 ]; then
+    echo "APPEARANCE CONTROL COUNT WRONG: $f has theme=$theme studio=$studio, expected exactly one of either"
     fail=1
   fi
 done < <(find dist -name '*.html' | sort)

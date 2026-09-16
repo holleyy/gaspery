@@ -155,3 +155,36 @@ will shift a link built on character offsets; link cards need
 respect `draft`; posts cap at 300 graphemes. Open question: the rail already
 shows your latest Bluesky post, so auto-posting every link makes the pulse a
 mirror of the site's own links.
+
+## /studio defaults to the magenta plate, on the brand-strong press
+
+**Decided:** 2026-09-16, with the studio page.
+
+`/studio` is the one page that chooses an appearance for the reader. It
+paints the plate (the magenta ink as the ground, paper type, the black ink
+layer off register) by default, ignores the OS, and offers light and dark
+as page-local opt-outs through its own three-dot switch and its own storage
+key. It never reads or writes the site-wide `theme` preference.
+
+**Why.** The brief was a studio landing page in the manner of the bold
+agency demos, where the brand colour is the whole ground. Making it opt-in
+would make it a novelty; making it the default makes it the page.
+
+**The press.** The ground is brand-strong (#B82E70), not the display
+magenta (#D63A86). Paper on the display ink is 3.88:1, short of AA for the
+12px categories and the 14px foot links; on brand-strong it is 5.09:1, so
+every word on the plate clears 4.5:1 with no size exception to remember.
+Secondary ink on the plate is full paper for the same reason; only Top
+Secret's display-size name dims, by opacity, to 3.32:1 against a 3:1 floor.
+
+**The loud moment, multiplied.** DESIGN.md spends the misregistration once
+per page. This page spends it five times (the wordmark and four names) and
+sets three sizes off the documented type ramp (28px wordmark, 120px names,
+40px on the fallback cards). Deliberate: the page is a poster, not a leaf of
+the notebook, and the design lint will keep flagging the literals.
+
+**Not linked yet.** The rail's Index does not list Studio. The page is a
+sibling reachable by URL until it earns a place, or replaces the homepage.
+
+**Revisit if** the bold default stops being wanted: add a `system` state
+to the switch and make it the default, and the plate becomes a choice.

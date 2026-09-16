@@ -335,6 +335,19 @@ export default config({
           defaultValue: 'planning',
         }),
         url: fields.text({ label: 'URL' }),
+        /* Optional here and in src/content.config.ts. Keystatic stores an
+           image field at <directory>/<slug>/<field>.<ext>, so a proof lives
+           at public/shots/<app>/proof.webp and the YAML holds
+           /shots/<app>/proof.webp. Seed new entries in that exact layout: a
+           hand-written path anywhere else is moved on the first save, and
+           whatever else referenced the old file breaks (see
+           tests/studio.test.ts). */
+        proof: fields.image({
+          label: 'Proof',
+          description: 'A screenshot for the studio page. Leave empty for "Proof pending".',
+          directory: 'public/shots',
+          publicPath: '/shots/',
+        }),
         order: fields.number({ label: 'Order' }),
       },
     }),
