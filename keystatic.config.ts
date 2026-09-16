@@ -335,6 +335,15 @@ export default config({
           defaultValue: 'planning',
         }),
         url: fields.text({ label: 'URL' }),
+        /* Optional here and in src/content.config.ts. Uploads land in
+           public/shots and the YAML holds the absolute /shots/... path, the
+           only place Astro can serve them from (see bodyImages above). */
+        proof: fields.image({
+          label: 'Proof',
+          description: 'A screenshot for the studio page. Leave empty for "Proof pending".',
+          directory: 'public/shots',
+          publicPath: '/shots/',
+        }),
         order: fields.number({ label: 'Order' }),
       },
     }),

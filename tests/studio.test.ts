@@ -58,3 +58,35 @@ test('categoryFor derives the platform from meta and Soon from status', () => {
   // Whitespace around the segment is trimmed.
   assert.equal(categoryFor({ meta: '  iOS  · SwiftUI', status: 'dev' }), 'iOS');
 });
+
+const contentConfig = read('src/content.config.ts');
+const keystaticConfig = read('keystatic.config.ts');
+
+test('proof is optional in the Zod apps schema', () => {
+  // A field required in one schema and optional in the other commits fine
+  // in Keystatic and then fails the Cloudflare build. Both are pinned.
+  const apps = contentConfig.slice(contentConfig.indexOf('const apps = defineCollection'));
+  const block = apps.slice(0, apps.indexOf('});') + 3);
+  assert.match(block, /proof:\s*z\.string\(\)\.optional\(\)/);
+});
+
+test('proof is an image field in the Keystatic apps collection, uploading to /shots', () => {
+  const start = keystaticConfig.indexOf('apps: collection({');
+  assert.notEqual(start, -1, 'apps collection not found in keystatic.config.ts');
+  const block = keystaticConfig.slice(start, keystaticConfig.indexOf('singletons: {', start));
+  assert.match(block, /proof:\s*fields\.image\(\{/);
+  assert.match(block, /directory:\s*'public\/shots'/);
+  assert.match(block, /publicPath:\s*'\/shots\/'/);
+  // fields.image is optional by default; a `validation: { isRequired: true }`
+  // here would be the exact drift this test exists to catch.
+  const field = block.slice(block.indexOf('proof:'), block.indexOf('}),', block.indexOf('proof:')));
+  assert.doesNotMatch(field, /isRequired/);
+});
+
+test('GRØD carries the one real proof and the file exists', () => {
+  const grod = read('src/content/apps/grod.yaml');
+  const match = grod.match(/^proof:\s*(\S+)\s*$/m);
+  assert.ok(match, 'grod.yaml has no proof line');
+  assert.equal(match[1], '/shots/grod/briefing.webp');
+  assert.doesNotThrow(() => readFileSync(new URL(`../public${match[1]}`, import.meta.url)));
+});
