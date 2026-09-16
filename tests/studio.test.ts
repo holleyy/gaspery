@@ -240,3 +240,13 @@ test('the foot carries the tagline, the Elsewhere links, and the imprint', () =>
 test('no em dashes in the page', () => {
   assert.doesNotMatch(studioPage, /—/);
 });
+
+const parity = read('scripts/verify-parity.sh');
+
+test('the parity gate admits one studio switch in place of the theme toggle', () => {
+  // Original guarantee kept: no page ever carries two theme radio groups.
+  // New: a page may carry the studio switch instead of the theme toggle.
+  assert.match(parity, /class="studio-switch"/);
+  assert.match(parity, /-gt 1/);
+  assert.match(parity, /-lt 1/);
+});
