@@ -104,15 +104,16 @@ const apps = (await getCollection('apps'))
     <div class="studio-imprint"><Imprint /></div>
 
     {/* One proof element, one pre-rendered card per app. The script shows
-        the card whose data-card matches the hovered item's data-proof. A
+        the card whose data-card matches the hovered item's data-proof. The
+        offset plate is a drop-shadow on the card (studio.css), so a proof
+        uploaded as a transparent device frame keeps its silhouette. A
         real screenshot when the app has one; otherwise "Proof pending",
         or "Redacted" while the app is still in planning. The pending and
         redacted cards are markup, not images. */}
     <div class="studio-proof" aria-hidden="true">
-      <div class="studio-proof__plate"></div>
       {apps.map((app) =>
         app.proof ? (
-          <div class="studio-card" data-card={app.id}>
+          <div class="studio-card studio-card--image" data-card={app.id}>
             <img src={app.proof} alt="" decoding="async" fetchpriority="low" />
           </div>
         ) : app.status === 'planning' ? (
@@ -148,8 +149,8 @@ const apps = (await getCollection('apps'))
   if (proof && items.length) {
     const cards = [...proof.querySelectorAll<HTMLElement>('.studio-card')];
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-    /* The card's box. Read from the element when it first shows, so the
-       size lives in studio.css only; these are the fallbacks. */
+    /* The shown card's box, read from the element each time one shows: a
+       framed phone is taller than a framed laptop. These are fallbacks. */
     let W = 400;
     let H = (W * 2) / 3;
     let tx = 0, ty = 0, x = 0, y = 0;
@@ -175,7 +176,7 @@ const apps = (await getCollection('apps'))
         if (e.pointerType === 'touch') return;
         cards.forEach((c) => c.classList.toggle('is-on', c.dataset.card === item.dataset.proof));
         W = proof.offsetWidth || W;
-        H = (W * 2) / 3;
+        H = proof.offsetHeight || H;
         place(e);
         if (!on) { x = tx; y = ty; paint(); }
         on = true;
