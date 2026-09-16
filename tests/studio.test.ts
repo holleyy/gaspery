@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 // `.ts` is required here: Node's native type stripping runs this file
 // directly and ESM needs the extension. Astro files import extensionless.
 import {
@@ -83,12 +83,23 @@ test('proof is an image field in the Keystatic apps collection, uploading to /sh
   assert.doesNotMatch(field, /isRequired/);
 });
 
-test('GRØD carries the one real proof and the file exists', () => {
-  const grod = read('src/content/apps/grod.yaml');
-  const match = grod.match(/^proof:\s*(\S+)\s*$/m);
-  assert.ok(match, 'grod.yaml has no proof line');
-  assert.equal(match[1], '/shots/grod/briefing.webp');
-  assert.doesNotThrow(() => readFileSync(new URL(`../public${match[1]}`, import.meta.url)));
+test('every proof sits where Keystatic would put it, and the file exists', () => {
+  // Keystatic stores an image field at <directory>/<slug>/<field>.<ext>
+  // and moves anything else there on the first save, deleting the old
+  // file. A seeded proof must already be in that layout, or a routine
+  // edit in the CMS breaks whatever else referenced the old path.
+  const dir = new URL('../src/content/apps/', import.meta.url);
+  let found = 0;
+  for (const file of readdirSync(dir)) {
+    const yaml = readFileSync(new URL(file, dir), 'utf8');
+    const match = yaml.match(/^proof:\s*(\S+)\s*$/m);
+    if (!match) continue;
+    found += 1;
+    const slug = file.replace(/\.yaml$/, '');
+    assert.match(match[1], new RegExp(`^/shots/${slug}/proof\\.[a-z0-9]+$`), `${file}: proof is not in Keystatic's layout`);
+    assert.doesNotThrow(() => readFileSync(new URL(`../public${match[1]}`, import.meta.url)), `${file}: proof file missing`);
+  }
+  assert.ok(found >= 1, 'expected at least one app with a proof');
 });
 
 const studioCss = read('src/styles/studio.css');

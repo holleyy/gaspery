@@ -52,7 +52,7 @@ const apps = defineCollection({
     status: z.enum(['live', 'dev', 'planning']),
     url: z.string().optional(),
     /* A proof of the work for /studio: a real screenshot, served from
-       /public by absolute path (e.g. "/shots/grod/briefing.webp"). Optional
+       /public by absolute path (e.g. "/shots/grod/proof.webp"). Optional
        in both schemas on purpose; without one the studio page shows an
        honest "Proof pending" card, or "Redacted" while in planning. */
     proof: z.string().optional(),
