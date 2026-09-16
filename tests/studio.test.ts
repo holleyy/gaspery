@@ -144,14 +144,31 @@ test('the page-local ghost and plate inks are defined in all three states', () =
 });
 
 test('the accessibility gate drops every studio blend effect', () => {
-  const gate = studioCss.slice(studioCss.indexOf('prefers-reduced-transparency'));
+  const gateStart = studioCss.indexOf('@media (prefers-reduced-transparency: reduce), (prefers-contrast: more)');
+  assert.notEqual(gateStart, -1, 'no accessibility gate in studio.css');
+  const open = studioCss.indexOf('{', gateStart);
+  const inner = studioCss.indexOf('{', open + 1);
+  const close = studioCss.indexOf('}', inner);
+  const selectors = studioCss.slice(open + 1, inner);
+  const body = studioCss.slice(inner + 1, close);
   for (const target of ['.studio-name__ghost', '.studio-wm__ghost', '.studio-proof__plate']) {
-    assert.ok(gate.includes(target), `${target} is not gated`);
+    assert.ok(selectors.includes(target), `${target} is not in the gate's selector list`);
   }
+  assert.match(body, /display:\s*none/);
 });
 
 test('selection is readable on the plate', () => {
   // global.css paints ::selection brand-strong on paper; on the plate both
-  // resolve to paper, so the page pins its own.
-  assert.match(studioCss, /\.studio-page ::selection\s*\{[^}]*background:\s*var\(--studio-ghost\)/);
+  // resolve to paper, so the page pins the black ink under paper, and only
+  // on the plate: light and dark keep the site's own rule.
+  const escaped = PLATE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const rule = studioCss.match(new RegExp(`${escaped} ::selection\\s*\\{([^}]*)\\}`));
+  assert.ok(rule, 'no plate-scoped ::selection rule');
+  assert.match(rule[1], /background:\s*var\(--studio-ghost\)/);
+  assert.match(rule[1], /color:\s*var\(--color-ink\)/);
+  assert.doesNotMatch(studioCss, /\.studio-page ::selection/);
+});
+
+test('no em dashes in the studio stylesheet', () => {
+  assert.doesNotMatch(studioCss, /—/);
 });

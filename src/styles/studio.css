@@ -1,5 +1,5 @@
 /* =====================================================================
-   /studio — the plate page. Loaded by src/pages/studio.astro only.
+   /studio: the plate page. Loaded by src/pages/studio.astro only.
    One screen: the app names as a wrapping cloud of large two-tone type,
    a category beside each, a proof card that trails the cursor. The plate
    (magenta ground, paper type, the black ink layer off register) is the
@@ -61,9 +61,13 @@
 }
 
 /* global.css paints ::selection brand-strong on paper. On the plate both
-   are paper, so the page pins the black ink on paper instead; in light
-   and dark this resolves to brand on paper, the site's own. */
-.studio-page ::selection { background: var(--studio-ghost); color: var(--color-paper); }
+   resolve to paper, so selected text would vanish; the plate pins the
+   black ink under paper instead (14:1). Light and dark keep the site's
+   own rule, so this is scoped to the plate selector, not the page. */
+:root:has(.studio-page):not([data-studio='light']):not([data-studio='dark']) ::selection {
+  background: var(--studio-ghost);
+  color: var(--color-ink);
+}
 
 /* ---- Frame ---------------------------------------------------------- */
 .studio-page {
