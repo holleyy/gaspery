@@ -116,7 +116,9 @@ test('the chrome says Gaspery; only content and the colophon name Alex', () => {
     readdirSync(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true }).flatMap((d) =>
       d.isDirectory() ? walk(`${dir}/${d.name}`) : [`${dir}/${d.name}`]);
   const chrome = [...walk('src/pages'), ...walk('src/layouts'), ...walk('src/components')]
-    .filter((f) => !f.endsWith('Rail.astro'));
+    // The rail's colophon and the studio foot are the two colophons; both
+    // sign off with the author. Everything else in the chrome says Gaspery.
+    .filter((f) => !f.endsWith('Rail.astro') && !f.endsWith('pages/studio.astro'));
   for (const f of chrome) {
     assert.doesNotMatch(read(f), /Alex Holley/, `${f} still names Alex Holley`);
   }
