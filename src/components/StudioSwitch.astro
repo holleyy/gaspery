@@ -1,0 +1,132 @@
+---
+/* Three radios, three dots: magenta (the plate), paper (light), ink
+   (dark). Native radios bring keyboard support, grouping, and screen-
+   reader semantics for free; the dots are the labels. Its own radio name
+   and its own storage key, so it can never share a native group with
+   ThemeToggle or write the site-wide preference.
+
+   Rendered hidden and unhidden by the script below: a reader without
+   JavaScript gets the plate and never sees a control that cannot act. */
+---
+<fieldset class="studio-switch" hidden>
+  <legend class="sr-only">Appearance</legend>
+  <label>
+    <input type="radio" name="studio" value="plate" />
+    <span class="studio-switch__dot" data-state="plate"></span>
+    <span class="sr-only">Magenta</span>
+  </label>
+  <label>
+    <input type="radio" name="studio" value="light" />
+    <span class="studio-switch__dot" data-state="light"></span>
+    <span class="sr-only">Light</span>
+  </label>
+  <label>
+    <input type="radio" name="studio" value="dark" />
+    <span class="studio-switch__dot" data-state="dark"></span>
+    <span class="sr-only">Dark</span>
+  </label>
+</fieldset>
+
+<script>
+  import { STUDIO_STORAGE_KEY, readStudioAppearance, type StudioAppearance } from '../lib/studio';
+
+  const root = document.documentElement;
+  const group = document.querySelector<HTMLFieldSetElement>('.studio-switch');
+
+  /* The grounds, as literals: a script cannot read a custom property before
+     the element carrying it has painted. tests/studio.test.ts pins these to
+     the real tokens. */
+  const GROUND: Record<StudioAppearance, string> = {
+    plate: '#B82E70',
+    light: '#F6F1E6',
+    dark: '#191712',
+  };
+
+  /* Mirrors the pre-paint script in src/pages/studio.astro exactly. The
+     plate is the absence of an opt-out; light and dark set data-studio to
+     switch the plate block off and data-theme so the site's own palette
+     paints regardless of the OS. */
+  function apply(state: StudioAppearance) {
+    if (state === 'plate') {
+      delete root.dataset.studio;
+      delete root.dataset.theme;
+    } else {
+      root.dataset.studio = state;
+      root.dataset.theme = state;
+    }
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', GROUND[state]);
+  }
+
+  if (group) {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(STUDIO_STORAGE_KEY);
+    } catch {
+      /* Private mode. Fall through to the plate, which is the default. */
+    }
+    const current = readStudioAppearance(stored);
+    const checked = group.querySelector<HTMLInputElement>(`input[value="${current}"]`);
+    if (checked) checked.checked = true;
+    group.hidden = false;
+
+    group.addEventListener('change', (event) => {
+      const input = event.target as HTMLInputElement;
+      if (input.name !== 'studio') return;
+      const next = readStudioAppearance(input.value);
+      try {
+        if (next === 'plate') localStorage.removeItem(STUDIO_STORAGE_KEY);
+        else localStorage.setItem(STUDIO_STORAGE_KEY, next);
+      } catch {
+        /* Preference will not survive the page, but the page still flips. */
+      }
+      apply(next);
+    });
+  }
+</script>
+
+<style>
+  /* Scoped to :not([hidden]) so the `hidden` attribute (user-agent origin,
+     display: none) is not beaten by this author-origin display. */
+  .studio-switch:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .studio-switch label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px;
+  }
+  /* The radio is hidden but focusable; the ring lands on the label. */
+  .studio-switch input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .studio-switch__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+    transition: transform .15s ease;
+  }
+  .studio-switch__dot[data-state='plate'] { background: #B82E70; }
+  .studio-switch__dot[data-state='light'] { background: #F6F1E6; }
+  .studio-switch__dot[data-state='dark']  { background: #191712; }
+  .studio-switch label:hover .studio-switch__dot { transform: scale(1.15); }
+  .studio-switch input:checked + .studio-switch__dot {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  .studio-switch label:focus-within {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+</style>

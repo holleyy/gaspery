@@ -172,3 +172,35 @@ test('selection is readable on the plate', () => {
 test('no em dashes in the studio stylesheet', () => {
   assert.doesNotMatch(studioCss, /—/);
 });
+
+const studioSwitch = read('src/components/StudioSwitch.astro');
+
+test('the switch is three radios named studio, plate first, rendered hidden', () => {
+  assert.match(studioSwitch, /<fieldset class="studio-switch" hidden>/);
+  const values = [...studioSwitch.matchAll(/<input type="radio" name="studio" value="(\w+)"/g)].map((m) => m[1]);
+  assert.deepEqual(values, ['plate', 'light', 'dark']);
+  // A different radio name from ThemeToggle's `theme`, so the two controls
+  // can never form one native group.
+  assert.doesNotMatch(studioSwitch, /name="theme"/);
+});
+
+test("the switch's display rule is scoped to :not([hidden])", () => {
+  // The UA sheet implements `hidden` as display:none at user-agent origin;
+  // an unscoped author `display` beats it regardless of specificity.
+  assert.match(studioSwitch, /\.studio-switch:not\(\[hidden\]\)\s*\{[^}]*display:/);
+  assert.doesNotMatch(studioSwitch, /\.studio-switch\s*\{[^}]*display:/);
+});
+
+test('the switch writes the studio key, never the site-wide theme key', () => {
+  assert.match(studioSwitch, /STUDIO_STORAGE_KEY/);
+  assert.doesNotMatch(studioSwitch, /localStorage\.\w+\(\s*['"]theme['"]/);
+});
+
+test('the switch theme-color literals match the real tokens', () => {
+  const light = tokensIn(globalCss, ':root {');
+  const dark = tokensIn(globalCss, ":root[data-theme='dark']");
+  const plate = tokensIn(studioCss, PLATE);
+  for (const hex of [light['--color-paper'], dark['--color-paper'], plate['--color-paper']]) {
+    assert.ok(studioSwitch.includes(hex), `StudioSwitch.astro is missing the literal ${hex}`);
+  }
+});
