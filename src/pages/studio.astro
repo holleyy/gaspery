@@ -24,8 +24,9 @@ const apps = (await getCollection('apps'))
 <Base title="Studio · Gaspery" description="Small software, printed in two inks." mono>
   <div class="studio-page">
     {/* Runs before the rest of the body parses, so a reader who chose
-        light or dark never sees a magenta flash. The plate needs nothing:
-        it is the absence of an opt-out, painted by studio.css. Mirrors
+        light or dark never sees a magenta flash. The plate is the absence
+        of an opt-out, painted by studio.css, but it must still clear the
+        site-wide data-theme Base.astro may have set. Mirrors
         StudioSwitch.astro's apply() exactly; the key is repeated as a
         literal because this runs before the bundle exists, and
         tests/studio.test.ts pins the two together. */}
@@ -39,6 +40,12 @@ const apps = (await getCollection('apps'))
           root.dataset.studio = stored;
           root.dataset.theme = stored;
           ground = stored === 'dark' ? '#191712' : '#F6F1E6';
+        } else {
+          /* The plate: Base.astro's own script may have set the site-wide
+             data-theme a moment ago; the plate does not want it. Same as
+             apply('plate') in StudioSwitch.astro. */
+          delete root.dataset.studio;
+          delete root.dataset.theme;
         }
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', ground);
@@ -106,7 +113,7 @@ const apps = (await getCollection('apps'))
       {apps.map((app) =>
         app.proof ? (
           <div class="studio-card" data-card={app.id}>
-            <img src={app.proof} alt="" loading="lazy" decoding="async" />
+            <img src={app.proof} alt="" decoding="async" fetchpriority="low" />
           </div>
         ) : app.status === 'planning' ? (
           <div class="studio-card studio-card--blank" data-card={app.id}>
@@ -130,47 +137,60 @@ const apps = (await getCollection('apps'))
 
 <script>
   /* The proof trails the cursor: 28px to its right, vertically centred on
-     it, clamped inside the viewport, with a short lag so it follows rather
-     than snaps. Touch pointers are ignored, so a phone never sees it and a
-     tap simply follows the link. */
+     it, clamped inside the viewport, easing toward the pointer while it is
+     up and stopping once it settles, so nothing runs between hovers. Touch
+     pointers are ignored, so a phone never sees it and a tap simply follows
+     the link. Under prefers-reduced-motion the card snaps instead of
+     easing. Below 1000px studio.css hides the element, so an enter there
+     paints nothing. */
   const proof = document.querySelector<HTMLElement>('.studio-proof');
   const items = document.querySelectorAll<HTMLElement>('.studio-item[data-proof]');
   if (proof && items.length) {
     const cards = [...proof.querySelectorAll<HTMLElement>('.studio-card')];
-    const W = 400;
-    const H = (W * 2) / 3;
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    /* The card's box. Read from the element when it first shows, so the
+       size lives in studio.css only; these are the fallbacks. */
+    let W = 400;
+    let H = (W * 2) / 3;
     let tx = 0, ty = 0, x = 0, y = 0;
     let on = false;
-    let snap = true;
+    let frame = 0;
 
     const place = (e: PointerEvent) => {
-      tx = Math.min(e.clientX + 28, window.innerWidth - W - 16);
+      tx = Math.max(16, Math.min(e.clientX + 28, window.innerWidth - W - 16));
       ty = Math.min(Math.max(e.clientY - H / 2, 16), window.innerHeight - H - 16);
     };
+    const paint = () => { proof.style.transform = `translate(${x}px, ${y}px)`; };
+    const tick = () => {
+      frame = 0;
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      paint();
+      if (on || Math.abs(tx - x) + Math.abs(ty - y) > 0.5) frame = requestAnimationFrame(tick);
+    };
+    const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
 
     items.forEach((item) => {
       item.addEventListener('pointerenter', (e) => {
         if (e.pointerType === 'touch') return;
         cards.forEach((c) => c.classList.toggle('is-on', c.dataset.card === item.dataset.proof));
+        W = proof.offsetWidth || W;
+        H = (W * 2) / 3;
         place(e);
-        if (snap) { x = tx; y = ty; snap = false; }
+        if (!on) { x = tx; y = ty; paint(); }
         on = true;
         proof.classList.add('is-on');
+        wake();
       });
       item.addEventListener('pointerleave', () => {
         on = false;
-        snap = true;
         proof.classList.remove('is-on');
       });
     });
-    document.addEventListener('pointermove', (e) => { if (on) place(e); });
-
-    const tick = () => {
-      x += (tx - x) * 0.14;
-      y += (ty - y) * 0.14;
-      proof.style.transform = `translate(${x}px, ${y}px)`;
-      requestAnimationFrame(tick);
-    };
-    tick();
+    document.addEventListener('pointermove', (e) => {
+      if (!on) return;
+      place(e);
+      if (calm.matches) { x = tx; y = ty; paint(); } else wake();
+    }, { passive: true });
   }
 </script>

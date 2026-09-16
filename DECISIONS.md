@@ -177,6 +177,12 @@ every word on the plate clears 4.5:1 with no size exception to remember.
 Secondary ink on the plate is full paper for the same reason; only Top
 Secret's display-size name dims, by opacity, to 3.32:1 against a 3:1 floor.
 
+**The loud moment, multiplied.** DESIGN.md spends the misregistration once
+per page. This page spends it five times (the wordmark and four names) and
+sets three sizes off the documented type ramp (28px wordmark, 120px names,
+40px on the fallback cards). Deliberate: the page is a poster, not a leaf of
+the notebook, and the design lint will keep flagging the literals.
+
 **Not linked yet.** The rail's Index does not list Studio. The page is a
 sibling reachable by URL until it earns a place, or replaces the homepage.
 

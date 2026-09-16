@@ -249,6 +249,36 @@ test('no em dashes in the page', () => {
   assert.doesNotMatch(studioPage, /—/);
 });
 
+test('the proof image is not lazy: its card is display none until hover', () => {
+  assert.doesNotMatch(studioPage, /loading="lazy"/);
+  assert.match(studioPage, /fetchpriority="low"/);
+});
+
+test('the pre-paint script and the switch use the same three grounds, pinned to the tokens', () => {
+  // Both hardcode hex literals because a script cannot read a custom
+  // property before the element carrying it has painted. This pins them
+  // to the real tokens, as tests/theme.test.ts does for the site toggle.
+  const light = tokensIn(globalCss, ':root {')['--color-paper'];
+  const dark = tokensIn(globalCss, ":root[data-theme='dark']")['--color-paper'];
+  const plate = tokensIn(studioCss, PLATE)['--color-paper'];
+  for (const [name, source] of [['studio.astro', studioPage], ['StudioSwitch.astro', studioSwitch]] as const) {
+    for (const hex of [light, dark, plate]) {
+      assert.ok(source.includes(hex), `${name} is missing the literal ${hex}`);
+    }
+    // Both write the same two attributes, and both clear them for the plate.
+    assert.match(source, /dataset\.studio = /);
+    assert.match(source, /dataset\.theme = /);
+    assert.match(source, /delete root\.dataset\.studio/);
+    assert.match(source, /delete root\.dataset\.theme/);
+  }
+});
+
+test('the page uses the dynamic viewport height and gates motion', () => {
+  assert.match(studioCss, /\.studio-page\s*\{[^}]*min-height:\s*100dvh/);
+  assert.match(studioCss, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.doesNotMatch(studioCss, /\.studio-proof__plate\s*\{[^}]*mix-blend-mode/);
+});
+
 const parity = read('scripts/verify-parity.sh');
 
 test('the parity gate admits one studio switch in place of the theme toggle', () => {

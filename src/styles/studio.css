@@ -72,6 +72,7 @@
 /* ---- Frame ---------------------------------------------------------- */
 .studio-page {
   min-height: 100vh;
+  min-height: 100dvh;
   max-width: var(--page-max);
   margin: 0 auto;
   padding: 40px var(--margin) 40px;
@@ -150,7 +151,9 @@
    One fixed element, positioned by script, that trails the cursor. One
    card per app is pre-rendered inside it; the script shows the matching
    one. The offset card behind it is the monogram's misregistration at
-   card scale. */
+   card scale; it prints solid in the plate ink rather than blending,
+   because the proof is animated by transform and so is its own stacking
+   context, which leaves a blend mode nothing to blend with. */
 .studio-proof {
   position: fixed; left: 0; top: 0; width: 400px;
   pointer-events: none; z-index: 5;
@@ -161,7 +164,7 @@
 .studio-proof.is-on { opacity: 1; transform: rotate(0) scale(1); }
 .studio-proof__plate {
   position: absolute; inset: 0; transform: translate(8px, 8px);
-  background: var(--studio-plate); mix-blend-mode: var(--studio-blend); border-radius: 2px;
+  background: var(--studio-plate); border-radius: 2px;
 }
 .studio-card {
   position: relative; z-index: 1; display: none;
@@ -178,10 +181,12 @@
   color: #6C6759; margin-top: 8px;
 }
 
-/* ---- Foot ----------------------------------------------------------- */
+/* ---- Foot -----------------------------------------------------------
+   No rule above the foot, as on every other page: the imprint below draws
+   the one closing hairline. */
 .studio-foot {
   display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
-  padding-top: 20px; border-top: 1px solid var(--color-hairline);
+  padding-top: 24px;
 }
 .studio-foot__line { font-family: var(--font-serif); font-weight: 400; font-size: 17px; margin: 0 0 12px; }
 .studio-foot__links { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; font-weight: 500; }
@@ -195,6 +200,13 @@
    paper type. */
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .studio-name__ghost, .studio-wm__ghost, .studio-proof__plate { display: none; }
+}
+
+/* Motion is the one thing this page adds that the rest of the site does
+   not have. Under reduced motion every transition drops and the script
+   snaps the proof to the cursor instead of easing. */
+@media (prefers-reduced-motion: reduce) {
+  .studio-name__ghost, .studio-proof, .studio-wm__ink, .studio-nav a, .studio-foot__links a, .studio-switch__dot { transition: none; }
 }
 
 /* ---- Collapse ------------------------------------------------------- */
