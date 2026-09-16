@@ -204,9 +204,11 @@
 
 /* Motion is the one thing this page adds that the rest of the site does
    not have. Under reduced motion every transition drops and the script
-   snaps the proof to the cursor instead of easing. */
+   snaps the proof to the cursor instead of easing. The switch's dot is
+   handled inside StudioSwitch.astro, whose scoped style would otherwise
+   outrank a rule here. */
 @media (prefers-reduced-motion: reduce) {
-  .studio-name__ghost, .studio-proof, .studio-wm__ink, .studio-nav a, .studio-foot__links a, .studio-switch__dot { transition: none; }
+  .studio-name__ghost, .studio-proof, .studio-wm__ink, .studio-nav a, .studio-foot__links a { transition: none; }
 }
 
 /* ---- Collapse ------------------------------------------------------- */

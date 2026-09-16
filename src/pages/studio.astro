@@ -180,7 +180,7 @@ const apps = (await getCollection('apps'))
         if (!on) { x = tx; y = ty; paint(); }
         on = true;
         proof.classList.add('is-on');
-        wake();
+        if (!calm.matches) wake();
       });
       item.addEventListener('pointerleave', () => {
         on = false;

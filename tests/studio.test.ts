@@ -277,6 +277,10 @@ test('the page uses the dynamic viewport height and gates motion', () => {
   assert.match(studioCss, /\.studio-page\s*\{[^}]*min-height:\s*100dvh/);
   assert.match(studioCss, /@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(studioCss, /\.studio-proof__plate\s*\{[^}]*mix-blend-mode/);
+  // The switch's dot transition is killed inside the component's own
+  // scoped style, where it can win; the page-level gate must not claim it.
+  assert.match(studioSwitch, /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*\.studio-switch__dot\s*\{[^}]*transition:\s*none/);
+  assert.doesNotMatch(studioCss, /prefers-reduced-motion[^}]*\.studio-switch__dot/);
 });
 
 const parity = read('scripts/verify-parity.sh');

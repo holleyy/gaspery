@@ -120,6 +120,13 @@
   .studio-switch__dot[data-state='light'] { background: #F6F1E6; }
   .studio-switch__dot[data-state='dark']  { background: #191712; }
   .studio-switch label:hover .studio-switch__dot { transform: scale(1.15); }
+  /* Scoped here, not in studio.css: this component's scoped selectors
+     outrank an unscoped page rule, so the page cannot switch the dot's
+     transition off from outside. */
+  @media (prefers-reduced-motion: reduce) {
+    .studio-switch__dot { transition: none; }
+    .studio-switch label:hover .studio-switch__dot { transform: none; }
+  }
   .studio-switch input:checked + .studio-switch__dot {
     outline: 2px solid var(--color-ink);
     outline-offset: 2px;
