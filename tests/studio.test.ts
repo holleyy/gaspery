@@ -169,6 +169,14 @@ test('selection is readable on the plate', () => {
   assert.doesNotMatch(studioCss, /\.studio-page ::selection/);
 });
 
+test('the nav, not the switch, carries the push to the right edge', () => {
+  // StudioSwitch.astro's scoped style resets the switch's margin, so a
+  // margin-left: auto on the switch never wins. The nav has no competing
+  // margin, so the push lives there.
+  assert.match(studioCss, /\.studio-top \.studio-nav\s*\{[^}]*margin-left:\s*auto/);
+  assert.doesNotMatch(studioCss, /\.studio-top \.studio-switch\s*\{[^}]*margin-left/);
+});
+
 test('no em dashes in the studio stylesheet', () => {
   assert.doesNotMatch(studioCss, /—/);
 });
