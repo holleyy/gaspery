@@ -157,15 +157,11 @@ test('the page-local ghost and plate inks are defined in all three states', () =
 test('the accessibility gate drops every studio blend effect', () => {
   const gateStart = studioCss.indexOf('@media (prefers-reduced-transparency: reduce), (prefers-contrast: more)');
   assert.notEqual(gateStart, -1, 'no accessibility gate in studio.css');
-  const open = studioCss.indexOf('{', gateStart);
-  const inner = studioCss.indexOf('{', open + 1);
-  const close = studioCss.indexOf('}', inner);
-  const selectors = studioCss.slice(open + 1, inner);
-  const body = studioCss.slice(inner + 1, close);
-  for (const target of ['.studio-name__ghost', '.studio-wm__ghost', '.studio-proof__plate']) {
-    assert.ok(selectors.includes(target), `${target} is not in the gate's selector list`);
-  }
-  assert.match(body, /display:\s*none/);
+  const gate = studioCss.slice(gateStart, studioCss.indexOf('\n}\n', gateStart));
+  // The ghosts drop out, and the proof loses its plate (a drop-shadow of the
+  // card, so it is a filter, not an element).
+  assert.match(gate, /\.studio-name__ghost,\s*\.studio-wm__ghost\s*\{[^}]*display:\s*none/);
+  assert.match(gate, /\.studio-card\s*\{[^}]*filter:\s*none/);
 });
 
 test('selection is readable on the plate', () => {
@@ -303,4 +299,28 @@ test('the parity gate admits one studio switch in place of the theme toggle', ()
   assert.match(parity, /class="studio-switch"/);
   assert.match(parity, /\$\(\(theme \+ studio\)\) -ne 1/);
   assert.doesNotMatch(parity, /-gt 1/);
+});
+
+test('the proof plate is a hard drop-shadow of the card, so a framed proof keeps its silhouette', () => {
+  // A transparent device frame has no rectangle to put a plate behind. A
+  // zero-blur drop-shadow copies the alpha channel in the plate ink instead,
+  // so the offset plate hugs a laptop or a phone the way it hugs a card.
+  assert.match(studioCss, /\.studio-card\s*\{[^}]*filter:\s*drop-shadow\(8px 8px 0 var\(--studio-plate\)\)/);
+  assert.doesNotMatch(studioCss, /studio-proof__plate/);
+  assert.doesNotMatch(studioPage, /studio-proof__plate/);
+  // Image cards are bare: no paper box, no crop. Blank cards keep the paper
+  // box, so an app without an upload looks exactly as it did.
+  const image = studioCss.match(/\.studio-card--image\s*\{([^}]*)\}/);
+  assert.ok(image, 'no .studio-card--image rule');
+  assert.doesNotMatch(image[1], /background|border|aspect-ratio|overflow/);
+  const blank = studioCss.match(/\.studio-card--blank\s*\{([^}]*)\}/);
+  assert.ok(blank, 'no .studio-card--blank rule');
+  assert.match(blank[1], /background:\s*#F6F1E6/);
+  assert.match(blank[1], /aspect-ratio:\s*3 \/ 2/);
+  // Portrait proofs are capped in height, never cropped.
+  assert.match(studioCss, /\.studio-card--image img\s*\{[^}]*max-height/);
+  assert.doesNotMatch(studioCss, /object-fit:\s*cover/);
+  assert.match(studioPage, /class="studio-card studio-card--image"/);
+  // The script reads the shown card's real height, since a phone is taller than a laptop.
+  assert.match(studioPage, /H = proof\.offsetHeight/);
 });

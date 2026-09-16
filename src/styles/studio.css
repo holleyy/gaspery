@@ -162,18 +162,25 @@
   will-change: transform;
 }
 .studio-proof.is-on { opacity: 1; transform: rotate(0) scale(1); }
-.studio-proof__plate {
-  position: absolute; inset: 0; transform: translate(8px, 8px);
-  background: var(--studio-plate); border-radius: 2px;
-}
+/* The plate is a hard drop-shadow of the card, not an element behind it:
+   a zero-blur shadow copies the card's alpha channel in the plate ink, so
+   a proof that is a transparent device frame gets a plate that hugs the
+   laptop or the phone, while a paper card gets the same offset rectangle
+   as before. */
 .studio-card {
   position: relative; z-index: 1; display: none;
-  aspect-ratio: 3 / 2; border-radius: 2px; overflow: hidden;
-  /* Cards are always paper, whatever the page is: a proof is a print. */
-  background: #F6F1E6; border: 1px solid #D9D3C6; color: #232019;
+  filter: drop-shadow(8px 8px 0 var(--studio-plate));
 }
 .studio-card.is-on { display: block; }
-.studio-card img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+/* An image card is bare: the upload is the whole card, shown at its own
+   proportions and never cropped. A portrait phone is capped in height. */
+.studio-card--image { line-height: 0; }
+.studio-card--image img { display: block; width: auto; height: auto; max-width: 100%; max-height: 440px; }
+/* The fallback cards are still prints: paper, a hairline, 3:2. */
+.studio-card--blank {
+  aspect-ratio: 3 / 2; border-radius: 2px; overflow: hidden;
+  background: #F6F1E6; border: 1px solid #D9D3C6; color: #232019;
+}
 .studio-card--blank.is-on { display: grid; place-items: center; text-align: center; }
 .studio-card__big { font-family: var(--font-serif); font-weight: 400; font-size: 40px; letter-spacing: -0.02em; line-height: 1.1; }
 .studio-card__label {
@@ -199,7 +206,8 @@
    two-colour logic survives as flat shapes. The plate stays magenta with
    paper type. */
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .studio-name__ghost, .studio-wm__ghost, .studio-proof__plate { display: none; }
+  .studio-name__ghost, .studio-wm__ghost { display: none; }
+  .studio-card { filter: none; }
 }
 
 /* Motion is the one thing this page adds that the rest of the site does
