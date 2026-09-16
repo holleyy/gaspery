@@ -204,3 +204,39 @@ test('the switch theme-color literals match the real tokens', () => {
     assert.ok(studioSwitch.includes(hex), `StudioSwitch.astro is missing the literal ${hex}`);
   }
 });
+
+const studioPage = read('src/pages/studio.astro');
+
+test('the pre-paint script is inline and reads the same key the module exports', () => {
+  assert.match(studioPage, /<script is:inline>/);
+  const match = studioPage.match(/localStorage\.getItem\(\s*['"]([^'"]+)['"]\s*\)/);
+  assert.ok(match, 'studio.astro does not read localStorage in its inline script');
+  assert.equal(match[1], STUDIO_STORAGE_KEY);
+});
+
+test('the page mounts the studio switch once and never the theme toggle', () => {
+  assert.equal((studioPage.match(/<StudioSwitch \/>/g) ?? []).length, 1);
+  assert.doesNotMatch(studioPage, /ThemeToggle/);
+});
+
+test('the page is built on Base without the rail, in the mono face', () => {
+  assert.doesNotMatch(studioPage, /import Rail/);
+  assert.match(studioPage, /<Base[^>]*\smono\b/);
+  assert.match(studioPage, /title="Studio · Gaspery"/);
+});
+
+test('every name is printed twice with a decorative ghost, and the ghost never carries a heading', () => {
+  assert.match(studioPage, /class="studio-name__ghost" aria-hidden="true"/);
+  assert.match(studioPage, /class="studio-name__ink"/);
+  assert.match(studioPage, /<h1 class="sr-only">Apps<\/h1>/);
+});
+
+test('the foot carries the tagline, the Elsewhere links, and the imprint', () => {
+  assert.match(studioPage, /Small software, printed in two inks\./);
+  assert.match(studioPage, /sidebar\.elsewhere\.map/);
+  assert.match(studioPage, /<Imprint \/>/);
+});
+
+test('no em dashes in the page', () => {
+  assert.doesNotMatch(studioPage, /—/);
+});

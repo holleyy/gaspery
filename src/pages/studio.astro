@@ -1,0 +1,176 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StudioSwitch from '../components/StudioSwitch.astro';
+import Imprint from '../components/Imprint.astro';
+import sidebar from '../data/sidebar/index.json';
+import { categoryFor } from '../lib/studio';
+import '../styles/studio.css';
+
+/* The studio landing page: one screen, the work as large type, a proof on
+   hover. Reachable by URL only for now; the rail's Index does not list it
+   (see docs/superpowers/specs/2026-09-16-studio-page-design.md). */
+const apps = (await getCollection('apps'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((a) => ({
+    id: a.id,
+    name: a.data.name,
+    url: a.data.url,
+    proof: a.data.proof,
+    status: a.data.status,
+    category: categoryFor(a.data),
+  }));
+---
+<Base title="Studio · Gaspery" description="Small software, printed in two inks." mono>
+  <div class="studio-page">
+    {/* Runs before the rest of the body parses, so a reader who chose
+        light or dark never sees a magenta flash. The plate needs nothing:
+        it is the absence of an opt-out, painted by studio.css. Mirrors
+        StudioSwitch.astro's apply() exactly; the key is repeated as a
+        literal because this runs before the bundle exists, and
+        tests/studio.test.ts pins the two together. */}
+    <script is:inline>
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem('studio'); } catch (e) {}
+        var root = document.documentElement;
+        var ground = '#B82E70';
+        if (stored === 'light' || stored === 'dark') {
+          root.dataset.studio = stored;
+          root.dataset.theme = stored;
+          ground = stored === 'dark' ? '#191712' : '#F6F1E6';
+        }
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', ground);
+      })();
+    </script>
+
+    <header class="studio-top">
+      <a class="studio-wm" href="/" aria-label="Gaspery, home">
+        <span class="studio-wm__ghost" aria-hidden="true">Gaspery.</span>
+        <span class="studio-wm__ink">Gaspery.</span>
+      </a>
+      <StudioSwitch />
+      <nav class="studio-nav" aria-label="Primary">
+        <a href="/writing">Writing</a>
+        <a href="/studio" aria-current="page">Studio</a>
+        <a href="/about">About</a>
+        <a href="/now">Now</a>
+      </nav>
+    </header>
+
+    <main class="studio-work" id="main">
+      <h1 class="sr-only">Apps</h1>
+      <ul class="studio-cloud">
+        {apps.map((app) => (
+          <li class="studio-item" data-proof={app.id}>
+            {app.url ? (
+              <a class="studio-name" href={app.url}>
+                <span class="studio-name__ghost" aria-hidden="true">{app.name}</span>
+                <span class="studio-name__ink">{app.name}</span>
+              </a>
+            ) : (
+              <span class="studio-name studio-name--dim">
+                <span class="studio-name__ghost" aria-hidden="true">{app.name}</span>
+                <span class="studio-name__ink">{app.name}</span>
+              </span>
+            )}
+            <span class="studio-cat">{app.category}</span>
+          </li>
+        ))}
+      </ul>
+    </main>
+
+    <footer class="studio-foot">
+      <div>
+        <p class="studio-foot__line">Small software, printed in two inks.</p>
+        <div class="studio-foot__links">
+          {sidebar.elsewhere.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
+        </div>
+      </div>
+      <span class="label">Alex Holley · © MMXXVI · London</span>
+    </footer>
+    {/* The trading disclosure is findable at the bottom of every page;
+        see Imprint.astro. */}
+    <div class="studio-imprint"><Imprint /></div>
+
+    {/* One proof element, one pre-rendered card per app. The script shows
+        the card whose data-card matches the hovered item's data-proof. A
+        real screenshot when the app has one; otherwise "Proof pending",
+        or "Redacted" while the app is still in planning. The pending and
+        redacted cards are markup, not images. */}
+    <div class="studio-proof" aria-hidden="true">
+      <div class="studio-proof__plate"></div>
+      {apps.map((app) =>
+        app.proof ? (
+          <div class="studio-card" data-card={app.id}>
+            <img src={app.proof} alt="" loading="lazy" decoding="async" />
+          </div>
+        ) : app.status === 'planning' ? (
+          <div class="studio-card studio-card--blank" data-card={app.id}>
+            <div>
+              <div class="studio-card__big">████ ██████</div>
+              <div class="studio-card__label">Redacted</div>
+            </div>
+          </div>
+        ) : (
+          <div class="studio-card studio-card--blank" data-card={app.id}>
+            <div>
+              <div class="studio-card__big">{app.name}</div>
+              <div class="studio-card__label">Proof pending</div>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  </div>
+</Base>
+
+<script>
+  /* The proof trails the cursor: 28px to its right, vertically centred on
+     it, clamped inside the viewport, with a short lag so it follows rather
+     than snaps. Touch pointers are ignored, so a phone never sees it and a
+     tap simply follows the link. */
+  const proof = document.querySelector<HTMLElement>('.studio-proof');
+  const items = document.querySelectorAll<HTMLElement>('.studio-item[data-proof]');
+  if (proof && items.length) {
+    const cards = [...proof.querySelectorAll<HTMLElement>('.studio-card')];
+    const W = 400;
+    const H = (W * 2) / 3;
+    let tx = 0, ty = 0, x = 0, y = 0;
+    let on = false;
+    let snap = true;
+
+    const place = (e: PointerEvent) => {
+      tx = Math.min(e.clientX + 28, window.innerWidth - W - 16);
+      ty = Math.min(Math.max(e.clientY - H / 2, 16), window.innerHeight - H - 16);
+    };
+
+    items.forEach((item) => {
+      item.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'touch') return;
+        cards.forEach((c) => c.classList.toggle('is-on', c.dataset.card === item.dataset.proof));
+        place(e);
+        if (snap) { x = tx; y = ty; snap = false; }
+        on = true;
+        proof.classList.add('is-on');
+      });
+      item.addEventListener('pointerleave', () => {
+        on = false;
+        snap = true;
+        proof.classList.remove('is-on');
+      });
+    });
+    document.addEventListener('pointermove', (e) => { if (on) place(e); });
+
+    const tick = () => {
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      proof.style.transform = `translate(${x}px, ${y}px)`;
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+</script>
