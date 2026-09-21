@@ -1,12 +1,37 @@
 ---
 // Direction 1: "a paragraph, a screenshot if it helps, a link" — for the
 // small tools that aren't products. See against-the-one-pager.md.
+import { imageSize } from '../lib/imageSize';
 import RegistrationMark from './RegistrationMark.astro';
+
+interface Props {
+  image?: string;
+  alt?: string;
+}
+const { image, alt } = Astro.props;
+/* Dimensions are stated on the <img> so the page never reflows as the
+   shot lands; read from the file at build time rather than hand-typed. */
+const size = image ? imageSize(image) : undefined;
 ---
 <div class="app-page__lede">
   <slot />
 </div>
-<div class="media-placeholder">
-  <RegistrationMark size={28} />
-  <span class="label">Screenshot coming soon</span>
-</div>
+{image ? (
+  /* A real screenshot, printed flat: no frame, no duotone (see DESIGN.md,
+     App screenshots). */
+  <figure class="app-shot">
+    <img
+      src={image}
+      alt={alt ?? ''}
+      width={size?.width}
+      height={size?.height}
+      loading="lazy"
+      decoding="async"
+    />
+  </figure>
+) : (
+  <div class="media-placeholder">
+    <RegistrationMark size={28} />
+    <span class="label">Screenshot coming soon</span>
+  </div>
+)}

@@ -445,18 +445,19 @@ keeps only the print sign-off (`© MMXXVI · London`), so the entity is never
 stated twice on one screen.
 
 ### App screenshots
-Real product shots on an app page, set per spread in the page's frontmatter
-(`image` + `alt`; omit both and the spread keeps the honest "screenshot coming
-soon" placeholder, never a fake one). The source assets are cut-out windows on
+Real product shots on an app page, set in the page's frontmatter (`image` +
+`alt`: per spread on an editorial page, once at the top level for the quiet
+template's single "a screenshot if it helps" slot; omit both and the slot keeps
+the honest "screenshot coming soon" placeholder, never a fake one). The source assets are cut-out windows on
 transparency, so they print straight onto the bone ground: no frame, no card,
 and deliberately **no riso-duotone** — the apps already render in these two
 inks, and filtering a UI would cost legibility to prove a point the screenshot
 is already making. Dimensions are stated on the `<img>` so the row never
 reflows, and they lazy-load.
 
-An editorial app page carrying screenshots takes `.app-page--wide` (1160px
-instead of the 680px reading measure), and its spreads run media-dominant
-(560/360). The prose keeps its own caps, so only the images take the extra
+Any app page carrying a screenshot takes `.app-page--wide` (1160px instead of
+the 680px reading measure); an editorial page's spreads run media-dominant
+(560/360), and a quiet page's one shot runs the full width under the lede. The prose keeps its own caps, so only the images take the extra
 room: a Mac window shrunk into a prose column is a smudge, not proof.
 
 ### Signature motifs

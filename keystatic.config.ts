@@ -297,6 +297,11 @@ export default config({
           ],
           defaultValue: 'quiet',
         }),
+        image: fields.text({
+          label: 'Screenshot path (quiet template)',
+          description: 'e.g. /shots/skal/live.webp — leave empty for the "coming soon" placeholder',
+        }),
+        alt: fields.text({ label: 'Screenshot alt text (quiet template)', multiline: true }),
         spreads: fields.array(
           fields.object({
             heading: fields.text({ label: 'Heading' }),
