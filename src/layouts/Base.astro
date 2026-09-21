@@ -91,6 +91,18 @@ const ogImage = new URL('/og/card.png', Astro.site);
       href={fontsHref}
       rel="stylesheet"
     />
+    {/* Pageviews are counted by Counterscale, a small analytics Worker on
+        this site's own Cloudflare account (counterscale.holleyalex.workers.dev).
+        It sets no cookies and shares nothing with a third party, which is the
+        only kind of counting PRODUCT.md's "no growth machinery" allows; the
+        rail colophon says so in one plain sentence. The site id is a label
+        we chose, not a secret. */}
+    <script
+      id="counterscale-script"
+      data-site-id="gaspery"
+      src="https://counterscale.holleyalex.workers.dev/tracker.js"
+      defer
+    ></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
