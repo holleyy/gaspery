@@ -1,0 +1,276 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/skal-a.css';
+
+/* Arm "a" of the /skal test (see src/lib/skal.ts). Converted from the
+   standalone prototype a-skal-md.html; the direction contract is the first comment inside the
+   page root (Astro strips a slot's leading comment; a deeper one survives). */
+---
+<Base title="Skål · Markdown for macOS" description="The .md handler you actually want. A native Mac app that opens a Markdown file as a document, not a workspace." fonts={['family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400', 'family=IBM+Plex+Mono:wght@400;500']}>
+
+<div class="win" id="win" data-view="live">
+<!--
+THESIS: The landing page is a Markdown document open in Skål. It refuses the hero-plus-feature-grid: the visitor reads the app's own rendering, and the status bar at the foot switches this page between Code, Live and Split exactly as it switches a file.
+OWN-WORLD: Blekk's warm paper (#F6EFE4), Source Serif 4 for prose, IBM Plex Mono for source and measurement; rust headings, a teal lede, magenta accent used only where the app uses it (the active tab, links). A 38px title strip, a 30px status bar, a 620px prose column with no card.
+STORY: "Oh, this is the app." They read the page, press Code, watch it become the file, and understand source preservation before it is explained. Then they join the TestFlight.
+FIRST VIEWPORT: Title strip (Skål.md, gaspery.com/skal, one bezel button: Join the TestFlight). Below, the H1 "The .md handler you actually want.", the bold teal lede, a blockquote that tells the reader the page is open in Skål and to press Code, the opening paragraph and the same link inline. Status bar pinned to the foot: Code · Live · Split, word count, UTF-8.
+FORM: the document itself; direction 1 of 3. No seed key: the user asked for three examples, which pins the directions and replaces the roll. The title strip is 52px, not 38px, because it carries a two-line title (name over path) and the bezel; the app's 38px strip is the toolbar-off state with only traffic lights. In dark mode the app captures stay on light paper (the app's default paper); "same paper" refers to the Quick Look capture, which is on the dark paper.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="strip">
+    <svg class="strip__doc" viewBox="0 0 16 18" fill="none" aria-hidden="true"><path d="M2.5 1.5h7l4 4v11h-11z" stroke="currentColor"/><path d="M9.5 1.5v4h4" stroke="currentColor"/></svg>
+    <div class="strip__title"><b>Skål.md</b><span>gaspery.com/skal</span></div>
+    <div class="strip__spacer"></div>
+    <a class="bezel" href="#beta">Join the TestFlight</a>
+  </header>
+
+  <div class="panes">
+    <article class="pane pane--live" id="live" aria-label="Live view">
+      <div class="doc" id="doc">
+        <h1>The <code>.md</code> handler you actually want.</h1>
+        <p class="lede">A native Mac app that opens a Markdown file as a document, not a workspace.</p>
+        <blockquote><p>This page is open in Skål. Press <button class="sw" type="button" data-view="code">Code</button> in the bar at the bottom and it becomes the file it was written as.</p></blockquote>
+        <p>Double-click a <code>.md</code> file and Skål opens it alone: no folder, no sidebar, no account, no library, no new format between you and your words. Read it, edit it, close it. It is still the same file, in the same place, and when you save, what goes back to disk is what you opened plus what you changed.</p>
+        <p class="cta"><a href="#beta">Join the TestFlight beta</a><span class="cta__meta">Requires macOS 26 or later.</span></p>
+
+        <h2>One file, three views</h2>
+        <p>You are reading this page in <button class="sw" type="button" data-view="live">Live</button>. The bar at the bottom switches it the way it switches a document. Press <button class="sw" type="button" data-view="code">Code</button> and this page becomes the file it was written as. <button class="sw sw--split" type="button" data-view="split">Split</button> keeps both in view, scrolling together.</p>
+        <table>
+          <thead><tr><th>View</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Live</td><td>Reading and editing rendered prose. The serif is the mode indicator.</td></tr>
+            <tr><td>Code</td><td>Working on the exact source, in mono, with line numbers.</td></tr>
+            <tr><td>Split</td><td>Seeing source and presentation together, linked.</td></tr>
+          </tbody>
+        </table>
+        <figure class="wide">
+          <img src="/shots/skal/landing/shot-split.webp" width="2560" height="1720" alt="Skål in Split view: the Markdown source of Field notes on the left, the same document rendered as prose on the right, with Code, Live, Split and Linked in the status bar." loading="lazy">
+          <figcaption>Split, linked. <kbd>⌃⌘1</kbd> Code, <kbd>⌃⌘2</kbd> Live, <kbd>⌃⌘3</kbd> Split. They work on this page too.</figcaption>
+        </figure>
+
+        <h2>The source stays yours</h2>
+        <p>Open a file and save it without touching anything, and it comes back byte for byte. Make an edit and only the source that expresses the edit changes. Delimiter spelling, whitespace, line breaks, list numbering and fence lengths are left exactly as you wrote them, even inside the paragraph you edited.</p>
+        <p>Type <code>**hello**</code> in Live and it becomes bold. Undo, and the asterisks come back as literal characters, escaped in the file so they survive a reopen. Skål writes only the escapes needed to keep what you can see.</p>
+
+        <h2>Nothing it hasn't earned</h2>
+        <p>Opening a file directly starts with every panel off: a strip for the traffic lights, the prose, and a status bar. Files, Outline and the toolbar are three independent toggles, and all eight combinations are ordinary states rather than fallbacks. Open a folder on purpose and Files appears; add a heading and it appears in Outline.</p>
+        <figure class="wide">
+          <img src="/shots/skal/landing/shot-outline.webp" width="2560" height="1720" alt="Skål with only the Outline panel showing: Field notes on the left, its headings on the right with a small magenta position bar beside the current one." loading="lazy">
+          <figcaption>Outline on, Files off. <kbd>⌘0</kbd> Files, <kbd>⇧⌘0</kbd> Outline, <kbd>⌥⌘T</kbd> Toolbar.</figcaption>
+        </figure>
+
+        <h2>Everyday Markdown, close at hand</h2>
+        <p>Select some prose and a small cluster appears beside it: paragraph style, bold, italic, inline code, link, quote, list. It sits next to the selection because that is what it acts on, and it never appears on a bare caret.</p>
+        <figure class="detail">
+          <img src="/shots/skal/landing/detail-cluster.webp" width="845" height="519" alt="Detail of the Live view: the floating formatting cluster beside a selected word, with Italic shown active, above a paragraph and a task list." loading="lazy">
+          <figcaption>Detail of the Live view. The cluster belongs to the selection, so it lives next to it; here the word is already italic, so Italic shows as on.</figcaption>
+        </figure>
+        <p>Links and images share one small editor. <kbd>⌘K</kbd> opens it for the selection, with the document's own headings offered as destinations. Tables, task lists, fenced code, footnotes and reference links are all there, with bounded suggestions for destinations, headings and fence languages that stay out of the way of writing.</p>
+        <figure class="detail">
+          <img src="/shots/skal/landing/detail-link.webp" width="1000" height="520" alt="Detail of the Live view: the link editor popover over a task list, with a destination field, the link text, and Remove Link, Cancel and Apply." loading="lazy">
+          <figcaption>Detail of the Live view. One editor for links and images, opened with ⌘K on the link.</figcaption>
+        </figure>
+        <ul class="tasks">
+          <li><span class="box on" aria-hidden="true"></span><span>Task lists are drawn controls, and completing one is a one-step undo.</span></li>
+          <li><span class="box" aria-hidden="true"></span><span>Tables render as tables and keep their pipe style in the source.</span></li>
+          <li><span class="box" aria-hidden="true"></span><span>Footnotes<sup>1</sup> number themselves, with read-only previews.</span></li>
+        </ul>
+
+        <h2>Findings, not autocorrect</h2>
+        <p>Check Markdown reads the source and reports what it found: a table whose cells could be padded to align, a footnote whose definition is malformed. Each finding shows where it is, what the fix would do, and three ways out: show it in Code, review the fix, or dismiss it. Nothing is changed until you say so.</p>
+        <figure class="wide">
+          <img src="/shots/skal/landing/shot-findings.webp" width="2560" height="1720" alt="The Findings panel beside Field notes: one cleanup suggestion, Align table source padding, lines 15 to 19, with Show in Code, Review Fix and Dismiss." loading="lazy">
+          <figcaption>One finding. Three buttons. The document is untouched until Review Fix.</figcaption>
+        </figure>
+
+        <h2>In Finder, before you open anything</h2>
+        <p>Skål adds Markdown previews and thumbnails to Finder through Quick Look, in Live or Code, on your chosen paper. Quick Look is read only and never fetches a remote image, because most encounters with a <code>.md</code> file are not editing sessions.</p>
+        <figure>
+          <img src="/shots/skal/landing/shot-quicklook-light.webp" width="1620" height="1286" alt="A Finder Quick Look panel showing Field notes.md rendered as prose, with Live and Code toggles and an Open with Skål button." loading="lazy">
+          <figcaption>Space bar in Finder. Same rendering, same paper.</figcaption>
+        </figure>
+
+        <h2>Make it the default</h2>
+        <p>Get Info on any Markdown file, choose Skål under Open with, and press Change All. From then on, a double-click means Skål.</p>
+        <figure class="narrow">
+          <img src="/shots/skal/landing/shot-get-info.webp" width="530" height="1026" alt="The Finder Get Info window for Field notes.md, with Open with set to Skål as the default and a Change All button." loading="lazy">
+          <figcaption>Finder's Get Info. Once.</figcaption>
+        </figure>
+
+        <h2>Not in Skål</h2>
+        <ul>
+          <li>No account to create and no library to unlock. Plain files, in the folders you already keep them in.</li>
+          <li>No sync service. iCloud Drive, Dropbox and git already do that, and the file is just a file.</li>
+          <li>No AI features of our own. The suggestions are bounded to what is in the document.</li>
+          <li>No plugin system and no theme editor. You choose a paper in Settings, and that is the extent of it.</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="beta">Skål is in beta</h2>
+        <p>Build 0.1 has been submitted to TestFlight and is waiting on Apple's review. Skål will be a small paid Mac app when it ships; the beta is free, and the most useful thing you can send back is a file it got wrong. It requires macOS 26 or later and runs on Apple silicon and Intel.</p>
+        <p class="cta"><a href="/skal/a/go/">Join the TestFlight beta</a><span class="cta__meta">Apple silicon and Intel, sandboxed, built for the App Store.</span></p>
+        <p class="signoff">Made in London by <a href="https://gaspery.com">Gaspery</a>. Welcome in. <strong>Skål!</strong></p>
+
+        <p class="fn"><sup>1</sup> Paper, view, panels and writing-assistance preferences belong to the app. Your file remains plain Markdown.</p>
+      </div>
+    </article>
+
+    <div class="pane pane--code" id="code" aria-label="Code view">
+      <div class="src"><pre><span class="ln"><span><span class="h"># The `.md` handler you actually want.</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="b">**A native Mac app that opens a Markdown file as a document, not a workspace.**</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="q">&gt;</span> This page is open in Skål. Press Code in the bar at the bottom and it becomes the file it was written as.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Double-click a <span class="c">`.md`</span> file and Skål opens it alone: no folder, no sidebar, no account, no library, no new format between you and your words. Read it, edit it, close it. It is still the same file, in the same place, and when you save, what goes back to disk is what you opened plus what you changed.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">[Join the TestFlight beta](/skal/a/go/)</span> Requires macOS 26 or later.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## One file, three views</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>You are reading this page in <span class="b">**Live**</span>. The bar at the bottom switches it the way it switches a document. Press <span class="b">**Code**</span> and this page becomes the file it was written as. <span class="b">**Split**</span> keeps both in view, scrolling together.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="t">| View | Best for |</span></span></span>
+<span class="ln"><span><span class="t">|:---|:---|</span></span></span>
+<span class="ln"><span><span class="t">|</span> <span class="b">**Live**</span> <span class="t">|</span> Reading and editing rendered prose. The serif is the mode indicator. <span class="t">|</span></span></span>
+<span class="ln"><span><span class="t">|</span> <span class="b">**Code**</span> <span class="t">|</span> Working on the exact source, in mono, with line numbers. <span class="t">|</span></span></span>
+<span class="ln"><span><span class="t">|</span> <span class="b">**Split**</span> <span class="t">|</span> Seeing source and presentation together, linked. <span class="t">|</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![Skål in Split view: source on the left, prose on the right.](/shots/skal/landing/shot-split.webp)</span></span></span>
+<span class="ln"><span><span class="k">Split, linked. ⌃⌘1 Code, ⌃⌘2 Live, ⌃⌘3 Split. They work on this page too.</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## The source stays yours</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Open a file and save it without touching anything, and it comes back byte for byte. Make an edit and only the source that expresses the edit changes. Delimiter spelling, whitespace, line breaks, list numbering and fence lengths are left exactly as you wrote them, even inside the paragraph you edited.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Type <span class="c">`**hello**`</span> in Live and it becomes bold. Undo, and the asterisks come back as literal characters, escaped in the file so they survive a reopen. Skål writes only the escapes needed to keep what you can see.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Nothing it hasn't earned</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Opening a file directly starts with every panel off: a strip for the traffic lights, the prose, and a status bar. Files, Outline and the toolbar are three independent toggles, and all eight combinations are ordinary states rather than fallbacks. Open a folder on purpose and Files appears; add a heading and it appears in Outline.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![Skål with only the Outline panel showing.](/shots/skal/landing/shot-outline.webp)</span></span></span>
+<span class="ln"><span><span class="k">Outline on, Files off. ⌘0 Files, ⇧⌘0 Outline, ⌥⌘T Toolbar.</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Everyday Markdown, close at hand</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Select some prose and a small cluster appears beside it: paragraph style, bold, italic, inline code, link, quote, list. It sits next to the selection because that is what it acts on, and it never appears on a bare caret.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![The floating formatting cluster beside a selection.](/shots/skal/landing/detail-cluster.webp)</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Links and images share one small editor. ⌘K opens it for the selection, with the document's own headings offered as destinations. Tables, task lists, fenced code, footnotes and reference links are all there, with bounded suggestions for destinations, headings and fence languages that stay out of the way of writing.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![The link editor popover, opened with ⌘K on the link.](/shots/skal/landing/detail-link.webp)</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="q">- [x]</span> Task lists are drawn controls, and completing one is a one-step undo.</span></span>
+<span class="ln"><span><span class="q">- [ ]</span> Tables render as tables and keep their pipe style in the source.</span></span>
+<span class="ln"><span><span class="q">- [ ]</span> Footnotes<span class="l">[^plain-text]</span> number themselves, with read-only previews.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Findings, not autocorrect</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Check Markdown reads the source and reports what it found: a table whose cells could be padded to align, a footnote whose definition is malformed. Each finding shows where it is, what the fix would do, and three ways out: show it in Code, review the fix, or dismiss it. Nothing is changed until you say so.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![The Findings panel: one cleanup suggestion with Show in Code, Review Fix and Dismiss.](/shots/skal/landing/shot-findings.webp)</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## In Finder, before you open anything</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Skål adds Markdown previews and thumbnails to Finder through Quick Look, in Live or Code, on your chosen paper. Quick Look is read only and never fetches a remote image, because most encounters with a <span class="c">`.md`</span> file are not editing sessions.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![A Finder Quick Look panel rendering Field notes.md.](/shots/skal/landing/shot-quicklook-light.webp)</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Make it the default</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Get Info on any Markdown file, choose Skål under Open with, and press Change All. From then on, a double-click means Skål.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">![The Finder Get Info window with Open with set to Skål.](/shots/skal/landing/shot-get-info.webp)</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Not in Skål</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="q">-</span> No account to create and no library to unlock. Plain files, in the folders you already keep them in.</span></span>
+<span class="ln"><span><span class="q">-</span> No sync service. iCloud Drive, Dropbox and git already do that, and the file is just a file.</span></span>
+<span class="ln"><span><span class="q">-</span> No AI features of our own. The suggestions are bounded to what is in the document.</span></span>
+<span class="ln"><span><span class="q">-</span> No plugin system and no theme editor. You choose a paper in Settings, and that is the extent of it.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="q">---</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="h">## Skål is in beta</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Build 0.1 has been submitted to TestFlight and is waiting on Apple's review. Skål will be a small paid Mac app when it ships; the beta is free, and the most useful thing you can send back is a file it got wrong. It requires macOS 26 or later and runs on Apple silicon and Intel.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">[Join the TestFlight beta](/skal/a/go/)</span> Apple silicon and Intel, sandboxed, built for the App Store.</span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span>Made in London by <span class="l">[Gaspery](https://gaspery.com)</span>. Welcome in. <span class="b">**Skål!**</span></span></span>
+<span class="ln"><span></span></span>
+<span class="ln"><span><span class="l">[^plain-text]</span>: Paper, view, panels and writing-assistance preferences belong to the app. Your file remains plain Markdown.</span></span></pre></div>
+    </div>
+  </div>
+
+  <footer class="skal-status">
+    <div class="tabs" role="tablist" aria-label="View">
+      <button class="tab" role="tab" id="tab-code" aria-selected="false" data-view="code">Code</button>
+      <button class="tab" role="tab" id="tab-live" aria-selected="true" data-view="live">Live</button>
+      <button class="tab tab--split" role="tab" id="tab-split" aria-selected="false" data-view="split">Split</button>
+    </div>
+    <span class="status__hint" id="hint">This page switches like a document.</span>
+    <span class="status__spacer"></span>
+    <span class="status__stats"><span id="words">— words</span><span class="status__enc">UTF-8</span></span>
+  </footer>
+</div>
+<script>
+(function () {
+  var win = document.getElementById('win');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var live = document.getElementById('live');
+  var code = document.getElementById('code');
+  var hint = document.getElementById('hint');
+  var narrow = window.matchMedia('(max-width: 860px)');
+  var hints = { live: 'This page switches like a document.', code: 'The same page, as the file it was written as.', split: 'Linked. Scroll either side.' };
+
+  function setView(v, persist) {
+    if (v === 'split' && narrow.matches) v = 'live';
+    var prev = win.getAttribute('data-view');
+    win.setAttribute('data-view', v);
+    if (prev !== v) {
+      var incoming = v === 'code' ? code : v === 'live' ? live : code;
+      incoming.classList.remove('is-in'); void incoming.offsetWidth; incoming.classList.add('is-in');
+    }
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.view === v)); });
+    hint.textContent = hints[v];
+    if (persist) { try { localStorage.setItem('skal-view', v); } catch (e) {} }
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { setView(t.dataset.view, true); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'), function (b) { b.addEventListener('click', function () { setView(b.dataset.view, true); window.scrollTo({ top: 0, behavior: calmScroll() }); }); });
+  function calmScroll() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; }
+  document.addEventListener('keydown', function (e) {
+    if (!(e.ctrlKey && e.metaKey)) return;
+    var map = { '1': 'code', '2': 'live', '3': 'split' };
+    if (map[e.key]) { e.preventDefault(); setView(map[e.key], true); }
+  });
+  narrow.addEventListener('change', function () { if (win.getAttribute('data-view') === 'split' && narrow.matches) setView('live', false); });
+
+  /* Word count, from the rendered document, like the status bar's. */
+  var text = document.getElementById('doc').innerText || '';
+  var n = text.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('words').textContent = n + ' words';
+
+  /* Linked scrolling in Split: proportional, and only from the pane the pointer is in. */
+  var lock = null;
+  function link(a, b) {
+    a.addEventListener('scroll', function () {
+      if (win.getAttribute('data-view') !== 'split' || lock === b) return;
+      lock = a;
+      var ra = a.scrollTop / Math.max(1, a.scrollHeight - a.clientHeight);
+      b.scrollTop = ra * (b.scrollHeight - b.clientHeight);
+      requestAnimationFrame(function () { lock = null; });
+    }, { passive: true });
+  }
+  link(live, code); link(code, live);
+
+  var stored = null;
+  try { stored = localStorage.getItem('skal-view'); } catch (e) {}
+  if (stored === 'code' || stored === 'split') setView(stored, false);
+})();
+</script>
+
+</Base>

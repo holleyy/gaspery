@@ -1,0 +1,29 @@
+---
+import {
+  SKAL_VARIANT_COOKIE,
+  SKAL_VARIANT_MAX_AGE,
+  resolveSkalVariant,
+} from '../../lib/skal';
+
+/* On-demand: the only route in the /skal test that runs on the Worker.
+   It never renders anything; it picks an arm and redirects. See lib/skal.ts. */
+export const prerender = false;
+
+const { variant, fresh } = resolveSkalVariant(
+  Astro.url.searchParams.get('v'),
+  Astro.cookies.get(SKAL_VARIANT_COOKIE)?.value,
+);
+
+if (fresh) {
+  Astro.cookies.set(SKAL_VARIANT_COOKIE, variant, {
+    path: '/skal',
+    maxAge: SKAL_VARIANT_MAX_AGE,
+    sameSite: 'lax',
+    secure: true,
+    httpOnly: true,
+  });
+}
+
+Astro.response.headers.set('cache-control', 'private, no-store');
+return Astro.redirect(`/skal/${variant}/`, 302);
+---
