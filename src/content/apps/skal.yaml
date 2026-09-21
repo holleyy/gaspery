@@ -1,6 +1,9 @@
 name: Skål
-dek: your default markdown editor
+dek: >-
+  A native Markdown reader and editor that opens the file you already have and
+  leaves the source exactly as it was.
 meta: macOS · SwiftUI
 status: dev
+url: /apps/skal
 proof: /shots/skal/proof.png
 order: 4
