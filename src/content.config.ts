@@ -68,6 +68,11 @@ const appPages = defineCollection({
   schema: z.object({
     title: z.string(),
     template: z.enum(['quiet', 'editorial']),
+    /* The quiet template's one screenshot ("a screenshot if it helps"),
+       served from /public like a spread's. Optional in both schemas; omit
+       and the page keeps the honest placeholder. `alt` goes with it. */
+    image: z.string().optional(),
+    alt: z.string().optional(),
     spreads: z
       .array(
         z.object({
