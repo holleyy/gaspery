@@ -297,9 +297,16 @@ export default config({
           ],
           defaultValue: 'quiet',
         }),
-        image: fields.text({
-          label: 'Screenshot path (quiet template)',
-          description: 'e.g. /shots/skal/live.webp — leave empty for the "coming soon" placeholder',
+        /* The quiet template's one screenshot, uploaded through the CMS.
+           Keystatic stores it at public/shots/<slug>/shot.<ext> and writes
+           /shots/<slug>/shot.<ext> here; seed by hand only in that exact
+           layout, or the first save moves the file (see the `proof` note
+           on the apps collection and tests/app-pages.test.ts). */
+        shot: fields.image({
+          label: 'Screenshot (quiet template)',
+          description: 'One real screenshot, printed under the paragraph. Leave empty for the "coming soon" placeholder.',
+          directory: 'public/shots',
+          publicPath: '/shots/',
         }),
         alt: fields.text({ label: 'Screenshot alt text (quiet template)', multiline: true }),
         spreads: fields.array(

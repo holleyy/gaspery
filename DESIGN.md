@@ -445,8 +445,9 @@ keeps only the print sign-off (`© MMXXVI · London`), so the entity is never
 stated twice on one screen.
 
 ### App screenshots
-Real product shots on an app page, set in the page's frontmatter (`image` +
-`alt`: per spread on an editorial page, once at the top level for the quiet
+Real product shots on an app page, set in the page's frontmatter (per spread
+as `image` + `alt` on an editorial page; once at the top level as `shot` +
+`alt`, a Keystatic upload stored at `/shots/<slug>/shot.<ext>`, for the quiet
 template's single "a screenshot if it helps" slot; omit both and the slot keeps
 the honest "screenshot coming soon" placeholder, never a fake one). The source assets are cut-out windows on
 transparency, so they print straight onto the bone ground: no frame, no card,
