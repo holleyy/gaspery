@@ -5,8 +5,12 @@ interface Props {
   title: string;
   description?: string;
   mono?: boolean;
+  /* A page that lives in another product's type system (the Skål landing
+     pages set Blekk's faces) passes its own Google Fonts family strings and
+     the site's pair is not requested at all. */
+  fonts?: string[];
 }
-const { title, description = 'Product, design & small software. A working notebook.', mono = false } = Astro.props;
+const { title, description = 'Product, design & small software. A working notebook.', mono = false, fonts } = Astro.props;
 
 /* IBM Plex Mono is the feature format's meta face — eyebrows and the
    `01 / NAME` keys. Only feature pages request it; every other page's
@@ -16,7 +20,7 @@ const families = [
   'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
 ];
 if (mono) families.push('family=IBM+Plex+Mono:wght@400;600');
-const fontsHref = `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap`;
+const fontsHref = `https://fonts.googleapis.com/css2?${(fonts ?? families).join('&')}&display=swap`;
 
 /* The whole audience arrives by link, so the preview card is the first
    surface most visitors ever see of this site. Canonical + OG/Twitter meta
@@ -103,6 +107,9 @@ const ogImage = new URL('/og/card.png', Astro.site);
       src="https://counterscale.holleyalex.workers.dev/tracker.js"
       defer
     ></script>
+    {/* A page may add one or two head tags of its own (the Skål go page's
+        meta refresh); everything else in the head stays the layout's. */}
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

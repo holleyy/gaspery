@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { TESTFLIGHT_URL, type SkalVariant } from '../lib/skal';
+
+/* The click that counts. Each arm's "Join the TestFlight beta" link lands
+   here for a moment: the page is static, carries the site's tracker like
+   every other page, and moves on to TestFlight once the tracker has had a
+   beat. A 302 would be cleaner and would count nothing, because nothing
+   loads. Both paths are visible: the meta refresh is the fallback for a
+   visitor with scripts off, who is counted by nobody and sent on anyway. */
+
+interface Props { variant: SkalVariant; }
+const { variant } = Astro.props;
+---
+<Base
+  title={`TestFlight · Skål`}
+  description="Opening Skål's TestFlight page."
+  fonts={['family=Source+Serif+4:opsz,wght@8..60,400;8..60,600']}
+>
+  <meta http-equiv="refresh" content={`2;url=${TESTFLIGHT_URL}`} slot="head" />
+  <main id="main" class="skal-go" data-variant={variant} data-to={TESTFLIGHT_URL}>
+    <p>Opening TestFlight. If nothing happens, <a href={TESTFLIGHT_URL}>carry on by hand</a>.</p>
+  </main>
+  <style is:global>
+    .skal-go {
+      min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+      font-family: 'Source Serif 4', 'Iowan Old Style', Georgia, serif; font-size: 18px;
+      color: var(--color-ink); background: var(--color-paper);
+    }
+    .skal-go p { margin: 0; text-align: center; max-width: 30em; text-wrap: balance; }
+    .skal-go a { color: var(--color-brand-strong); }
+  </style>
+  <script>
+    /* Give the deferred tracker a beat, then go. */
+    const main = document.querySelector<HTMLElement>('.skal-go');
+    const to = main?.dataset.to;
+    if (to) setTimeout(() => window.location.replace(to), 400);
+  </script>
+</Base>

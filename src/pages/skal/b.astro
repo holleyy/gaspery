@@ -1,0 +1,169 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/skal-b.css';
+
+/* Arm "b" of the /skal test (see src/lib/skal.ts). Converted from the
+   standalone prototype d-double-click.html; the direction contract is the first comment inside the
+   page root (Astro strips a slot's leading comment; a deeper one survives). */
+---
+<Base title="Skål · Markdown for macOS" description="The .md handler you actually want. A native Mac app that opens a Markdown file as a document, not a workspace." fonts={['family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400']}>
+
+<div class="skal-page">
+<!--
+THESIS: The page tells the one moment the product is built around: you double-click a Markdown file. It shows what a Mac gives you today (a wall of punctuation, or an invitation to set up a workspace) and then what Skål gives you (the file, as a document). It refuses the feature grid and the diff; the positioning is viewer-first and the default handler, and source preservation is a trust line low on the page.
+OWN-WORLD: Blekk's pasteboard (#E7E2D8) as the desk, warm paper (#FAF7F1) for the objects on it, ink #211E1A, rust headings, the app's magenta on the primary action and on the one selected Finder row. Captures are trimmed to the window edge and cast the page's own shadow, so every object on the desk shares one shadow. Source Serif 4 for headings and prose; the system sans for anything that is UI (file rows, window chrome, buttons). No mono anywhere, since nothing on the page is source.
+STORY: "That is exactly what happens to me." The visitor recognises the moment, sees the better outcome, learns it also fixes Finder previews, and joins the beta.
+FIRST VIEWPORT: Small wordmark row. The headline "The .md handler you actually want." A one-line dek. Then a Finder-style list of three Markdown files on paper with Skål's own document icons, "Field notes.md" selected, captioned "You double-click one of these." The raw-text panel and the Skål capture below both show that same file, so the double-click completes. Then Finder, the default handler, the three views, the trust line, the Not list and the beta. The two "what you get today" panels begin below the fold line.
+FORM: sequential story; direction 4 of 5. No seed key: the user asked for more examples, which pins the directions and replaces the roll. Code-led, both themes.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="top">
+    <a class="top__wm" href="#"><img class="top__icon" src="/shots/skal/landing/icon.webp" width="640" height="640" alt="">Skål</a>
+    <nav aria-label="Site"><a href="#beta">Beta on TestFlight</a><a href="https://gaspery.com">Gaspery</a></nav>
+  </header>
+
+  <section class="skal-hero">
+    <h1>The <code>.md</code> handler you actually want.</h1>
+    <p class="hero__dek">A native Mac app that opens a Markdown file as a document, not a workspace. Quiet enough to be the default.</p>
+    <div class="folder" role="img" aria-label="A Finder window listing three Markdown files, with Field notes.md selected.">
+      <div class="folder__bar"><i></i><i></i><i></i><span>Notes</span></div>
+      <table>
+        <thead><tr><th>Name</th><th>Date Modified</th><th>Kind</th></tr></thead>
+        <tbody>
+          <tr><td><img class="fileicon" src="/shots/skal/landing/icon.webp" width="640" height="640" alt="">2026 reading list.md</td><td>12 September 2026 at 08:14</td><td>Markdown</td></tr>
+          <tr class="sel"><td><img class="fileicon" src="/shots/skal/landing/icon.webp" width="640" height="640" alt="">Field notes.md</td><td>Today at 20:43</td><td>Markdown</td></tr>
+          <tr><td><img class="fileicon" src="/shots/skal/landing/icon.webp" width="640" height="640" alt="">Sourdough, third attempt.md</td><td>3 September 2026 at 21:40</td><td>Markdown</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="folder__cap">You double-click one of these.</p>
+  </section>
+
+  <section class="sec">
+    <h2>What a Mac gives you today.</h2>
+    <p>Either the raw file in a text editor, or an app that would like you to make an account, create a library, and import your files before it shows you anything.</p>
+    <div class="today">
+      <figure>
+        <div class="win">
+          <div class="win__bar"><i></i><i></i><i></i><span>Field notes.md</span></div>
+          <div class="wall"># Field notes, September
+
+**Three days in the Lakes, one notebook, no signal.**
+
+&gt; The plan was Helvellyn on Saturday and a long, flat Sunday. The weather had other plans, and so did the pen.
+
+I keep these in plain Markdown so they open anywhere, and so that in ten years they will still open. This one has a table, a list of things to do, a footnote and a photograph, which is about as much structure as a walk deserves.
+
+## Saturday
+
+Up at six. Frost on the tent, the first of the year, and the tarn completely still. Striding Edge by nine; the ridge was empty apart from two runners and a dog with better balance than either of us.
+
+Lunch at Red Tarn. Too cold to sit for long, so we didn't.
+
+| Leg | Miles | Ascent | Weather |
+|:---|---:|---:|:---|
+| Glenridding to Red Tarn | 3.1 | 1,600 ft | Frost, then sun |
+| Striding Edge to the summit | 1.4 | 900 ft | Wind from the west |
+| Swirral Edge and back down | 3.6 | 0 ft | Clear, cold |
+
+![Red Tarn at seven in the morning, still enough to hold the ridge upside down.](images/tarn.jpg)</div>
+        </div>
+        <figcaption>A wall of punctuation. The text editor is doing its job; it just doesn't know what Markdown is.</figcaption>
+      </figure>
+      <figure>
+        <div class="win">
+          <div class="win__bar"><i></i><i></i><i></i><span>Welcome</span></div>
+          <div class="invite" aria-label="A generic first-run screen">
+            <h3>Set up your workspace</h3>
+            <p>Sign in to sync your notes across devices, then choose a folder to import.</p>
+            <div class="fake" aria-hidden="true"><span class="primary">Create account</span><span>Sign in</span><span>Choose a folder to import…</span></div>
+          </div>
+        </div>
+        <figcaption>An invitation to set up a workspace. You wanted to read one file.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>What Skål gives you.</h2>
+    <p>The file, as a document. It opens alone, with no folder, no sidebar, and no chrome it hasn't earned. Read it, edit it, close it. It is still the same <code>.md</code> file, in the same place.</p>
+    <figure class="one">
+      <img src="/shots/skal/landing/shot-live.webp" width="2560" height="1720" alt="Skål with every panel off: Field notes, September set as prose on warm paper, with only Code, Live and Split in the status bar." loading="eager">
+      <figcaption>No account. No library. No new format between you and your words.<small>Files, Outline and the toolbar are three switches you turn on, not off. Add a heading and it appears in Outline; press Check Markdown and Skål reports what it found, with a fix you can review before anything changes.</small></figcaption>
+    </figure>
+    <div class="cta">
+      <a class="btn" href="/skal/b/go/">Join the TestFlight beta</a>
+      <span class="fact">Requires macOS 26 or later.</span>
+    </div>
+  </section>
+
+  <section class="sec two">
+    <figure>
+      <img src="/shots/skal/landing/shot-quicklook-light.webp" width="1620" height="1286" alt="A Finder Quick Look panel showing Field notes.md rendered as prose, with Live and Code toggles and an Open with Skål button." loading="lazy">
+    </figure>
+    <div>
+      <h2>Often you don't even need to open it.</h2>
+      <p>Skål adds Markdown previews and thumbnails to Finder. Press the space bar on a <code>.md</code> file and read it rendered, on your chosen paper, without opening anything. Quick Look is read only and never fetches a remote image.</p>
+      <p><b>Most encounters with a Markdown file aren't editing sessions.</b> Skål is built in that order: a reader that happens to edit.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>When you do want to write.</h2>
+    <p>One file, three views. Read and edit rendered prose in <b>Live</b>. Work on the exact source in <b>Code</b>. Keep both in view with <b>Split</b>, scrolling together.</p>
+    <figure class="one">
+      <img src="/shots/skal/landing/shot-split.webp" width="2560" height="1720" alt="Skål in Split view: the Markdown source of Field notes on the left, the same document rendered as prose on the right, with Code, Live, Split and Linked in the status bar." loading="lazy">
+    </figure>
+    <ul class="views">
+      <li><b>Live</b><span>Clean prose at rest. Type Markdown and it becomes formatting; undo and the characters come back.</span></li>
+      <li><b>Code</b><span>The file as it is on disk, with line numbers and wrapped lines.</span></li>
+      <li><b>Split</b><span>Both, side by side and linked. Double-click the divider for an equal split.</span></li>
+    </ul>
+  </section>
+
+  <section class="sec two">
+    <figure class="narrow">
+      <img src="/shots/skal/landing/shot-get-info.webp" width="530" height="1026" alt="The Finder Get Info window for Field notes.md, with Open with set to Skål as the default and a Change All button." loading="lazy">
+    </figure>
+    <div>
+      <h2>Make it the default.</h2>
+      <p>Get Info on any Markdown file, choose Skål under Open with, and press Change All. From then on, a double-click means Skål, and a Markdown file on your Mac is just a document again.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="trust">
+      <h2>It never rewrites your file.</h2>
+      <div>
+        <p>Some Markdown editors rebuild the whole file from their own model when you save, so lines you never touched come back reformatted. Skål saves what it opened, plus what you changed. Open a file and save it without editing and it comes back byte for byte.</p>
+        <p>You will only ever notice this if you keep your notes in git or share them with other tools. If you do, you will notice it every day.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Not in Skål.</h2>
+    <ul class="nots">
+      <li><b>No account.</b><span>Nothing to create, nothing to unlock. Plain files in the folders you already keep them in.</span></li>
+      <li><b>No sync service.</b><span>iCloud Drive, Dropbox and git already do that, and the file is just a file.</span></li>
+      <li><b>No AI of our own.</b><span>The suggestions are bounded to what is in the document.</span></li>
+      <li><b>No plugins, no themes.</b><span>You choose a paper in Settings. That is the extent of it.</span></li>
+    </ul>
+  </section>
+
+  <section class="close" id="beta">
+    <h2>Skål is in beta.</h2>
+    <p>Build 0.1 has been submitted to TestFlight and is waiting on Apple's review. It will be a small paid Mac app when it ships; the beta is free, and the most useful thing you can send back is a file it got wrong.</p>
+    <div class="cta">
+      <a class="btn" href="/skal/b/go/">Join the TestFlight beta</a>
+      <span class="fact">Requires macOS 26 or later. Apple silicon and Intel.</span>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Skål is made in London by <a href="https://gaspery.com">Gaspery</a>.</span>
+    <span>Welcome in. Skål.</span>
+  </footer>
+</div>
+
+</Base>
