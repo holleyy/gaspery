@@ -116,8 +116,12 @@ body.crt .tx,body.crt h1,body.crt h2{text-shadow:0 0 6px currentColor}
 .kept .pin{width:14px; height:14px; border-radius:50%; background:var(--pin); box-shadow:0 0 0 3px #000, 0 0 0 5px var(--pin); position:absolute; left:-9px; top:-9px}
 .kept figure.passed .pin{background:var(--grid); box-shadow:0 0 0 3px #000, 0 0 0 5px var(--grid)}
 /* now line across the grid */
-.nowline{position:absolute; left:var(--timecol); right:0; height:2px; background:var(--tx-red); z-index:3; pointer-events:none; top:0}
-.nowline::before{content:"NOW"; position:absolute; left:8px; top:-14px; font-family:var(--tx); font-size:8px; color:var(--tx-red)}
+/* the clock's minute, marked only in the two rails: a tick in the time column
+   with its label, and a tick in the kept column, never across a programme block */
+.nowline{position:absolute; left:0; right:0; height:2px; z-index:3; pointer-events:none; top:0; background:none}
+.nowline::before{content:""; position:absolute; left:0; width:var(--timecol); height:2px; background:var(--tx-red)}
+.nowline::after{content:""; position:absolute; right:0; width:var(--keptcol); height:2px; background:var(--tx-red)}
+.nowline span{position:absolute; left:8px; top:-14px; font-family:var(--tx); font-size:8px; color:var(--tx-red)}
 /* sub schedule inside the Invite block */
 .slots{display:grid; grid-template-columns:max-content minmax(0,1fr) minmax(0,1.3fr); border:2px solid currentColor}
 .slots .r{display:grid; grid-column:1 / -1; grid-template-columns:subgrid; background:var(--tx-cyan); color:#000; border-bottom:2px solid #000}
