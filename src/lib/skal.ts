@@ -18,9 +18,9 @@ export type SkalVariant = (typeof SKAL_VARIANTS)[number];
 export const SKAL_VARIANT_COOKIE = 'skal-variant';
 export const SKAL_VARIANT_MAX_AGE = 60 * 60 * 24 * 90;
 
-/* Replace when the build clears TestFlight review. Until then the go page
-   still counts the click and lands on TestFlight's own front door. */
-export const TESTFLIGHT_URL = 'https://testflight.apple.com/';
+/* The public TestFlight invitation for build 0.1. The go pages count the
+   click and land here. */
+export const TESTFLIGHT_URL = 'https://testflight.apple.com/join/UenrAtQX';
 export const TESTFLIGHT_URL_IS_PLACEHOLDER = TESTFLIGHT_URL === 'https://testflight.apple.com/';
 
 export function isSkalVariant(value: unknown): value is SkalVariant {
