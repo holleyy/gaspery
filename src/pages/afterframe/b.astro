@@ -7,7 +7,7 @@ import '../../styles/afterframe-b.css';
    comment inside the page root (Astro strips a slot's leading comment; a
    deeper one survives). */
 ---
-<Base title="Afterframe · Tonight's listings" description="A new kind of film companion for Plex. Tonight's schedule, and the moments you kept, at the minute you kept them. The film never stops." fonts={['family=League+Gothic', 'family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400', 'family=Silkscreen:wght@400;700']}>
+<Base title="Afterframe · Stop taking photos of your TV" description="Afterframe keeps the frame from whatever is playing on your Plex, with its dialogue and its place in the film, and never touches the television. Tonight's listings, with the moments you kept." fonts={['family=League+Gothic', 'family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400', 'family=Silkscreen:wght@400;700']}>
 
 <div class="af-root">
 <!--
@@ -37,8 +37,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <!-- 22:00 · P100 -->
     <div class="tcell h" data-t="22:00"><div class="in"><span class="tx">22:00</span><span class="lab">P100</span></div></div>
     <section class="af-hero blk" style="grid-row:1" data-page="100" data-time="22:00 · P100" aria-labelledby="h1">
-      <h1 id="h1">Keep what stayed with&nbsp;you.</h1>
-      <p class="lede measure">A new kind of film companion. Reach back to a moment playing from Plex, keep the frame and its words, and never interrupt the television. Tonight's schedule runs down the page. What you kept is in the right-hand column, at the minute you kept it.</p>
+      <span class="tx d meta ended"><span>22:00</span><span><s>Photographing the television</s></span><span>ended</span></span>
+      <h1 id="h1">Stop taking photos of your&nbsp;TV.</h1>
+      <p class="lede measure">Afterframe keeps the frame from whatever is playing on your Plex, with its dialogue and its place in the film, and never touches the television. Keep what stayed with you. Send it to whoever needs to see it. Tonight's schedule runs down the page; what you kept is in the right-hand column, at the minute you kept it.</p>
       <div class="cta-row">
         <a class="key" href="/afterframe/b/go/">Join the early list</a>
         <a class="key cyan" href="#p101">How it works · 23:10</a>
@@ -180,8 +181,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
       </div>
       <div id="p199" data-page="199" style="margin-top:12px">
-        <h2 style="font-size:clamp(2.6rem, 6vw, 5rem); color:var(--tx-yellow)">Every film leaves something behind.</h2>
-        <p style="margin-top:12px">Keep the frame. Remember the feeling. Share the moment.</p>
+        <h2 style="font-size:clamp(2.6rem, 6vw, 5rem); color:var(--tx-yellow)">Keep what stayed with you.</h2>
+        <p style="margin-top:12px">Every film leaves something behind. Keep the frame. Remember the feeling. Share the moment.</p>
         <div class="cta-row">
           <a class="key" href="/afterframe/b/go/">Join the early list</a>
           <a class="key yellow" href="https://gaspery.com">Follow the build</a>

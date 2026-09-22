@@ -102,6 +102,7 @@ body.crt .tx,body.crt h1,body.crt h2{text-shadow:0 0 6px currentColor}
 .blk .body p{font-size:1.02rem}
 .af-hero.blk{grid-column:2 / 4; background:#000; min-height:min(68vh, 620px); justify-content:center; gap:26px}
 .af-hero.blk .legend{margin-top:auto}
+.ended{margin-bottom:-8px} .ended s{text-decoration:line-through; text-decoration-thickness:2px; text-decoration-color:var(--tx-red)}
 .af-hero .lede{font-size:clamp(1.05rem,1.4vw,1.3rem); line-height:1.45; color:var(--tx-white)}
 .cta-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:18px}
 /* the kept column */
