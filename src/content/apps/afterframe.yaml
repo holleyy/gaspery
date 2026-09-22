@@ -1,7 +1,8 @@
-name: Aftershot
+name: Afterframe
 dek: Pulls stills and GIFs straight off whatever's playing on your Plex server.
 meta: iOS · SwiftUI
 status: dev
-url: /apps/aftershot
-proof: /shots/aftershot/proof.png
+url: /apps/afterframe
+site: /afterframe
+proof: /shots/afterframe/proof.png
 order: 3
