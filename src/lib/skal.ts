@@ -10,10 +10,14 @@
    sends the visitor on, so the conversion is a pageview too.
 
    The cookie is functional, not analytics: it keeps a returning visitor on
-   the arm they first saw. It carries a letter and nothing else. */
+   the arm they first saw. It carries a letter and nothing else.
 
-export const SKAL_VARIANTS = ['a', 'b'] as const;
-export type SkalVariant = (typeof SKAL_VARIANTS)[number];
+   The arm logic itself is shared with /afterframe in src/lib/variants.ts. */
+
+import { ARMS, isArm, pickArm, resolveArm, type Arm } from './variants.ts';
+
+export const SKAL_VARIANTS = ARMS;
+export type SkalVariant = Arm;
 
 export const SKAL_VARIANT_COOKIE = 'skal-variant';
 export const SKAL_VARIANT_MAX_AGE = 60 * 60 * 24 * 90;
@@ -23,26 +27,9 @@ export const SKAL_VARIANT_MAX_AGE = 60 * 60 * 24 * 90;
 export const TESTFLIGHT_URL = 'https://testflight.apple.com/join/UenrAtQX';
 export const TESTFLIGHT_URL_IS_PLACEHOLDER = TESTFLIGHT_URL === 'https://testflight.apple.com/';
 
-export function isSkalVariant(value: unknown): value is SkalVariant {
-  return value === 'a' || value === 'b';
-}
-
-/* A fair coin, from the platform's own randomness. */
-export function pickSkalVariant(random: () => number = Math.random): SkalVariant {
-  return random() < 0.5 ? 'a' : 'b';
-}
-
-/* The arm a request should see: an explicit ?v= wins (so a specific arm can
-   be shared or checked), then the cookie, then a fresh coin. */
-export function resolveSkalVariant(
-  query: string | null,
-  cookie: string | undefined,
-  random: () => number = Math.random,
-): { variant: SkalVariant; fresh: boolean } {
-  if (isSkalVariant(query)) return { variant: query, fresh: query !== cookie };
-  if (isSkalVariant(cookie)) return { variant: cookie, fresh: false };
-  return { variant: pickSkalVariant(random), fresh: true };
-}
+export const isSkalVariant = isArm;
+export const pickSkalVariant = pickArm;
+export const resolveSkalVariant = resolveArm;
 
 export function skalGoPath(variant: SkalVariant): string {
   return `/skal/${variant}/go/`;

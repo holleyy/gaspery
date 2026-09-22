@@ -48,6 +48,16 @@ const { Content } = await render(page);
       <EditorialAppBody spreads={page.data.spreads ?? []}><Content /></EditorialAppBody>
     )}
 
+    {app.data.site && (
+      /* An app with a site of its own gets one plain door to it. The site
+         is built in the app's world, not this one, so the link says where
+         it goes rather than what it is. */
+      <p class="app-page__site">
+        <a href={app.data.site}>Visit the {app.data.name} site &rarr;</a>
+        <span>{app.data.name} has a home of its own, built in its own world.</span>
+      </p>
+    )}
+
     {/* App pages are the marketing URLs App Store review actually visits, so
         the full statutory imprint closes them. */}
     <footer><Imprint /></footer>
@@ -61,4 +71,18 @@ const { Content } = await render(page);
     justify-content: space-between;
     gap: 16px;
   }
+  .app-page__site {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .app-page__site a {
+    font-weight: 600;
+    color: var(--color-brand-strong);
+  }
+  .app-page__site a:hover { color: var(--color-brand-strong-hover); }
+  .app-page__site span { color: var(--color-ink-secondary); }
 </style>

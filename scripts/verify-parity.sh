@@ -55,7 +55,7 @@ done < <(find dist -name '*.html' | sort)
 # public/_redirects as raw rules; a build that drops them still succeeds and
 # still passes every test, and the only symptom is the old link 404ing in
 # production. So the gate that already builds checks for them.
-for rule in '/apps/afterframe/' '/apps/afterframe'; do
+for rule in '/apps/aftershot/' '/apps/aftershot'; do
   if ! grep -qE "^${rule}[[:space:]]" dist/_redirects 2>/dev/null; then
     echo "REDIRECT MISSING from dist/_redirects: $rule"
     fail=1

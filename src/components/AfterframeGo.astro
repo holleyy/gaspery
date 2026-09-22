@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { EARLY_LIST_URL, type AfterframeVariant } from '../lib/afterframe';
+
+/* The click that counts. Each arm's "Join the early list" link lands here
+   for a moment: the page is static, carries the site's tracker like every
+   other page, and opens the early-list email once the tracker has had a
+   beat. The meta refresh is the fallback for a visitor with scripts off,
+   and the visible link is the fallback for a browser that will not follow
+   a refresh to a mailto. */
+
+interface Props { variant: AfterframeVariant; }
+const { variant } = Astro.props;
+---
+<Base
+  title="Early list · Afterframe"
+  description="Joining the Afterframe early list."
+  fonts={['family=Schibsted+Grotesk:wght@400;700']}
+>
+  <meta http-equiv="refresh" content={`2;url=${EARLY_LIST_URL}`} slot="head" />
+  <main id="main" class="af-go" data-variant={variant} data-to={EARLY_LIST_URL}>
+    <p>Opening your mail app. If nothing happens, <a href={EARLY_LIST_URL}>write to hello@gaspery.com</a> and we will add you to the early list.</p>
+  </main>
+  <style is:global>
+    .af-go {
+      min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+      font-family: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif; font-size: 18px;
+      color: #F1ECE4; background: #0B0A0A;
+    }
+    .af-go p { margin: 0; text-align: center; max-width: 30em; text-wrap: balance; }
+    .af-go a { color: #EA8A4E; text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+  <script>
+    /* Give the deferred tracker a beat, then go. */
+    const main = document.querySelector<HTMLElement>('.af-go');
+    const to = main?.dataset.to;
+    if (to) setTimeout(() => { window.location.href = to; }, 400);
+  </script>
+</Base>

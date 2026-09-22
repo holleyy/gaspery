@@ -1,0 +1,282 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/afterframe-b.css';
+
+/* Arm "b" of the /afterframe test (see src/lib/afterframe.ts). Converted
+   from the standalone concept listings-3-grid.html; the direction contract is the first
+   comment inside the page root (Astro strips a slot's leading comment; a
+   deeper one survives). */
+---
+<Base title="Afterframe · Tonight's listings" description="A new kind of film companion for Plex. Tonight's schedule, and the moments you kept, at the minute you kept them. The film never stops." fonts={['family=League+Gothic', 'family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400', 'family=Silkscreen:wght@400;700']}>
+
+<div class="af-root">
+<!--
+DIRECTION CONTRACT · seed 8534e8c8 · mode persuade
+THESIS: (third cut: a kept frame is followed by its sent event in the column, the sharing block leads with the conversation, the header runner rewrites Keep to Share in teletext while it is on screen) The listings grid is the whole page. Time runs down the left edge from 22:00 to closedown, every section is a programme block at the hour it happens, and the moments you kept sit in their own column at the minute you kept them. Refuses sections; there is only the schedule.
+OWN-WORLD: teletext black, yellow for now, cyan for next, grey for later, orange only for the kept frame; Silkscreen at integer scale; League Gothic block titles; Barlow body; a NOW line across the grid that moves with the clock; fastext keys, a keypad, a CRT switch.
+STORY: visitor reads P100 at 22:00, sees Furious on now with a frame kept at 22:39 beside it, scrolls down the evening through how it works, the library, sharing and the index, and reaches closedown and the red key.
+FIRST VIEWPORT: header with keypad and clock; the P100 row; the schedule begins: the 22:00 cell, a black block with the headline, lede and keys spanning programme and kept columns; the 22:15 row starts Furious in yellow with the kept frame at 22:39 in the right column and the NOW line crossing at 22:47.
+FORM: television listings, the grid-as-page variant of option E. Raise: sequence carried only by time, which is real on every row.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main" aria-label="Afterframe home"><img loading="lazy" decoding="async" src="/shots/afterframe/icon.png" alt="" width="26" height="26"><span>Afterframe</span></a>
+    <div class="clock"><form class="keypad" id="keypad" aria-label="Type a page number"><span class="tx w">P</span><input class="tx w" id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="3" value="100" aria-label="Page number"></form><span class="tx d date">Sat 19 Sep</span><span class="tx y" id="clock">22:47:12</span><button type="button" class="crt-sw tx d" id="crtsw" aria-pressed="false">CRT</button></div>
+  </div>
+  <div class="runner"><div class="wrap"><span class="tx" id="runner" aria-live="polite">KEEP WHAT STAYED WITH YOU</span><span class="tx d right" id="runner-right">Tonight · 22:00 → closedown</span></div></div>
+</header>
+
+<main id="main" class="wrap">
+  <div class="pagehead"><span class="tx dh"><b>P100</b> Afterframe · Tonight</span><span class="tx d meta"><span>Plex</span><span>Apple TV</span><span>Living room</span><span>22:00 → closedown</span></span></div>
+  <div class="mosaic" aria-hidden="true"></div>
+
+  <div class="sched" id="sched">
+    <div class="nowline" id="nowline" aria-hidden="true"></div>
+
+    <!-- 22:00 · P100 -->
+    <div class="tcell h" data-t="22:00"><div class="in"><span class="tx">22:00</span><span class="lab">P100</span></div></div>
+    <section class="af-hero blk" style="grid-row:1" data-page="100" data-time="22:00 · P100" aria-labelledby="h1">
+      <h1 id="h1">Keep what stayed with&nbsp;you.</h1>
+      <p class="lede measure">A new kind of film companion. Reach back to a moment playing from Plex, keep the frame and its words, and never interrupt the television. Tonight's schedule runs down the page. What you kept is in the right-hand column, at the minute you kept it.</p>
+      <div class="cta-row">
+        <a class="key" href="/afterframe/b/go/">Join the early list</a>
+        <a class="key cyan" href="#p101">How it works · 23:10</a>
+      </div>
+      <div class="legend">
+        <span class="tx"><span class="swatch" style="background:var(--tx-yellow)"></span> On now</span>
+        <span class="tx"><span class="swatch" style="background:var(--tx-cyan)"></span> Next</span>
+        <span class="tx"><span class="swatch" style="background:var(--later)"></span> Later</span>
+        <span class="tx"><span class="swatch" style="background:var(--pin); border-radius:50%"></span> A moment you kept</span>
+        <span class="tx"><span class="swatch" style="background:var(--tx-cyan); border-radius:50%"></span> Sent on</span>
+        <span class="tx"><span class="swatch" style="background:var(--tx-red); width:2px"></span> Now · the television never stopped</span>
+      </div>
+    </section>
+
+    <!-- 22:15 · Furious -->
+    <div class="tcell" data-t="22:15"><div class="in"><span class="tx">22:15</span><span class="lab">Apple TV</span></div></div>
+    <section class="blk now" style="grid-row:2 / span 4" data-time="22:15 · Apple TV" aria-labelledby="h-fur">
+      <div class="head"><h2 id="h-fur">Furious · They Make a Noise Like Feathers</h2><span class="tx d meta"><span>S01E06</span><span>22:15 – 23:10</span><span>54:45</span><span>on now</span></span></div>
+      <div class="body">
+        <div>
+          <h3>Save the scene without stopping it.</h3>
+          <p>Afterframe is a companion, not a remote. It reads the active session and retrieves the selected moment from your own Plex server. It never pauses, seeks, or commands playback on Apple TV. At 22:39 a frame was kept from this episode. The programme did not notice.</p>
+          <p>Some moments arrive before you are ready for them. A composition. A glance. A line that changes the scene. Open the Companion and move through the last two minutes until you find the frame that caught you. No scramble for the remote. No photographing the screen. No asking everyone to wait.</p>
+        </div>
+        <div class="phone-row"><figure><div class="phone"><video poster="/shots/afterframe/now.webp" muted loop playsinline autoplay preload="metadata" aria-label="Afterframe's Now screen while Furious plays: the timeline advances, the plate is pressed, the frame drops into Tonight and the clock keeps counting"><source src="/shots/afterframe/loop/keep.mp4" type="video/mp4"></video></div><figcaption class="tx d">Now · 22:39 · the film never stops</figcaption></figure></div>
+      </div>
+    </section>
+    <div class="kept" style="grid-row:3" data-time="22:39 · kept">
+      <figure><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="816" height="290" src="/shots/afterframe/stills/tonight-big.jpg" alt="Furious, kept at 22:39, 24:20 into the episode"><figcaption><span class="tx p">22:39</span><span class="tx d">24:20 · Furious</span></figcaption></figure>
+    </div>
+
+    <div class="tcell" data-t="22:30"><div class="in"><span class="tx">22:30</span></div></div>
+    <div class="tcell" data-t="22:45"><div class="in"><span class="tx">22:45</span></div></div>
+    <div class="kept" style="grid-row:4" data-time="22:54 · kept · 22:56 · sent">
+      <figure><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-30-s.jpg" alt="Furious, kept at 22:54, 39:30 into the episode"><figcaption><span class="tx p">22:54</span><span class="tx d">39:30 · Furious</span><span class="line">“Calm down. I said what?”</span></figcaption></figure>
+      <figure class="sent"><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/sh-thread.jpg" alt="The same frame in the group chat, between the replies This is sooo good and I have no notes"><figcaption><span class="tx p">22:56</span><span class="tx d">sent · the group chat</span><span class="line">Two replies before the scene ended.</span></figcaption></figure>
+    </div>
+    <div class="tcell h" data-t="23:00"><div class="in"><span class="tx">23:00</span></div></div>
+
+    <!-- 23:10 · The Invite · P101 -->
+    <div class="tcell" data-t="23:15"><div class="in"><span class="tx">23:15</span><span class="lab">P101 · P102</span></div></div>
+    <section class="blk next" id="p101" style="grid-row:6 / span 7" data-page="101" data-time="23:10 · Apple TV · P101" aria-labelledby="h-inv">
+      <div class="head"><h2 id="h-inv">The Invite</h2><span class="tx d meta"><span>2026</span><span>23:10 – 01:02</span><span>01:52:10</span><span>next</span></span></div>
+      <div class="body one">
+        <div>
+          <h3>How it works · five slots</h3>
+          <div class="slots" role="list">
+            <div class="r" role="listitem"><div class="when"><span class="tx">00:18:30</span><span class="tx d"><small>slot 1</small></span></div><div class="what"><h3>Notice something</h3></div><div class="how">Keep watching. Afterframe observes the active Plex session on your Apple TV without taking control of it.</div></div>
+            <div class="r" role="listitem"><div class="when"><span class="tx">00:18:50</span><span class="tx d"><small>slot 2</small></span></div><div class="what"><h3>Reach back</h3><span class="q">Drag to hold a moment</span></div><div class="how">Move through the recent indexed timeline until you find the frame that caught you, or jump across the full runtime.</div></div>
+            <div class="r live" role="listitem"><div class="when"><span class="tx">00:19:40</span><span class="tx d"><small>slot 3</small></span></div><div class="what"><h3>Keep it</h3></div><div class="how">Afterframe secures the frame and its place in the film, then quietly works toward a higher-quality image when one is available.</div></div>
+            <div class="r" role="listitem"><div class="when"><span class="tx">Later</span><span class="tx d"><small>slot 4</small></span></div><div class="what"><h3>Make it yours</h3><span class="q">What made you stop here?</span></div><div class="how">Keep the moment as it is, preserve available dialogue, or answer that one question.</div></div>
+            <div class="r" role="listitem"><div class="when"><span class="tx">Any time</span><span class="tx d"><small>slot 5</small></span></div><div class="what"><h3>Share it</h3></div><div class="how">Send a clean image to a friend, or include dialogue and timecode when the context matters. The private original stays in Afterframe.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="body" id="p102" data-page="102">
+        <div>
+          <h3>Your taste, told in moments.</h3>
+          <p>Afterframe is not another list of what you watched. It is a history of what you noticed. Weave lays every capture out; Ribbon shows the shape of your attention across one title. Search by film, episode, dialogue, note, or timecode.</p>
+          <div class="stills" style="margin-top:16px" aria-label="Frames kept this week">
+            <div class="still"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-20-s.jpg" alt="Fire Force at 00:22:20" data-mosaic><span class="tx">Fire Force</span></div>
+            <div class="still"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-40-s.jpg" alt="Marie Antoinette at 00:05:40" data-mosaic><span class="tx">Marie Antoinette</span></div>
+            <div class="still"><img loading="lazy" decoding="async" width="640" height="382" src="/shots/afterframe/frames/itmfl-08-46-s.jpg" alt="In the Mood for Love at 00:08:46" data-mosaic><span class="tx">In the Mood for Love</span></div>
+            <div class="still"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40" data-mosaic><span class="tx">The Invite</span></div>
+          </div>
+        </div>
+        <div class="phone-row"><figure><div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/shots/tonight-15.webp" alt="Tonight: 15 captures across 5 titles"></div><figcaption class="tx d">Tonight</figcaption></figure><figure><div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/shots/library-invite.webp" alt="Weave: 133 captures from The Invite"></div><figcaption class="tx d">Weave</figcaption></figure></div>
+      </div>
+    </section>
+    <div class="kept" style="grid-row:10" data-time="00:18 · 00:19 · kept">
+      <figure class="passed"><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt="The Invite at 01:08:10, passed over"><figcaption><span class="tx d">00:18</span><span class="tx d">01:08:10 · passed over</span></figcaption></figure>
+      <figure><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite, kept at 00:19, 01:09:40 into the film"><figcaption><span class="tx p">00:19</span><span class="tx d">01:09:40 · The Invite</span><span class="line">“But it could be. Could be tonight.”</span></figcaption></figure>
+    </div>
+
+    <div class="tcell" data-t="23:30"><div class="in"><span class="tx">23:30</span></div></div>
+    <div class="tcell" data-t="23:45"><div class="in"><span class="tx">23:45</span></div></div>
+    <div class="tcell h" data-t="00:00"><div class="in"><span class="tx">00:00</span></div></div>
+    <div class="tcell" data-t="00:15"><div class="in"><span class="tx">00:15</span></div></div>
+    <div class="tcell" data-t="00:30"><div class="in"><span class="tx">00:30</span></div></div>
+    <div class="tcell" data-t="00:45"><div class="in"><span class="tx">00:45</span></div></div>
+
+    <!-- 01:02 · In the Mood for Love · P103 P104 -->
+    <div class="tcell h" data-t="01:00"><div class="in"><span class="tx">01:00</span><span class="lab">P103 · P104</span></div></div>
+    <section class="blk later" id="p103" style="grid-row:13 / span 7" data-page="103" data-time="01:02 · Apple TV · P103" aria-labelledby="h-itmfl">
+      <div class="head"><h2 id="h-itmfl">In the Mood for Love</h2><span class="tx d meta"><span>2000</span><span>01:02 – 02:41</span><span>01:38:40</span><span>later</span></span></div>
+      <div class="body">
+        <div>
+          <h3>The frame goes where you were already talking.</h3>
+          <p>Some moments immediately make you think of someone. The share sheet is the iPhone's own, so the frame lands in the group chat, the thread, or the post, with its line or its timecode when they help. The private original and the reason you kept it stay in Afterframe. At 22:56 the Furious frame went to the group chat; two replies came back before the scene ended.</p>
+          <div class="stills" style="margin-top:16px" aria-label="Sending a frame">
+            <div class="still"><img loading="lazy" decoding="async" width="920" height="497" src="/shots/afterframe/stills/sh-sheet.jpg" alt="The iPhone share sheet with the frame at the top" data-mosaic><span class="tx">22:56 · share sheet</span></div>
+            <div class="still"><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/sh-compose.jpg" alt="A new message with the frame and the words: I have no notes" data-mosaic><span class="tx">22:56 · into the thread</span></div>
+          </div>
+          <div class="out" style="margin-top:16px"><img width="1600" height="900" src="/shots/afterframe/frames/marie-05-40.jpg" alt="The exported frame with a timecode stamp"><span class="stamp">00:05:40</span></div>
+          <p class="tx d" style="margin-top:8px; font-size:12px">Or a durable copy: Marie Antoinette (2006) — 00-05-40.jpg · 1920 × 1080 · stamped · Photos</p>
+        </div>
+        <div class="phone-row"><figure><div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/shots/share-thread.webp" alt="The group thread with the frame between two replies"></div><figcaption class="tx d">The thread · names blurred</figcaption></figure></div>
+      </div>
+      <div class="body one">
+        <div>
+          <h3 id="p104" data-page="104">Kept carefully. Exported honestly.</h3>
+          <ul class="index">
+            <li><span class="k">Source frame</span><span class="s">Secured</span><span class="v">The indexed frame you were shown</span></li>
+            <li><span class="k">Enhanced</span><span class="s">Distinct</span><span class="v">A higher-quality frame from your server</span></li>
+            <li><span class="k">Subtitles</span><span class="s">Optional</span><span class="v">Text cue, rendered by Afterframe</span></li>
+            <li><span class="k">Note</span><span class="s">Optional</span><span class="v">Plain text, now or later</span></li>
+            <li><span class="k">Exports</span><span class="s">Independent</span><span class="v">Photos · Files · text sidecar</span></li>
+            <li><span class="k">Playback</span><span class="s">Untouched</span><span class="v">Observed only</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <div class="kept" style="grid-row:13" data-time="01:10 · kept">
+      <figure><span class="pin" aria-hidden="true"></span><img loading="lazy" decoding="async" width="640" height="382" src="/shots/afterframe/frames/itmfl-08-46-s.jpg" alt="In the Mood for Love, kept at 01:10, 00:08:46 into the film"><figcaption><span class="tx p">01:10</span><span class="tx d">00:08:46 · In the Mood for Love</span><span class="line">No subtitles on this one. The note reads: the mirror, again.</span></figcaption></figure>
+    </div>
+
+    <div class="tcell" data-t="01:15"><div class="in"><span class="tx">01:15</span></div></div>
+    <div class="tcell" data-t="01:30"><div class="in"><span class="tx">01:30</span></div></div>
+    <div class="tcell" data-t="01:45"><div class="in"><span class="tx">01:45</span></div></div>
+    <div class="tcell h" data-t="02:00"><div class="in"><span class="tx">02:00</span></div></div>
+    <div class="tcell" data-t="02:15"><div class="in"><span class="tx">02:15</span></div></div>
+    <div class="tcell" data-t="02:30"><div class="in"><span class="tx">02:30</span></div></div>
+
+    <!-- 02:41 · Closedown · P105 P199 -->
+    <div class="tcell h" data-t="02:45"><div class="in"><span class="tx">02:45</span><span class="lab">P105 · P199</span></div></div>
+    <section class="blk faq" id="p105" style="grid-row:20" data-page="105" data-time="02:41 · Closedown · P105" aria-labelledby="h-close">
+      <div class="head"><h2 id="h-close">Closedown · Questions from the sofa</h2><span class="tx d meta"><span>P105</span><span>7 entries</span><span>1/1</span></span></div>
+      <div class="body">
+        <div>
+          <details><summary>Does Afterframe take a screenshot of my Apple TV?</summary><p>No. Afterframe does not record or mirror the television. It retrieves a frame from your Plex Media Server near the selected playback position.</p></details>
+          <details><summary>Will it pause or seek what I am watching?</summary><p>No. Afterframe observes playback and never pauses, seeks, stops, or otherwise controls your Apple TV.</p></details>
+          <details><summary>Is capture frame-perfect?</summary><p>Afterframe uses the indexed frames available from Plex and captures the frame it shows you. It is designed around trustworthy moment selection rather than claiming arbitrary frame-by-frame precision.</p></details>
+          <details><summary>Does it preserve subtitles?</summary><p>When Afterframe can resolve a supported text subtitle cue, it can keep that dialogue and create an optional subtitled rendition. Afterframe subtitles are rendered separately; they are not a reproduction of the subtitles on Apple TV.</p></details>
+        </div>
+        <div>
+          <details><summary>Do I have to write a note?</summary><p>Never. A capture without a note is complete. Writing is there when a moment gives you something to say.</p></details>
+          <details><summary>Is Afterframe a social network?</summary><p>No. There is no public feed or profile. Your library is private; sharing happens deliberately through the services and conversations you already use.</p></details>
+          <details><summary>What do I need?</summary><p>The first release is designed for an iPhone running iOS 26 or later, access to a Plex Media Server, and a configured Apple TV Plex client. It does not capture from third-party streaming services.</p></details>
+        </div>
+      </div>
+      <div id="p199" data-page="199" style="margin-top:12px">
+        <h2 style="font-size:clamp(2.6rem, 6vw, 5rem); color:var(--tx-yellow)">Every film leaves something behind.</h2>
+        <p style="margin-top:12px">Keep the frame. Remember the feeling. Share the moment.</p>
+        <div class="cta-row">
+          <a class="key" href="/afterframe/b/go/">Join the early list</a>
+          <a class="key yellow" href="https://gaspery.com">Follow the build</a>
+        </div>
+      </div>
+    </section>
+    <div class="kept" style="grid-row:20" data-time="02:41"><span class="tx d">Closedown · nothing kept</span></div>
+    <div class="bars" aria-hidden="true"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="tx d">A new kind of film companion · coming to iPhone</span>
+    <span class="tx d"><a href="https://gaspery.com">gaspery.com</a> · iPhone · Plex Media Server · Apple TV</span>
+  </div>
+</footer>
+
+<div class="crt-glass" aria-hidden="true"></div>
+<nav class="fastext" aria-label="Fastext keys">
+  <a class="r" href="/afterframe/b/go/">Early list</a>
+  <a class="g" href="#p101">How it works</a>
+  <a class="y" href="#p102">Library</a>
+  <a class="c" href="#p105">Questions</a>
+</nav>
+<script is:inline>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var clock=document.getElementById('clock'), t=22*3600+47*60+12;
+  function pad(v){return (v<10?'0':'')+v;}
+  // the NOW line sits at the clock's minute between the two time cells it falls in
+  var cells=Array.prototype.slice.call(document.querySelectorAll('.tcell')), sched=document.getElementById('sched'), nowline=document.getElementById('nowline');
+  function mins(s){ var p=s.split(':'); var m=(+p[0])*60+(+p[1]); return m<12*60? m+24*60 : m; }
+  function placeNow(){
+    if(!nowline||!cells.length) return;
+    if(window.innerWidth<=980){ nowline.style.display='none'; return; } nowline.style.display='';
+    var m=Math.floor(t/60); if(m<12*60) m+=24*60;
+    var idx=-1; for(var i=0;i<cells.length;i++){ if(mins(cells[i].dataset.t)<=m) idx=i; }
+    if(idx<0){ nowline.style.display='none'; return; }
+    var a=cells[idx], b=cells[idx+1];
+    var top=a.offsetTop; var span=b? (b.offsetTop-a.offsetTop) : a.offsetHeight; var frac=(m-mins(a.dataset.t))/(b? (mins(b.dataset.t)-mins(a.dataset.t)) : 15);
+    nowline.style.top=(top+span*Math.min(1,frac))+'px';
+  }
+  if('ResizeObserver' in window){ new ResizeObserver(function(){ placeNow(); }).observe(sched); }
+  function tick(){ t++; var h=Math.floor(t/3600)%24, mi=Math.floor(t%3600/60), s=t%60; clock.textContent=pad(h)+':'+pad(mi)+':'+pad(s); if(s===0) placeNow(); }
+  tick(); placeNow(); window.addEventListener('resize', placeNow); window.addEventListener('load', placeNow);
+  if(!reduce) setInterval(tick,1000);
+  // keypad
+  var kp=document.getElementById('keypad'), pin=document.getElementById('pin');
+  function goPage(n){ var el=document.querySelector('[data-page="'+n+'"]'); if(el){ el.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); return true; } return false; }
+  if(kp){ kp.addEventListener('submit', function(e){ e.preventDefault(); goPage(pin.value); }); pin.addEventListener('input', function(){ if(pin.value.length===3 && goPage(pin.value)) pin.blur(); }); pin.addEventListener('focus', function(){ pin.select(); }); }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && document.activeElement!==pin) pin.value=e.target.dataset.page; }); },{rootMargin:'-40% 0px -50% 0px'});
+    document.querySelectorAll('section[data-page]').forEach(function(p){ io.observe(p); });
+  }
+  // the runner rewrites itself, character by character, while the sharing block is on screen
+  var runner=document.getElementById('runner'), rr=document.getElementById('runner-right'), KEEP='KEEP WHAT STAYED WITH YOU', SHARE='SHARE WHAT STAYED WITH YOU', cur=KEEP, rewriting=null;
+  function setRunner(txt){ runner.innerHTML=''; for(var i=0;i<txt.length;i++){ var c=document.createElement('span'); c.className='ch'; c.textContent=txt[i]; runner.appendChild(c); } }
+  function rewrite(to){
+    if(cur===to) return; cur=to; if(rewriting) clearInterval(rewriting);
+    var glyphs='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', n=Math.max(to.length, runner.children.length), i=0;
+    while(runner.children.length<n){ var c=document.createElement('span'); c.className='ch'; runner.appendChild(c); }
+    rewriting=setInterval(function(){
+      var chs=runner.children;
+      for(var k=i;k<Math.min(i+3,n);k++){ if(chs[k]){ chs[k].textContent=glyphs[Math.floor(Math.random()*glyphs.length)]; chs[k].classList.add('flip'); } }
+      if(i>0 && chs[i-1]){ chs[i-1].textContent=to[i-1]||''; chs[i-1].classList.remove('flip'); }
+      i++;
+      if(i>n){ clearInterval(rewriting); rewriting=null; setRunner(to); }
+    }, reduce?0:34);
+  }
+  if(runner){ setRunner(KEEP);
+    var p103=document.getElementById('p103');
+    if(p103 && 'IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(e){ rewrite(e.isIntersecting?SHARE:KEEP); if(rr) rr.textContent=e.isIntersecting?'P103 · the frame goes where you were already talking':'Tonight · 22:00 → closedown'; }); },{threshold:.2}).observe(p103); }
+  }
+  var sw=document.getElementById('crtsw'); if(sw){ sw.addEventListener('click', function(){ var on=document.body.classList.toggle('crt'); sw.setAttribute('aria-pressed', on); }); }
+  // mosaic reveal on the stills
+  function mosaic(img){
+    // block-graphic reveal, fail-safe: the mosaic is drawn only from a decoded frame, checked for content,
+    // starts on entry (or at once if already on screen), and is removed on a hard timer whatever happens
+    var st=img.parentNode;
+    function start(){
+      if(!img.naturalWidth) return;
+      var cv=document.createElement('canvas'); cv.className='mz'; cv.width=24; cv.height=14; cv.setAttribute('aria-hidden','true');
+      var c=cv.getContext('2d'); if(!c) return;
+      try{ c.imageSmoothingEnabled=false; c.drawImage(img,0,0,24,14); var d=c.getImageData(0,0,24,14).data, lit=0; for(var k=0;k<d.length;k+=4){ if(d[k]+d[k+1]+d[k+2]>30) lit++; } if(lit<20) return; }catch(e){ return; }
+      st.appendChild(cv);
+      var done=false; function go(){ if(done) return; done=true; cv.classList.add('go'); setTimeout(function(){ if(cv.parentNode) cv.parentNode.removeChild(cv); }, 1300); }
+      var r=st.getBoundingClientRect(); if(r.bottom>0 && r.top<window.innerHeight){ setTimeout(go, 250); }
+      else if('IntersectionObserver' in window){ var o=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ go(); o.disconnect(); } }); },{threshold:.2}); o.observe(st); }
+      setTimeout(go, 2500);
+    }
+    if(img.decode){ img.decode().then(start, function(){}); } else if(img.complete && img.naturalWidth){ start(); } else { img.addEventListener('load', start, {once:true}); }
+  }
+  if(!reduce) document.querySelectorAll('img[data-mosaic]').forEach(mosaic);
+})();
+</script>
+</div>
+</Base>

@@ -1,0 +1,29 @@
+---
+import {
+  AFTERFRAME_VARIANT_COOKIE,
+  AFTERFRAME_VARIANT_MAX_AGE,
+  resolveAfterframeVariant,
+} from '../../lib/afterframe';
+
+/* On-demand: the only route in the /afterframe test that runs on the Worker.
+   It never renders anything; it picks an arm and redirects. See lib/afterframe.ts. */
+export const prerender = false;
+
+const { variant, fresh } = resolveAfterframeVariant(
+  Astro.url.searchParams.get('v'),
+  Astro.cookies.get(AFTERFRAME_VARIANT_COOKIE)?.value,
+);
+
+if (fresh) {
+  Astro.cookies.set(AFTERFRAME_VARIANT_COOKIE, variant, {
+    path: '/afterframe',
+    maxAge: AFTERFRAME_VARIANT_MAX_AGE,
+    sameSite: 'lax',
+    secure: true,
+    httpOnly: true,
+  });
+}
+
+Astro.response.headers.set('cache-control', 'private, no-store');
+return Astro.redirect(`/afterframe/${variant}/`, 302);
+---

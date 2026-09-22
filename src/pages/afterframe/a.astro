@@ -1,0 +1,493 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/afterframe-a.css';
+
+/* Arm "a" of the /afterframe test (see src/lib/afterframe.ts). Converted
+   from the standalone concept contact-sheet-3.html; the direction contract is the first
+   comment inside the page root (Astro strips a slot's leading comment; a
+   deeper one survives). */
+---
+<Base title="Afterframe · Keep what stayed with you" description="A new kind of film companion for Plex. Reach back to a moment playing on your Apple TV, keep the frame and its words without interrupting the film, then share it beautifully." fonts={['family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900', 'family=Courier+Prime:ital,wght@0,400;0,700;1,400', 'family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800']}>
+
+<div class="af-root">
+<!--
+DIRECTION CONTRACT · seed 8534e8c8 · mode persuade
+THESIS: A moment kept is a frame circled in grease pencil on a proof sheet; the page IS the sheet, and the pencil is the visitor's cursor. Third cut: the frame's journey into a real group chat is shown, the header line corrects Keep to Share in pencil while the sharing sections are in view, and the never-stops section holds the loop. Second cut: every frame is a real capture from the owner's library, the sheet re-strings by hour or by title, and the library is an archive box of sleeved sheets. Refuses the floating-phone dark hero.
+OWN-WORLD: glossy silver-gelatin black sheet on a matte bench, film-base strips with printed perforations and white edge lettering, one china-marker orange for every mark, paper-white 8x10 prints, Schibsted Grotesk display, Courier Prime typed labels, Newsreader italic notes. State is a mark (circle, cross, check), never a hue.
+STORY: visitor reads one line, sees a frame circled out of a running strip, understands "keep it without stopping the film", joins the early list.
+FIRST VIEWPORT: headline top-left across two columns; below, left 60% a three-strip proof sheet with frame 14 (01:11:40) circled and its edge label lit, right 40% the circled frame as an 8x10 print with typed title/timecode and an italic note, then the two CTAs.
+FORM: proof sheet, candidate 3 of 7 (assigned). Raises: frame pitch snaps to the 10s index (cutting bench); solid mark for the committed frame, faint for the rest (pattern envelope); crowded index strip against one bare print (obi band).
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="grease" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main" aria-label="Afterframe home"><img loading="lazy" decoding="async" src="/shots/afterframe/icon.png" alt="" width="28" height="28"><span>Afterframe</span></a>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#library">Your library</a>
+      <a href="#sharing">Sharing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-grease" href="/afterframe/a/go/">Join the early list</a>
+  </div>
+  <div class="runner"><div class="wrap"><span class="type"><span class="swap"><span class="keep">Keep</span><span class="share" aria-hidden="true">Share</span><svg class="strike" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 12 C 30 9, 60 13, 98 8"/></svg></span> what stayed with you</span><span class="type right" id="runner-right">Proof sheet · 22 Sep 2026</span></div></div>
+</header>
+
+<main id="main">
+<!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="af-hero wrap" aria-labelledby="h1">
+  <div class="af-hero-head">
+    <h1 id="h1">Keep what stayed with&nbsp;you.</h1>
+    <p class="measure">A new kind of film companion. Afterframe lets you reach back to a moment playing from Plex, keep the frame and its words without interrupting your Apple&nbsp;TV, then hold it private or share it beautifully.</p>
+  </div>
+
+  <div class="af-hero-grid">
+    <div class="sheet draw" id="sheet" aria-label="Proof sheet of tonight's frames">
+      <div class="sheet-label">
+        <span class="type"><b>Afterframe</b> · proof sheet · 22 Sep 2026 · 15 frames · 5 titles</span>
+        <span class="type toggle" role="group" aria-label="Order the sheet"><button type="button" class="tg on" data-mode="hour" aria-pressed="true">by hour</button> / <button type="button" class="tg" data-mode="title" aria-pressed="false">by title</button> &nbsp;·&nbsp; <button type="button" class="tg" id="snd" aria-pressed="false">sound off</button> &nbsp;·&nbsp; <button type="button" class="tg" id="wipe">wipe</button></span>
+      </div>
+      <div class="strips" id="strips">
+      <div class="strip-title"><span><b>22:41 → 22:42</b> · The Invite</span><span>indexed every 10 s</span></div>
+      <div class="strip" style="--n:5">
+        <div class="edge t"><span>22:41</span><span>22:41</span><span>22:41</span><span>22:41</span><span>22:42</span></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:30" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-30-s.jpg" alt="The Invite: a man and a woman at a doorway"></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:40" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-40-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:50" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-50-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:08:10" data-clock="22:41" data-mark="x"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt=""><svg class="mark cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 14 L86 86 M84 12 L16 88"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:10" data-clock="22:42" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-10-s.jpg" alt=""></div>
+        <div class="edge b"><span>01:07:30</span><span>01:07:40</span><span>01:07:50</span><span>01:08:10</span><span>01:09:10</span></div>
+      </div>
+      <div class="strip-title"><span><b>22:43 → 23:10</b> · The Invite, Marie Antoinette</span><span>indexed every 10 s</span></div>
+      <div class="strip" style="--n:5">
+        <div class="edge t"><span>22:43</span><span class="kept">22:43</span><span>22:43</span><span>23:10</span><span class="kept">23:10</span></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:30" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-30-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="The Invite" data-tc="01:09:40" data-clock="22:43" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40, subtitled: But it could be. Could be tonight."><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:50" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-50-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="Marie Antoinette" data-tc="00:05:00" data-clock="23:10" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-00-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" id="kept" data-title="Marie Antoinette" data-tc="00:05:40" data-clock="23:10" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-40-s.jpg" alt="Marie Antoinette at 00:05:40: a woman looks into a gilt mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="edge b"><span>01:09:30</span><span class="kept">01:09:40</span><span>01:09:50</span><span>00:05:00</span><span class="kept">00:05:40</span></div>
+      </div>
+      <div class="strip-title"><span><b>23:32 → 00:20</b> · In the Mood for Love, Furious, Fire Force</span><span>indexed every 10 s</span></div>
+      <div class="strip" style="--n:5">
+        <div class="edge t"><span class="kept">23:32</span><span>00:05</span><span class="kept">00:05</span><span>00:20</span><span class="kept">00:20</span></div>
+        <div class="frame scope is-kept" data-title="In the Mood for Love" data-tc="00:08:46" data-clock="23:32" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="382" src="/shots/afterframe/frames/itmfl-08-46-s.jpg" alt="In the Mood for Love at 00:08:46: a woman at a counter seen past a mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="Furious" data-tc="00:39:30" data-clock="00:05" data-mark=""><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-30-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="Furious" data-tc="00:39:50" data-clock="00:05" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-50-s.jpg" alt="Furious at 00:39:50"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="Fire Force" data-tc="00:22:10" data-clock="00:20" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-10-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="Fire Force" data-tc="00:22:20" data-clock="00:20" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-20-s.jpg" alt="Fire Force at 00:22:20: a figure surrounded by flame"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="edge b"><span class="kept">00:08:46</span><span>00:39:30</span><span class="kept">00:39:50</span><span>00:22:10</span><span class="kept">00:22:20</span></div>
+      </div>
+      </div>
+      <svg class="ink" id="ink" aria-hidden="true"></svg>
+      <div class="loupe" id="loupe" aria-hidden="true"><span class="sub" id="loupe-sub"></span></div>
+      <svg class="pencil" id="pencil" viewBox="0 0 160 24" aria-hidden="true"><path d="M0 12 L14 5 L14 19 Z" fill="#E9D8BC"/><path d="M0 12 L6 9 L6 15 Z" fill="#B8552A"/><rect x="14" y="4" width="120" height="16" rx="2" fill="#E27B3F"/><rect x="14" y="4" width="120" height="5" rx="2" fill="#F19A66"/><rect x="134" y="3" width="26" height="18" rx="3" fill="#2A2320"/><text x="60" y="15.5" font-family="Courier Prime, monospace" font-size="7" letter-spacing="1.2" fill="#3A1A0A">CHINA MARKER</text></svg>
+    </div>
+
+    <div class="af-hero-aside">
+      <figure class="print" style="margin:0">
+        <img width="1600" height="900" src="/shots/afterframe/frames/marie-05-40.jpg" alt="The kept frame, printed: Marie Antoinette looks into a gilt mirror">
+        <figcaption class="cap">
+          <span class="type"><b>Marie Antoinette</b> (2006) · 00:05:40 · kept 23:10 · no subtitles</span>
+          <span class="note">“I can feel the excess and I love it.”</span>
+        </figcaption>
+      </figure>
+      <div class="cta-row">
+        <a class="btn btn-grease" href="/afterframe/a/go/">Join the early list</a>
+        <a class="btn btn-paper" href="#how">See how it works <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <p class="compat">Made for iPhone, Plex Media Server, and Apple TV.</p>
+      <p class="compat" id="loupe-hint" hidden>The pencil is yours. Move over the sheet to read a frame, click to circle one, or press and drag to write on the sheet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Nothing changes on the television ────────────────────────────────── -->
+<section class="playing" aria-labelledby="h-playing">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-playing">Save the scene without stopping&nbsp;it.</h2>
+      <p class="measure">Afterframe is a companion, not a remote. It reads the active session and retrieves the selected moment from your own Plex server. It never pauses, seeks, or commands playback on Apple&nbsp;TV.</p>
+    </div>
+
+    <div class="timeline" aria-label="One strip: the frame you kept at 01:09:40 while the film plays on">
+      <div class="strip" style="--n:8; --min:96px">
+        <div class="edge t"><span>The Invite</span><span>2026</span><span></span><span></span><span></span><span></span><span class="kept">kept</span><span>playing on</span></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:30" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-30-s.jpg" alt="The Invite: a man and a woman at a doorway"></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:40" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-40-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:50" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-50-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:08:10" data-clock="22:41" data-mark="x"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt=""><svg class="mark cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 14 L86 86 M84 12 L16 88"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:10" data-clock="22:42" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-10-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:30" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-30-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="The Invite" data-tc="01:09:40" data-clock="22:43" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40, subtitled: But it could be. Could be tonight."><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:50" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-50-s.jpg" alt=""></div>
+        <div class="edge b"><span>01:07:30</span><span>01:07:40</span><span>01:07:50</span><span>01:08:10</span><span>01:09:10</span><span>01:09:30</span><span class="kept">01:09:40</span><span>01:09:50</span></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="type"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1-.1 0"/></svg>kept, playback untouched</span>
+      <span class="type"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>passed over</span>
+      <span class="type"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18" style="stroke-dasharray:3 3"/></svg>playhead on the television</span>
+    </div>
+
+    <div class="two" style="margin-top:clamp(40px,5vw,72px)">
+      <div>
+        <h3 style="font-size:1.5rem; margin-bottom:14px">Reach back without rewinding.</h3>
+        <p class="measure">Some moments arrive before you are ready for them. A composition. A glance. A line that changes the scene. Open the Companion and move through the last two minutes until you find the frame that caught you. For a moment further away, jump across the full runtime. The film keeps playing. The moment is yours.</p>
+        <p class="measure" style="margin-top:14px">No scramble for the remote. No photographing the screen. No asking everyone to wait while you find the frame again.</p>
+      </div>
+      <div class="phone-row">
+        <figure>
+          <div class="phone"><video poster="/shots/afterframe/shots/now-itmfl.webp" muted loop playsinline autoplay preload="metadata" aria-label="Afterframe's Now screen while a film plays: the timeline advances, the plate is pressed, the frame drops into Tonight and the clock keeps counting"><source src="/shots/afterframe/loop/keep.mp4" type="video/mp4"></video></div>
+          <figcaption>Now · the film never stops</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ─────────────────────────────────────────────────────── -->
+<section class="steps wrap" id="how" aria-labelledby="h-how">
+  <div class="sec-head">
+    <h2 id="h-how">Notice. Reach back. Keep&nbsp;it.</h2>
+    <p class="measure">Five frames, in the order they happen. Capture now. Write later. Or never write at all.</p>
+  </div>
+  <div class="sheet">
+    <div class="strips">
+      <div class="strip-title"><span><b>How it works</b> · five frames in order</span><span>Now · Choose Moment · the plate · a note · Export</span></div>
+      <div class="strip" style="--n:5">
+        <div class="edge t"><span>1 · notice</span><span>2 · reach back</span><span>3 · keep</span><span>4 · yours</span><span>5 · share</span></div>
+        <div class="frame"><img loading="lazy" decoding="async" width="920" height="497" src="/shots/afterframe/stills/s2-notice.jpg" alt="In the Mood for Love playing, seen in Afterframe's Now screen"></div>
+        <div class="frame"><img loading="lazy" decoding="async" width="920" height="497" src="/shots/afterframe/stills/s2-reach.jpg" alt="Choose Moment: drag to hold a moment across the indexed timeline"></div>
+        <div class="frame"><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/s2-keep.jpg" alt="The orange capture plate"></div>
+        <div class="frame"><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/s2-yours.jpg" alt="Add a note: What made you stop here?"></div>
+        <div class="frame"><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/step-share.jpg" alt="Export: Save to Photos, Save, Share"></div>
+        <div class="edge b"><span>Now</span><span>Choose Moment</span><span>Now</span><span>Note</span><span>Export</span></div>
+      </div>
+      <div class="captions">
+        <div><h3>Notice something</h3><p>Keep watching. Afterframe observes the active Plex session, on Apple TV or any Plex client, without taking control of it.</p></div>
+        <div><h3>Reach back</h3><p>Drag to hold a moment across the recent indexed timeline, or jump across the full runtime.</p></div>
+        <div><h3>Keep it</h3><p>Afterframe secures the frame and its place in the film, then quietly works toward a higher-quality image when one is available.</p></div>
+        <div><h3>Make it yours</h3><p>Keep the moment as it is, preserve available dialogue, or answer one question:</p><p class="q">What made you stop here?</p></div>
+        <div><h3>Share it</h3><p>Send a clean image to a friend, or include dialogue and timecode when the context matters. The private original stays in Afterframe.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Library ──────────────────────────────────────────────────────────── -->
+<section class="library" id="library" aria-labelledby="h-lib">
+  <div class="wrap pair">
+    <div>
+      <h2 id="h-lib">Your taste, told in&nbsp;moments.</h2>
+      <p class="measure" style="margin-top:18px">Afterframe is not another list of what you watched. It is a history of what you noticed.</p>
+      <p class="measure" style="margin-top:14px">Your captures gather in Weave, a visual library where written moments have room to breathe and unannotated frames remain complete. Switch to Ribbon to see the shape of your attention across a film or episode: where moments clustered, where one image stood alone, and which scenes asked you to write something down.</p>
+      <ul class="claims">
+        <li>Film or episode identity</li>
+        <li>Meaningful timecode</li>
+        <li>Optional captured dialogue</li>
+        <li>Optional personal note</li>
+        <li>Search by title, line, note, or time</li>
+        <li>Tonight: everything you kept this evening</li>
+      </ul>
+    </div>
+    <div class="phone-row">
+      <figure>
+        <div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/shots/library-invite.webp" alt="Weave view: 133 captures, a grid of frames from The Invite with timecodes and Note buttons"></div>
+        <figcaption>Weave · 133 captures</figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/ribbon.webp" alt="Ribbon view: The Paper, S02E03, nine captures laid along a 24:40 timeline"></div>
+        <figcaption>Ribbon · one episode, nine moments</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="box" aria-label="The archive box: one sheet per title">
+      <div class="lid"><span class="type"><b>Afterframe</b> · archive · 133 sheets</span><span class="type">pull a sheet</span></div>
+      <div class="sleeves">
+        <div class="sleeve" style="--i:0"><span class="tab type">Fire Force · S03</span><div class="sheet"><div class="strip" style="--n:4"><div class="frame scope" data-title="Fire Force" data-tc="00:22:10" data-clock="00:20" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-10-s.jpg" alt=""></div><div class="frame scope is-kept" data-title="Fire Force" data-tc="00:22:20" data-clock="00:20" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-20-s.jpg" alt="Fire Force at 00:22:20: a figure surrounded by flame"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div></div></div></div>
+        <div class="sleeve" style="--i:1"><span class="tab type">Furious · S01</span><div class="sheet"><div class="strip" style="--n:4"><div class="frame scope" data-title="Furious" data-tc="00:39:30" data-clock="00:05" data-mark=""><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-30-s.jpg" alt=""></div><div class="frame scope is-kept" data-title="Furious" data-tc="00:39:50" data-clock="00:05" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-50-s.jpg" alt="Furious at 00:39:50"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div></div></div></div>
+        <div class="sleeve" style="--i:2"><span class="tab type">In the Mood for Love</span><div class="sheet"><div class="strip" style="--n:4"><div class="frame scope is-kept" data-title="In the Mood for Love" data-tc="00:08:46" data-clock="23:32" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="382" src="/shots/afterframe/frames/itmfl-08-46-s.jpg" alt="In the Mood for Love at 00:08:46: a woman at a counter seen past a mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div></div></div></div>
+        <div class="sleeve" style="--i:3"><span class="tab type">Marie Antoinette</span><div class="sheet"><div class="strip" style="--n:4"><div class="frame scope" data-title="Marie Antoinette" data-tc="00:05:00" data-clock="23:10" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-00-s.jpg" alt=""></div><div class="frame scope is-kept" id="kept" data-title="Marie Antoinette" data-tc="00:05:40" data-clock="23:10" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-40-s.jpg" alt="Marie Antoinette at 00:05:40: a woman looks into a gilt mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div></div></div></div>
+        <div class="sleeve" style="--i:4"><span class="tab type">The Invite</span><div class="sheet"><div class="strip" style="--n:4"><div class="frame scope" data-title="The Invite" data-tc="01:07:30" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-30-s.jpg" alt="The Invite: a man and a woman at a doorway"></div><div class="frame scope" data-title="The Invite" data-tc="01:07:40" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-40-s.jpg" alt=""></div><div class="frame scope" data-title="The Invite" data-tc="01:07:50" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-50-s.jpg" alt=""></div><div class="frame scope" data-title="The Invite" data-tc="01:08:10" data-clock="22:41" data-mark="x"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt=""><svg class="mark cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 14 L86 86 M84 12 L16 88"/></svg></div></div><div class="strip" style="--n:4"><div class="frame scope" data-title="The Invite" data-tc="01:09:10" data-clock="22:42" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-10-s.jpg" alt=""></div><div class="frame scope" data-title="The Invite" data-tc="01:09:30" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-30-s.jpg" alt=""></div><div class="frame scope is-kept" data-title="The Invite" data-tc="01:09:40" data-clock="22:43" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40, subtitled: But it could be. Could be tonight."><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div><div class="frame scope" data-title="The Invite" data-tc="01:09:50" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-50-s.jpg" alt=""></div></div></div></div>
+      </div>
+    </div>
+    <div class="ribbon">
+      <div class="sheet">
+        <div class="sheet-label"><span class="type"><b>Ribbon</b> · The Invite · the shape of one evening's attention</span><span class="type">01:07:30 → 01:09:50 · 1 kept, 1 passed</span></div>
+        <div class="strips">
+        <div class="strip" style="--n:8; --min:84px">
+          <div class="edge t"><span>22:41</span><span>22:41</span><span>22:41</span><span>22:41</span><span>22:42</span><span>22:43</span><span class="kept">22:43</span><span>22:43</span></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:07:30" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-30-s.jpg" alt="The Invite: a man and a woman at a doorway"></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:07:40" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-40-s.jpg" alt=""></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:07:50" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-50-s.jpg" alt=""></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:08:10" data-clock="22:41" data-mark="x"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt=""><svg class="mark cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 14 L86 86 M84 12 L16 88"/></svg></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:09:10" data-clock="22:42" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-10-s.jpg" alt=""></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:09:30" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-30-s.jpg" alt=""></div>
+          <div class="frame scope is-kept" data-title="The Invite" data-tc="01:09:40" data-clock="22:43" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40, subtitled: But it could be. Could be tonight."><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+          <div class="frame scope" data-title="The Invite" data-tc="01:09:50" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-50-s.jpg" alt=""></div>
+          <div class="edge b"><span>01:07:30</span><span>01:07:40</span><span>01:07:50</span><span>01:08:10</span><span>01:09:10</span><span>01:09:30</span><span class="kept">01:09:40</span><span>01:09:50</span></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Sharing ──────────────────────────────────────────────────────────── -->
+<section class="export wrap" id="sharing" aria-labelledby="h-share">
+  <div class="sec-head">
+    <h2 id="h-share">The frame goes where you were already&nbsp;talking.</h2>
+    <p class="measure">Some moments immediately make you think of someone. Send the frame into the group chat, the thread, or the post, with its line or its timecode when they help, and keep the private original and the reason you kept it in Afterframe.</p>
+  </div>
+  <div class="export-grid">
+    <div class="phone-row" style="justify-content:flex-start">
+      <figure>
+        <div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/export.webp" alt="Export sheet: full size 1920 by 1040 or 1280 px, a timecode stamp toggle, Save to Photos, Save and Share buttons"></div>
+        <figcaption>Export · size, stamp, destination</figcaption>
+      </figure>
+    </div>
+    <div class="export-right">
+      <figure class="print" style="margin:0">
+        <img width="1600" height="900" src="/shots/afterframe/frames/marie-05-40.jpg" alt="The exported frame">
+        <figcaption class="cap">
+          <span class="type"><b>Marie Antoinette (2006) — 00-05-40.jpg</b> · 1920 × 1080 · saved to Photos</span>
+        </figcaption>
+      </figure>
+<pre class="sidecar" aria-label="The text sidecar saved with the export"><b>Marie Antoinette (2006) — 00-05-40.txt</b>
+<span class="k">title      </span>Marie Antoinette (2006)
+<span class="k">timecode   </span>00:05:40
+<span class="k">dialogue   </span>—
+<span class="k">note       </span>I can feel the excess and I love it
+<span class="k">exported   </span>22 Sep 2026 · Photos · full size</pre>
+      <p class="measure">The share sheet is the iPhone's own, so the frame lands wherever the conversation is. When you want something durable beyond Afterframe, save an independent copy to Photos or Files with a meaningful name and, if you like, this text sidecar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Where it went ────────────────────────────────────────────────────── -->
+<section class="went wrap" id="went" aria-labelledby="h-went">
+  <div class="sec-head">
+    <h2 id="h-went">From the sheet to the group chat, before the&nbsp;credits.</h2>
+    <p class="measure">One frame from Furious, kept at 00:05 and sent at 00:07. Two replies before the scene was over. The names are blurred; the thread is real.</p>
+  </div>
+  <div class="went-grid">
+    <div class="went-prints">
+      <figure class="print small" style="transform:rotate(-1.2deg)"><img loading="lazy" decoding="async" width="920" height="497" src="/shots/afterframe/stills/sh-sheet.jpg" alt="The iPhone share sheet with the frame at the top and the apps below"><figcaption class="cap"><span class="type"><b>00:07</b> · the share sheet</span></figcaption></figure>
+      <figure class="print small" style="transform:rotate(.8deg)"><img loading="lazy" decoding="async" width="840" height="454" src="/shots/afterframe/stills/sh-compose.jpg" alt="A new message with the frame and the words: I have no notes"><figcaption class="cap"><span class="type"><b>00:07</b> · into the thread</span></figcaption></figure>
+      <figure class="print small" style="transform:rotate(-.5deg)"><img loading="lazy" decoding="async" width="920" height="497" src="/shots/afterframe/stills/sh-bluesky.jpg" alt="A Bluesky post composed with the frame and alt text"><figcaption class="cap"><span class="type"><b>00:12</b> · or a post, with alt text</span></figcaption></figure>
+    </div>
+    <svg class="went-arrow" viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 60 C 60 20, 120 100, 186 58 M170 44 L188 58 L168 72"/></svg>
+    <div class="phone-row went-phone">
+      <figure><div class="phone"><img loading="lazy" decoding="async" width="920" height="2000" src="/shots/afterframe/shots/share-thread.webp" alt="The group thread: the frame between the replies This is sooo good and I have no notes"></div><figcaption>The thread · 00:09 · two replies</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ── Trust ────────────────────────────────────────────────────────────── -->
+<section class="playing" aria-labelledby="h-trust">
+  <div class="wrap faq-grid">
+    <div>
+      <h2 id="h-trust">Kept carefully. Exported&nbsp;honestly.</h2>
+      <p class="measure" style="margin-top:18px">Afterframe stores each capture as its own durable package. Creating a new version never destroys the clean original. If enhancement or export fails, the original capture and note remain safe.</p>
+    </div>
+    <table class="spec">
+      <tbody>
+        <tr><th scope="row">Source frame</th><td>The indexed frame you were shown, secured first. <em>kept distinct</em></td></tr>
+        <tr><th scope="row">Enhanced image</th><td>A higher-quality frame fetched from your server when available. <em>kept distinct</em></td></tr>
+        <tr><th scope="row">Subtitles</th><td>Dialogue from a supported text cue, rendered by Afterframe in its own restrained style. <em>optional</em></td></tr>
+        <tr><th scope="row">Note</th><td>Plain text, now or later. A bare capture is never treated as unfinished. <em>optional</em></td></tr>
+        <tr><th scope="row">Exports</th><td>Independent copies in Photos or Files with meaningful names and an optional text sidecar. <em>yours to keep</em></td></tr>
+        <tr><th scope="row">Playback</th><td>Observed, never paused, sought, or commanded. <em>untouched</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── FAQ ──────────────────────────────────────────────────────────────── -->
+<section class="faq wrap" id="faq" aria-labelledby="h-faq">
+  <div class="faq-grid">
+    <div>
+      <h2 id="h-faq">Questions from the&nbsp;sofa.</h2>
+      <p class="measure" style="margin-top:18px">Not a remote. Not a watch tracker. Not a folder of anonymous screenshots. Afterframe lives beside the screen, at the point where watching becomes noticing.</p>
+    </div>
+    <div>
+      <details><summary>Does Afterframe take a screenshot of my Apple TV?</summary><p>No. Afterframe does not record or mirror the television. It retrieves a frame from your Plex Media Server near the selected playback position.</p></details>
+      <details><summary>Will it pause or seek what I am watching?</summary><p>No. Afterframe observes playback and never pauses, seeks, stops, or otherwise controls your Apple TV.</p></details>
+      <details><summary>Is capture frame-perfect?</summary><p>Afterframe uses the indexed frames available from Plex and captures the frame it shows you. It is designed around trustworthy moment selection rather than claiming arbitrary frame-by-frame precision.</p></details>
+      <details><summary>Does it preserve subtitles?</summary><p>When Afterframe can resolve a supported text subtitle cue, it can keep that dialogue and create an optional subtitled rendition. Afterframe subtitles are rendered separately; they are not a reproduction of the subtitles on Apple TV.</p></details>
+      <details><summary>Do I have to write a note?</summary><p>Never. A capture without a note is complete. Writing is there when a moment gives you something to say.</p></details>
+      <details><summary>Is Afterframe a social network?</summary><p>No. There is no public feed or profile. Your library is private; sharing happens deliberately through the services and conversations you already use.</p></details>
+      <details><summary>What do I need?</summary><p>The first release is designed for an iPhone running iOS 26 or later, access to a Plex Media Server, and a configured Apple TV Plex client. It does not capture from third-party streaming services.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ── Close ────────────────────────────────────────────────────────────── -->
+<section class="close" aria-labelledby="h-close">
+  <div class="wrap">
+    <div class="timeline">
+      <div class="strip" style="--n:15; --min:84px">
+        <div class="edge t"><span>22:41</span><span>22:41</span><span>22:41</span><span>22:41</span><span>22:42</span><span>22:43</span><span class="kept">22:43</span><span>22:43</span><span>23:10</span><span class="kept">23:10</span><span class="kept">23:32</span><span>00:05</span><span class="kept">00:05</span><span>00:20</span><span class="kept">00:20</span></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:30" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-30-s.jpg" alt="The Invite: a man and a woman at a doorway"></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:40" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-40-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:07:50" data-clock="22:41" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-07-50-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:08:10" data-clock="22:41" data-mark="x"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-08-10-s.jpg" alt=""><svg class="mark cross" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 14 L86 86 M84 12 L16 88"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:10" data-clock="22:42" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-10-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:30" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-30-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="The Invite" data-tc="01:09:40" data-clock="22:43" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-40-s.jpg" alt="The Invite at 01:09:40, subtitled: But it could be. Could be tonight."><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="The Invite" data-tc="01:09:50" data-clock="22:43" data-mark=""><img loading="lazy" decoding="async" width="640" height="347" src="/shots/afterframe/frames/invite-01-09-50-s.jpg" alt=""></div>
+        <div class="frame scope" data-title="Marie Antoinette" data-tc="00:05:00" data-clock="23:10" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-00-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" id="kept" data-title="Marie Antoinette" data-tc="00:05:40" data-clock="23:10" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/marie-05-40-s.jpg" alt="Marie Antoinette at 00:05:40: a woman looks into a gilt mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope is-kept" data-title="In the Mood for Love" data-tc="00:08:46" data-clock="23:32" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="382" src="/shots/afterframe/frames/itmfl-08-46-s.jpg" alt="In the Mood for Love at 00:08:46: a woman at a counter seen past a mirror"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="Furious" data-tc="00:39:30" data-clock="00:05" data-mark=""><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-30-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="Furious" data-tc="00:39:50" data-clock="00:05" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="267" src="/shots/afterframe/frames/furious-39-50-s.jpg" alt="Furious at 00:39:50"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="frame scope" data-title="Fire Force" data-tc="00:22:10" data-clock="00:20" data-mark=""><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-10-s.jpg" alt=""></div>
+        <div class="frame scope is-kept" data-title="Fire Force" data-tc="00:22:20" data-clock="00:20" data-mark="kept"><img loading="lazy" decoding="async" width="640" height="360" src="/shots/afterframe/frames/fireforce-22-20-s.jpg" alt="Fire Force at 00:22:20: a figure surrounded by flame"><svg class="mark circle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17"/></svg></div>
+        <div class="edge b"><span>01:07:30</span><span>01:07:40</span><span>01:07:50</span><span>01:08:10</span><span>01:09:10</span><span>01:09:30</span><span class="kept">01:09:40</span><span>01:09:50</span><span>00:05:00</span><span class="kept">00:05:40</span><span class="kept">00:08:46</span><span>00:39:30</span><span class="kept">00:39:50</span><span>00:22:10</span><span class="kept">00:22:20</span></div>
+      </div>
+    </div>
+    <div class="close-grid">
+      <div>
+        <h2 id="h-close">Every film leaves something behind.</h2>
+        <p class="measure" style="margin-top:16px; font-size:1.1rem">Keep the frame. Remember the feeling. Share the moment.</p>
+      </div>
+      <div class="cta-row" style="justify-content:flex-end">
+        <a class="btn btn-grease" href="/afterframe/a/go/">Join the early list</a>
+        <a class="btn btn-paper" href="https://gaspery.com">Follow the build</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="type">A new kind of film companion, coming to iPhone.</span>
+    <span class="type"><a href="https://gaspery.com">gaspery.com</a> · made for iPhone, Plex Media Server, and Apple TV</span>
+  </div>
+</footer>
+<script is:inline>
+(function(){
+  // One authored moment: the grease circle draws around the kept frame once the sheet is in view.
+  var sheet=document.getElementById('sheet');
+  if(!sheet) return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ sheet.classList.remove('draw'); return; }
+  // Restart the draw when the hero re-enters after a long scroll away (once per visit is enough).
+  var done=false;
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting && !done){ done=true; sheet.classList.add('draw'); io.disconnect(); } });
+    },{threshold:.35});
+    sheet.classList.remove('draw'); io.observe(sheet);
+  }
+  var kept=document.getElementById('kept'), sc=sheet.querySelector('.strips');
+  if(kept && sc && sc.scrollWidth>sc.clientWidth+8){
+    sc.scrollLeft=Math.max(0, kept.offsetLeft - (sc.clientWidth - kept.offsetWidth)/2);
+  }
+})();
+(function(){
+  document.documentElement.classList.add('js');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CIRCLE='M52 6 C 78 4, 97 22, 96 50 C 95 80, 72 97, 46 95 C 20 93, 3 74, 5 48 C 7 22, 30 7, 55 8 C 62 8.5, 70 12, 76 17';
+  // grease boxes around every primary action
+  document.querySelectorAll('.btn-grease').forEach(function(b){
+    var svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.setAttribute('class','scribble'); svg.setAttribute('viewBox','0 0 200 56'); svg.setAttribute('preserveAspectRatio','none'); svg.setAttribute('aria-hidden','true');
+    var d='M8 10 C 60 6, 130 7, 194 9 C 196 22, 195 36, 193 47 C 130 50, 62 51, 6 48 C 4 36, 5 22, 7 12 C 30 10, 60 9, 80 9';
+    ['g1','g2'].forEach(function(c){ var p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',d); p.setAttribute('pathLength','1'); p.setAttribute('class',c); svg.appendChild(p); });
+    var f=document.createElement('span'); f.className='fill'; f.setAttribute('aria-hidden','true');
+    b.appendChild(svg); b.appendChild(f);
+  });
+  // the sheet's gloss follows the hand; the loupe reads the frame under it; a click marks the frame
+  var sheet=document.getElementById('sheet'), loupe=document.getElementById('loupe'), sub=document.getElementById('loupe-sub'), hint=document.getElementById('loupe-hint');
+  if(!sheet||!loupe) return;
+  var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(hint && fine) hint.hidden=false;
+  sheet.addEventListener('pointermove', function(e){
+    var r=sheet.getBoundingClientRect();
+    sheet.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    sheet.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+    if(!fine) return;
+    var fr=e.target.closest('.frame');
+    if(!fr||!sheet.contains(fr)){ sheet.classList.remove('lens'); return; }
+    var img=fr.querySelector('img'); var fr_r=fr.getBoundingClientRect();
+    var px=(e.clientX-fr_r.left)/fr_r.width, py=(e.clientY-fr_r.top)/fr_r.height;
+    loupe.style.left=(e.clientX-r.left)+'px'; loupe.style.top=(e.clientY-r.top)+'px';
+    loupe.style.backgroundImage='url("'+img.getAttribute('src')+'")';
+    loupe.style.backgroundSize=(fr_r.width*2.6)+'px auto';
+    loupe.style.backgroundPosition=(px*100)+'% '+(py*100)+'%';
+    var strip=fr.closest('.strip'); var idx=Array.prototype.indexOf.call(strip.querySelectorAll('.frame'), fr);
+    var top=strip.querySelector('.edge.t'); var lbl=top? top.children[idx] : null;
+    sub.textContent = lbl && lbl.textContent ? lbl.textContent : '';
+    sheet.classList.add('lens');
+  });
+  var pencil=document.getElementById('pencil');
+  sheet.addEventListener('pointermove', function(e){ if(!pencil||!fine) return; var r=sheet.getBoundingClientRect(); pencil.style.left=(e.clientX-r.left)+'px'; pencil.style.top=(e.clientY-r.top)+'px'; });
+  sheet.addEventListener('pointerleave', function(){ sheet.classList.remove('lens'); });
+  var strips=document.getElementById('strips'), frames=Array.prototype.slice.call(strips.querySelectorAll('.frame'));
+  function mk(tag, cls, html){ var el=document.createElement(tag); if(cls) el.className=cls; if(html!=null) el.innerHTML=html; return el; }
+  function edgeRow(cls, labels, keptIdx){ var e=mk('div','edge '+cls); labels.forEach(function(l,i){ e.appendChild(mk('span', keptIdx.indexOf(i)>-1?'kept':'', l)); }); return e; }
+  function uniq(a){ return a.filter(function(v,i){ return a.indexOf(v)===i; }); }
+  function build(mode){
+    var groups=[];
+    if(mode==='hour'){ for(var k=0;k<frames.length;k+=5){ var it=frames.slice(k,k+5); groups.push({label:it[0].dataset.clock+' → '+it[it.length-1].dataset.clock, extra:' · '+uniq(it.map(function(f){return f.dataset.title;})).join(', '), sub:'indexed every 10 s', items:it, n:5}); } }
+    else { var by={}, order=[]; frames.forEach(function(f){ var t=f.dataset.title; if(!by[t]){ by[t]=[]; order.push(t); } by[t].push(f); }); order.forEach(function(t){ var it=by[t]; groups.push({label:t, extra:'', sub:it.length+(it.length===1?' frame':' frames')+' · '+it[0].dataset.tc+' → '+it[it.length-1].dataset.tc, items:it, n:8}); }); }
+    strips.innerHTML='';
+    groups.forEach(function(g){
+      var t=mk('div','strip-title','<span><b>'+g.label+'</b>'+g.extra+'</span><span>'+g.sub+'</span>');
+      var st=mk('div','strip'); st.style.setProperty('--n', g.n);
+      var kept=[]; g.items.forEach(function(f,i){ if(f.dataset.mark==='kept') kept.push(i); });
+      st.appendChild(edgeRow('t', g.items.map(function(f){ return mode==='hour'?f.dataset.clock:f.dataset.tc; }), kept));
+      g.items.forEach(function(f){ st.appendChild(f); });
+      st.appendChild(edgeRow('b', g.items.map(function(f){ return mode==='hour'?f.dataset.tc:f.dataset.clock; }), kept));
+      strips.appendChild(t); strips.appendChild(st);
+    });
+  }
+  var shareSecs=[document.getElementById('sharing'), document.getElementById('went')].filter(Boolean), shareVis={};
+  if(shareSecs.length && 'IntersectionObserver' in window){
+    var sio=new IntersectionObserver(function(es){ es.forEach(function(e){ shareVis[e.target.id]=e.isIntersecting; }); var any=Object.keys(shareVis).some(function(k){ return shareVis[k]; }); document.body.classList.toggle('sharing', any); var rr=document.getElementById('runner-right'); if(rr) rr.textContent=any?'Sharing · the frame goes where you were already talking':'Proof sheet · 22 Sep 2026'; },{threshold:.25});
+    shareSecs.forEach(function(s){ sio.observe(s); });
+  }
+  document.querySelectorAll('.toggle .tg').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('.toggle .tg').forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); build(b.dataset.mode); }); });
+  // freehand grease: press and drag writes on the sheet; a short press is a click and circles the frame
+  var ink=document.getElementById('ink'), drawing=null, moved=0, sndOn=false, ac=null;
+  function scratch(){
+    if(!sndOn) return;
+    try{
+      ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+      var len=Math.floor(ac.sampleRate*0.14), buf=ac.createBuffer(1,len,ac.sampleRate), d=buf.getChannelData(0), last=0;
+      for(var i=0;i<len;i++){ var w=Math.random()*2-1; last=(last+0.03*w)/1.03; d[i]=last*6*(1-i/len); }
+      var src=ac.createBufferSource(); src.buffer=buf; var f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1800; f.Q.value=.8; var g=ac.createGain(); g.gain.value=.5;
+      src.connect(f); f.connect(g); g.connect(ac.destination); src.start();
+    }catch(e){}
+  }
+  var sndBtn=document.getElementById('snd'); if(sndBtn) sndBtn.addEventListener('click', function(){ sndOn=!sndOn; sndBtn.textContent=sndOn?'sound on':'sound off'; sndBtn.setAttribute('aria-pressed', sndOn); sndBtn.classList.toggle('on', sndOn); if(sndOn) scratch(); });
+  var wipeBtn=document.getElementById('wipe'); if(wipeBtn) wipeBtn.addEventListener('click', function(){ if(ink) ink.innerHTML=''; sheet.querySelectorAll('.frame .mark.circle').forEach(function(m){ if(m.parentNode.dataset.mark!=='kept') m.remove(); }); });
+  if(ink && fine){
+    var pts=[];
+    function pt(e){ var r=sheet.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    function d(){ return pts.map(function(p,i){ return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1); }).join(' '); }
+    sheet.addEventListener('pointerdown', function(e){ if(e.button!==0||e.target.closest('button, a')) return; pts=[pt(e)]; moved=0; var g=document.createElementNS('http://www.w3.org/2000/svg','path'); g.setAttribute('class','ghost'); var p=document.createElementNS('http://www.w3.org/2000/svg','path'); drawing=[g,p]; ink.appendChild(g); ink.appendChild(p); scratch(); });
+    sheet.addEventListener('pointermove', function(e){ if(!drawing) return; var q=pt(e), l=pts[pts.length-1]; moved+=Math.hypot(q[0]-l[0], q[1]-l[1]); pts.push(q); var s=d(); drawing[0].setAttribute('d', s); drawing[1].setAttribute('d', s); });
+    function up(){ if(!drawing) return; if(moved<10){ drawing[0].remove(); drawing[1].remove(); } drawing=null; }
+    sheet.addEventListener('pointerup', up); sheet.addEventListener('pointercancel', up); sheet.addEventListener('pointerleave', up);
+  }
+  sheet.addEventListener('click', function(e){
+    if(moved>=10){ moved=0; return; }
+    var fr=e.target.closest('.frame'); if(!fr||!sheet.contains(fr)) return;
+    var existing=fr.querySelector('.mark.circle');
+    if(existing){ if(fr.id!=='kept') existing.remove(); return; }
+    var svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.setAttribute('class','mark circle'); svg.setAttribute('viewBox','0 0 100 100'); svg.setAttribute('preserveAspectRatio','none'); svg.setAttribute('aria-hidden','true');
+    var p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',CIRCLE); p.setAttribute('pathLength','1'); svg.appendChild(p); fr.appendChild(svg);
+    if(!reduce){ p.style.strokeDasharray='1 1'; p.style.strokeDashoffset='1'; p.style.animation='draw .8s cubic-bezier(.3,.6,.2,1) forwards'; }
+    var strip=fr.closest('.strip'); var idx=Array.prototype.indexOf.call(strip.querySelectorAll('.frame'), fr);
+    var bot=strip.querySelector('.edge.b'); if(bot && bot.children[idx]) bot.children[idx].classList.add('kept');
+  });
+})();
+</script>
+</div>
+</Base>

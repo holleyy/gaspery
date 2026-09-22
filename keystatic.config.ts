@@ -347,6 +347,10 @@ export default config({
           defaultValue: 'planning',
         }),
         url: fields.text({ label: 'URL' }),
+        site: fields.text({
+          label: 'Own site',
+          description: 'A path or URL for the app\'s own site, when it has one (e.g. /afterframe). Leave empty otherwise.',
+        }),
         /* Optional here and in src/content.config.ts. Keystatic stores an
            image field at <directory>/<slug>/<field>.<ext>, so a proof lives
            at public/shots/<app>/proof.webp and the YAML holds

@@ -51,6 +51,10 @@ const apps = defineCollection({
     meta: z.string(),
     status: z.enum(['live', 'dev', 'planning']),
     url: z.string().optional(),
+    /* Where the app's own site lives, when it has one built in its own world
+       rather than on this site's pages (Afterframe at /afterframe). The app
+       page offers it as a plain link; nothing else on the site reads it. */
+    site: z.string().optional(),
     /* A proof of the work for /studio: a real screenshot, served from
        /public by absolute path (e.g. "/shots/grod/proof.webp"). Optional
        in both schemas on purpose; without one the studio page shows an
