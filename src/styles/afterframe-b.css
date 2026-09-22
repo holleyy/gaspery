@@ -1,5 +1,12 @@
 /* /afterframe/b: loaded by src/pages/afterframe/b.astro only. Converted from the standalone concept listings-3-grid.html in ~/Git/afterframe/docs/marketing/concepts. */
 .af-root{min-height:100dvh}
+/* Every <img> states its intrinsic width and height so the page never reflows
+   as it loads. Those attributes also act as a presentational height, and
+   the concept CSS sized images by width and aspect-ratio alone, so without
+   this line a 640×360 frame drawn 280px wide stays 360px tall and turns
+   portrait. Height follows the CSS; rules below that set height:100% win by
+   coming later. */
+.af-root img{height:auto}
 
 /* ── World: the listings grid is the whole page; time runs down ──────────── */
 :root{
