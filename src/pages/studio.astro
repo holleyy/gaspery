@@ -15,7 +15,9 @@ const apps = (await getCollection('apps'))
   .map((a) => ({
     id: a.id,
     name: a.data.name,
-    url: a.data.url,
+    /* The name goes to the app's own site when it has one (Afterframe at
+       /afterframe, Skål at /skal), otherwise to its page here. */
+    url: a.data.site ?? a.data.url,
     proof: a.data.proof,
     status: a.data.status,
     category: categoryFor(a.data),

@@ -324,3 +324,12 @@ test('the proof plate is a hard drop-shadow of the card, so a framed proof keeps
   // The script reads the shown card's real height, since a phone is taller than a laptop.
   assert.match(studioPage, /H = proof\.offsetHeight/);
 });
+
+test('a name links to the app\'s own site when it has one, else to its page here', () => {
+  assert.match(studioPage, /url: a\.data\.site \?\? a\.data\.url/);
+  // The two apps with minisites carry `site`, as a root-relative path.
+  for (const app of ['skal', 'afterframe']) {
+    const yaml = read(`src/content/apps/${app}.yaml`);
+    assert.match(yaml, new RegExp(`^site: /${app}$`, 'm'), `${app}.yaml has no site line`);
+  }
+});
