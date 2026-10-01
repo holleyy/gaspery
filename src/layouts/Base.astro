@@ -9,8 +9,13 @@ interface Props {
      pages set Blekk's faces) passes its own Google Fonts family strings and
      the site's pair is not requested at all. */
   fonts?: string[];
+  /* A page that is light-only (the GRØD landing pages, whose captures are
+     the app on light paper) pins the appearance here. Set server-side, it
+     beats a stored choice: the inline script below leaves a present
+     attribute alone. */
+  theme?: 'light' | 'dark';
 }
-const { title, description = 'Product, design & small software. A working notebook.', mono = false, fonts } = Astro.props;
+const { title, description = 'Product, design & small software. A working notebook.', mono = false, fonts, theme } = Astro.props;
 
 /* IBM Plex Mono is the feature format's meta face — eyebrows and the
    `01 / NAME` keys. Only feature pages request it; every other page's
@@ -30,7 +35,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og/card.png', Astro.site);
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,11 +61,13 @@ const ogImage = new URL('/og/card.png', Astro.site);
       (function () {
         var stored = null;
         try { stored = localStorage.getItem('theme'); } catch (e) {}
-        if (stored === 'light' || stored === 'dark') {
+        var pinned = document.documentElement.dataset.theme;
+        if (!pinned && (stored === 'light' || stored === 'dark')) {
           document.documentElement.dataset.theme = stored;
         }
-        var dark = stored === 'dark'
-          || (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var theme = pinned || stored;
+        var dark = theme === 'dark'
+          || (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', dark ? '#191712' : '#F6F1E6');
       })();

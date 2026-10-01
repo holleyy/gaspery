@@ -1,0 +1,19 @@
+---
+import GrodSentence from '../../components/GrodSentence.astro';
+
+/* /grod/e: the page is one sentence, each clause pinned beside its
+   captures. The page itself is src/components/GrodSentence.astro; arms f
+   and g are the same sentence cut differently. */
+
+const contract = `
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm e
+THESIS: The page is one sentence, read at the speed of scroll. "It remembers" fills the first screen; every scroll lands on the next clause at poster size, pinned while the real captures for that clause pass beneath it. It refuses the feature grid: there are no sections, only clauses.
+OWN-WORLD: grained bone paper; Merriweather 300 clauses from 108px to 184px, one 2px magenta ghost on the first; Merriweather for ledes, Atkinson Hyperlegible Next for body and captions, sentence case, never tracked; windows laid on the paper with a real shadow, details cut at the UI's edges with a hairline; the night footer, ink ground with teal dots and the wordmark at 19vw.
+STORY: "It remembers... what was said. Who said it. What I decided. For as long as I keep it. On this Mac." Then the beta, then night.
+FIRST VIEWPORT: the bar; "It remembers" at 184px; beneath it, at 44px in the secondary ink, the rest of the sentence; the lede with the promise in italic; the beta bezel with "Mac only. No form, no tracker." The first clause's top edge shows at the fold.
+SIGNATURE: the first clause's three tabs (Notes, Summary, Transcript) sift in from the right, one over the next; press any window or its tab and it comes to the front.
+FORM: one sentence in clauses, user-requested on 2026-09-30 as the new direction (big type that scrolls through things); seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+`;
+---
+<GrodSentence arm="e" title="GRØD · It remembers" contract={contract} />

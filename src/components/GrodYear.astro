@@ -1,0 +1,180 @@
+---
+import '../styles/grod-year.css';
+import {
+  DEMO_MEETINGS,
+  DEMO_TODAY,
+  WEEKLY_REVIEW_DATES,
+  WEEKLY_REVIEW_NEXT,
+  WEEKLY_REVIEW_SKIPPED,
+  plannerRows,
+  type PlannerCell,
+} from '../lib/grodDemo';
+
+/* A year of the Demo workspace's meetings, drawn the way the app's year
+   page draws it: twelve months, each a grid of weeks, a square a day, ink
+   density for meetings a day, week numbers in the gutter. Every mark is a
+   real meeting (src/lib/grodDemo.ts). The figure has states that fade what
+   does not belong: today, the weekly review (with a teal thread through
+   its instances), a person, a month, a search. A page sets the state from
+   outside (arm a, by scroll) or lets the reader pick it (`controls`). */
+
+interface Props {
+  id?: string;
+  /* Show the row of buttons that set the state. */
+  controls?: boolean;
+  /* Months per row. */
+  columns?: number;
+  class?: string;
+}
+const { id = 'year', controls = false, columns = 4, class: cls = '' } = Astro.props;
+
+const rows = plannerRows();
+const total = rows.reduce((n, r) => n + r.total, 0);
+const first = rows[0];
+const last = rows[rows.length - 1];
+
+const datesWith = (name: string) => new Set(DEMO_MEETINGS.filter((m) => m.people.includes(name)).map((m) => m.date));
+const maya = datesWith('Maya Chen');
+const nils = datesWith('Nils Rud');
+const nilsNovember = [...nils].filter((d) => d.startsWith('2025-11')).length;
+const series = new Map<string, string>([
+  ...WEEKLY_REVIEW_DATES.map((d) => [d, '1'] as [string, string]),
+  [WEEKLY_REVIEW_SKIPPED, 'x'],
+  [WEEKLY_REVIEW_NEXT, 'n'],
+]);
+
+/* ISO week number of a day, for the gutter the app prints. */
+function isoWeek(date: string): number {
+  const d = new Date(`${date}T00:00:00Z`);
+  const day = (d.getUTCDay() + 6) % 7;
+  d.setUTCDate(d.getUTCDate() - day + 3);
+  const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  const diff = (d.getTime() - firstThursday.getTime()) / 86400000;
+  return 1 + Math.round((diff - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+}
+
+/* Each month as the app lays it out: weeks as rows, Monday first. */
+const months = rows.map((row, r) => {
+  const days = row.cells.filter((c): c is PlannerCell => c !== null);
+  const weeks: { no: number; cells: (PlannerCell | null)[] }[] = [];
+  let week: (PlannerCell | null)[] = Array.from({ length: days[0].weekday }, () => null);
+  for (const day of days) {
+    week.push(day);
+    if (week.length === 7) { weeks.push({ no: isoWeek(day.date), cells: week }); week = []; }
+  }
+  if (week.length) { weeks.push({ no: isoWeek(week.find((c) => c)!.date), cells: [...week, ...Array.from({ length: 7 - week.length }, () => null)] }); }
+  return { ...row, r, weeks, yearTag: r === 0 || row.label === 'January', november: row.month === '2025-11' };
+});
+
+/* What each day held, for the readout: "Tue 4 Nov 2025 · Team sync · Hiring loop: Senior iOS". */
+const titles = new Map<string, string[]>();
+for (const m of DEMO_MEETINGS) titles.set(m.date, [...(titles.get(m.date) ?? []), m.title]);
+const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dayLabel = (cell: PlannerCell) => {
+  const [y, m] = cell.date.split('-').map(Number);
+  return `${WEEKDAYS[cell.weekday]} ${cell.day} ${MONTHS[m - 1]} ${y}`;
+};
+
+const states = [
+  { state: 'all', label: 'The whole year' },
+  { state: 'series', label: 'The weekly review' },
+  { state: 'people', label: 'Maya Chen' },
+  { state: 'months', label: 'November' },
+  { state: 'ask', label: '“nils”' },
+];
+---
+<figure class={`gy ${cls}`} id={id} data-state="all" style={`--gy-cols:${columns}`} aria-labelledby={`${id}-title`}>
+  <div class="gy-head">
+    <span id={`${id}-title`}>{first.label} {first.year} to {last.label} {last.year}</span>
+    <span>{total} meetings</span>
+  </div>
+  {controls && (
+    <div class="gy-controls" role="group" aria-label="Show on the year">
+      {states.map((s) => <button type="button" data-state={s.state} aria-pressed={s.state === 'all' ? 'true' : 'false'}>{s.label}</button>)}
+    </div>
+  )}
+  <div class="gy-year">
+    {months.map((m) => (
+      <div class="gy-month" data-november={m.november ? '' : undefined}>
+        <div class="gy-month__head"><b>{m.label}</b>{m.yearTag && <small>{m.year}</small>}<span>{m.total || ''}</span></div>
+        <div class="gy-week gy-week--head" aria-hidden="true"><em></em><i>M</i><i>T</i><i>W</i><i>T</i><i>F</i><i>S</i><i>S</i></div>
+        {m.weeks.map((w) => (
+          <div class="gy-week">
+            <em aria-hidden="true">{w.no}</em>
+            {w.cells.map((cell) => cell ? (
+              <i
+                data-date={cell.date}
+                data-n={Math.min(cell.count, 4)}
+                data-today={cell.date === DEMO_TODAY ? '' : undefined}
+                data-s={series.get(cell.date)}
+                data-m={maya.has(cell.date) ? '' : undefined}
+                data-nl={nils.has(cell.date) ? '' : undefined}
+                data-first-nils={cell.date === '2025-11-04' ? '' : undefined}
+                data-day={cell.count ? dayLabel(cell) : undefined}
+                data-held={cell.count ? (titles.get(cell.date) ?? []).join(' · ') : undefined}
+              ><span class="visually-hidden">{dayLabel(cell)}: {cell.count ? (titles.get(cell.date) ?? []).join(', ') : 'no meetings'}</span></i>
+            ) : <i class="none" aria-hidden="true"></i>)}
+          </div>
+        ))}
+      </div>
+    ))}
+    <svg class="gy-thread" aria-hidden="true"><polyline points="" vector-effect="non-scaling-stroke" /></svg>
+  </div>
+  <figcaption class="gy-readout" aria-live="polite">
+    <span data-for="all"><i class="gy-swatch" data-n="1"></i>1 <i class="gy-swatch" data-n="2"></i>2 <i class="gy-swatch" data-n="3"></i>3 <i class="gy-swatch" data-n="4"></i>4+ meetings a day</span>
+    <span data-for="today"><b>Today</b> · Thu 16 Apr · Weekly product review: pilot narrative</span>
+    <span data-for="series"><b>Weekly product review</b> · four instances, one skipped week, the next on Tue 21 Apr</span>
+    <span data-for="people"><b>Maya Chen</b> · in {maya.size} of these meetings</span>
+    <span data-for="months"><b>November 2025</b> · First met Nils Rud, on Tue 4 Nov</span>
+    <span data-for="ask"><b>nils</b> · {nilsNovember} meetings in November 2025, {nils.size} in all</span>
+    <span data-for="kept"><b>{total} meetings</b> · nothing ages out</span>
+    <span class="gy-day" data-for="day" aria-hidden="true"></span>
+  </figcaption>
+</figure>
+
+<script>
+  /* The series thread is drawn through the review's instances from their
+     real positions, so it survives any width. A year with controls lets
+     the reader set its state; without this script it shows everything,
+     which is also true. */
+  for (const year of document.querySelectorAll<HTMLElement>('.gy')) {
+    const box = year.querySelector<HTMLElement>('.gy-year');
+    const svg = year.querySelector<SVGSVGElement>('.gy-thread');
+    const line = svg?.querySelector('polyline');
+    const draw = () => {
+      if (!box || !svg || !line) return;
+      const b = box.getBoundingClientRect();
+      if (!b.width) return;
+      svg.setAttribute('viewBox', `0 0 ${b.width} ${b.height}`);
+      const points = Array.from(year.querySelectorAll<HTMLElement>('i[data-s]'))
+        .sort((a, c) => (a.dataset.date! < c.dataset.date! ? -1 : 1))
+        .map((el) => { const r = el.getBoundingClientRect(); return `${r.x - b.x + r.width / 2},${r.y - b.y + r.height / 2}`; });
+      line.setAttribute('points', points.join(' '));
+    };
+    draw();
+    addEventListener('resize', draw);
+    document.fonts?.ready.then(draw);
+
+    /* Point at a day and the readout names what it held. The same words
+       are in each square for a screen reader, so this adds nothing they
+       lack. */
+    const day = year.querySelector<HTMLElement>('.gy-day');
+    box?.addEventListener('pointerover', (event) => {
+      const cell = (event.target as HTMLElement).closest<HTMLElement>('i[data-day]');
+      if (!day) return;
+      if (!cell) { year.classList.remove('is-pointing'); return; }
+      day.replaceChildren(Object.assign(document.createElement('b'), { textContent: cell.dataset.day ?? '' }), ` · ${cell.dataset.held ?? ''}`);
+      year.classList.add('is-pointing');
+    });
+    box?.addEventListener('pointerleave', () => year.classList.remove('is-pointing'));
+
+    const buttons = Array.from(year.querySelectorAll<HTMLButtonElement>('.gy-controls button'));
+    for (const b of buttons) {
+      b.addEventListener('click', () => {
+        year.dataset.state = b.dataset.state ?? 'all';
+        for (const o of buttons) o.setAttribute('aria-pressed', String(o === b));
+      });
+    }
+  }
+</script>

@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-d.css';
+import { BETA_URL } from '../../lib/grod';
+import GrodPopOut from '../../components/GrodPopOut.astro';
+import GrodNight from '../../components/GrodNight.astro';
+
+/* /grod/d: powers of ten. One continuous zoom from a year to a sentence,
+   made only of real captures. Exploration arm; the beta link goes straight
+   to the email. The direction contract is the first comment inside the
+   page root (Astro strips a slot's leading comment; a deeper one survives). */
+
+const scales = [
+  {
+    id: 'year', word: 'A year.', kind: 'win', src: 'window-year', w: 1600, h: 1152,
+    alt: "GRØD's year page for 2026: every day a square, darker where there were more meetings, 44 so far.",
+    lede: 'Every meeting since January, on one page.',
+    body: 'The darker the day, the more it held. Click a day and the meeting opens; a two-finger swipe brings the year back.',
+  },
+  {
+    id: 'month', word: 'A month.', kind: 'win', src: 'window-month', w: 1600, h: 1152,
+    alt: "GRØD's month page for November 2025: 14 meetings, 10 hours, 9 people; What stood out: First met Nils Rud, on Tue 4 Nov; #Platform went from 2 meetings to 4; the weeks as bars.",
+    lede: 'Months that notice things.',
+    body: '“First met Nils Rud, on Tue 4 Nov.” “#Platform went from 2 meetings to 4.” Written from the records GRØD holds, never generated.',
+  },
+  {
+    id: 'week', word: 'A week.', kind: 'element', src: 'popover', w: 702, h: 874,
+    alt: 'The series popover for the weekly product review: Weekly, 4 instances; Continuity, 3 decisions, dated 31 Mar, 24 Mar and 17 Mar; Next, Tue 21 Apr; Today; Open the series.',
+    lede: 'It remembers what you decided.',
+    body: 'Your weekly review is one thing across time, not forty rows. Open this week’s, and the decisions from the weeks before are waiting. A skipped week stays a skipped week.',
+  },
+  {
+    id: 'meeting', word: 'A meeting.', kind: 'win', src: 'window-notes', w: 1600, h: 1152,
+    alt: "GRØD's meeting page for the weekly product review on 16 April: the notes tab, the decisions, and the Ask panel over them.",
+    lede: 'It writes around your notes, not over them.',
+    body: 'Your lines hold still while the sections arrive around them. Regenerate keeps your edits.',
+  },
+  {
+    id: 'voice', word: 'A voice.', kind: 'pop', src: 'voice', w: 1215, h: 170, win: 'window-person',
+    winAlt: "Maya Chen's page in GRØD: her email, Voice profiles, and her upcoming and past meetings.",
+    alt: "Voice profiles: 1 recognised voice, used to label this person in transcripts. First heard 16 Apr 2026.",
+    lede: 'Name a voice once.',
+    body: 'The meetings where GRØD had already recognised it update, and every later one knows it.',
+  },
+  {
+    id: 'sentence', word: 'A sentence.', kind: 'pop', src: 'line-0302', w: 1215, h: 140, win: 'window-answer',
+    winAlt: 'The transcript of the weekly product review with the Ask panel open: When do invitations go out? Invitations go to six teams on 21 April, source 3:02.',
+    alt: 'One transcript line, highlighted: 03:02, Ellis Morgan, Invitations go to six teams on 21 April. That supersedes the earlier 14 April note.',
+    lede: 'Ask, and it tells you when it doesn’t know.',
+    body: 'Ask when the invitations go out and the answer says 21 April, with 3:02 as its source. Ask something the meeting didn’t cover and it says: “This meeting doesn’t cover that.”',
+  },
+];
+---
+<Base
+  title="GRØD · A year to a sentence"
+  description="GRØD keeps a year of meetings on one page and every sentence inside it, on this Mac. Scroll from a year to a month to a week to a meeting to a sentence, and back out."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain gd">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm d
+THESIS: Eames applied to an archive: one continuous zoom from a year to a sentence, and back out, made only of real captures. It refuses the feature tour: every section is one scale nearer, and the scale word is the headline.
+OWN-WORLD: bone paper; the scale words in Merriweather 300 at 148px, the ledes in Merriweather 400; Atkinson Hyperlegible Next, sentence case, for the page's voice; windows laid on the paper with a real shadow, details cut at the UI's edges, the previous stage receding beneath the next.
+STORY: "A year. A month. A week. A meeting. A voice. A sentence. And it is all still here." Then the beta.
+FIRST VIEWPORT: the bar; "A year." at 148px with its lede and body beside the 2026 year page, which fills the right of the screen; "Scroll in" as a cue under the words; the beta bezel in the bar. Nothing floats above the stage.
+FORM: powers of ten, user-requested on 2026-09-30 (direction 3 of the four talked through); seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="g-top">
+    <a class="g-brand" href="/grod/d/" aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Page">
+      <a href="#out">And back out</a>
+      <a class="g-bezel" href={BETA_URL}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    {scales.map((s, i) => (
+      <section class="gd-scale" id={s.id} aria-labelledby={`h-${s.id}`}>
+        <div class="gd-stage">
+          <div class="gd-words">
+            {i === 0
+              ? <h1 class="g-xl" id={`h-${s.id}`}><span class="g-ghost"><span aria-hidden="true">{s.word}</span>{s.word}</span></h1>
+              : <h2 class="g-xl" id={`h-${s.id}`}>{s.word}</h2>}
+            <p class="g-lede">{s.lede}</p>
+            <p class="g-body gd-body">{s.body}</p>
+            {i === 0 && <p class="g-cue"><svg viewBox="0 0 14 18" aria-hidden="true"><path d="M7 1v15M1.5 10.5 7 16l5.5-5.5"/></svg>Scroll in</p>}
+          </div>
+          {s.kind === 'pop'
+            ? <GrodPopOut class="gd-figure gd-figure--pop" window={s.win!} detail={s.src} alt={s.winAlt!} detailAlt={s.alt} mag={1.25} />
+            : <figure class={`g-capture gd-figure ${s.kind === 'detail' ? 'g-detail gd-figure--detail' : 'g-win'} ${s.kind === 'element' ? 'gd-figure--element' : ''}`}>
+                <img src={`/shots/grod/landing/${s.src}.webp`} width={s.w} height={s.h} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" fetchpriority={i === 0 ? 'high' : undefined} />
+              </figure>}
+        </div>
+      </section>
+    ))}
+
+    <section class="gd-out" id="out" aria-labelledby="h-out">
+      <h2 class="g-xl" id="h-out">And it is all still here.</h2>
+      <div class="gd-out__grid">
+        <div>
+          <p class="g-body">Transcripts and notes stay until you delete them. There is no GRØD server holding a copy, no account, and no plan that hides last year.</p>
+          <p class="g-promise">Your meeting content never leaves this Mac.</p>
+        </div>
+        <dl class="g-receipts">
+          <div><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics.</dd></div>
+          <div><dt>The call</dt><dd>Nobody in the call knows it is there. Telling the other person is still on you.</dd></div>
+          <div><dt>Deletion</dt><dd>“Recording removed” appears only once it is true.</dd></div>
+        </dl>
+      </div>
+      <figure class="g-capture g-win gd-year-small">
+        <img src="/shots/grod/landing/window-year-2025.webp" width="2000" height="1440" alt="The 2025 year page: the year before, still here." loading="lazy" decoding="async" />
+        <figcaption>Last year, still here.</figcaption>
+      </figure>
+      <div class="gd-close">
+        <p class="g-h2">Breakfast is almost ready.</p>
+        <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+        <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+      </div>
+    </section>
+  </main>
+
+  <GrodNight />
+</div>
+</Base>

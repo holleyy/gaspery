@@ -1,0 +1,41 @@
+/* /grod/a · the year on the wall.
+
+   The year is drawn the way the app's year page draws it: twelve months in
+   four columns, each a grid of weeks, a square a day, week numbers in the
+   gutter. It is big, on the right, and pinned; the story on the left sets
+   its state. Teal appears once, as the thread of the weekly review. */
+
+.ga-main {
+  max-width: var(--g-max); margin: 0 auto; padding: 40px var(--g-pad) 80px;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+/* ---- The year, pinned ------------------------------------------------- */
+.ga-sheet { position: sticky; top: 40px; display: grid; gap: 14px; min-width: 0; }
+.ga-imprint { font-family: var(--g-serif); font-style: italic; font-size: 15px; color: var(--color-ink); }
+
+/* ---- The story ------------------------------------------------------------ */
+.ga-story { min-width: 0; display: grid; }
+.ga-step { display: grid; gap: 22px; padding: 40px 0 72px; border-top: 1px solid var(--color-hairline); }
+.ga-step--hero { border-top: 0; padding-top: 12px; min-height: calc(100dvh - 120px); align-content: center; padding-bottom: 96px; }
+.ga-h1 { font-size: clamp(48px, 6.4vw, 92px); }
+.ga-step .g-lede { max-width: 26ch; }
+.ga-step .g-body { max-width: 48ch; }
+.ga-narrow { max-width: 360px; }
+.ga-toast { max-width: 200px; }
+.ga-palette { max-width: 420px; }
+.ga-step--close { padding-bottom: 40px; }
+.ga-phone-end { display: none; }
+.ga-share { font: inherit; color: var(--color-brand-strong); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ---- Small screens ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .ga-main { grid-template-columns: 1fr; padding-top: 16px; }
+  .ga-sheet { position: static; order: 1; gap: 12px; }
+  .ga-story { order: 2; }
+  .ga-step--hero { min-height: 0; padding: 32px 0 48px; }
+  .ga-h1 { font-size: clamp(44px, 12vw, 64px); }
+  .ga-phone-end { display: block; }
+}
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

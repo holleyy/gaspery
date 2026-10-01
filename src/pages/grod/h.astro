@@ -1,0 +1,31 @@
+---
+import GrodSentence from '../../components/GrodSentence.astro';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
+
+/* /grod/h: arm g, upgraded. The hero opens on the tagline with the sentence
+   beneath it, and the fourth clause's year is the live one from arm a,
+   which the reader can filter. The page itself is
+   src/components/GrodSentence.astro. */
+
+const contract = `
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm h (g, upgraded)
+THESIS: The page opens on the one line no rival uses, "Meetings, distilled.", and then reads one sentence at the speed of scroll, printed on two papers with the app at the size it is. Its best moment is the fourth clause, where a year of meetings is not a screenshot but the thing itself, which the reader can ask for a person, a series, a month. It refuses the feature grid and the shrunken screenshot.
+OWN-WORLD: grained bone paper and the ink ground (#232019) with teal dots at a 17px pitch, in alternation; Merriweather 300 at 128px for the tagline and up to 132px for the clauses; Merriweather ledes, Atkinson Hyperlegible Next for body and captions; windows at 1000 points, details lifted out of their windows as magnified cards; the night footer with the bowl of oats on its horizon and the wordmark at 19vw.
+STORY: "Meetings, distilled. It remembers what was said, who said it, and what I decided, for as long as I keep it, on this Mac, and it showed me before it asked." Then the beta, then night, then breakfast.
+FIRST VIEWPORT: the bar on bone; "Meetings, distilled." on one line at 128px; beneath it, on the left, the sentence at 44px in the secondary ink, the lede with the promise in italic, and the beta bezel; on the right the Agenda, the app's own first screen, as a window on the paper (a short silent loop of it once recorded: the list scrolled, a meeting opened, a swipe back); the night ground of the first clause rising at the fold.
+SIGNATURE: the live year. Twelve months of the Demo workspace's real meetings, and a row of names beneath the heading: press one and the year fades to what it holds for that name, with a teal thread through the weekly review.
+FORM: one sentence in clauses, as arm g, with the tagline restored and the archive promoted. Proposed on 2026-10-01 as the upgrade to g; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+`;
+---
+<GrodSentence
+  arm="h" title="GRØD · Meetings, distilled" contract={contract}
+  class="gf gg" dark={['said', 'decided', 'mac']} motif="oats" hero="distilled" year="live" heroMedia="agenda"
+/>
+
+<style is:global>
+  /* The canvas beneath the page is the night ground with the bowl at its
+     foot, so a rubber-band overscroll at the bottom shows the oats. */
+  html { background: #232019 url('/shots/grod/landing/oats.svg') center calc(100% - 40px) / 240px auto no-repeat; }
+</style>

@@ -1,0 +1,28 @@
+---
+import GrodSentence from '../../components/GrodSentence.astro';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
+
+/* /grod/g: the sentence in two inks. Arm f's actual-size windows, with the
+   clauses alternating between the grained bone paper and the night ground
+   with its dot field; the bowl of oats sits on the footer's horizon and in
+   the overscroll. The page itself is src/components/GrodSentence.astro. */
+
+const contract = `
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm g (f in two inks)
+THESIS: The page is one sentence printed on two papers. The clauses alternate between the grained bone sheet and the night ground with its field of teal dots, hard-edged like two passes through the press, and the app sits on both at the size it is. It refuses the single-ground page as much as the feature grid.
+OWN-WORLD: grained bone paper and the ink ground (#232019) with teal dots at a 17px pitch, in alternation; Merriweather 300 clauses up to 132px; Merriweather ledes, Atkinson Hyperlegible Next for body and captions; windows at 1000 points, light paper on both grounds; the night footer with the bowl of oats on its horizon line and the wordmark at 19vw.
+STORY: "It remembers... what was said. Who said it. What I decided. For as long as I keep it. On this Mac." Then the beta, then night, then breakfast.
+FIRST VIEWPORT: the bar on bone; "It remembers" at 184px; the rest of the sentence at 44px in the secondary ink; the lede with the promise in italic; the beta bezel; the night ground of the first clause rising at the fold.
+SIGNATURE: the hard edge between the two grounds, and the bowl of oats on the horizon where the other arms set a sun; overscroll at the foot shows the oats again.
+FORM: one sentence in clauses, as arm f, on both of the site's grounds. User-requested on 2026-10-01 ("integrate both our light and dark backgrounds, and maybe our oats as an overscroll"), dots and footer from the daybreak draft on the same day; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+`;
+---
+<GrodSentence arm="g" title="GRØD · It remembers, in two inks" contract={contract} class="gf gg" dark={['said', 'decided', 'mac']} motif="oats" />
+
+<style is:global>
+  /* The canvas beneath the page is the night ground with the bowl at its
+     foot, so a rubber-band overscroll at the bottom shows the oats. */
+  html { background: #232019 url('/shots/grod/landing/oats.svg') center calc(100% - 40px) / 240px auto no-repeat; }
+</style>

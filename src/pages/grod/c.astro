@@ -1,0 +1,247 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-c.css';
+import { BETA_URL } from '../../lib/grod';
+
+/* /grod/c: the series. The page is the app's own object for a recurring
+   meeting, the series page, read oldest first so Continuity accumulates.
+   Every date, attendee and decision is from demo-workspace.json, in the
+   app's own words (Continuity, Decisions); the page writes nothing into the
+   record. Exploration arm; the beta link goes straight to the email. */
+
+const decided = {
+  i1: ['Make recommendation trust the April product focus.'],
+  i2: ['Hold pilot scope to the evidence reveal and the onboarding loop.'],
+  i3: ['Structure every evidence rationale as change, source, and uncertainty.'],
+  i4: ['Retire confidence scores in favour of evidence counts and concrete caveats.', 'Invite six pilot teams on 21 April.'],
+};
+const log = [
+  { from: 'i1', date: '17 Mar', text: decided.i1[0] },
+  { from: 'i2', date: '24 Mar', text: decided.i2[0] },
+  { from: 'i3', date: '31 Mar', text: decided.i3[0] },
+  { from: 'i4', date: '16 Apr', text: decided.i4[0] },
+  { from: 'i4', date: '16 Apr', text: decided.i4[1], note: 'Supersedes the 14 April note.' },
+];
+---
+<Base
+  title="GRØD · One meeting, four weeks"
+  description="One recurring meeting, four weeks, as GRØD keeps it: what was decided carries forward, on this Mac. A private, Mac-native memory for your meetings."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g gc">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm c
+THESIS: The page is the app's own object for a recurring meeting, the series page, read oldest first. Each instance opens with Continuity, the decisions carried from above, and a margin collects every decision as you read. It refuses the feature tour: the features appear where the series reaches them, in the app's own words.
+OWN-WORLD: bone paper; the dates in Merriweather 300 at 116px, exactly as the app's series ladder sets them; Merriweather ledes; Atkinson Hyperlegible Next for the record, sentence case, never tracked; a hairline rule between instances; the margin a quiet second column; magenta only on the bezel and the "You are here" mark.
+STORY: "It kept the first one, then the next, and by the fourth it knew what we had decided." Then NEXT is yours: the beta.
+FIRST VIEWPORT: the bar; "Meetings, distilled." at 120px; the lede naming the series the way the app does (Weekly product review · Weekly · 4 instances); instance #1, "17 Mar" at 116px with who was there and "Continuity: none yet"; the margin on the right titled Continuity, empty.
+FORM: the series page, user-requested on 2026-09-30 (direction 2 of the four talked through), re-cut from minutes to the app's own object on the same day; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="g-top">
+    <a class="g-brand" href="/grod/c/" aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Page">
+      <a href="#next">Next</a>
+      <a class="g-bezel" href={BETA_URL}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main" class="gc-main">
+    <div class="gc-series">
+      <header class="gc-head">
+        <h1 class="g-h"><span class="g-ghost"><span aria-hidden="true">Meetings, distilled.</span>Meetings, distilled.</span></h1>
+        <p class="g-lede">One recurring meeting, four weeks, as GRØD keeps it. What was decided carries forward.</p>
+        <p class="gc-seriesline"><b>Weekly product review</b> · Weekly · 4 instances · next on Tue 21 Apr</p>
+        <p class="g-meta"><em>Your meeting content never leaves this Mac.</em> Nothing joins the call. No account.</p>
+      </header>
+
+      <article class="gc-instance" id="i1" aria-labelledby="h-i1">
+        <h2 class="gc-date" id="h-i1"><span class="g-h">17 Mar</span><span class="gc-nth">#1 · Research readout</span></h2>
+        <p class="gc-with">With Ellis Morgan, Nia Okafor, Tomas Varga, Priya Shah, Jonah Reed.</p>
+        <h3 class="gc-label">Continuity</h3>
+        <p class="g-body">None yet. This is the first instance GRØD kept.</p>
+        <div class="gc-body">
+          <p class="g-h2">It shows you, before it asks you.</p>
+          <p class="g-body">On first run you say one sentence and watch it appear under You. Then the Mac answers out loud, and that appears under Them: both sides of a call, on this Mac, with no second person, and none of it saved.</p>
+          <div class="gc-pair">
+            <figure class="g-capture g-win">
+              <img src="/shots/grod/landing/onboard-voice.webp" width="1360" height="1280" alt="GRØD's first run: That is your voice, on your Mac. Under You: Testing 123 testing. The recording bar reads Setup, not saved." loading="lazy" decoding="async" />
+              <figcaption>First, your voice. Setup, not saved.</figcaption>
+            </figure>
+            <figure class="g-capture g-win">
+              <img src="/shots/grod/landing/onboard-both.webp" width="1360" height="1280" alt="GRØD's first run: Both sides, on this Mac. Under You: Testing 123 testing. Under Them: Loud and clear on my end." loading="lazy" decoding="async" />
+              <figcaption>Then the Mac's, through the system audio: “Loud and clear on my end.”</figcaption>
+            </figure>
+          </div>
+          <p class="g-body">Nobody in the call knows it is there. Telling the other person is still on you; GRØD just doesn't make it everyone's business.</p>
+        </div>
+        <h3 class="gc-label">Decisions</h3>
+        <ul class="gc-decided">{decided.i1.map((d) => <li>{d}</li>)}</ul>
+      </article>
+
+      <article class="gc-instance" id="i2" aria-labelledby="h-i2">
+        <h2 class="gc-date" id="h-i2"><span class="g-h">24 Mar</span><span class="gc-nth">#2 · Critique follow-through</span></h2>
+        <p class="gc-with">With Maya Chen, Ellis Morgan, Nia Okafor, Tomas Varga, Lena Ortiz.</p>
+        <h3 class="gc-label">Continuity <span>1 decision</span></h3>
+        <ul class="gc-arising">{decided.i1.map((d) => <li><span>17 Mar</span>{d}</li>)}</ul>
+        <div class="gc-body">
+          <p class="g-h2">It writes around your notes, not over them.</p>
+          <figure class="g-capture g-win">
+            <img src="/shots/grod/landing/window-notes.webp" width="2000" height="1440" alt="GRØD's meeting page: the notes tab with The story, Decisions and the Ask panel answering from the 3:02 moment." loading="lazy" decoding="async" />
+            <figcaption>The notes tab. Your lines hold still while the sections arrive around them. Regenerate keeps your edits.</figcaption>
+          </figure>
+        </div>
+        <h3 class="gc-label">Decisions</h3>
+        <ul class="gc-decided">{decided.i2.map((d) => <li>{d}</li>)}</ul>
+      </article>
+
+      <article class="gc-instance" id="i3" aria-labelledby="h-i3">
+        <h2 class="gc-date" id="h-i3"><span class="g-h">31 Mar</span><span class="gc-nth">#3 · Evidence prototype</span></h2>
+        <p class="gc-with">With Ellis Morgan, Nia Okafor, Tomas Varga, Lena Ortiz.</p>
+        <h3 class="gc-label">Continuity <span>2 decisions</span></h3>
+        <ul class="gc-arising">
+          <li><span>24 Mar</span>{decided.i2[0]}</li>
+          <li><span>17 Mar</span>{decided.i1[0]}</li>
+        </ul>
+        <div class="gc-body">
+          <p class="g-h2">It remembers what you decided.</p>
+          <p class="g-body">Your weekly review is one thing across time, not forty rows. Open this week's, and the decisions from the weeks before are waiting, as records, not as a summary someone wrote.</p>
+          <figure class="g-capture g-detail gc-narrow">
+            <img src="/shots/grod/landing/continuity.webp" width="780" height="930" alt="The series popover: Weekly product review, Weekly, 4 instances; Continuity, 3 decisions, dated 31 Mar, 24 Mar and 17 Mar; Next, Tue 21 Apr; Today; Open the series." loading="lazy" decoding="async" />
+            <figcaption>The series popover on this instance. This page's margin is the same list.</figcaption>
+          </figure>
+        </div>
+        <h3 class="gc-label">Decisions</h3>
+        <ul class="gc-decided">{decided.i3.map((d) => <li>{d}</li>)}</ul>
+      </article>
+
+      <article class="gc-instance gc-instance--skipped" id="skipped" aria-labelledby="h-skipped">
+        <h2 class="gc-date" id="h-skipped"><span class="g-h">9 Apr</span><span class="gc-nth">No meeting</span></h2>
+        <p class="gc-with">The week was skipped.</p>
+        <div class="gc-body">
+          <figure class="g-capture g-detail">
+            <img src="/shots/grod/landing/skipped.webp" width="1240" height="196" alt="The series ladder: Earlier, 9 Apr, No meeting, The week was skipped." loading="lazy" decoding="async" />
+            <figcaption>A gap is a record too. Nothing was recorded, and nothing was made up to fill it.</figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="gc-instance gc-instance--today" id="i4" aria-labelledby="h-i4">
+        <h2 class="gc-date" id="h-i4"><span class="g-h">16 Apr</span><span class="gc-nth">#4 · Pilot narrative · <b>You are here</b></span></h2>
+        <p class="gc-with">With Maya Chen, Ellis Morgan, Nia Okafor, Tomas Varga, Jonah Reed.</p>
+        <h3 class="gc-label">Continuity <span>3 decisions</span></h3>
+        <ul class="gc-arising">
+          <li><span>31 Mar</span>{decided.i3[0]}</li>
+          <li><span>24 Mar</span>{decided.i2[0]}</li>
+          <li><span>17 Mar</span>{decided.i1[0]}</li>
+        </ul>
+        <div class="gc-body">
+          <p class="g-h2">Name a voice once. Earlier meetings catch up.</p>
+          <figure class="g-capture g-detail">
+            <img src="/shots/grod/landing/voice.webp" width="1280" height="200" alt="Maya Chen's page: Voice profiles, 1 recognised voice, first heard 16 Apr 2026." loading="lazy" decoding="async" />
+            <figcaption>The meetings where GRØD had already recognised the voice update, and every later one knows it.</figcaption>
+          </figure>
+
+          <p class="g-h2">Months that notice things.</p>
+          <figure class="g-capture g-win">
+            <img src="/shots/grod/landing/window-month.webp" width="2000" height="1440" alt="November 2025 in GRØD: 14 meetings, 10 hours, 9 people; What stood out: First met Nils Rud, on Tue 4 Nov; #Platform went from 2 meetings to 4; the weeks as bars; the meetings below." loading="lazy" decoding="async" />
+            <figcaption>The month page. What stood out is written from the records GRØD holds, never generated.</figcaption>
+          </figure>
+
+          <p class="g-h2">A year on one page.</p>
+          <figure class="g-capture g-win">
+            <img src="/shots/grod/landing/window-year.webp" width="2000" height="1440" alt="GRØD's year page for 2026: every day a square, darker where there were more meetings." loading="lazy" decoding="async" />
+            <figcaption>Click a day and the meeting opens. A two-finger swipe brings the year back.</figcaption>
+          </figure>
+
+          <p class="g-h2">Ask, and it tells you when it doesn't know.</p>
+          <figure class="g-capture g-detail gc-narrow">
+            <img src="/shots/grod/landing/ask.webp" width="790" height="282" alt="The Ask panel: When do invitations go out? Invitations go to six teams on 21 April. That date supersedes the earlier 14 April note. Source: 3:02." loading="lazy" decoding="async" />
+            <figcaption>An answer with its source at 3:02. When a meeting didn't cover something, GRØD says: “This meeting doesn't cover that.”</figcaption>
+          </figure>
+        </div>
+        <h3 class="gc-label">Decisions</h3>
+        <ul class="gc-decided">
+          <li>{decided.i4[0]}</li>
+          <li>{decided.i4[1]} <span class="g-meta">Supersedes the 14 April note.</span></li>
+        </ul>
+      </article>
+
+      <article class="gc-instance gc-instance--next" id="next" aria-labelledby="h-next">
+        <h2 class="gc-date" id="h-next"><span class="g-h">21 Apr</span><span class="gc-nth">Next · Yours</span></h2>
+        <h3 class="gc-label">Continuity <span>5 decisions</span></h3>
+        <p class="g-h2">Nothing ages out.</p>
+        <p class="g-body">Transcripts and notes stay until you delete them. There is no GRØD server holding a copy, no account, and no plan that hides last year.</p>
+        <p class="g-promise">Your meeting content never leaves this Mac.</p>
+        <dl class="g-receipts">
+          <div><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics.</dd></div>
+          <div><dt>The call</dt><dd>Nobody in the call knows it is there. Telling the other person is still on you.</dd></div>
+          <div><dt>Deletion</dt><dd>“Recording removed” appears only once it is true.</dd></div>
+        </dl>
+        <div class="gc-close">
+          <p class="g-h2">Breakfast is almost ready.</p>
+          <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+        </div>
+      </article>
+    </div>
+
+    <aside class="gc-margin" aria-labelledby="h-log">
+      <div class="gc-margin__pin">
+        <h2 class="gc-margin__title" id="h-log">Continuity <span id="gc-count"></span></h2>
+        <ol class="gc-log" id="gc-log">
+          {log.map((d) => <li data-from={d.from}><span>{d.date}</span>{d.text}{d.note && <small>{d.note}</small>}</li>)}
+        </ol>
+        <p class="g-meta gc-margin__empty" id="gc-empty">Nothing yet. The first instance is below.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="g-foot">
+    <span>GRØD is made by <a href="https://gaspery.com/">Gaspery</a>.</span>
+    <span>Every date, name and decision on this page is a record in the app's Demo workspace.</span>
+  </footer>
+</div>
+
+<script>
+  /* The margin fills as the series is read: a decision appears once the
+     instance that made it has been reached or scrolled past. Without this
+     script every decision is listed from the start, which is also true. */
+  const log = document.getElementById('gc-log');
+  const empty = document.getElementById('gc-empty');
+  const count = document.getElementById('gc-count');
+  const items = log ? Array.from(log.querySelectorAll<HTMLLIElement>('li[data-from]')) : [];
+  const label = (n: number) => (n === 0 ? '' : `${n} decision${n === 1 ? '' : 's'}`);
+  if (log && items.length && 'IntersectionObserver' in window) {
+    log.dataset.live = '';
+    const reached = new Set<string>();
+    const render = () => {
+      let shown = 0;
+      for (const li of items) {
+        const on = reached.has(li.dataset.from ?? '');
+        li.toggleAttribute('hidden', !on);
+        if (on) shown += 1;
+      }
+      empty?.toggleAttribute('hidden', shown > 0);
+      if (count) count.textContent = label(shown);
+    };
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting || e.boundingClientRect.top < 0) reached.add(e.target.id);
+      render();
+    }, { rootMargin: '0px 0px -40% 0px' });
+    for (const id of ['i1', 'i2', 'i3', 'i4']) {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    }
+    render();
+  } else {
+    empty?.setAttribute('hidden', '');
+    if (count) count.textContent = label(items.length);
+  }
+</script>
+</Base>

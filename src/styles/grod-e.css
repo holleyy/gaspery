@@ -1,0 +1,157 @@
+/* /grod/e · one sentence.
+
+   The clause is pinned at the top of its section while the captures for
+   it scroll past; on a phone it sits above them. Two authored motions: the
+   clause arriving, and the first clause's three tabs sifting in from the
+   right, one over the next. */
+
+.ge-hero {
+  max-width: var(--g-max); margin: 0 auto; padding: clamp(48px, 9vh, 120px) var(--g-pad) 64px;
+  min-height: calc(100dvh - 64px); display: flex; flex-direction: column; justify-content: center; gap: 24px;
+}
+.ge-rest {
+  font-family: var(--g-serif); font-weight: 300; font-optical-sizing: auto;
+  font-size: clamp(24px, 3.2vw, 44px); line-height: 1.15; letter-spacing: -0.015em;
+  color: var(--color-ink-secondary); max-width: 24ch; text-wrap: balance;
+  margin-top: -8px;
+}
+.ge-hero .g-lede { margin-top: 8px; font-size: clamp(19px, 1.6vw, 24px); max-width: 38ch; font-family: var(--g-sans); }
+.ge-hero .g-lede em { color: var(--color-ink); }
+
+/* The hero's words sit in a row so the app can stand beside them. With
+   no media the row is just the words. */
+.ge-hero__row { display: grid; gap: 24px; }
+.ge-hero__text { display: grid; gap: 24px; align-content: start; min-width: 0; }
+.ge-hero--media { justify-content: flex-start; padding-top: clamp(40px, 8vh, 96px); gap: 20px; }
+.ge-hero--media .ge-hero__row { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(32px, 4vw, 64px); align-items: start; }
+.ge-hero--media .ge-hero__text { padding-top: 12px; }
+/* The app in the hero is oversized: wider than its column and running off
+   the right edge of the screen. Its top sits just under the headline's
+   baseline. Printing the headline over the window's top strip was tried
+   (2026-10-01) and put "distilled." on the traffic lights; the headline
+   stays clear of the chrome. A video has no alpha, so it takes the
+   window's own corner radius (48 of 2000 wide, 48 of 1440 high). */
+.ge-hero--media .g-xl { position: relative; z-index: 2; }
+.ge-hero--media .ge-hero__text { position: relative; z-index: 2; }
+.ge-hero__media { position: relative; z-index: 1; width: min(66vw, 960px); margin-top: clamp(-30px, -2vw, -12px); }
+.ge-hero__media video { display: block; width: 100%; height: auto; border-radius: 2.4% / 3.333%; filter: var(--g-cast); }
+
+/* The film's pause control: quiet, in the words column, where it is on
+   screen whenever the film is. */
+.ge-film-toggle {
+  justify-self: start; display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-size: 14px; color: var(--color-ink-secondary);
+  padding: 4px 0; border: 0; background: none; cursor: pointer;
+}
+.ge-film-toggle[hidden] { display: none; }
+.ge-film-toggle:hover { color: var(--color-ink); }
+.ge-film-toggle svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ge-film-toggle__play { display: none; fill: currentColor; stroke-width: 1; }
+.ge-film-toggle[aria-pressed="true"] .ge-film-toggle__play { display: inline; }
+.ge-film-toggle[aria-pressed="true"] .ge-film-toggle__pause { display: none; }
+
+/* An ending a phone can use: shown only where the page is one column. */
+.ge-phone-end { display: none; }
+.ge-share { font: inherit; color: var(--color-brand-strong); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ---- Clauses ---------------------------------------------------------- */
+.ge-clause {
+  max-width: var(--g-max); margin: 0 auto; padding: 96px var(--g-pad) 40px;
+  display: grid; grid-template-columns: 5fr 7fr; gap: 40px clamp(32px, 5vw, 80px);
+  align-items: start;
+  border-top: 1px solid var(--color-hairline);
+}
+.ge-pin { position: sticky; top: 40px; }
+.ge-pin .g-h { font-size: clamp(52px, 7.2vw, 108px); }
+.ge-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; padding-bottom: 56px; min-width: 0; }
+.ge-body .g-body { max-width: 52ch; }
+.ge-toast { max-width: 220px; }
+/* A paragraph and its detail. Stacked here, where the body is one of two
+   columns; arm f and after set them side by side across the page. */
+.ge-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; min-width: 0; }
+.ge-row__text { display: grid; gap: 18px; align-content: start; min-width: 0; }
+.ge-row__text .ge-refusal { margin-top: 6px; }
+.ge-row__text .ge-refusal + .g-meta { margin-top: -10px; }
+/* The first run, as proof of the promise. */
+/* minmax(0, …) and min-width: 0 throughout: a window is 2000px wide in its
+   file, and an auto track would grow to that and push the clause off a
+   phone's screen. */
+.ge-proof { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 8px; min-width: 0; }
+.ge-proof__pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; min-width: 0; }
+/* The tagline hero: one line at the page's measure. */
+.ge-h1--tagline { font-size: clamp(52px, 8.8vw, 128px); }
+.ge-hero[data-hero="distilled"] .ge-rest { max-width: 30ch; margin-top: 4px; }
+.ge-year { display: grid; gap: 16px; }
+.ge-clause--last .g-receipts { margin-top: 8px; }
+.ge-close { display: grid; gap: 18px; padding-top: 24px; border-top: 1px solid var(--color-hairline); }
+
+/* ---- The stack ----------------------------------------------------------- */
+/* Three windows in one grid cell, each resting a step down and to the
+   right of the last. As the stack scrolls into view they arrive from the
+   right in turn: Notes, then Summary over it, then Transcript over both. */
+.ge-stack__deck {
+  display: grid; grid-template-columns: 1fr;
+  padding: 0 10% 96px 0;
+}
+.ge-stack__item {
+  grid-area: 1 / 1; position: relative; z-index: var(--n);
+  transform: translate(calc(var(--n) * 5%), calc(var(--n) * 48px));
+}
+.ge-stack__item { cursor: pointer; }
+.ge-stack__item:focus-visible { outline: 2px solid var(--color-teal-ink); outline-offset: 6px; border-radius: 12px; }
+.ge-stack__tab {
+  position: absolute; left: 14px; top: -12px; z-index: 1;
+  padding: 4px 10px 5px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; line-height: 1.2;
+  background: var(--color-ink); color: var(--color-paper);
+}
+.ge-stack__item.is-front .ge-stack__tab { background: var(--color-brand); }
+.ge-stack__item.is-front { animation: none; }
+/* The tab row, drawn like the app's own tabs: the front one is bold with
+   the app's underline. */
+.ge-stack__tabs { display: flex; gap: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--color-hairline); }
+.ge-stack__tabbtn {
+  font: inherit; font-size: 15px; font-weight: 500; line-height: 1.2; color: var(--color-ink-secondary);
+  padding: 8px 14px 10px; margin-bottom: -1px; border: 0; border-bottom: 2px solid transparent; background: none; cursor: pointer;
+  transition: color .15s ease, border-color .15s ease;
+}
+.ge-stack__tabbtn:hover { color: var(--color-ink); }
+.ge-stack__tabbtn[aria-pressed="true"] { color: var(--color-ink); font-weight: 600; border-bottom-color: var(--color-ink); }
+@supports (animation-timeline: view()) {
+  .ge-stack__item {
+    animation: ge-sift linear both;
+    animation-timeline: view();
+  }
+  .ge-stack__item[style*="--n:0"] { animation-range: entry 0% entry 55%; }
+  .ge-stack__item[style*="--n:1"] { animation-range: entry 45% cover 30%; }
+  .ge-stack__item[style*="--n:2"] { animation-range: cover 15% cover 55%; }
+}
+@keyframes ge-sift {
+  from { transform: translate(calc(var(--n) * 5% + 60%), calc(var(--n) * 48px - 24px)) rotate(2.5deg); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translate(calc(var(--n) * 5%), calc(var(--n) * 48px)) rotate(0deg); opacity: 1; }
+}
+
+/* The clause arrives: rises 24px and fades in as its section enters. */
+@supports (animation-timeline: view()) {
+  .ge-pin .g-h {
+    animation: ge-arrive linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+@keyframes ge-arrive {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .ge-phone-end { display: block; }
+  .ge-hero--media .ge-hero__row { grid-template-columns: 1fr; gap: 32px; }
+  .ge-hero__media { width: auto; margin-top: 0; }
+  .ge-clause { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 64px; }
+  .ge-pin { position: static; }
+  .ge-hero { min-height: 0; }
+  .ge-stack__deck { padding-bottom: 48px; }
+  .ge-stack__item { transform: translate(calc(var(--n) * 3%), calc(var(--n) * 22px)); }
+}

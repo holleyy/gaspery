@@ -1,0 +1,158 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-a.css';
+import { grodGoPath } from '../../lib/grod';
+import GrodYear from '../../components/GrodYear.astro';
+
+/* Arm "a" of the /grod test (see src/lib/grod.ts): the year on the wall.
+   The year (src/components/GrodYear.astro) is drawn the way the app's own
+   year page draws it, big on the right, pinned; the story runs down the
+   left and changes what the year shows. The direction contract is the
+   first comment inside the page root (Astro strips a slot's leading
+   comment; a deeper one survives). */
+
+const goPath = grodGoPath('a');
+---
+<Base
+  title="GRØD · Meetings, distilled"
+  description="GRØD remembers what was said, who said it, and what you decided. A year of meetings on one page, kept on your Mac. Your meeting content never leaves this Mac."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g ga">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm a
+THESIS: The page is a year of meetings drawn the way the app draws its year page, twelve months in four columns, big on the right, pinned while the story runs down the left and changes what the year shows. It refuses the hero-plus-feature-tour: the archive is the first thing you see and the only picture that stays.
+OWN-WORLD: bone paper; the year as the app's own grid, a square a day with gaps, magenta at four densities for meetings a day, empty days in the surface grey, week numbers in the gutter; teal appears once, as the thread of the weekly review; Merriweather 300 for the headline and month names, Atkinson Hyperlegible Next for everything else, sentence case.
+STORY: "That is a year of my meetings, and it is all still there." Then the year shows today, the series, a person, a month, a search, and the whole year again, before the beta.
+FIRST VIEWPORT: the bar; on the left "Meetings, distilled." at 88px, the dek, the small print, the beta bezel; on the right the year, May 2025 to April 2026, filling seven-twelfths of the screen, today outlined, a readout beneath it; the first story step's heading at the fold.
+SIGNATURE: the year changes state as each step reaches the middle of the screen; the change is a half-second fade of the marks that do not belong to that step, and a teal thread drawn through the weekly review's four Tuesdays.
+FORM: the year on the wall, user-pinned (direction 1 of the four talked through on 2026-09-30), re-cut on 2026-10-01 to the app's own year layout at size; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="g-top">
+    <a class="g-brand" href="/grod/a/" aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Page">
+      <a href="#kept">Nothing ages out</a>
+      <a class="g-bezel" href={goPath}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main" class="ga-main">
+    <div class="ga-story">
+      <section class="ga-step ga-step--hero" data-state="all" aria-labelledby="h1">
+        <h1 class="g-h ga-h1" id="h1"><span class="g-ghost"><span aria-hidden="true">Meetings, distilled.</span>Meetings, distilled.</span></h1>
+        <p class="g-lede">It remembers what was said, who said it, and what you decided.</p>
+        <p class="g-meta">No bot in your call. No account. Mac only.</p>
+        <p class="g-close"><a class="g-bezel g-bezel--big" href={goPath}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+      </section>
+
+      <section class="ga-step" data-state="today" aria-labelledby="h-today">
+        <h2 class="g-h2" id="h-today">It writes around your notes, not over them.</h2>
+        <figure class="g-capture g-win">
+          <img src="/shots/grod/landing/window-notes.webp" width="2000" height="1440" alt="GRØD's meeting page for Thursday 16 April: the notes tab, the decisions, and the Ask panel answering from the 3:02 moment." decoding="async" fetchpriority="high" />
+          <figcaption>Today, open. Your lines hold still while the sections arrive around them. Regenerate keeps your edits.</figcaption>
+        </figure>
+      </section>
+
+      <section class="ga-step" data-state="series" aria-labelledby="h-series">
+        <h2 class="g-h2" id="h-series">It remembers what you decided.</h2>
+        <p class="g-body">Your weekly review is one thing across time, not forty rows. Open this week's, and the decisions from the weeks before are waiting. A skipped week stays a skipped week.</p>
+        <figure class="g-capture g-win ga-narrow">
+          <img src="/shots/grod/landing/popover.webp" width="702" height="874" alt="The series popover: Weekly product review, Weekly, 4 instances; Continuity, 3 decisions dated 31 Mar, 24 Mar and 17 Mar; Next, Tue 21 Apr; Today; Open the series." loading="lazy" decoding="async" />
+          <figcaption>Continuity, on this week's instance. The thread on the year is the same four meetings.</figcaption>
+        </figure>
+      </section>
+
+      <section class="ga-step" data-state="people" aria-labelledby="h-people">
+        <h2 class="g-h2" id="h-people">Name a voice once. Earlier meetings catch up.</h2>
+        <p class="g-body">The meetings where GRØD had already recognised the voice update, and every later one knows it. Overlapping speech it can't place goes to Needs review, not to a guess.</p>
+        <figure class="g-capture g-detail">
+          <img src="/shots/grod/landing/voice.webp" width="1280" height="200" alt="Maya Chen's page: Voice profiles, 1 recognised voice, used to label this person in transcripts, first heard 16 Apr 2026." loading="lazy" decoding="async" />
+          <figcaption>Maya Chen's page. The year shows every meeting she is in.</figcaption>
+        </figure>
+      </section>
+
+      <section class="ga-step" data-state="months" aria-labelledby="h-months">
+        <h2 class="g-h2" id="h-months">Months that notice things.</h2>
+        <figure class="g-capture g-detail">
+          <img src="/shots/grod/landing/stood-out.webp" width="1280" height="242" alt="November 2025, What stood out: First met Nils Rud, on Tue 4 Nov. #Platform went from 2 meetings to 4." loading="lazy" decoding="async" />
+          <figcaption>Written from the records it holds, never generated.</figcaption>
+        </figure>
+        <figure class="g-capture g-detail">
+          <img src="/shots/grod/landing/merge.webp" width="1250" height="195" alt="Tags: Design reviews looks like Design review. Same name, written differently. Merge into Design review, or Keep separate." loading="lazy" decoding="async" />
+          <figcaption>Tags that tidy themselves, with you deciding.</figcaption>
+        </figure>
+      </section>
+
+      <section class="ga-step" data-state="ask" aria-labelledby="h-ask">
+        <h2 class="g-h2" id="h-ask">Ask, and it tells you when it doesn't know.</h2>
+        <figure class="g-capture g-win ga-palette">
+          <img src="/shots/grod/landing/palette.webp" width="1116" height="956" alt="The command palette: November 2025, nils. Go to: November 2025, filtered to Nils Rud, 2 meetings." loading="lazy" decoding="async" />
+          <figcaption>Type a name and the year filters to the meetings they were in. Every answer names its source, and when a meeting didn't cover something, GRØD says so.</figcaption>
+        </figure>
+        <p class="g-quote">“This meeting doesn't cover that.”</p>
+      </section>
+
+      <section class="ga-step" data-state="kept" id="kept" aria-labelledby="h-kept">
+        <h2 class="g-h2" id="h-kept">Nothing ages out.</h2>
+        <p class="g-body">Transcripts and notes stay until you delete them. There is no GRØD server holding a copy, no account, and no plan that hides last year.</p>
+        <p class="g-promise">Your meeting content never leaves this Mac.</p>
+        <dl class="g-receipts">
+          <div><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics.</dd></div>
+          <div><dt>The call</dt><dd>Nobody in the call knows it is there. Telling the other person is still on you.</dd></div>
+          <div><dt>Deletion</dt><dd>“Recording removed” appears only once it is true.</dd></div>
+        </dl>
+        <figure class="g-capture g-win ga-toast">
+          <img src="/shots/grod/landing/toast.webp" width="375" height="67" alt="A receipt in GRØD: 2 notes deleted, with Undo." loading="lazy" decoding="async" />
+        </figure>
+      </section>
+
+      <section class="ga-step ga-step--close" data-state="all" aria-labelledby="h-beta">
+        <h2 class="g-h2" id="h-beta">Breakfast is almost ready.</h2>
+        <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+        <p class="g-close"><a class="g-bezel g-bezel--big" href={goPath}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+        <p class="ga-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ga-share" id="share">Send yourself this link</button></p>
+      </section>
+    </div>
+
+    <div class="ga-sheet">
+      <GrodYear id="sheet" />
+      <p class="ga-imprint">Your meeting content never leaves this Mac.</p>
+    </div>
+  </main>
+
+  <footer class="g-foot">
+    <span>GRØD is made by <a href="https://gaspery.com/">Gaspery</a>.</span>
+    <span>Every mark on the year and every capture is the app's Demo workspace.</span>
+  </footer>
+</div>
+
+<script>
+  /* The year follows the story: the step nearest the middle of the screen
+     sets its state. Without this script the year shows everything, which
+     is also true. */
+  const sheet = document.getElementById('sheet');
+  const steps = Array.from(document.querySelectorAll<HTMLElement>('.ga-step[data-state]'));
+  if (sheet && steps.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) sheet.dataset.state = (e.target as HTMLElement).dataset.state ?? 'all';
+    }, { rootMargin: '-42% 0px -42% 0px' });
+    for (const s of steps) io.observe(s);
+  }
+
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.getElementById('share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split('#')[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>

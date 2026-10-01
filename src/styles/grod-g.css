@@ -1,0 +1,73 @@
+/* /grod/g · the sentence, in two inks.
+
+   Loads after grod-e.css and grod-f.css. The clauses alternate between the
+   grained bone paper and the night ground (the light theme's ink, with the
+   teal dot field from the daybreak draft), hard-edged like two passes
+   through the press. A dark band redefines the tokens for everything
+   inside it; the captures stay the app on light paper, which is what makes
+   them read on the dark. The footer's motif is the bowl of oats, and the
+   canvas beneath the page shows it again on overscroll. */
+
+/* Full-bleed bands with the content inset to the page measure. */
+.gg .ge-clause {
+  position: relative; max-width: none; border-top: 0;
+  padding-left: max(var(--g-pad), calc((100% - var(--g-max)) / 2 + var(--g-pad)));
+  padding-right: max(var(--g-pad), calc((100% - var(--g-max)) / 2 + var(--g-pad)));
+  padding-bottom: 32px;
+}
+.gg .ge-clause > :not(.g-dots) { position: relative; z-index: 1; }
+.gg .ge-clause[data-band="dark"] {
+  --color-paper: #232019;
+  --color-surface: #2C2820;
+  --color-surface-raised: #353026;
+  --color-hairline: #453F33;
+  --color-ink: #F6F1E6;
+  --color-ink-secondary: #B4AD9B;
+  --color-brand: #F06AA6;
+  --color-brand-bright: #F582B5;
+  --color-brand-strong: #F06AA6;
+  --color-brand-strong-hover: #F582B5;
+  --color-teal: #63CCAF;
+  --color-teal-ink: #63CCAF;
+  background: var(--g-night); color: var(--color-ink);
+}
+/* Where the night ground ends and the paper resumes, the magenta pass
+   shows 2px past the edge: the band printed slightly out of register, the
+   same offset as the headline's ghost. Nothing shows where a band runs into
+   the night footer, which is one ground with it. */
+.gg .ge-clause[data-band="dark"] { box-shadow: 0 2px 0 var(--g-ghost); }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .gg .ge-clause[data-band="dark"] { box-shadow: none; } }
+
+/* On a tall band the dots fade over the first screen and a half, not over
+   the whole band. */
+.gg .ge-clause[data-band="dark"] > .g-dots {
+  -webkit-mask: linear-gradient(180deg, #000 0, rgba(0, 0, 0, .6) 620px, transparent 1300px);
+          mask: linear-gradient(180deg, #000 0, rgba(0, 0, 0, .6) 620px, transparent 1300px);
+}
+.gg .ge-clause[data-band="dark"] .g-ghost > span { mix-blend-mode: screen; }
+/* On the night ground the key and the casts are the app's dark rules: a
+   near-ink label on the light pink, a black contact shadow, and a faint
+   light edge where an ink shadow would vanish. */
+.gg .ge-clause[data-band="dark"] {
+  --g-key: #F06AA6;
+  --g-key-hover: #F279AF;
+  --g-key-press: #F282B4;
+  --g-key-ink: #232019;
+  --g-key-bezel: 0 1px 1px -0.5px rgba(0, 0, 0, .70), 0 3px 6px -3px rgba(0, 0, 0, .50), inset 0 0 0 1px rgba(0, 0, 0, .10), inset 0 1px 0 rgba(255, 255, 255, .22);
+  --g-key-bezel-press: 0 0.5px 0.5px -0.25px rgba(0, 0, 0, .75), inset 0 0 0 1px rgba(0, 0, 0, .12);
+  --g-cast: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 2px 2px rgba(0, 0, 0, .44)) drop-shadow(0 4px 7px rgba(0, 0, 0, .32));
+  --g-cast-bare: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 3px 3px rgba(0, 0, 0, .5)) drop-shadow(0 8px 12px rgba(0, 0, 0, .4));
+  --g-cast-card: 0 0 0 0.5px rgba(246, 241, 230, .3), 0 2px 2px rgba(0, 0, 0, .44), 0 4px 9px -3px rgba(0, 0, 0, .32);
+  --g-lift: 0 2px 2px rgba(0, 0, 0, .44), 0 4px 9px -3px rgba(0, 0, 0, .32);
+}
+.gg.g--soft .ge-clause[data-band="dark"] {
+  --g-cast: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 24px 48px rgba(0, 0, 0, .5));
+  --g-cast-bare: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 40px 70px rgba(0, 0, 0, .6));
+  --g-cast-card: 0 0 0 0.5px rgba(246, 241, 230, .3), 0 40px 80px -20px rgba(0, 0, 0, .7);
+  --g-lift: none;
+}
+.gg .ge-clause[data-band="dark"] .g-detail img { border-color: var(--color-hairline); }
+.gg .ge-clause[data-band="dark"] .ge-stack__tab { background: var(--color-ink); color: var(--g-night); }
+.gg .ge-clause[data-band="dark"] ::selection { background: color-mix(in srgb, var(--color-brand) 40%, transparent); }
+/* The last band runs straight into the night footer: same ground, no seam. */
+.gg .g-night { padding-top: 24px; }

@@ -1,0 +1,69 @@
+/* /grod/c · matters arising.
+
+   The minutes run down the left; the margin on the right is sticky and
+   collects every decision as the reader reaches the instance that made
+   it. The dates are set exactly as the app's series ladder sets them:
+   Merriweather, light, large. */
+
+.gc-main {
+  max-width: var(--g-max); margin: 0 auto; padding: 40px var(--g-pad) 80px;
+  display: grid; grid-template-columns: minmax(0, 8fr) minmax(220px, 4fr); gap: 0 clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+.gc-series { display: grid; gap: 0; min-width: 0; }
+.gc-head { display: grid; gap: 22px; padding-bottom: 56px; }
+.gc-head .g-meta em { color: var(--color-ink); }
+.gc-seriesline { font-size: 17px; color: var(--color-ink-secondary); }
+.gc-seriesline b { color: var(--color-ink); font-weight: 600; }
+
+.gc-instance { display: grid; gap: 18px; padding: 48px 0 56px; border-top: 1px solid var(--color-hairline); }
+.gc-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; }
+.gc-date .g-h { font-size: clamp(56px, 8vw, 116px); }
+.gc-nth { font-size: 17px; font-weight: 500; color: var(--color-ink-secondary); }
+.gc-nth b { color: var(--color-brand-strong); font-weight: 600; }
+.gc-with { font-size: 16px; color: var(--color-ink-secondary); margin-top: -6px; }
+.gc-label { font-size: 15px; font-weight: 600; margin-top: 14px; color: var(--color-ink); }
+.gc-label span { font-weight: 400; color: var(--color-ink-secondary); margin-left: 8px; }
+.gc-arising, .gc-decided { display: grid; gap: 8px; font-size: 17px; line-height: 1.45; max-width: 60ch; }
+.gc-arising li { display: grid; grid-template-columns: 5.5ch 1fr; gap: 12px; color: var(--color-ink); }
+.gc-arising li span { color: var(--color-ink-secondary); font-variant-numeric: tabular-nums; }
+.gc-decided li { padding-left: 18px; position: relative; }
+.gc-decided li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--color-brand); }
+.gc-decided li .g-meta { display: block; }
+
+.gc-body { display: grid; gap: 28px; padding: 18px 0 8px; }
+.gc-body .g-h2 { margin-top: 12px; }
+.gc-body .g-body { max-width: 56ch; }
+.gc-narrow { max-width: 560px; }
+.gc-body .g-body b { font-weight: 600; }
+.gc-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+@media (max-width: 640px) { .gc-pair { grid-template-columns: 1fr; } }
+
+.gc-instance--skipped .gc-date .g-h { color: var(--color-ink-secondary); }
+.gc-instance--next { gap: 22px; }
+.gc-instance--next .g-receipts { margin-top: 8px; }
+.gc-close { display: grid; gap: 18px; padding-top: 32px; margin-top: 16px; border-top: 1px solid var(--color-hairline); }
+
+/* ---- The margin ------------------------------------------------------- */
+.gc-margin { min-width: 0; align-self: stretch; }
+.gc-margin__pin { position: sticky; top: 32px; padding-top: 12px; display: grid; gap: 16px; }
+.gc-margin__title {
+  font-family: var(--g-serif); font-weight: 400; font-optical-sizing: auto; font-size: 22px; letter-spacing: -0.01em;
+  padding-bottom: 12px; border-bottom: 1px solid var(--color-hairline);
+}
+.gc-margin__title span { font-family: var(--g-sans); font-size: 14px; color: var(--color-ink-secondary); margin-left: 8px; }
+.gc-log { display: grid; gap: 14px; font-size: 15px; line-height: 1.45; }
+.gc-log li { display: grid; grid-template-columns: 5.5ch 1fr; gap: 10px; }
+.gc-log li span { color: var(--color-ink-secondary); font-variant-numeric: tabular-nums; }
+.gc-log li small { grid-column: 2; font-size: 13px; color: var(--color-ink-secondary); }
+.gc-log li[hidden] { display: none; }
+.gc-margin__empty[hidden] { display: none; }
+
+@media (max-width: 900px) {
+  .gc-main { grid-template-columns: 1fr; }
+  .gc-margin { order: -1; }
+  .gc-margin__pin { position: static; padding-bottom: 32px; }
+  .gc-log[data-live] { display: none; }
+  .gc-margin__empty { display: none; }
+  .gc-margin__title { display: none; }
+}
