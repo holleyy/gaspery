@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH } from '../src/lib/grod.ts';
+import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH, GROD_PAGES } from '../src/lib/grod.ts';
 import {
   DEMO_MEETINGS,
   DEMO_TODAY,
@@ -20,11 +20,24 @@ test('the page is /grod, and its call to action is counted on its own go page', 
   assert.match(read('src/pages/grod/go.astro'), /GrodGo/);
 });
 
+test('a phone keeps the page links in the bar and drops only the in-page ones', () => {
+  const css = read('src/styles/grod.css');
+  assert.match(css, /@media \(max-width: 640px\) \{[^}]*\}\s*\.g-top \{[^}]*\}\s*\.g-nav a\[href\^="#"\] \{ display: none; \}/);
+  assert.doesNotMatch(css, /\.g-nav a:not\(\.g-bezel\) \{ display: none; \}/);
+});
+
 test('the Features page is reachable from the home page and counts its beta click', () => {
   const page = read('src/pages/grod/features.astro');
   assert.match(page, /THESIS:/);
   assert.match(page, /href=\{GROD_GO_PATH\}/);
-  assert.match(read('src/pages/grod/index.astro'), /href: '\/grod\/features\/'/);
+  // the bar and the footer list the site's pages from one list, and the
+  // home page offers Features beside each call to action
+  assert.ok(GROD_PAGES.some((p) => p.href === '/grod/features/'));
+  const home = read('src/pages/grod/index.astro');
+  assert.match(home, /nav=\{\[\.\.\.GROD_PAGES,/);
+  assert.match(home, /more=\{\{ href: GROD_PAGES\[0\]\.href/);
+  assert.match(read('src/components/GrodNight.astro'), /\.\.\.GROD_PAGES\]/);
+  assert.equal(read('src/components/GrodSentence.astro').match(/\{more && <a class="g-more"/g)?.length, 2);
   // every time on the line has its section
   const ids = [...page.matchAll(/\{ id: '([a-z]+)', label:/g)].map((m) => m[1]);
   assert.equal(ids.length, 7);

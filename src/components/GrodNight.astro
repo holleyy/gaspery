@@ -5,14 +5,24 @@
    the wordmark at poster size, grounded off the bottom edge. The motif is
    the half-set sun, or the bowl of oats on arm g. */
 
+import { GROD_HOME, GROD_PAGES } from '../lib/grod';
+
 interface Props {
   note?: string;
   motif?: 'sun' | 'oats';
 }
 const { note = 'Every capture on this page is the app, running its Demo workspace.', motif = 'sun' } = Astro.props;
+
+/* The site's pages, on every page: the footer is the one place the whole
+   list always is, whatever the bar has room for. */
+const here = Astro.url.pathname.replace(/\/?$/, '/');
+const pages = [{ href: GROD_HOME, label: 'GRØD' }, ...GROD_PAGES];
 ---
 <footer class="g-night" data-motif={motif}>
   <div class="g-dots" aria-hidden="true"></div>
+  <nav class="g-night__pages" aria-label="GRØD site">
+    {pages.map((page) => <a href={page.href} aria-current={page.href === here ? 'page' : undefined}>{page.label}</a>)}
+  </nav>
   <div class="g-night__colophon">
     <span>GRØD is made by <a href="https://gaspery.com/">Gaspery</a>.</span>
     <span>{note}</span>

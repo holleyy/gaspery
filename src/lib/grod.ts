@@ -17,5 +17,14 @@ export const BETA_URL = 'mailto:hello@gaspery.com?subject=GR%C3%98D%20beta';
 
 export const GROD_GO_PATH = '/grod/go/';
 
+/* The site's pages after the home page, in the order the bar and the footer
+   list them. One list, so a new page is one line here and appears in both
+   on every page. The bar holds two on a phone; a third page means the phone
+   bar needs a menu (see the note in src/styles/grod.css). */
+export const GROD_HOME = '/grod/';
+export const GROD_PAGES = [
+  { href: '/grod/features/', label: 'Features' },
+] as const;
+
 /* The explorations served in development. */
 export const GROD_EXPLORATIONS = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] as const;

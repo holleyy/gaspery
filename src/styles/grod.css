@@ -184,6 +184,10 @@
   font-size: clamp(26px, 3vw, 42px); line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance;
 }
 .g-close { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px; }
+/* The second action beside the key: a plain link, underlined so it reads
+   as one next to a button. */
+.g a.g-more { font-size: 15px; font-weight: 600; white-space: nowrap; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.g a.g-more:hover { text-decoration-color: currentColor; }
 .g-close .g-meta { max-width: 40ch; }
 
 .g-foot {
@@ -213,6 +217,15 @@
   display: flex; align-items: baseline; justify-content: center; gap: 12px 2.2em; flex-wrap: wrap;
   padding: 0 var(--g-pad) 2.4em; font-size: 14px; text-align: center; color: rgba(246, 241, 230, .68);
 }
+/* The site's pages, over the colophon. */
+.g-night__pages {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 28px;
+  padding: 0 var(--g-pad) 1.6em; font-size: 15px; font-weight: 500;
+}
+.g .g-night__pages a { color: rgba(246, 241, 230, .78); }
+.g .g-night__pages a:hover, .g .g-night__pages a[aria-current] { color: #F6F1E6; }
+.g .g-night__pages a[aria-current] { font-weight: 600; }
 .g .g-night__colophon a { color: #F6F1E6; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(246, 241, 230, .4); }
 .g-night__colophon em { color: #F6F1E6; }
 .g-night__horizon { position: relative; z-index: 1; height: clamp(150px, 17vw, 230px); overflow: hidden; }
@@ -242,8 +255,14 @@
   .g *, .g *::before, .g *::after { animation: none !important; transition: none !important; }
 }
 
+/* On a phone the bar keeps the site's pages and drops the links into the
+   page itself (the #anchors). GRØD, two page names and the key fit at
+   360px; a third page will not, and that is the point to give the phone
+   bar a menu. The footer lists every page whatever the bar holds. */
 @media (max-width: 640px) {
-  .g-nav a:not(.g-bezel) { display: none; }
+  .g-nav { gap: 18px; }
+  .g-top { gap: 16px; }
+  .g-nav a[href^="#"] { display: none; }
   .g-h { letter-spacing: -0.02em; line-height: 1.02; }
   .g-xl { letter-spacing: -0.03em; line-height: 0.98; }
 }

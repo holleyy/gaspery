@@ -8,7 +8,7 @@ import '../../styles/grod-e.css';
 import '../../styles/grod-f.css';
 import '../../styles/grod-g.css';
 import '../../styles/grod-features.css';
-import { GROD_GO_PATH } from '../../lib/grod';
+import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
 
 /* /grod/features: what GRØD does, told by how long after a meeting it is.
    The page is built from the home page's own parts (the clause, the row,
@@ -66,9 +66,9 @@ FORM: a timeline of scales, agreed with the user on 2026-10-01 as the Features s
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->
   <header class="g-top">
-    <a class="g-brand" href="/grod/" aria-label="GRØD home">GRØD</a>
+    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
     <nav class="g-nav" aria-label="Site">
-      <a href="/grod/features/" aria-current="page">Features</a>
+      {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === '/grod/features/' ? 'page' : undefined}>{page.label}</a>)}
       <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
     </nav>
   </header>
