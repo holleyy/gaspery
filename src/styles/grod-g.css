@@ -55,7 +55,7 @@
   --g-key-ink: #232019;
   --g-key-bezel: 0 1px 1px -0.5px rgba(0, 0, 0, .70), 0 3px 6px -3px rgba(0, 0, 0, .50), inset 0 0 0 1px rgba(0, 0, 0, .10), inset 0 1px 0 rgba(255, 255, 255, .22);
   --g-key-bezel-press: 0 0.5px 0.5px -0.25px rgba(0, 0, 0, .75), inset 0 0 0 1px rgba(0, 0, 0, .12);
-  --g-cast: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 2px 2px rgba(0, 0, 0, .44)) drop-shadow(0 4px 7px rgba(0, 0, 0, .32));
+  --g-cast: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 1px 1px rgba(0, 0, 0, .5)) drop-shadow(0 3px 3px rgba(0, 0, 0, .3));
   --g-cast-bare: drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 3px 3px rgba(0, 0, 0, .5)) drop-shadow(0 8px 12px rgba(0, 0, 0, .4));
   --g-cast-card: 0 0 0 0.5px rgba(246, 241, 230, .3), 0 2px 2px rgba(0, 0, 0, .44), 0 4px 9px -3px rgba(0, 0, 0, .32);
   --g-lift: 0 2px 2px rgba(0, 0, 0, .44), 0 4px 9px -3px rgba(0, 0, 0, .32);

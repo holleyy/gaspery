@@ -188,3 +188,30 @@ sibling reachable by URL until it earns a place, or replaces the homepage.
 
 **Revisit if** the bold default stops being wanted: add a `system` state
 to the switch and make it the default, and the plate becomes a choice.
+
+## The GRØD site runs its own scale and the app's card lift
+
+**Decided:** 2026-10-01, with the Features page.
+
+`/grod` and `/grod/features` are the app's world laid on the site's tokens,
+not leaves of the notebook. They set type at poster size in Merriweather 300,
+swap Inter for the app's house face (Atkinson Hyperlegible Next), use no
+tracked capitals and no mono, and give the app's windows and floating parts
+the app's own card lift, where the rest of the site is flat. DESIGN.md
+documents all of it (§3 "The GRØD site's scale", §4 "The GRØD site's card
+lift", §5 "The GRØD site"), and every rule is scoped under `.g`.
+
+**Why.** The page sells a Mac app by showing it. A window shrunk into the
+notebook's reading column is a smudge, and a real window laid flat on bone
+paper of the same colour has no edge. The scale and the lift are what make
+the captures read as objects.
+
+**The lint.** The design detector's remaining flags on these files were
+confirmed intentional and silenced in `.impeccable/config.json`: the phone
+size of the live year's week numbers (7px), an alpha stop inside the dot
+field's mask, and the type and radius literals in the dev-only explorations
+(`src/styles/grod-a.css` to `grod-d.css`), which are never built for
+production and are kept as starting points for later pages.
+
+**Revisit if** a third page type wants the same parts: move the `.g` tokens
+into `global.css` as a second named scale instead of copying them.

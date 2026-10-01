@@ -20,6 +20,53 @@ test('the page is /grod, and its call to action is counted on its own go page', 
   assert.match(read('src/pages/grod/go.astro'), /GrodGo/);
 });
 
+test('the Features page is reachable from the home page and counts its beta click', () => {
+  const page = read('src/pages/grod/features.astro');
+  assert.match(page, /THESIS:/);
+  assert.match(page, /href=\{GROD_GO_PATH\}/);
+  assert.match(read('src/pages/grod/index.astro'), /href: '\/grod\/features\/'/);
+  // every time on the line has its section
+  const ids = [...page.matchAll(/\{ id: '([a-z]+)', label:/g)].map((m) => m[1]);
+  assert.equal(ids.length, 7);
+  for (const id of ids) assert.match(page, new RegExp(`<section class="ge-clause[^"]*" id="${id}"`), id);
+});
+
+test('the site has one footer: Features ends on the home page\'s motif', () => {
+  const motif = read('src/pages/grod/index.astro').match(/motif="([a-z]+)"/)?.[1];
+  assert.equal(motif, 'oats');
+  assert.match(read('src/pages/grod/features.astro'), new RegExp(`<GrodNight motif="${motif}"`));
+});
+
+test('every stack on the Features page names windows that exist', () => {
+  const page = read('src/pages/grod/features.astro');
+  const srcs = [...page.matchAll(/\{ n: \d, src: '([a-z-]+)'/g)].map((m) => m[1]);
+  assert.equal(srcs.length, 5);
+  for (const src of srcs) readFileSync(new URL(`../public/shots/grod/landing/${src}.webp`, import.meta.url));
+});
+
+test('every feature on the Features page has an address of its own', () => {
+  const page = read('src/pages/grod/features.astro');
+  // each heading links to its own row, lead or list, which carries the id
+  const headings = [...page.matchAll(/<h3 class="g-h2">(.*?)<\/h3>/g)];
+  assert.ok(headings.length >= 20);
+  for (const [, inner] of headings) {
+    const id = inner.match(/^<a class="gt-anchor" href="#([a-z-]+)">/)?.[1];
+    assert.ok(id, `no address on: ${inner}`);
+    assert.match(page, new RegExp(`<div class="(ge-row|gt-lead|gt-needs)" id="${id}">`), id);
+  }
+  // receipts are addressable too, and no address is used twice (the seven
+  // times' own ids are in the same list, so a clash with one fails here)
+  assert.doesNotMatch(page, /<div><dt>/);
+  const ids = [...page.matchAll(/ id="([^"{]+)"/g)].map((m) => m[1]);
+  assert.equal(new Set(ids).size, ids.length, 'duplicate id');
+});
+
+test('the Features page never counts the options', () => {
+  const page = read('src/pages/grod/features.astro');
+  assert.doesNotMatch(page, /\b(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+(themes|toppings|fonts|dock styles)\b/i);
+  assert.doesNotMatch(page, /—/);
+});
+
 test('the explorations are built in development only', () => {
   const route = read('src/pages/grod/[arm].astro');
   assert.match(route, /if \(!import\.meta\.env\.DEV\) return \[\];/);

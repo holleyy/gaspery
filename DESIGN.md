@@ -95,10 +95,76 @@ typography:
     fontSize: "16px"
     lineHeight: 1.62
     note: "A Spec section's supporting paragraph — a step below featureBody, so the standfirst above it stays dominant."
+  grodPoster:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(64px, 12.5vw, 184px)"
+    fontWeight: 300
+    lineHeight: 0.94
+    letterSpacing: "-0.035em"
+    note: "The GRØD site only (.g-xl). Light weight on the optical-size axis: at poster size the 800 of `display` would be a slab."
+  grodDisplay:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(52px, 8.4vw, 120px)"
+    fontWeight: 300
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
+    note: "The GRØD site only (.g-h): a page's heading and each clause or time."
+  grodTagline:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(52px, 8.8vw, 128px)"
+    fontWeight: 300
+    note: "The GRØD home page's one-line hero, set to the page's measure."
+  grodClause:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(52px, 7.2vw, 108px)"
+    fontWeight: 300
+    note: "A clause pinned beside its captures."
+  grodClauseWide:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(56px, 9vw, 132px)"
+    fontWeight: 300
+    note: "A clause standing over full-width windows (/grod and /grod/features)."
+  grodHeading:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(30px, 3.6vw, 48px)"
+    fontWeight: 400
+    lineHeight: 1.08
+    letterSpacing: "-0.015em"
+    note: "A feature's heading (.g-h2). On /grod/features, where a time holds several, it steps down to clamp(26px, 2.5vw, 34px)."
+  grodPromise:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(26px, 3vw, 42px)"
+    fontWeight: 400
+    fontStyle: "italic"
+    lineHeight: 1.15
+  grodWordmark:
+    fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(5rem, 19vw, 17rem)"
+    fontWeight: 900
+    letterSpacing: "0.05em"
+    note: "The night footer's wordmark, grounded off the bottom edge."
+  grodBody:
+    fontFamily: "'Atkinson Hyperlegible Next', Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontSize: "clamp(17px, 1.35vw, 19px)"
+    lineHeight: 1.55
+    note: "The app's house face, in place of Inter, on the GRØD site only."
+  grodYearWeek:
+    fontFamily: "'Atkinson Hyperlegible Next', Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontSize: "9px"
+    note: "The week numbers down the live year's months, at the size the app draws them (7px on a phone)."
+  grodYearWeekday:
+    fontFamily: "'Atkinson Hyperlegible Next', Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontSize: "8px"
+    note: "The weekday letters over each month of the live year."
 rounded:
   sm: "2px"
   card: "8px"
   card-expanded: "10px"
+  grod-mark: "3px"
+  grod-detail: "4px"
+  grod-focus: "12px"
+  grod-pop: "14px"
+  grod-chip: "999px"
 components:
   monogram:
     backgroundColor: "{colors.brand}"
@@ -328,6 +394,47 @@ only inside `.feature`; every page outside it keeps the `display` / `headline`
   Merriweather/Inter pairing above — requested only on feature pages, so
   ordinary pages still carry two faces as before.
 
+### The GRØD site's scale
+The GRØD site (`/grod`, `/grod/features`; every rule scoped under `.g` in
+`src/styles/grod*.css`) is the app's own world laid on the site's tokens, and
+it runs a poster scale far above the notebook's, declared as the `grod*` steps
+in the frontmatter above and applied nowhere else.
+- **Poster** (Merriweather 300, `clamp(64px, 12.5vw, 184px)`, line-height
+  0.94, letter-spacing -0.035em) and **Display** (Merriweather 300,
+  `clamp(52px, 8.4vw, 120px)`, 0.98, -0.025em): a page's heading and each
+  clause or time. Weight 300 on the optical-size axis, not the notebook's 800:
+  at this size the heavy cut is a slab. A clause pinned beside its captures is
+  `clamp(52px, 7.2vw, 108px)`; standing over full-width windows it is
+  `clamp(56px, 9vw, 132px)`; the home page's one-line tagline is
+  `clamp(52px, 8.8vw, 128px)`.
+- **Heading** (Merriweather 400, `clamp(30px, 3.6vw, 48px)`, 1.08): a
+  feature's heading. On the Features page, where a time holds several, it
+  steps down to `clamp(26px, 2.5vw, 34px)`.
+- **Promise** (Merriweather 400 italic, `clamp(26px, 3vw, 42px)`) and
+  **Quote** (Merriweather 400, `clamp(26px, 2.8vw, 40px)`): the one promise
+  and the app's own words, quoted.
+- **Lede** (Merriweather 400, `clamp(21px, 2vw, 30px)`, 1.3) and **Body**
+  (Atkinson Hyperlegible Next 400, `clamp(17px, 1.35vw, 19px)`, 1.55; one
+  step larger, `clamp(18px, 1.5vw, 21px)`, beside full-width windows).
+- **Small** (Atkinson Hyperlegible Next, 14 to 16px, sentence case, secondary
+  ink): captions, receipts, the time line, the bar.
+- **Wordmark** (Merriweather 900, `clamp(5rem, 19vw, 17rem)`, tracking
+  0.05em): the night footer's GRØD, grounded off the bottom edge.
+- **The live year's labels** (9px week numbers, 8px weekday letters, 7px on a
+  phone): the app's own year grid redrawn at the app's own sizes. They are
+  the only type on the site below the 10px floor, and they label a drawing;
+  nothing has to be read from them that the month names do not also say.
+
+Two faces, as everywhere, but the functional one changes: **Atkinson
+Hyperlegible Next**, the app's house font, takes Inter's place, and
+Merriweather stays because every capture's own heading is set in it, so the
+page's headline and the app's share a face.
+
+**The No-Tracked-Meta Rule (GRØD site).** No tracked capitals and no mono
+anywhere on the GRØD site: the notebook's `label` and `meta` steps are not
+used there. Labels are sentence case at 14 to 16px, and a timestamp is a
+timestamp. Small tracked lines over big type read as machine-set.
+
 ### Named Rules
 **The Printed-Heading Rule.** Serif (Merriweather) is reserved for what should
 read as printed — display, headings, titles, the wordmark. Sans (Inter) carries
@@ -357,6 +464,34 @@ shadow.
 feel separate, change its tonal layer (`surface` / `surface-raised`) or divide it
 with a hairline — never add a shadow. The only apparent "offset" allowed is the
 misregistration, and that is ink, not elevation.
+
+### The GRØD site's card lift
+The one place the Flat Press Rule does not hold. The GRØD site shows the
+app's real windows and floating parts as objects laid on the paper, so they
+take the app's own depth, ported from its `LiftTokens` `.card`: a tight
+contact cast that seats a thing on the sheet. It is defined once, as tokens
+on `.g` in `src/styles/grod.css`, with a second set for the night bands in
+`grod-g.css`.
+- **`--g-lift`** (box-shadow, `0 1px 1px` at 10%, `0 2px 3px` at 7%,
+  `0 7px 11px -5px` at 11%, all ink): a detail cut from a window.
+  **`--g-cast-card`** is the same with a 1px ring at 10%, for a pop-out card.
+- **`--g-cast`** (drop-shadow filter: a 0.5px edge at 30%, `0 1px 1px` at 12%,
+  `0 3px 3px` at 7%): windows and traced elements, whose shapes are their own.
+  A filter has no spread, so the wide third layer is left out; with it the
+  cast spilled round the sides and read as a soft shadow.
+  **`--g-cast-bare`** is the stronger cast for an element lifted clear of its
+  window.
+- **On the night ground** the cast is black, not ink, with a 0.5px paper edge
+  at 35%, because an ink shadow vanishes on ink.
+- **The key** (`.g-bezel`): the app's primary button (#D23984, 8px, hover
+  #C13779, pressed #B63573; on the night ground near-ink on #F06AA6), with a
+  contact drop, a ring and a top highlight. The notebook has no filled
+  buttons; the GRØD site has exactly this one.
+
+**The Seated-Not-Floating Rule (GRØD site).** Nothing on the GRØD site casts
+further than a few pixels. No tall blur, no glow, no coloured shadow: a cast
+wide enough to see as a shadow is wrong. `?depth=soft` on the home page shows
+the earlier tall blur, kept only for comparison.
 
 ## 5. Components
 
@@ -461,6 +596,36 @@ the 680px reading measure); an editorial page's spreads run media-dominant
 (560/360), and a quiet page's one shot runs the full width under the lede. The prose keeps its own caps, so only the images take the extra
 room: a Mac window shrunk into a prose column is a smudge, not proof.
 
+### The GRØD site
+The parts `/grod` and `/grod/features` are built from. All are scoped under
+`.g`; the pages are pinned to the light appearance and carry their own night
+bands, so the site's theme toggle does not appear on them.
+- **Captures.** Every image is a real capture of the app's Demo workspace,
+  never a mock. A **window** (`.g-win`) is cut to its own rounded corners with
+  alpha and shown at the capture's native 2000px. A **detail** (`.g-detail`)
+  is a region inside a window with a hairline (4px radius). A floating part
+  (popover, toast, palette, bar, card, pill) is traced to its own shape and
+  shown near the size it is in the app, never stretched to fill a column.
+  `scripts/grod-landing-crops.mjs` cuts all of them.
+- **Pop-out** (`GrodPopOut.astro`): a window with one region magnified on a
+  card (14px radius) overhanging its right edge. No outlines, no connectors.
+- **Stack** (`GrodStack.astro`): several views of one thing as overlapping
+  windows under a tab row. Any window or tab press brings that view to the
+  front; the row is always there, so no window can be lost.
+- **Time line** (`.gt-time`, Features): seven stops on one rule, pinned to
+  the top, marking the time being read. A stop is a 7px ring, inked magenta
+  when current. Every feature heading is a link to its own address and shows
+  the same stop when pointed at or arrived at.
+- **Night bands and footer** (`GrodNight.astro`): the light theme's ink
+  (#232019) as a ground, with the app's Riso teal (#2AA7C8) dot field at a
+  17px pitch fading downward, a 2px magenta seam under each band, and the
+  footer's oats on a paper horizon line. One footer for every GRØD page.
+- **Paper grain** (`.g--grain`): thresholded noise in the sheet, so the bone
+  ground reads as paper. Judge it at 1:1 pixels.
+- **Radii.** 3px (focus ring, a day in the year), 4px (a detail, a stack's
+  tab label), 8px (the key), 12px (focus on a stack window), 14px (the
+  pop-out card), and a full round for the year's filter chips.
+
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a
 generic layout. Reuse them deliberately; don't invent competing ones.
@@ -475,13 +640,13 @@ generic layout. Reuse them deliberately; don't invent competing ones.
 ### Do:
 - **Do** reuse an existing token before adding a new one. If nothing fits, that's a real gap — add it here and to `global.css` together, never leave it implicit in one component's inline values.
 - **Do** set anything printed (display, headings, titles, wordmark) in Merriweather and anything functional (body, meta, labels) in Inter.
-- **Do** let new page *types* break from the two-column rail layout (the GRØD app page is the first test) — but keep the same palette, type scale, and signature motifs. "Different structure, same ink," never "different structure, different system."
+- **Do** let new page *types* break from the two-column rail layout (the GRØD app page is the first test) — but keep the same palette, type scale, and signature motifs. "Different structure, same ink," never "different structure, different system." The GRØD site is the one sanctioned step further: same ink, its own poster scale and the app's own card lift (§3, §4), all scoped under `.g`.
 - **Do** check both color schemes **and** the accessibility gates (`prefers-reduced-transparency`, `prefers-contrast: more`) before calling any illustrated component done.
 - **Do** pair every status color with a text label — color is never the only signal.
 
 ### Don't:
 - **Don't** introduce a third ink or accent color into chrome. Two inks and a ground there; solve hierarchy with weight, size, and space — a study's own subject-matter ink is the one sanctioned exception (see The Identity Exception, §2).
-- **Don't** add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule).
+- **Don't** add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule). The GRØD site's card lift (§4) is the only exception, and it stays inside `.g`.
 - **Don't** scatter the misregistration across headlines by reflex — spend it once by default (see The Single-Impression Rule), and never let meaning depend on a blend mode.
 - **Don't** hardcode a light color value where a token exists — the token carries its dark twin.
 - **Don't** build a generic SaaS/startup landing: gradient hero, feature grid, "Get started free."

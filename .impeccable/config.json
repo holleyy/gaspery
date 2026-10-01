@@ -100,6 +100,66 @@
         "value": "40px",
         "createdAt": "2026-09-16T17:49:09.321Z",
         "reason": "User confirmed 40px is intentional: the studio fallback proof cards, approved in the 2026-09-16 studio spec and recorded in DECISIONS.md"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "7px",
+        "files": [
+          "src/styles/grod-year.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.704Z",
+        "reason": "User confirmed 2026-10-01: the live year's week numbers at phone width, the app's own year grid redrawn; documented in DESIGN.md §3 'The GRØD site's scale'"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0, 0, 0, .6)",
+        "createdAt": "2026-10-01T16:37:09.737Z",
+        "reason": "alpha stop inside the GRØD night bands' dot-field mask-image; masks use only the alpha channel, no colour renders (same case as rgba(0,0,0,.5) in .halftone)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/styles/grod-a.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.771Z",
+        "reason": "User confirmed 2026-10-01: dev-only GRØD exploration, never built for production; kept as a starting point for later pages (DECISIONS.md)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/styles/grod-b.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.804Z",
+        "reason": "User confirmed 2026-10-01: dev-only GRØD exploration, never built for production; kept as a starting point for later pages (DECISIONS.md)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/styles/grod-c.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.837Z",
+        "reason": "User confirmed 2026-10-01: dev-only GRØD exploration, never built for production; kept as a starting point for later pages (DECISIONS.md)"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/styles/grod-d.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.870Z",
+        "reason": "User confirmed 2026-10-01: dev-only GRØD exploration, never built for production; kept as a starting point for later pages (DECISIONS.md)"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "src/styles/grod-b.css"
+        ],
+        "createdAt": "2026-10-01T16:37:09.902Z",
+        "reason": "User confirmed 2026-10-01: dev-only GRØD exploration, never built for production (DECISIONS.md)"
       }
     ]
   }

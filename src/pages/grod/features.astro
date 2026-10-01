@@ -1,0 +1,404 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import GrodPopOut from '../../components/GrodPopOut.astro';
+import GrodStack from '../../components/GrodStack.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-e.css';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
+import '../../styles/grod-features.css';
+import { GROD_GO_PATH } from '../../lib/grod';
+
+/* /grod/features: what GRØD does, told by how long after a meeting it is.
+   The page is built from the home page's own parts (the clause, the row,
+   the window at actual size, the pop-out, the stack, the night footer); the
+   new part is the time line under the heading, which is also the page's
+   contents and stays pinned while it is read. Every feature has an address
+   of its own (/grod/features/#continuity), so an email or a support reply
+   can point at one; the address is on the feature's whole row, so its
+   picture arrives with its heading. The direction contract is the
+   first comment inside the page root (Astro strips a slot's leading
+   comment; a deeper one survives). */
+
+const times = [
+  { id: 'before', label: 'The minute before' },
+  { id: 'during', label: 'The hour itself' },
+  { id: 'after', label: 'The hour after' },
+  { id: 'week', label: 'The week after' },
+  { id: 'month', label: 'The month after' },
+  { id: 'year', label: 'The year after' },
+  { id: 'anytime', label: 'Any time' },
+];
+const shot = (name: string) => `/shots/grod/landing/${name}.webp`;
+
+/* The stacks. Tabs are listed in the app's own order; `n` is the place in
+   the stack, and the highest starts in front: Notes, the tab the app opens
+   on, and the Map, the view Tags opens on. */
+const meetingTabs = [
+  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
+  { n: 2, src: 'window-notes', label: 'Notes', alt: "The Notes tab of GRØD's meeting page: The story, Decisions, and the Ask panel over them." },
+  { n: 0, src: 'window-transcript', label: 'Transcript', alt: 'The Transcript tab: six lines, each with its minute and the person who said it.' },
+];
+const tagTabs = [
+  { n: 1, src: 'window-tags-map', label: 'Map', alt: "GRØD's Tags page as a map: two merge suggestions, then every tag as a block sized by its meetings. Team, 47, and Customers, 43, are the largest; Platform, Hiring, Product review, Trust and others are smaller." },
+  { n: 0, src: 'window-tags', label: 'Index', alt: "GRØD's Tags page as an index: the same two merge suggestions, then the tags in use lately and the ones cooling, each with a small strip of when it was used." },
+];
+---
+<Base
+  title="Features · GRØD"
+  description="What GRØD does, from the minute before a meeting to the year after it: a card before each call, both sides recorded with no bot, notes written around yours, decisions carried forward, and a year on one page. On this Mac."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain ge gf gg gt">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode read · /grod/features
+THESIS: What GRØD does, told by how long after a meeting it is: the minute before, the hour itself, the hour after, the week, the month, the year. It starts where every rival's "before, during, after" starts and keeps going where none of them can. It refuses the feature grid: time is the only order.
+OWN-WORLD: the home page's world unchanged: grained bone paper and the night ground with its dots in alternation, Merriweather 300 at poster size for the seven times, Atkinson Hyperlegible Next for the rest, windows at actual size, floating parts traced to their own shapes, the app's card lift and key.
+STORY: "It is useful a minute before the call, and still useful a year after." Read the times down the page, find the one that matters to you, then the honest list of what it needs, then the beta.
+FIRST VIEWPORT: the bar (GRØD, Features, Join the beta); "What GRØD does" at 120px; the two-sentence lede; the time line, seven stops across the page, which pins to the top on scroll and marks where you are; the night ground of the first time rising at the fold.
+SIGNATURE: the time line. It is the contents, the progress mark and the argument at once.
+FORM: a timeline of scales, agreed with the user on 2026-10-01 as the Features structure (arm d's zoom turned into time); seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="g-top">
+    <a class="g-brand" href="/grod/" aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Site">
+      <a href="/grod/features/" aria-current="page">Features</a>
+      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="gt-hero" aria-labelledby="h1">
+      <h1 class="g-h" id="h1"><span class="g-ghost"><span aria-hidden="true">What GRØD does</span>What GRØD does</span></h1>
+      <p class="g-lede">GRØD is a Mac app for the hour after a meeting, and the year after it. It records both sides of a call, writes the notes, and keeps everything findable, on this Mac.</p>
+      <p class="gt-follow">This page follows one meeting, a weekly product review, from the minute before it starts to the weeks after. Then it takes its place among a year of others.</p>
+    </section>
+
+    <nav class="gt-time" aria-label="On this page">
+      <ol>
+        {times.map((t) => <li><a href={`#${t.id}`} data-time={t.id}>{t.label}</a></li>)}
+      </ol>
+    </nav>
+
+    <!-- ==================== The minute before ==================== -->
+    <section class="ge-clause" id="before" data-band="dark" aria-labelledby="h-before">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-before">The minute before.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row" id="card">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#card">A card before each meeting</a></h3>
+            <p class="g-body">A few minutes before a scheduled meeting, a small card appears over your work. Join opens the link in your browser or conference app. If you would rather this one was not recorded, skip it from the card or the keyboard, without switching apps.</p>
+            <p class="g-meta">GRØD hands over the meeting address, never meeting content.</p>
+          </div>
+          <figure class="g-capture g-win gt-el gt-el--card">
+            <img src={shot('card')} width="640" height="124" alt="GRØD's pre-meeting card: Weekly product review, in 12 min, 60 min, Don't record, and a Join button." decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-row" id="agenda">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#agenda">Your day, on one page</a></h3>
+            <p class="g-body">The Agenda shows what is coming, what just happened, and the next meeting docked at the top. The further back you go, the quieter it gets, until older months hand you on to Timeline.</p>
+          </div>
+          <figure class="g-capture g-win">
+            <img src={shot('window-agenda')} width="2000" height="1440" alt="GRØD's Agenda: the next meeting docked at the top, today's others beneath it, then this week's meetings with a line each." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <dl class="g-receipts">
+          <div id="detection"><dt>It notices when a call starts</dt><dd>Turn on detection and GRØD watches for Zoom, Teams, Slack, FaceTime and Webex, on every microphone you have plugged in, and offers to record.</dd></div>
+          <div id="calendar"><dt>It records by itself only if you connect a calendar</dt><dd>Then it records scheduled meetings, and the card lets you skip any you would rather it left alone. Without a calendar, GRØD records when you tell it to. Setup explains this before anything is recorded.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== The hour itself ==================== -->
+    <section class="ge-clause" id="during" aria-labelledby="h-during">
+      <div class="ge-pin"><h2 class="g-h" id="h-during">The hour itself.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row" id="no-bot">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#no-bot">Both sides, no bot</a></h3>
+            <p class="g-body">GRØD records your microphone and the audio your conference app is already playing. Nothing joins the call and nothing announces itself. Telling the other person is still on you.</p>
+          </div>
+          <figure class="g-capture g-win">
+            <img src={shot('window-recording')} width="2000" height="1440" alt="A meeting page while GRØD records: the recording bar at the foot shows 08:42, the meeting's name, and Open, Flag, Live, pause and Stop." loading="lazy" decoding="async" />
+            <figcaption>Recording. The bar carries the time and the state; your notes stay open above it.</figcaption>
+          </figure>
+        </div>
+        <div class="ge-row" id="keeps-going">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#keeps-going">It keeps going</a></h3>
+            <p class="g-body">Swap to your AirPods mid-call and GRØD reconnects and carries on recording to the same file. If the other side's audio drops out, GRØD keeps what it heard and tells you exactly what happened.</p>
+          </div>
+          <figure class="g-capture g-win gt-el">
+            <img src={shot('bar-stalled')} width="1283" height="124" alt="The recording bar at 08:42 with a No system audio flag beside Open, Flag, Live, pause and Stop." loading="lazy" decoding="async" />
+            <figcaption>The other side went quiet. The bar says so, and keeps recording.</figcaption>
+          </figure>
+        </div>
+        <dl class="g-receipts">
+          <div class="gt-with-pill" id="pill">
+            <img class="gt-pill" src={shot('pill')} width="80" height="328" alt="GRØD's recording pill: the Ø, a level meter, pause, stop and transcript buttons, and the time, 08:54." loading="lazy" decoding="async" />
+            <dt>A pill, not a dashboard</dt>
+            <dd>A slim pill sits on the edge of your screen with the time and the state. The main window stays out of the way. A live transcript is there if you want it.</dd>
+          </div>
+          <div id="your-notes"><dt>Your notes, as you type them</dt><dd>Jot what matters in the notes pad while you talk. Those lines are yours, and they stay that way. Type nothing, and you still get notes.</dd></div>
+          <div id="recording"><dt>You always know it is recording</dt><dd>The menu bar icon, the floating pill and the recording bar all show it. Recording is never silently on.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== The hour after ==================== -->
+    <section class="ge-clause" id="after" data-band="dark" aria-labelledby="h-after">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-after">The hour after.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row" id="processing">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#processing">It tells you what it is doing</a></h3>
+            <p class="g-body">Transcribing. Improving transcript. Identifying speakers. Summarizing. Structuring notes. Each step shows while it runs, and your notes stay open the whole time.</p>
+          </div>
+          <figure class="g-capture g-win gt-el gt-el--processing">
+            <img src={shot('bar-processing')} width="794" height="112" alt="The bar after a meeting ends: Summarizing, with a thin line of progress beneath it." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+
+        <div class="gt-lead" id="notes">
+          <h3 class="g-h2"><a class="gt-anchor" href="#notes">Summary, Notes, Transcript</a></h3>
+          <p class="g-body">Every meeting has three views. Notes is a magic notepad: write something, and it comes back as your notes, enriched. Write nothing, and GRØD fills in what you need. Summary is the decisions, action items and open questions. Transcript is the exact words, with who said them.</p>
+        </div>
+        <GrodStack
+          tabs={meetingTabs}
+          caption="Summary, Notes, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front."
+        />
+
+        <div class="ge-row" id="ask">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#ask">Ask the meeting</a></h3>
+            <p class="g-body">Ask a question and get an answer drawn from the whole meeting, with a source you can click to jump to the moment. If the meeting did not cover it, GRØD says so.</p>
+            <p class="g-quote">“This meeting doesn't cover that.”</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src={shot('ask')} width="790" height="282" alt="The Ask panel: When do invitations go out? Invitations go to six teams on 21 April. That date supersedes the earlier 14 April note. Source: 3:02." loading="lazy" decoding="async" />
+            <figcaption>The answer, and its source at 3:02.</figcaption>
+          </figure>
+        </div>
+        <div class="ge-row" id="retry">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#retry">When it cannot finish, it says so</a></h3>
+            <p class="g-body">If something fails, GRØD says what happened in plain words, keeps the notes it already has, and offers to try again.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src={shot('retry')} width="1272" height="302" alt="A meeting's Notes tab with a plain notice: The briefing could not be regenerated after the source changed. Existing notes remain available. Retry." loading="lazy" decoding="async" />
+            <figcaption>The notes it already has stay. Retry is one press.</figcaption>
+          </figure>
+        </div>
+        <dl class="g-receipts">
+          <div id="notes-arrive"><dt>Notes that arrive around yours</dt><dd>GRØD writes the rest of the notes a section at a time, around the lines you typed. Your lines stay marked as yours. Switch to Original to see exactly what you wrote.</dd></div>
+          <div id="summary"><dt>A summary you can correct</dt><dd>Reword a decision. Tick an action item. Change who owns it. Remove what is wrong, and undo if you change your mind. Regenerating keeps your edits.</dd></div>
+          <div id="export"><dt>Take it anywhere</dt><dd>Export a meeting as three linked Markdown files: summary, notes and transcript. Or copy whichever tab you are reading.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== The week after ==================== -->
+    <section class="ge-clause" id="week" aria-labelledby="h-week">
+      <div class="ge-pin"><h2 class="g-h" id="h-week">The week after.</h2></div>
+      <div class="ge-body">
+        <div class="gt-lead" id="series">
+          <h3 class="g-h2"><a class="gt-anchor" href="#series">Recurring meetings, as one thing</a></h3>
+          <p class="g-body">A weekly meeting is one series with a history, not forty unrelated rows. Move between instances with a swipe. A week that was skipped stays a skipped week.</p>
+        </div>
+        <figure class="g-capture g-win">
+          <img src={shot('window-series')} width="2000" height="1440" alt="The series page for the weekly product review: Next, Tue 21 Apr; Today; Earlier, with 9 Apr marked No meeting, then 31 Mar, 24 Mar and 17 Mar with a line each." loading="lazy" decoding="async" />
+          <figcaption>One series: what is next, today, and every week before it.</figcaption>
+        </figure>
+        <div class="ge-row" id="continuity">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#continuity">It remembers what you decided</a></h3>
+            <p class="g-body">Open this week's instance and the decisions from the weeks before are waiting, as records, not as a summary someone wrote.</p>
+          </div>
+          <figure class="g-capture g-win gt-el gt-el--popover">
+            <img src={shot('popover')} width="698" height="870" alt="The series popover: Weekly product review, Weekly, 4 instances; Continuity, 3 decisions, dated 31 Mar, 24 Mar and 17 Mar; Next, Tue 21 Apr; Today; Open the series." loading="lazy" decoding="async" />
+            <figcaption>Continuity, on this week's instance.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== The month after ==================== -->
+    <section class="ge-clause" id="month" data-band="dark" aria-labelledby="h-month">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-month">The month after.</h2></div>
+      <div class="ge-body">
+        <div class="gt-lead" id="voices">
+          <h3 class="g-h2"><a class="gt-anchor" href="#voices">Voices you name once</a></h3>
+          <p class="g-body">GRØD separates speakers on your Mac and keeps track of each voice it hears. Name a voice once and every meeting where GRØD has already recognised it updates, and every meeting after knows who is speaking.</p>
+        </div>
+        <GrodPopOut
+          class="ge-figure"
+          window="window-person" detail="voice" mag={1.25}
+          alt="Maya Chen's page in GRØD: her email, Voice profiles, and her upcoming and past meetings."
+          detailAlt="Voice profiles: 1 recognised voice, used to label this person in transcripts. First heard 16 Apr 2026."
+          caption="Maya Chen's page. One recognised voice, first heard on 16 April."
+        />
+        <div class="ge-row" id="people">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#people">People, not contacts</a></h3>
+            <p class="g-body">Everyone you meet has a page led by the meetings you shared. Pick two people and see only the meetings they were both in.</p>
+          </div>
+          <figure class="g-capture g-win">
+            <img src={shot('window-shared')} width="2000" height="1440" alt="GRØD's People page with Ellis Morgan and Maya Chen selected, and a list of the three meetings they shared." loading="lazy" decoding="async" />
+            <figcaption>Two people picked; the meetings they shared.</figcaption>
+          </figure>
+        </div>
+        <div class="gt-lead" id="months">
+          <h3 class="g-h2"><a class="gt-anchor" href="#months">Months that notice things</a></h3>
+          <p class="g-body">Each month has a page that tells you what stood out: the first time you met someone, a topic that doubled, a week that went quiet. Every fact comes from your own records, so none of it is made up.</p>
+        </div>
+        <figure class="g-capture g-win">
+          <img src={shot('window-month')} width="2000" height="1440" alt="November 2025 in GRØD: 14 meetings, 10 hours, 9 people; What stood out: First met Nils Rud, on Tue 4 Nov; #Platform went from 2 meetings to 4; the weeks as bars." loading="lazy" decoding="async" />
+          <figcaption>November 2025: who you first met, what doubled, and the weeks as bars.</figcaption>
+        </figure>
+        <div class="gt-lead" id="tags">
+          <h3 class="g-h2"><a class="gt-anchor" href="#tags">Tags that tidy themselves, and draw you a map</a></h3>
+          <p class="g-body">“Design review” and “Design reviews” are one tag. GRØD suggests the odd merge, remembers your answer, and lets you undo it. Once you have used enough tags to draw one, they get a map: each tag sized by its meetings and coloured by how lately you used it. The Index is the same tags as a list, the live ones first.</p>
+        </div>
+        <GrodStack
+          tabs={tagTabs}
+          label="Tags, two views"
+          caption="The Map and the Index. Press a window, or its tab, to bring it to the front."
+        />
+      </div>
+    </section>
+
+    <!-- ==================== The year after ==================== -->
+    <section class="ge-clause" id="year" aria-labelledby="h-year">
+      <div class="ge-pin"><h2 class="g-h" id="h-year">The year after.</h2></div>
+      <div class="ge-body">
+        <div class="gt-lead" id="year-page">
+          <h3 class="g-h2"><a class="gt-anchor" href="#year-page">A year on one page</a></h3>
+          <p class="g-body">Every day you met, on one grid. Click a day or a week to open it. Transcripts and notes stay until you delete them, so last year is still there.</p>
+        </div>
+        <figure class="g-capture g-win gt-win--wide">
+          <img src={shot('window-year')} width="2000" height="1440" alt="GRØD's year page for 2026: every day a square, darker where there were more meetings." loading="lazy" decoding="async" />
+        </figure>
+        <div class="ge-row" id="search">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#search">Found, by the words or by the meaning</a></h3>
+            <p class="g-body">One shortcut, ⌘K, searches meetings, people and tags, by the words used or by what was meant. On a month page it searches that month.</p>
+          </div>
+          <figure class="g-capture g-win gt-el gt-el--palette">
+            <img src={shot('palette')} width="1116" height="956" alt="The command palette: November 2025, nils. Go to: November 2025, filtered to Nils Rud, 2 meetings. Meetings in November: two hiring loops." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-row" id="ask-everything">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#ask-everything">Ask across every meeting</a></h3>
+            <p class="g-body">Search looks across people, meetings and transcripts at once, and it can answer a question from your meetings.</p>
+          </div>
+          <figure class="g-capture g-win">
+            <img src={shot('window-search')} width="2000" height="1440" alt="GRØD's Search page for confidence ribbon decision: Answer from your meetings, two people and two meetings found, with the matching words marked." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Any time ==================== -->
+    <section class="ge-clause ge-clause--last" id="anytime" data-band="dark" aria-labelledby="h-anytime">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-anytime">Any time.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row" id="undo">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#undo">Undo, everywhere it counts</a></h3>
+            <p class="g-body">Delete, file, merge or remove, and a receipt appears with Undo. Deleting waits twelve seconds before it happens.</p>
+          </div>
+          <figure class="g-capture g-win gt-el gt-el--toast">
+            <img src={shot('toast')} width="375" height="67" alt="A receipt in GRØD: 2 notes deleted, with Undo." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-row" id="engines">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="gt-anchor" href="#engines">Choose your engines</a></h3>
+            <p class="g-body">Transcription runs on Apple's built-in speech model, with nothing to download. Summaries run on Apple Intelligence. If you want more, you can choose to download a higher-accuracy transcription model or a local summary model. Each is fetched over HTTPS and checked before it is used.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src={shot('engines')} width="1464" height="308" alt="GRØD's settings: Transcription engine. Apple, built-in, live, selected. Two larger models listed as not installed, with their sizes." loading="lazy" decoding="async" />
+            <figcaption>The built-in engine is selected. The others are yours to download, or not.</figcaption>
+          </figure>
+        </div>
+
+        <div class="gt-needs" id="needs">
+          <h3 class="g-h2"><a class="gt-anchor" href="#needs">What it needs, and what it does not do</a></h3>
+          <dl class="g-receipts">
+            <div id="mac"><dt>A Mac</dt><dd>An Apple silicon Mac running macOS 26 or later. Summaries use Apple Intelligence, or a local model you choose to download. Recording and transcription work without either.</dd></div>
+            <div id="apps"><dt>Any app that plays audio</dt><dd>Zoom, Microsoft Teams, Google Meet in a browser, Slack huddles, FaceTime, Webex and others. It also works for a conversation in the room, through your microphone.</dd></div>
+            <div id="offline"><dt>Offline, once it is set up</dt><dd>With the models it needs on your Mac, recording, transcription, search and summaries all run locally. The very first use may need macOS to fetch its own speech or intelligence assets.</dd></div>
+            <div id="accuracy"><dt>Good, and not perfect</dt><dd>It is a local model, and GRØD does not mark its own guesses, so a wrong line reads as confidently as a right one. Answers come with a source you can check in one click.</dd></div>
+            <div id="sync"><dt>No sync, today</dt><dd>There is no GRØD cloud to sync through, so it does not reach your other Macs or your phone.</dd></div>
+            <div id="consent"><dt>Telling people is on you</dt><dd>GRØD does not announce itself. Recording laws differ by place; check what applies to you.</dd></div>
+          </dl>
+        </div>
+
+        <div class="ge-close">
+          <figure class="g-capture g-win gt-el gt-el--dock">
+            <img src={shot('dock-breathe')} width="1200" height="118" alt="The top of GRØD's Agenda at the end of the day: That was your last meeting. Breathe." loading="lazy" decoding="async" />
+            <figcaption>What the Agenda says when the day's meetings are done.</figcaption>
+          </figure>
+          <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+          <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GrodNight motif="oats" note="Every capture on this page is the app, running its Demo workspace." />
+</div>
+
+<script>
+  /* The time line marks where the reader is: the last time whose section
+     has reached the upper part of the screen. On a narrow screen the line
+     scrolls sideways, and the current time is brought into view inside it
+     (never by scrolling the page). */
+  const line = document.querySelector<HTMLElement>('.gt-time');
+  const list = line?.querySelector('ol');
+  const links = Array.from(line?.querySelectorAll<HTMLAnchorElement>('a[data-time]') ?? []);
+  const sections = links.map((a) => document.getElementById(a.dataset.time ?? '')).filter((s): s is HTMLElement => !!s);
+  let current = '';
+  const mark = () => {
+    let now = '';
+    for (const s of sections) if (s.getBoundingClientRect().top <= innerHeight * 0.45) now = s.id;
+    if (now === current) return;
+    current = now;
+    for (const a of links) {
+      const on = a.dataset.time === now;
+      if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      if (on && list && list.scrollWidth > list.clientWidth) {
+        list.scrollTo({ left: a.offsetLeft - (list.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+      }
+    }
+  };
+  if (links.length) {
+    addEventListener('scroll', mark, { passive: true });
+    addEventListener('resize', mark);
+    mark();
+  }
+
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.querySelector<HTMLButtonElement>('.ge-share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split(/[?#]/)[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>

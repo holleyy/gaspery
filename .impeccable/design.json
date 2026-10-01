@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T00:52:15Z",
+  "generatedAt": "2026-10-01T16:38:24Z",
   "title": "Design System: Riso Notebook",
   "extensions": {
     "colorMeta": {
@@ -113,14 +113,119 @@
       "label": {
         "displayName": "Label",
         "purpose": "Eyebrows, meta lines, status pills. Inter 600, uppercase, 0.14em tracking."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Feature-format eyebrows and key labels. IBM Plex Mono 600, 12px, uppercase, 0.14em tracking. Feature pages only; never on the GRØD site."
+      },
+      "featureDisplay": {
+        "displayName": "Feature Display",
+        "purpose": "The feature format's hero heading. Merriweather 800, clamped up to the 56px display step."
+      },
+      "featureSection": {
+        "displayName": "Feature Section",
+        "purpose": "Section headings inside a feature body. Merriweather 800, clamp(26px, 3vw, 34px)."
+      },
+      "featureBody": {
+        "displayName": "Feature Body",
+        "purpose": "Body copy inside a feature body, a step above the reading column's 17px."
+      },
+      "featureDetail": {
+        "displayName": "Feature Detail",
+        "purpose": "A Spec section's supporting paragraph, a step below Feature Body."
+      },
+      "grodPoster": {
+        "displayName": "GRØD Poster",
+        "purpose": "GRØD site only (.g-xl). Merriweather 300 at poster size; the light cut, because 800 at this size is a slab."
+      },
+      "grodDisplay": {
+        "displayName": "GRØD Display",
+        "purpose": "GRØD site only (.g-h). A page's heading and each clause or time. Merriweather 300."
+      },
+      "grodTagline": {
+        "displayName": "GRØD Tagline",
+        "purpose": "The GRØD home page's one-line hero, set to the page's measure."
+      },
+      "grodClause": {
+        "displayName": "GRØD Clause",
+        "purpose": "A clause pinned beside its captures."
+      },
+      "grodClauseWide": {
+        "displayName": "GRØD Clause, wide",
+        "purpose": "A clause standing over full-width windows (/grod, /grod/features)."
+      },
+      "grodHeading": {
+        "displayName": "GRØD Heading",
+        "purpose": "A feature's heading (.g-h2). Merriweather 400. Steps down to clamp(26px, 2.5vw, 34px) on the Features page."
+      },
+      "grodPromise": {
+        "displayName": "GRØD Promise",
+        "purpose": "The one promise, in Merriweather 400 italic."
+      },
+      "grodWordmark": {
+        "displayName": "GRØD Wordmark",
+        "purpose": "The night footer's GRØD, Merriweather 900, grounded off the bottom edge."
+      },
+      "grodBody": {
+        "displayName": "GRØD Body",
+        "purpose": "Atkinson Hyperlegible Next, the app's house face, in place of Inter on the GRØD site. Small text is 14 to 16px, sentence case, never tracked capitals or mono."
+      },
+      "grodYearWeek": {
+        "displayName": "GRØD Year, week",
+        "purpose": "Week numbers in the live year, at the app's own size (7px on a phone). They label a drawing."
+      },
+      "grodYearWeekday": {
+        "displayName": "GRØD Year, weekday",
+        "purpose": "Weekday letters over each month of the live year."
       }
     },
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "g-lift",
+        "value": "0 1px 1px rgba(35, 32, 25, .10), 0 2px 3px rgba(35, 32, 25, .07), 0 7px 11px -5px rgba(35, 32, 25, .11)",
+        "purpose": "GRØD site only. The app's card lift (LiftTokens .card) as a box shadow: a detail cut from a window. The rest of the site is flat."
+      },
+      {
+        "name": "g-cast-card",
+        "value": "0 0 0 1px rgba(35, 32, 25, .10), 0 1px 1px rgba(35, 32, 25, .10), 0 2px 3px rgba(35, 32, 25, .07), 0 7px 11px -5px rgba(35, 32, 25, .11)",
+        "purpose": "GRØD site only. The lift with a hairline ring: a pop-out card."
+      },
+      {
+        "name": "g-cast",
+        "value": "drop-shadow(0 0 0.5px rgba(35, 32, 25, .30)) drop-shadow(0 1px 1px rgba(35, 32, 25, .12)) drop-shadow(0 3px 3px rgba(35, 32, 25, .07))",
+        "purpose": "GRØD site only. A filter, for windows and traced elements whose shapes are their own: a hairline edge and two contact layers, nothing wide enough to read as a shadow."
+      },
+      {
+        "name": "g-cast-night",
+        "value": "drop-shadow(0 0 0.5px rgba(246, 241, 230, .35)) drop-shadow(0 1px 1px rgba(0, 0, 0, .5)) drop-shadow(0 3px 3px rgba(0, 0, 0, .3))",
+        "purpose": "The same cast on a night band: black, not ink, with a paper edge, because an ink shadow vanishes on ink."
+      },
+      {
+        "name": "g-cast-bare",
+        "value": "drop-shadow(0 1px 1px rgba(35, 32, 25, .12)) drop-shadow(0 3px 4px rgba(35, 32, 25, .09)) drop-shadow(0 9px 12px rgba(35, 32, 25, .12))",
+        "purpose": "GRØD site only. The stronger cast for an element lifted clear of its window (the Continuity popover on /grod)."
+      },
+      {
+        "name": "g-key-bezel",
+        "value": "0 1px 1px -0.5px rgba(35, 32, 25, .30), 0 3px 6px -3px rgba(35, 32, 25, .16), inset 0 0 0 1px rgba(35, 32, 25, .13), inset 0 1px 0 rgba(255, 255, 255, .34)",
+        "purpose": "The GRØD key's bezel: a contact drop, a ring and a top highlight. Never a glow."
+      }
+    ],
     "motion": [
       {
         "name": "hover-color",
         "value": "color 0.15s ease",
         "purpose": "Link, heading, and nav hover shift to brand-bright. The only recurring transition."
+      },
+      {
+        "name": "g-ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "GRØD site. State changes in the live year and the film's reveal."
+      },
+      {
+        "name": "g-scroll-sift",
+        "value": "animation-timeline: view()",
+        "purpose": "GRØD site. The stack's windows arrive from the right and each clause rises 24px as it enters. Scroll-driven, off under prefers-reduced-motion."
       }
     ],
     "breakpoints": [
@@ -138,6 +243,11 @@
         "name": "mobile-sm",
         "value": "420px",
         "purpose": "Type-only step; shrinks the 404's Hero from 34px to 30px."
+      },
+      {
+        "name": "grod-collapse",
+        "value": "900px",
+        "purpose": "GRØD site. Clauses and rows drop to one column, the pinned clause unpins, the time line scrolls sideways, and the phone ending appears."
       }
     ],
     "accessibility": [
@@ -150,6 +260,11 @@
         "name": "increased-contrast",
         "value": "prefers-contrast: more",
         "purpose": "Same gate as reduced-transparency — meaning never depends on a blend mode."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "GRØD site. The hero film holds its poster with a Play control, and scroll-driven motion is off."
       }
     ]
   },
@@ -241,6 +356,38 @@
       "description": "The treatment for real photography — grayscale piped through an ink/paper duotone filter (SVG, defined once in Base.astro), then the halftone dot recipe laid full-bleed over the top. A photo run through the same press as everything else.",
       "html": "<figure class='ds-riso-photo'><div class='ds-riso-photo-img' role='img' aria-label='Duotone-treated photograph'></div></figure>",
       "css": ".ds-riso-photo { margin: 0; position: relative; border-radius: 8px; overflow: hidden; } .ds-riso-photo-img { width: 280px; height: 180px; background: linear-gradient(135deg, var(--color-ink), var(--color-paper)); } .ds-riso-photo::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(var(--color-teal) 1.1px, transparent 1.5px); background-size: 7px 7px; mix-blend-mode: multiply; } @media (prefers-color-scheme: dark) { .ds-riso-photo::after { mix-blend-mode: screen; } }"
+    },
+    {
+      "name": "GRØD Key",
+      "kind": "button",
+      "refersTo": "grod-key",
+      "description": "The GRØD site's one filled button: the app's primary key, with a contact bezel and no glow. The notebook itself has no filled buttons.",
+      "html": "<a class='ds-grod-key' href='#'>Join the beta</a>",
+      "css": ".ds-grod-key { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; border-radius: 8px; background: #D23984; color: #fff; font-family: 'Atkinson Hyperlegible Next', Inter, sans-serif; font-weight: 600; font-size: 15px; line-height: 1; text-decoration: none; box-shadow: 0 1px 1px -0.5px rgba(35, 32, 25, .30), 0 3px 6px -3px rgba(35, 32, 25, .16), inset 0 0 0 1px rgba(35, 32, 25, .13), inset 0 1px 0 rgba(255, 255, 255, .34); transition: background-color .12s ease, box-shadow .12s ease, transform .08s ease; } .ds-grod-key:hover { background: #C13779; } .ds-grod-key:active { background: #B63573; transform: translateY(0.5px); box-shadow: 0 0.5px 0.5px -0.25px rgba(35, 32, 25, .34), inset 0 0 0 1px rgba(35, 32, 25, .15); } .ds-grod-key:focus-visible { outline: 2px solid var(--color-teal-ink); outline-offset: 3px; }"
+    },
+    {
+      "name": "GRØD Time Line",
+      "kind": "nav",
+      "refersTo": "grod-time-line",
+      "description": "The Features page's contents and progress mark: stops on one rule, pinned to the top. A stop is a ring, inked magenta for the time being read.",
+      "html": "<nav class='ds-grod-time'><a href='#' aria-current='true'>The minute before</a><a href='#'>The hour itself</a><a href='#'>The hour after</a></nav>",
+      "css": ".ds-grod-time { display: flex; gap: 28px; padding: 0 4px; border-top: 1px solid var(--color-hairline); border-bottom: 1px solid var(--color-hairline); font-family: 'Atkinson Hyperlegible Next', Inter, sans-serif; } .ds-grod-time a { position: relative; padding: 15px 0 14px 15px; font-size: 15px; font-weight: 500; line-height: 1.2; white-space: nowrap; text-decoration: none; color: var(--color-ink-secondary); transition: color .15s ease; } .ds-grod-time a::before { content: ''; position: absolute; left: 0; top: 50%; width: 7px; height: 7px; margin-top: -4px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--color-ink-secondary); } .ds-grod-time a:hover { color: var(--color-ink); } .ds-grod-time a[aria-current] { color: var(--color-ink); font-weight: 600; } .ds-grod-time a[aria-current]::before { background: var(--color-brand); box-shadow: none; }"
+    },
+    {
+      "name": "GRØD Clause",
+      "kind": "custom",
+      "refersTo": "grod-display",
+      "description": "A clause or a time at poster size: Merriweather 300 on the optical-size axis. The page's one heading rides the 2px magenta ghost; the clauses do not.",
+      "html": "<h2 class='ds-grod-clause'>The week after.</h2>",
+      "css": ".ds-grod-clause { margin: 0; font-family: Merriweather, Georgia, serif; font-weight: 300; font-optical-sizing: auto; font-size: clamp(52px, 8.4vw, 120px); line-height: 0.98; letter-spacing: -0.025em; color: var(--color-ink); text-wrap: balance; }"
+    },
+    {
+      "name": "GRØD Night Band",
+      "kind": "custom",
+      "refersTo": "grod-night",
+      "description": "The light theme's ink as a ground, with the app's Riso teal dot field fading downward and a 2px magenta seam beneath. Alternates with grained bone paper down a GRØD page.",
+      "html": "<div class='ds-grod-night'><div class='ds-grod-night-dots'></div><p>The hour after.</p></div>",
+      "css": ".ds-grod-night { position: relative; padding: 40px 28px; background: #232019; color: #F6F1E6; box-shadow: 0 2px 0 #D63A86; overflow: hidden; } .ds-grod-night p { position: relative; margin: 0; font-family: Merriweather, Georgia, serif; font-weight: 300; font-size: 44px; line-height: 1; letter-spacing: -0.025em; } .ds-grod-night-dots { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, #2AA7C8 1.2px, transparent 1.4px); background-size: 17px 17px; background-position: 4px 7px; opacity: .16; -webkit-mask: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 55%, transparent 90%); mask: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 55%, transparent 90%); }"
     }
   ],
   "narrative": {
@@ -251,7 +398,8 @@
       "Serif prints, sans functions. Merriweather for anything that should read as printed; Inter for everything operational.",
       "Flat by tone, not shadow. Depth comes from `paper → surface → surface-raised` layering and hairlines; there are no box-shadows.",
       "One loud moment. The misregistered headline is spent once per page — the rail masthead everywhere, the Hero on the 404 — the rest is quiet.",
-      "Accessibility-gated ink. Every blend-mode effect degrades to solid ink under `prefers-reduced-transparency` / `prefers-contrast: more`; meaning never depends on a blend."
+      "Accessibility-gated ink. Every blend-mode effect degrades to solid ink under `prefers-reduced-transparency` / `prefers-contrast: more`; meaning never depends on a blend.",
+      "One sanctioned other world. The GRØD site (/grod, /grod/features) keeps the inks and the paper but runs its own poster scale in Merriweather 300, the app's house face for body, no tracked capitals, and the app's card lift on real captures. All of it is scoped under `.g`; nothing leaks into the notebook."
     ],
     "rules": [
       {
@@ -288,18 +436,28 @@
         "name": "The Flat Press Rule",
         "body": "Surfaces never lift off the page. If something needs to feel separate, change its tonal layer (`surface` / `surface-raised`) or divide it with a hairline — never add a shadow. The only apparent \"offset\" allowed is the misregistration, and that is ink, not elevation.",
         "section": "elevation"
+      },
+      {
+        "name": "The No-Tracked-Meta Rule (GRØD site)",
+        "body": "No tracked capitals and no mono anywhere on the GRØD site: the notebook's `label` and `meta` steps are not used there. Labels are sentence case at 14 to 16px, and a timestamp is a timestamp. Small tracked lines over big type read as machine-set.",
+        "section": "typography"
+      },
+      {
+        "name": "The Seated-Not-Floating Rule (GRØD site)",
+        "body": "Nothing on the GRØD site casts further than a few pixels. No tall blur, no glow, no coloured shadow: a cast wide enough to see as a shadow is wrong. `?depth=soft` on the home page shows the earlier tall blur, kept only for comparison.",
+        "section": "elevation"
       }
     ],
     "dos": [
       "Do reuse an existing token before adding a new one. If nothing fits, that's a real gap — add it here and to `global.css` together, never leave it implicit in one component's inline values.",
       "Do set anything printed (display, headings, titles, wordmark) in Merriweather and anything functional (body, meta, labels) in Inter.",
-      "Do let new page *types* break from the two-column rail layout (the GRØD app page is the first test) — but keep the same palette, type scale, and signature motifs. \"Different structure, same ink,\" never \"different structure, different system.\"",
+      "Do let new page *types* break from the two-column rail layout (the GRØD app page is the first test) — but keep the same palette, type scale, and signature motifs. \"Different structure, same ink,\" never \"different structure, different system.\" The GRØD site is the one sanctioned step further: same ink, its own poster scale and the app's own card lift (§3, §4), all scoped under `.g`.",
       "Do check both color schemes and the accessibility gates (`prefers-reduced-transparency`, `prefers-contrast: more`) before calling any illustrated component done.",
       "Do pair every status color with a text label — color is never the only signal."
     ],
     "donts": [
       "Don't introduce a third ink or accent color into chrome. Two inks and a ground there; solve hierarchy with weight, size, and space — a study's own subject-matter ink is the one sanctioned exception (see The Identity Exception, §2).",
-      "Don't add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule).",
+      "Don't add box-shadows, glows, or glassmorphism — the system is flat (see The Flat Press Rule). The GRØD site's card lift (§4) is the only exception, and it stays inside `.g`.",
       "Don't scatter the misregistration across headlines by reflex — spend it once by default (see The Single-Impression Rule), and never let meaning depend on a blend mode.",
       "Don't hardcode a light color value where a token exists — the token carries its dark twin.",
       "Don't build a generic SaaS/startup landing: gradient hero, feature grid, \"Get started free.\"",

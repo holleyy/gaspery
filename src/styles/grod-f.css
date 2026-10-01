@@ -13,7 +13,7 @@
 .gf .g-win { max-width: var(--gf-win); }
 .gf .ge-toast { max-width: 240px; }
 .gf .ge-stack { max-width: calc(var(--gf-win) + 120px); }
-.gf .ge-stack__deck { padding: 0 12% 120px 0; }
+.gf .ge-stack__deck { padding: 0 calc((var(--count, 3) - 1) * 6%) calc((var(--count, 3) - 1) * 60px) 0; }
 .gf .ge-stack__item { transform: translate(calc(var(--n) * 6%), calc(var(--n) * 60px)); }
 /* A paragraph and its detail share the page's width, so nothing sits
    alone on the left with an empty right. */

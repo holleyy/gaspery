@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import GrodNight from './GrodNight.astro';
 import GrodPopOut from './GrodPopOut.astro';
 import GrodYear from './GrodYear.astro';
+import GrodStack from './GrodStack.astro';
 import '../styles/grod.css';
 import '../styles/grod-e.css';
 import { existsSync, statSync } from 'node:fs';
@@ -21,6 +22,8 @@ interface Props {
   title: string;
   /* Where the wordmark links: the page's own address. */
   home?: string;
+  /* The bar's links, before the beta key. */
+  nav?: { href: string; label: string }[];
   /* The direction contract, emitted as the first comment inside the root. */
   contract: string;
   /* Extra classes on the root (gf for actual size, gg for the bands). */
@@ -36,7 +39,7 @@ interface Props {
   /* The app in the hero: the Agenda, beside the words. */
   heroMedia?: 'none' | 'agenda';
 }
-const { arm, home = `/grod/${arm}/`, title, contract, class: cls = '', dark = [], motif = 'sun', hero = 'remembers', year = 'capture', heroMedia = 'none' } = Astro.props;
+const { arm, home = `/grod/${arm}/`, nav = [{ href: '#mac', label: 'On this Mac' }], title, contract, class: cls = '', dark = [], motif = 'sun', hero = 'remembers', year = 'capture', heroMedia = 'none' } = Astro.props;
 
 /* The hero's films. Each is used as soon as it exists in /public; the
    first one present plays, and ?film=<id> shows another, to compare. Until
@@ -56,12 +59,6 @@ const films = heroMedia === 'agenda'
   : [];
 const film = films[0];
 const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
-
-const tabs = [
-  { n: 0, src: 'window-notes', label: 'Notes', alt: "The Notes tab of GRØD's meeting page: The story, Decisions, and the Ask panel over them." },
-  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
-  { n: 2, src: 'window-transcript', label: 'Transcript', alt: 'The Transcript tab: six lines, each with its minute and the person who said it.' },
-];
 ---
 <Base
   title={title}
@@ -85,7 +82,7 @@ const tabs = [
   <header class="g-top">
     <a class="g-brand" href={home} aria-label="GRØD home">GRØD</a>
     <nav class="g-nav" aria-label="Page">
-      <a href="#mac">On this Mac</a>
+      {nav.map((link) => <a href={link.href}>{link.label}</a>)}
       <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
     </nav>
   </header>
@@ -128,20 +125,7 @@ const tabs = [
       {band('said') && <div class="g-dots" aria-hidden="true"></div>}
       <div class="ge-pin"><h2 class="g-h" id="h-said">what was said.</h2></div>
       <div class="ge-body">
-        <figure class="g-capture ge-stack" aria-label="One meeting, three tabs">
-          <div class="ge-stack__tabs" role="group" aria-label="Bring a tab to the front">
-            {tabs.map((t) => <button type="button" class="ge-stack__tabbtn" data-n={t.n} aria-pressed={t.n === 2 ? 'true' : 'false'}>{t.label}</button>)}
-          </div>
-          <div class="ge-stack__deck">
-            {tabs.map((t) => (
-              <div class="ge-stack__item g-win" style={`--n:${t.n}`} data-n={t.n} role="button" tabindex="0" aria-label={`Bring the ${t.label} tab to the front`}>
-                <img src={`/shots/grod/landing/${t.src}.webp`} width="2000" height="1440" alt={t.alt} decoding="async" loading="lazy" />
-                <span class="ge-stack__tab" aria-hidden="true">{t.label}</span>
-              </div>
-            ))}
-          </div>
-          <figcaption>Notes, Summary, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front.</figcaption>
-        </figure>
+        <GrodStack />
         <div class="ge-row">
           <div class="ge-row__text">
             <p class="g-body">Ask a question and the answer shows where it came from: the minute, the line, the person. Ask something the meeting didn't cover, and it says so.</p>
@@ -275,27 +259,6 @@ const tabs = [
 </div>
 
 <script>
-  /* The stack works like the app's tabs: press any window, or any tab in
-     the row above, and that window comes to the front. The row is always
-     there, so no window can be lost behind another. */
-  const stack = document.querySelector<HTMLElement>('.ge-stack');
-  const items = Array.from(stack?.querySelectorAll<HTMLElement>('.ge-stack__item') ?? []);
-  const buttons = Array.from(stack?.querySelectorAll<HTMLButtonElement>('.ge-stack__tabbtn') ?? []);
-  const front = (n: string | undefined) => {
-    if (!n) return;
-    for (const item of items) {
-      const top = item.dataset.n === n;
-      item.style.zIndex = top ? String(items.length + 1) : item.dataset.n ?? '0';
-      item.classList.toggle('is-front', top);
-    }
-    for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.n === n));
-  };
-  for (const item of items) {
-    item.addEventListener('click', () => front(item.dataset.n));
-    item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); front(item.dataset.n); } });
-  }
-  for (const b of buttons) b.addEventListener('click', () => front(b.dataset.n));
-
   /* The hero's film. ?film=<id> swaps in another cut, to compare. It plays
      only while it is on screen; a reader who asked for less motion keeps
      the poster until they press play; and anyone can stop it, because it
