@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/grod-b.css';
+import { GROD_GO_PATH } from '../../lib/grod';
+
+/* Arm "b" of the /grod test (see src/lib/grod.ts): the things it noticed.
+   The direction contract is the first comment inside the page root (Astro
+   strips a slot's leading comment; a deeper one survives). */
+
+const goPath = GROD_GO_PATH;
+---
+<Base
+  title="GRØD · Meetings, distilled"
+  description="Eight things GRØD noticed in one team's meetings, each a record you can open. A private, Mac-native memory for your meetings. Your meeting content never leaves this Mac."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="gb-root">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm b
+THESIS: The page is a sequence of sentences GRØD wrote from its own records, one per viewport at poster size, each with the capture it came from. It refuses marketing copy as the headline: the product's output is the headline, and the page's own voice stays small.
+OWN-WORLD: bone paper; Merriweather 300 sentences up to 112px; Atkinson Hyperlegible Next for the standfirst, captions and body; magenta only where the app uses it (the ghost on the first sentence, the beta bezel); captures at 2× on hairline-bordered paper with a soft offset shadow; no cards, no grid.
+STORY: "It noticed that on its own?" Eight sentences, each opening a record, then the one reason it can (nothing ages out), then the beta.
+FIRST VIEWPORT: the bar (GRØD, Join the beta); the standfirst in two short lines; "First met Nils Rud, on Tue 4 Nov." at 112px across two lines; the source line (November 2025 · What stood out · the month page); the month page's What stood out block cropped at 2×, its bottom edge at the fold.
+FORM: the poster of noticed things, user-pinned (direction 4 of the four talked through on 2026-09-30); seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="gb-top">
+    <a class="gb-brand" href="/grod/b/" aria-label="GRØD home">GRØD</a>
+    <nav class="gb-nav" aria-label="Page">
+      <a href="#why">Why it can</a>
+      <a class="gb-bezel" href={goPath}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <p class="gb-stand"><span>Eight things GRØD noticed in one team's meetings.</span> <span>Each one is a record you can open in the app, not a line written for this page.</span></p>
+
+    <section class="gb-fact gb-fact--lead" aria-labelledby="h1">
+      <h1 class="gb-sentence" id="h1"><span class="gb-sentence__ghost" aria-hidden="true">First met Nils Rud, on Tue 4&nbsp;Nov.</span>First met Nils Rud, on Tue 4&nbsp;Nov.</h1>
+      <p class="gb-source"><span>November 2025</span><span>What stood out</span><span>the month page</span></p>
+      <figure class="gb-capture">
+        <img src="/shots/grod/landing/stood-out.webp" width="1215" height="410" alt="The top of GRØD's month page for November 2025: 14 meetings, 10 hours, 9 people, and under What stood out the lines First met Nils Rud, on Tue 4 Nov and #Platform went from 2 meetings to 4." decoding="async" fetchpriority="high" />
+      </figure>
+      <p class="gb-why">Nils's hiring loop was on the 4th. Nobody typed that; the month page noticed it from the meetings it holds.</p>
+    </section>
+
+    <section class="gb-next" id="why" aria-label="What follows">
+      <p class="gb-why">Seven more sentences follow, each with its record: the skipped week, #Platform, the two tags that were one, the recognised voice, the answer with its source at 3:02, the refusal, the deletion receipt. Then the reason it can notice all this, and the beta.</p>
+    </section>
+  </main>
+</div>
+</Base>

@@ -1,0 +1,102 @@
+/* /grod/b · the things it noticed.
+
+   Same world as /grod/a (the site's Riso tokens, Merriweather for display
+   because the captures set their headings in it, Atkinson Hyperlegible
+   Next as the app's own body face). This arm is typographic: the product's
+   sentences at poster size, the page's own voice small beneath them. */
+
+.gb-root {
+  --gb-serif: "Merriweather", Georgia, "Times New Roman", serif;
+  --gb-sans: "Atkinson Hyperlegible Next", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --gb-max: 1200px;
+  --gb-pad: clamp(20px, 4vw, 56px);
+
+  font-family: var(--gb-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+.gb-root ::selection { background: color-mix(in srgb, var(--color-brand) 28%, transparent); }
+.gb-root :focus-visible { outline: 2px solid var(--color-teal-ink); outline-offset: 3px; border-radius: 3px; }
+.gb-root a { color: var(--color-brand-strong); text-decoration: none; }
+.gb-root a:hover { color: var(--color-brand-strong-hover); }
+:where(.gb-root) p { margin: 0; }
+
+/* ---- Bar ---------------------------------------------------------- */
+.gb-top {
+  max-width: var(--gb-max); margin: 0 auto; padding: 18px var(--gb-pad) 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.gb-brand { font-weight: 700; font-size: 15px; letter-spacing: 0.12em; color: var(--color-brand); }
+.gb-brand:hover { color: var(--color-brand); }
+.gb-nav { display: flex; align-items: center; gap: 28px; font-size: 15px; font-weight: 500; }
+.gb-nav a:not(.gb-bezel) { color: var(--color-ink); }
+.gb-nav a:not(.gb-bezel):hover { color: var(--color-brand-strong); }
+.gb-bezel {
+  display: inline-block; padding: 9px 16px 10px; border-radius: 6px;
+  background: var(--color-brand); color: var(--color-paper); font-weight: 600; font-size: 15px;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 12%, transparent), 0 6px 14px -8px color-mix(in srgb, var(--color-brand) 70%, transparent);
+  transition: background-color .15s ease, transform .15s ease;
+}
+.gb-root .gb-bezel { color: var(--color-paper); }
+.gb-bezel:hover { background: var(--color-brand-strong-hover); transform: translateY(-1px); }
+
+/* ---- The standfirst -------------------------------------------------- */
+.gb-stand span { display: block; }
+.gb-stand {
+  max-width: var(--gb-max); margin: 56px auto 0; padding: 0 var(--gb-pad);
+  font-size: clamp(18px, 1.5vw, 21px); line-height: 1.45; color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+/* ---- A noticed thing ------------------------------------------------- */
+.gb-fact { max-width: var(--gb-max); margin: 0 auto; padding: 40px var(--gb-pad) 0; }
+.gb-fact--lead { padding-top: 44px; }
+
+.gb-sentence {
+  position: relative; margin: 0;
+  font-family: var(--gb-serif); font-weight: 300; font-optical-sizing: auto;
+  font-size: clamp(44px, 7.6vw, 112px); line-height: 1.02; letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+/* The one print moment: the first sentence riding a misregistered ghost. */
+.gb-sentence__ghost {
+  position: absolute; inset: 0; transform: translate(3px, 3px);
+  color: var(--color-brand); mix-blend-mode: multiply; pointer-events: none; user-select: none;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .gb-sentence__ghost { mix-blend-mode: screen; } }
+:root[data-theme='dark'] .gb-sentence__ghost { mix-blend-mode: screen; }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .gb-sentence__ghost { display: none; } }
+
+/* Where the sentence came from, as the app labels it. Tracked Atkinson
+   caps like the app's own section labels; never mono. */
+.gb-source {
+  display: flex; flex-wrap: wrap; gap: 6px 0; margin-top: 22px;
+  font-size: 15px; font-weight: 500; color: var(--color-ink-secondary);
+}
+.gb-source span + span::before { content: "·"; margin: 0 10px; color: var(--color-hairline); }
+
+.gb-capture {
+  margin: 28px 0 0; padding: 0;
+  border: 1px solid var(--color-hairline); border-radius: 6px; overflow: hidden;
+  background: #F6F1E6;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--color-ink) 6%, transparent), 0 24px 48px -28px color-mix(in srgb, var(--color-ink) 55%, transparent);
+}
+.gb-capture img { display: block; width: 100%; height: auto; }
+
+.gb-why {
+  margin-top: 22px; max-width: 62ch;
+  font-size: clamp(17px, 1.35vw, 19px); line-height: 1.5; text-wrap: pretty;
+}
+
+.gb-next { max-width: var(--gb-max); margin: 0 auto; padding: 96px var(--gb-pad) 120px; }
+
+@media (max-width: 640px) {
+  .gb-nav a:not(.gb-bezel) { display: none; }
+  .gb-stand { margin-top: 28px; }
+  .gb-stand span { display: inline; }
+  .gb-source { display: block; line-height: 1.7; }
+  .gb-source span + span::before { margin: 0 8px; }
+  .gb-sentence { line-height: 1.06; letter-spacing: -0.02em; }
+}

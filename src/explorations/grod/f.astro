@@ -1,0 +1,20 @@
+---
+import GrodSentence from '../../components/GrodSentence.astro';
+import '../../styles/grod-f.css';
+
+/* /grod/f: /grod/e's sentence with the app at actual size: one column,
+   every window at the width it has on a Mac. The page itself is
+   src/components/GrodSentence.astro. */
+
+const contract = `
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm f (e at actual size)
+THESIS: The page is one sentence, read at the speed of scroll, and the app is shown at the size it is. "It remembers" fills the first screen; each clause sits above its captures, and every window is as wide as it is on a Mac. It refuses the shrunken screenshot as much as the feature grid.
+OWN-WORLD: grained bone paper; Merriweather 300 clauses up to 132px; Merriweather ledes, Atkinson Hyperlegible Next for body and captions, sentence case, never tracked; windows at 1000 points on the paper with a real shadow; the night footer, ink ground with teal dots and the wordmark at 19vw.
+STORY: "It remembers... what was said. Who said it. What I decided. For as long as I keep it. On this Mac." Then the beta, then night.
+FIRST VIEWPORT: the bar; "It remembers" at 184px; the rest of the sentence at 44px in the secondary ink; the lede with the promise in italic; the beta bezel. The first clause's top edge shows at the fold.
+SIGNATURE: the three tabs as a stack of actual-size windows, sifting in from the right; press any window or its tab and it comes to the front.
+FORM: one sentence in clauses, as arm e, with the app at actual size. User-requested on 2026-10-01 ("shall we get an F with bigger images?"); seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+`;
+---
+<GrodSentence arm="f" title="GRØD · It remembers, at actual size" contract={contract} class="gf" />

@@ -1,0 +1,37 @@
+/* /grod/f · the sentence, at actual size.
+
+   Loads after grod-e.css and undoes its two-column clause: the clause sits
+   above its captures, and every window is shown at the width it has on a
+   Mac (the captures are 2× of a 1000-point window), so nothing is shrunk. */
+
+.gf { --gf-win: 1000px; }
+.gf .ge-clause { grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: 88px; }
+.gf .ge-pin { position: static; }
+.gf .ge-pin .g-h { font-size: clamp(56px, 9vw, 132px); }
+.gf .ge-body { gap: 56px; padding-bottom: 72px; }
+.gf .ge-body .g-body { max-width: 56ch; font-size: clamp(18px, 1.5vw, 21px); }
+.gf .g-win { max-width: var(--gf-win); }
+.gf .ge-toast { max-width: 240px; }
+.gf .ge-stack { max-width: calc(var(--gf-win) + 120px); }
+.gf .ge-stack__deck { padding: 0 12% 120px 0; }
+.gf .ge-stack__item { transform: translate(calc(var(--n) * 6%), calc(var(--n) * 60px)); }
+/* A paragraph and its detail share the page's width, so nothing sits
+   alone on the left with an empty right. */
+.gf .ge-row { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px clamp(32px, 5vw, 72px); align-items: center; }
+.gf .ge-row__text .g-body { max-width: 40ch; }
+.gf .ge-figure { max-width: calc(var(--gf-win) + 140px); }
+.gf .ge-proof { gap: 36px; }
+.gf .ge-proof__pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); max-width: 1120px; }
+.gf .ge-proof .ge-row__text .g-body { max-width: 56ch; }
+.gf .ge-clause--last .g-receipts { max-width: 900px; }
+
+@keyframes ge-sift {
+  from { transform: translate(calc(var(--n) * 6% + 60%), calc(var(--n) * 60px - 24px)) rotate(2.5deg); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translate(calc(var(--n) * 6%), calc(var(--n) * 60px)) rotate(0deg); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .gf .ge-row, .gf .ge-proof__pair { grid-template-columns: minmax(0, 1fr); }
+  .gf .ge-stack__item { transform: translate(calc(var(--n) * 3%), calc(var(--n) * 22px)); }
+}

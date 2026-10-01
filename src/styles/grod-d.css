@@ -1,0 +1,63 @@
+/* /grod/d · powers of ten.
+
+   Each scale is a tall section with a sticky stage. As you scroll, the
+   next stage rises over the last and its capture grows from a distance to
+   full size; the previous one stays beneath, receding. Without scroll-
+   driven animation support, or with reduced motion, the stages simply
+   stack: the words and the capture, one scale at a time. */
+
+.gd-scale { position: relative; min-height: 165vh; }
+.gd-scale:last-of-type { min-height: 140vh; }
+.gd-stage {
+  position: sticky; top: 0; min-height: 100dvh;
+  max-width: var(--g-max); margin: 0 auto; padding: 48px var(--g-pad) 40px;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 5vw, 72px); align-items: center;
+  /* each stage covers the last, so it carries the sheet's grain itself */
+  background: var(--color-paper) var(--g-grain) 0 0 / 240px 240px;
+}
+.gd-words { display: grid; gap: 18px; align-content: center; }
+.gd-words .g-xl { font-size: clamp(56px, 9.6vw, 148px); }
+.gd-words .g-lede { max-width: 22ch; }
+.gd-body { max-width: 44ch; }
+.gd-words .g-cue { margin-top: 12px; }
+.gd-figure { width: 100%; align-self: center; transform-origin: 50% 50%; }
+.gd-figure--detail { max-width: 640px; justify-self: center; }
+.gd-figure--element { max-width: 420px; justify-self: center; }
+.gd-figure--pop { --overhang: 10%; }
+
+/* The zoom: the capture grows from 0.62 to 1 as its stage arrives. */
+@supports (animation-timeline: view()) {
+  .gd-figure {
+    animation: gd-zoom linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+  .gd-words { animation: gd-fade linear both; animation-timeline: view(); animation-range: entry 20% entry 100%; }
+}
+@keyframes gd-zoom {
+  from { transform: scale(.62); opacity: .35; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes gd-fade {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- And back out ----------------------------------------------------- */
+.gd-out {
+  position: relative; max-width: var(--g-max); margin: 0 auto; padding: 96px var(--g-pad) 80px;
+  display: grid; gap: 48px; background: var(--color-paper) var(--g-grain) 0 0 / 240px 240px;
+  border-top: 1px solid var(--color-hairline);
+}
+.gd-out .g-xl { font-size: clamp(48px, 7.4vw, 112px); }
+.gd-out__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 40px clamp(32px, 5vw, 72px); align-items: start; }
+.gd-out__grid .g-promise { margin-top: 24px; }
+.gd-year-small { max-width: 640px; }
+.gd-close { display: grid; gap: 18px; padding-top: 32px; border-top: 1px solid var(--color-hairline); }
+
+@media (max-width: 900px) {
+  .gd-scale, .gd-scale:last-of-type { min-height: 0; }
+  .gd-stage { position: static; min-height: 0; grid-template-columns: 1fr; padding: 56px var(--g-pad) 24px; }
+  .gd-out__grid { grid-template-columns: 1fr; }
+  .gd-figure { animation: none !important; }
+}

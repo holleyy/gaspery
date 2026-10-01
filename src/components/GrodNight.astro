@@ -1,0 +1,28 @@
+---
+/* The bold footer: night. Ported from the daybreak draft of the old GRØD
+   site (grodappsite/draft-daybreak.html): the ink ground, a field of teal
+   dots fading downward, a colophon, a motif on a paper horizon line, and
+   the wordmark at poster size, grounded off the bottom edge. The motif is
+   the half-set sun, or the bowl of oats on arm g. */
+
+interface Props {
+  note?: string;
+  motif?: 'sun' | 'oats';
+}
+const { note = 'Every capture on this page is the app, running its Demo workspace.', motif = 'sun' } = Astro.props;
+---
+<footer class="g-night" data-motif={motif}>
+  <div class="g-dots" aria-hidden="true"></div>
+  <div class="g-night__colophon">
+    <span>GRØD is made by <a href="https://gaspery.com/">Gaspery</a>.</span>
+    <span>{note}</span>
+    <span><em>Your meeting content never leaves this Mac.</em></span>
+  </div>
+  <div class="g-night__horizon" aria-hidden="true">
+    {motif === 'sun'
+      ? <div class="g-night__sun"></div>
+      : <img class="g-night__oats" src="/shots/grod/landing/oats.svg" width="520" height="340" alt="" loading="lazy" decoding="async" />}
+    <div class="g-night__line"></div>
+  </div>
+  <span class="g-night__word" aria-hidden="true">GRØD</span>
+</footer>

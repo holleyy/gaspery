@@ -1,0 +1,355 @@
+---
+import Base from '../layouts/Base.astro';
+import GrodNight from './GrodNight.astro';
+import GrodPopOut from './GrodPopOut.astro';
+import GrodYear from './GrodYear.astro';
+import '../styles/grod.css';
+import '../styles/grod-e.css';
+import { existsSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+import { GROD_GO_PATH } from '../lib/grod';
+
+/* The sentence page: five clauses, each with the real captures for it.
+   Arms e, f, g and h are this one page cut four ways (see their files for
+   each contract); the differences are layout classes, which clauses print
+   on the night ground, the footer's motif, how the hero opens, and whether
+   the year is the app's capture or the live one. The live page at /grod
+   is the h cut; e, f and g are explorations (src/explorations/grod). */
+
+interface Props {
+  arm: 'e' | 'f' | 'g' | 'h';
+  title: string;
+  /* Where the wordmark links: the page's own address. */
+  home?: string;
+  /* The direction contract, emitted as the first comment inside the root. */
+  contract: string;
+  /* Extra classes on the root (gf for actual size, gg for the bands). */
+  class?: string;
+  /* Clause ids printed on the night ground. */
+  dark?: string[];
+  motif?: 'sun' | 'oats';
+  /* How the hero opens: on the sentence, or on the tagline with the
+     sentence beneath it. */
+  hero?: 'remembers' | 'distilled';
+  /* The fourth clause's year: the app's capture, or the live year. */
+  year?: 'capture' | 'live';
+  /* The app in the hero: the Agenda, beside the words. */
+  heroMedia?: 'none' | 'agenda';
+}
+const { arm, home = `/grod/${arm}/`, title, contract, class: cls = '', dark = [], motif = 'sun', hero = 'remembers', year = 'capture', heroMedia = 'none' } = Astro.props;
+
+/* The hero's films. Each is used as soon as it exists in /public; the
+   first one present plays, and ?film=<id> shows another, to compare. Until
+   one exists the still stands in, and it stays as the poster and the
+   reduced-motion fallback after. Each address carries the file's own
+   stamp, so a browser that cached an earlier cut cannot go on showing it. */
+const LOOP_DIR = '/shots/grod/landing/loop';
+const FILMS = [
+  { id: 'continuity', label: "GRØD: the Agenda, the weekly review opened, its series popover with Continuity, and a two-finger swipe back to the Agenda." },
+  { id: 'agenda', label: "GRØD: the Agenda, a meeting opened, and a two-finger swipe back to the Agenda." },
+];
+const filmFile = (id: string, ext: string) => join(process.cwd(), 'public', `${LOOP_DIR}/${id}.${ext}`);
+const filmSrc = (id: string, ext: string) =>
+  existsSync(filmFile(id, ext)) ? `${LOOP_DIR}/${id}.${ext}?v=${Math.round(statSync(filmFile(id, ext)).mtimeMs / 1000).toString(36)}` : undefined;
+const films = heroMedia === 'agenda'
+  ? FILMS.map((f) => ({ ...f, webm: filmSrc(f.id, 'webm'), mp4: filmSrc(f.id, 'mp4') })).filter((f) => f.webm || f.mp4)
+  : [];
+const film = films[0];
+const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
+
+const tabs = [
+  { n: 0, src: 'window-notes', label: 'Notes', alt: "The Notes tab of GRØD's meeting page: The story, Decisions, and the Ask panel over them." },
+  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
+  { n: 2, src: 'window-transcript', label: 'Transcript', alt: 'The Transcript tab: six lines, each with its minute and the person who said it.' },
+];
+---
+<Base
+  title={title}
+  description="GRØD remembers what was said, who said it, and what you decided, for as long as you keep it, on this Mac. A private, Mac-native memory for your meetings."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class={`g g--grain ge ${cls}`}>
+  <Fragment set:html={`<!--\n${contract.trim()}\n-->`} />
+  <script is:inline>
+    /* Depth is the app's card lift. ?depth=soft shows the earlier tall
+       blurred cast instead, to compare. */
+    (function () {
+      var root = document.currentScript && document.currentScript.parentElement;
+      if (root && /[?&]depth=soft/.test(location.search)) root.classList.add('g--soft');
+    })();
+  </script>
+  <header class="g-top">
+    <a class="g-brand" href={home} aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Page">
+      <a href="#mac">On this Mac</a>
+      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class={`ge-hero ${heroMedia === 'agenda' ? 'ge-hero--media' : ''}`} data-hero={hero} aria-labelledby="h1">
+      {hero === 'distilled'
+        ? <h1 class="g-xl ge-h1--tagline" id="h1"><span class="g-ghost"><span aria-hidden="true">Meetings, distilled.</span>Meetings, distilled.</span></h1>
+        : <h1 class="g-xl" id="h1"><span class="g-ghost"><span aria-hidden="true">It remembers</span>It remembers</span></h1>}
+      <div class="ge-hero__row">
+        <div class="ge-hero__text">
+          {hero === 'distilled'
+            ? <p class="ge-rest">It remembers what was said, who said it, and what you decided.</p>
+            : <p class="ge-rest" aria-hidden="true">what was said, who said it, and what you decided.</p>}
+          <p class="g-lede">GRØD is a private, Mac-native memory for your meetings. Nothing joins your call, and there is no account. <em>Your meeting content never leaves this Mac.</em></p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">Mac only. No form, no tracker.</span></p>
+          {film && (
+            <button type="button" class="ge-film-toggle" aria-pressed="false" hidden>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path class="ge-film-toggle__pause" d="M3 2v8M9 2v8" /><path class="ge-film-toggle__play" d="M3.5 2l6 4-6 4z" /></svg>
+              <span>Pause the film</span>
+            </button>
+          )}
+        </div>
+        {heroMedia === 'agenda' && (
+          <figure class="g-capture g-win ge-hero__media">
+            {film ? (
+              <video class="ge-hero__loop" muted loop playsinline preload="metadata" poster="/shots/grod/landing/window-agenda.webp" width="2000" height="1440" aria-label={film.label} data-films={JSON.stringify(films)}>
+                {film.webm && <source src={film.webm} type="video/webm" />}
+                {film.mp4 && <source src={film.mp4} type="video/mp4" />}
+              </video>
+            ) : (
+              <img src="/shots/grod/landing/window-agenda.webp" width="2000" height="1440" alt="GRØD's Agenda: today's meetings at the top, the next one about to record, and this week's meetings below with a line each on what was decided." decoding="async" fetchpriority="high" />
+            )}
+          </figure>
+        )}
+      </div>
+    </section>
+
+    <section class="ge-clause" id="said" data-band={band('said')} aria-labelledby="h-said">
+      {band('said') && <div class="g-dots" aria-hidden="true"></div>}
+      <div class="ge-pin"><h2 class="g-h" id="h-said">what was said.</h2></div>
+      <div class="ge-body">
+        <figure class="g-capture ge-stack" aria-label="One meeting, three tabs">
+          <div class="ge-stack__tabs" role="group" aria-label="Bring a tab to the front">
+            {tabs.map((t) => <button type="button" class="ge-stack__tabbtn" data-n={t.n} aria-pressed={t.n === 2 ? 'true' : 'false'}>{t.label}</button>)}
+          </div>
+          <div class="ge-stack__deck">
+            {tabs.map((t) => (
+              <div class="ge-stack__item g-win" style={`--n:${t.n}`} data-n={t.n} role="button" tabindex="0" aria-label={`Bring the ${t.label} tab to the front`}>
+                <img src={`/shots/grod/landing/${t.src}.webp`} width="2000" height="1440" alt={t.alt} decoding="async" loading="lazy" />
+                <span class="ge-stack__tab" aria-hidden="true">{t.label}</span>
+              </div>
+            ))}
+          </div>
+          <figcaption>Notes, Summary, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front.</figcaption>
+        </figure>
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">Ask a question and the answer shows where it came from: the minute, the line, the person. Ask something the meeting didn't cover, and it says so.</p>
+            <p class="g-quote ge-refusal">“This meeting doesn't cover that.”</p>
+            <p class="g-meta">What it says when the answer isn't in the room.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src="/shots/grod/landing/ask.webp" width="790" height="282" alt="The Ask panel: When do invitations go out? Invitations go to six teams on 21 April. That date supersedes the earlier 14 April note. Source: 3:02." loading="lazy" decoding="async" />
+            <figcaption>The answer, and its source at 3:02.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="ge-clause" id="who" data-band={band('who')} aria-labelledby="h-who">
+      {band('who') && <div class="g-dots" aria-hidden="true"></div>}
+      <div class="ge-pin"><h2 class="g-h" id="h-who">who said it.</h2></div>
+      <div class="ge-body">
+        <GrodPopOut
+          class="ge-figure"
+          window="window-person" detail="voice" mag={1.25}
+          alt="Maya Chen's page in GRØD: her email, Voice profiles, and her upcoming and past meetings."
+          detailAlt="Voice profiles: 1 recognised voice, used to label this person in transcripts. First heard 16 Apr 2026."
+          caption="Maya Chen's page. One recognised voice, first heard on 16 April."
+        />
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">Name a voice once. The meetings where GRØD had already recognised it update, and every later one knows it. Overlapping speech it can't place goes to Needs review, not to a guess.</p>
+          </div>
+          <figure class="g-capture g-win">
+            <img src="/shots/grod/landing/window-people.webp" width="2000" height="1440" alt="GRØD's People page: Coming up, eight people with the meeting they are next in, one marked Not in People." loading="lazy" decoding="async" />
+            <figcaption>People, and who you're seeing today.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="ge-clause" id="decided" data-band={band('decided')} aria-labelledby="h-decided">
+      {band('decided') && <div class="g-dots" aria-hidden="true"></div>}
+      <div class="ge-pin"><h2 class="g-h" id="h-decided">and what you decided.</h2></div>
+      <div class="ge-body">
+        <GrodPopOut
+          class="ge-figure"
+          window="window-continuity" detail="popover" mag={1.45} at={[37, 3]} bare
+          alt="This week's weekly product review in GRØD, with its series popover open over the notes."
+          detailAlt="The series popover: Weekly product review, Weekly, 4 instances; Continuity, 3 decisions, dated 31 Mar, 24 Mar and 17 Mar; Next, Tue 21 Apr; Today; Open the series."
+          caption="Continuity, on this week's instance. Three weeks of decisions, waiting when you open it."
+        />
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">Your weekly review is one thing across time, not forty rows. Open this week's, and the decisions from the weeks before are there, as records, not as a summary someone wrote.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src="/shots/grod/landing/skipped.webp" width="1240" height="196" alt="The series ladder: Earlier, 9 Apr, No meeting, The week was skipped." loading="lazy" decoding="async" />
+            <figcaption>A skipped week stays a skipped week. Nothing is made up to fill it.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="ge-clause" id="kept" data-band={band('kept')} aria-labelledby="h-kept">
+      {band('kept') && <div class="g-dots" aria-hidden="true"></div>}
+      <div class="ge-pin"><h2 class="g-h" id="h-kept">for as long as you keep it.</h2></div>
+      <div class="ge-body">
+        {year === 'live' ? (
+          <div class="ge-year">
+            <GrodYear id="year" controls columns={6} />
+            <p class="g-meta">Every square is a meeting in GRØD's Demo workspace. Press a name to see what the year holds for it.</p>
+          </div>
+        ) : (
+          <figure class="g-capture g-win">
+            <img src="/shots/grod/landing/window-year.webp" width="2000" height="1440" alt="GRØD's year page for 2026: every day as a square, darker where there were more meetings, 44 so far." loading="lazy" decoding="async" />
+            <figcaption>2026 so far. The darker the day, the more it held.</figcaption>
+          </figure>
+        )}
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">Transcripts and notes stay until you delete them. There is no GRØD server holding a copy, no account, and no plan that hides last year.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src="/shots/grod/landing/stood-out.webp" width="1280" height="242" alt="November 2025, What stood out: First met Nils Rud, on Tue 4 Nov. #Platform went from 2 meetings to 4." loading="lazy" decoding="async" />
+            <figcaption>Months that notice things. Written from the records it holds, never generated.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="ge-clause ge-clause--last" id="mac" data-band={band('mac')} aria-labelledby="h-mac">
+      {band('mac') && <div class="g-dots" aria-hidden="true"></div>}
+      <div class="ge-pin"><h2 class="g-h" id="h-mac">on this Mac.</h2></div>
+      <div class="ge-body">
+        <p class="g-promise">Your meeting content never leaves this Mac.</p>
+
+        <div class="ge-proof">
+          <div class="ge-row__text">
+            <p class="g-h2">It shows you, before it asks you.</p>
+            <p class="g-body">On first run you say one sentence and watch it appear under You. Then the Mac answers out loud, and that appears under Them: both sides of a call, on this Mac, with no second person, and none of it saved.</p>
+          </div>
+          <div class="ge-proof__pair">
+            <figure class="g-capture g-win">
+              <img src="/shots/grod/landing/onboard-voice.webp" width="1360" height="1280" alt="GRØD's first run: That is your voice, on your Mac. Under You: Testing 123 testing. The recording bar reads Setup, not saved." loading="lazy" decoding="async" />
+              <figcaption>First, your voice. Setup, not saved.</figcaption>
+            </figure>
+            <figure class="g-capture g-win">
+              <img src="/shots/grod/landing/onboard-both.webp" width="1360" height="1280" alt="GRØD's first run: Both sides, on this Mac. That came out of your speakers and back in through the system audio. No second person. Under You: Testing 123 testing. Under Them: Loud and clear on my end." loading="lazy" decoding="async" />
+              <figcaption>Then the Mac's, through the system audio: “Loud and clear on my end.”</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <dl class="g-receipts">
+          <div><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics.</dd></div>
+          <div><dt>The call</dt><dd>Nobody in the call knows it is there. Telling the other person is still on you.</dd></div>
+          <div><dt>Deletion</dt><dd>“Recording removed” appears only once it is true.</dd></div>
+        </dl>
+        <figure class="g-capture g-win ge-toast">
+          <img src="/shots/grod/landing/toast.webp" width="375" height="67" alt="A receipt in GRØD: 2 notes deleted, with Undo." loading="lazy" decoding="async" />
+          <figcaption>The receipt, with undo.</figcaption>
+        </figure>
+        <div class="ge-close">
+          <p class="g-h2">Breakfast is almost ready.</p>
+          <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
+          <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GrodNight motif={motif} />
+</div>
+
+<script>
+  /* The stack works like the app's tabs: press any window, or any tab in
+     the row above, and that window comes to the front. The row is always
+     there, so no window can be lost behind another. */
+  const stack = document.querySelector<HTMLElement>('.ge-stack');
+  const items = Array.from(stack?.querySelectorAll<HTMLElement>('.ge-stack__item') ?? []);
+  const buttons = Array.from(stack?.querySelectorAll<HTMLButtonElement>('.ge-stack__tabbtn') ?? []);
+  const front = (n: string | undefined) => {
+    if (!n) return;
+    for (const item of items) {
+      const top = item.dataset.n === n;
+      item.style.zIndex = top ? String(items.length + 1) : item.dataset.n ?? '0';
+      item.classList.toggle('is-front', top);
+    }
+    for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.n === n));
+  };
+  for (const item of items) {
+    item.addEventListener('click', () => front(item.dataset.n));
+    item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); front(item.dataset.n); } });
+  }
+  for (const b of buttons) b.addEventListener('click', () => front(b.dataset.n));
+
+  /* The hero's film. ?film=<id> swaps in another cut, to compare. It plays
+     only while it is on screen; a reader who asked for less motion keeps
+     the poster until they press play; and anyone can stop it, because it
+     loops (WCAG 2.2.2). */
+  const film = document.querySelector<HTMLVideoElement>('.ge-hero__loop');
+  const toggle = document.querySelector<HTMLButtonElement>('.ge-film-toggle');
+  if (film) {
+    const wanted = new URLSearchParams(location.search).get('film');
+    const cuts: { id: string; label: string; webm?: string; mp4?: string }[] = JSON.parse(film.dataset.films ?? '[]');
+    const cut = cuts.find((c) => c.id === wanted);
+    if (cut && cut !== cuts[0]) {
+      film.replaceChildren(...(['webm', 'mp4'] as const).flatMap((ext) => {
+        if (!cut[ext]) return [];
+        const source = document.createElement('source');
+        source.src = cut[ext]!; source.type = `video/${ext}`;
+        return [source];
+      }));
+      film.setAttribute('aria-label', cut.label);
+      film.load();
+    }
+
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let stopped = still;
+    const label = toggle?.querySelector('span');
+    const show = () => {
+      if (!toggle || !label) return;
+      toggle.setAttribute('aria-pressed', String(stopped));
+      label.textContent = stopped ? 'Play the film' : 'Pause the film';
+    };
+    if (toggle) {
+      toggle.hidden = false;
+      toggle.addEventListener('click', () => {
+        stopped = !stopped;
+        if (stopped) film.pause(); else film.play().catch(() => {});
+        show();
+      });
+      show();
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !stopped) film.play().catch(() => {});
+        else film.pause();
+      }, { threshold: 0.35 }).observe(film);
+    }
+  }
+
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.querySelector<HTMLButtonElement>('.ge-share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split(/[?#]/)[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" width="520" height="340" role="img" aria-label="A bowl of oats, printed in two inks, slightly out of register.">
+  <!-- Authored for the GRØD landing explorations (2026-10-01): the app's
+       overscroll art, oats and a bowl, redrawn in the site's two inks. The
+       teal pass is offset 3px down and right of the magenta pass, as a Riso
+       print would be. Halftone on the bowl's body, flat ink elsewhere. -->
+  <defs>
+    <pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <circle cx="3.5" cy="3.5" r="1.6" fill="#63CCAF"/>
+    </pattern>
+    <pattern id="htm" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(60)">
+      <circle cx="3" cy="3" r="1.7" fill="#F06AA6"/>
+    </pattern>
+  </defs>
+
+  <!-- the heap: a halftone mound in the magenta pass, behind the grains -->
+  <path d="M110 172 Q140 128 260 118 Q380 128 410 172 Z" fill="url(#htm)"/>
+  <path d="M110 172 Q140 128 260 118 Q380 128 410 172" fill="none" stroke="#F06AA6" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- teal pass, offset -->
+  <g transform="translate(3 3)" opacity=".92">
+    <ellipse cx="260" cy="170" rx="180" ry="30" fill="none" stroke="#63CCAF" stroke-width="7"/>
+    <path d="M80 170 Q260 250 440 170 Q430 300 260 316 Q90 300 80 170 Z" fill="url(#ht)"/>
+    <path d="M80 170 Q260 250 440 170 Q430 300 260 316 Q90 300 80 170 Z" fill="none" stroke="#63CCAF" stroke-width="6"/>
+    <ellipse cx="260" cy="318" rx="92" ry="9" fill="none" stroke="#63CCAF" stroke-width="5"/>
+  </g>
+
+  <!-- magenta pass: the oats, heaped over the rim and a few spilled -->
+  <g fill="#F06AA6">
+    <ellipse cx="200" cy="152" rx="13" ry="7" transform="rotate(-24 200 152)"/>
+    <ellipse cx="228" cy="140" rx="13" ry="7" transform="rotate(12 228 140)"/>
+    <ellipse cx="256" cy="134" rx="14" ry="7" transform="rotate(-8 256 134)"/>
+    <ellipse cx="286" cy="138" rx="13" ry="7" transform="rotate(28 286 138)"/>
+    <ellipse cx="314" cy="148" rx="13" ry="7" transform="rotate(-16 314 148)"/>
+    <ellipse cx="176" cy="164" rx="12" ry="6.5" transform="rotate(18 176 164)"/>
+    <ellipse cx="214" cy="166" rx="13" ry="7" transform="rotate(-40 214 166)"/>
+    <ellipse cx="244" cy="156" rx="13" ry="7" transform="rotate(32 244 156)"/>
+    <ellipse cx="272" cy="154" rx="13" ry="7" transform="rotate(-30 272 154)"/>
+    <ellipse cx="302" cy="162" rx="13" ry="7" transform="rotate(10 302 162)"/>
+    <ellipse cx="336" cy="166" rx="12" ry="6.5" transform="rotate(-22 336 166)"/>
+    <ellipse cx="236" cy="178" rx="13" ry="7" transform="rotate(6 236 178)"/>
+    <ellipse cx="266" cy="176" rx="14" ry="7" transform="rotate(-18 266 176)"/>
+    <ellipse cx="296" cy="180" rx="13" ry="7" transform="rotate(36 296 180)"/>
+    <ellipse cx="190" cy="182" rx="12" ry="6.5" transform="rotate(-6 190 182)"/>
+    <ellipse cx="326" cy="184" rx="12" ry="6.5" transform="rotate(14 326 184)"/>
+    <!-- spilled -->
+    <ellipse cx="462" cy="300" rx="13" ry="7" transform="rotate(-20 462 300)"/>
+    <ellipse cx="486" cy="286" rx="12" ry="6.5" transform="rotate(30 486 286)"/>
+    <ellipse cx="54" cy="296" rx="12" ry="6.5" transform="rotate(16 54 296)"/>
+    <ellipse cx="34" cy="312" rx="11" ry="6" transform="rotate(-34 34 312)"/>
+  </g>
+  <!-- the oat's crease, in the teal pass, offset -->
+  <g transform="translate(3 3)" fill="none" stroke="#63CCAF" stroke-width="1.6" stroke-linecap="round" opacity=".9">
+    <path d="M190 154 l20 -4 M218 142 l20 -3 M245 134 l22 0 M276 136 l20 4 M304 146 l20 4 M166 166 l20 -2 M204 170 l20 -8 M234 158 l20 6 M262 156 l20 -4 M292 160 l20 4 M326 168 l20 -4 M226 178 l20 2 M256 178 l20 -4 M286 180 l20 6 M180 184 l20 -2 M316 186 l20 2 M452 302 l20 -4 M476 288 l20 4 M44 298 l20 2 M24 314 l20 -6"/>
+  </g>
+</svg>

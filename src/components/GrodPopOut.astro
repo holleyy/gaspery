@@ -1,0 +1,50 @@
+---
+import shots from '../lib/grodShots.json';
+
+/* A detail, popped out of the window it came from. The whole window sits
+   on the paper and the same region, magnified, floats over it as a card
+   with a deep soft shadow. No outlines and no connectors: the card's
+   content and its position say where it came from. The rect is the
+   detail's box as fractions of the window, which the crop script knows
+   exactly.
+
+   Two placements. By default the card overhangs the window's right edge at
+   the height it came from. With `at` it is lifted in place: positioned by
+   its own left and top (fractions of the window) so it covers the region
+   it magnifies. `bare` is for a detail that is already a traced element
+   with its own shape and alpha (a popover): no card behind it, only the
+   shadow. */
+
+interface Props {
+  window: string;
+  detail: string;
+  /* left, top, width, height of the detail inside the window, 0 to 100.
+     Read from the crop script's own record (src/lib/grodShots.json) unless
+     given. */
+  rect?: [number, number, number, number];
+  alt: string;
+  detailAlt: string;
+  caption?: string;
+  /* Pixel sizes of the two images, for layout before they load. */
+  w?: number; h?: number; dw?: number; dh?: number;
+  /* How much larger the card is than the region it magnifies. */
+  mag?: number;
+  at?: [number, number];
+  bare?: boolean;
+  class?: string;
+}
+const { window, detail, alt, detailAlt, caption, w = 2000, h = 1440, mag = 1.3, at, bare = false, class: cls = '' } = Astro.props;
+const shot = (shots as Record<string, { w: number; h: number; rect: number[] }>)[detail];
+if (!shot && !Astro.props.rect) throw new Error(`GrodPopOut: no crop record for "${detail}" in src/lib/grodShots.json; run scripts/grod-landing-crops.mjs`);
+const [l, t, rw, rh] = Astro.props.rect ?? shot.rect;
+const dw = Astro.props.dw ?? shot.w;
+const dh = Astro.props.dh ?? shot.h;
+const style = `--l:${l}; --t:${t}; --w:${rw}; --h:${rh}; --mag:${mag};${at ? ` --at-l:${at[0]}; --at-t:${at[1]};` : ''}`;
+---
+<figure class={`g-capture g-pop ${at ? 'g-pop--at' : ''} ${cls}`} style={style}>
+  <div class="g-pop__stage">
+    <img class="g-pop__win" src={`/shots/grod/landing/${window}.webp`} width={w} height={h} alt={alt} loading="lazy" decoding="async" />
+    <img class={`g-pop__card ${bare ? 'g-pop__card--bare' : ''}`} src={`/shots/grod/landing/${detail}.webp`} width={dw} height={dh} alt={detailAlt} loading="lazy" decoding="async" />
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
