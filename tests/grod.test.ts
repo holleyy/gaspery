@@ -1,14 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import {
-  GROD_VARIANTS,
-  GROD_VARIANT_COOKIE,
-  BETA_URL,
-  isGrodVariant,
-  resolveGrodVariant,
-  grodGoPath,
-} from '../src/lib/grod.ts';
+import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH } from '../src/lib/grod.ts';
 import {
   DEMO_MEETINGS,
   DEMO_TODAY,
@@ -19,12 +12,22 @@ import {
 
 const read = (rel: string) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8');
 
-test('the test has exactly two arms, each with its own go page', () => {
-  assert.deepEqual([...GROD_VARIANTS], ['a', 'b']);
-  assert.equal(isGrodVariant('c'), false);
-  assert.equal(grodGoPath('a'), '/grod/a/go/');
-  assert.equal(GROD_VARIANT_COOKIE, 'grod-variant');
-  assert.deepEqual(resolveGrodVariant(null, 'b', () => 0.1), { variant: 'b', fresh: false });
+test('the page is /grod, and its call to action is counted on its own go page', () => {
+  assert.equal(GROD_GO_PATH, '/grod/go/');
+  const page = read('src/pages/grod/index.astro');
+  assert.match(page, /home="\/grod\/"/);
+  assert.match(read('src/components/GrodSentence.astro'), /href=\{GROD_GO_PATH\}/);
+  assert.match(read('src/pages/grod/go.astro'), /GrodGo/);
+});
+
+test('the explorations are built in development only', () => {
+  const route = read('src/pages/grod/[arm].astro');
+  assert.match(route, /if \(!import\.meta\.env\.DEV\) return \[\];/);
+  for (const arm of GROD_EXPLORATIONS) read(`src/explorations/grod/${arm}.astro`);
+});
+
+test('the app roster sends /studio and /apps/grod to the page', () => {
+  assert.match(read('src/content/apps/grod.yaml'), /^site: \/grod$/m);
 });
 
 test('the beta link is an email, no form, no tracker', () => {
@@ -75,11 +78,10 @@ test('the planner is twelve full rows ending on the month that holds today', () 
   assert.equal(rows[0].cells[30]?.day, 31);
 });
 
-test('each arm carries its direction contract inside the page root', () => {
-  for (const arm of GROD_VARIANTS) {
-    const page = read(`src/pages/grod/${arm}.astro`);
-    assert.match(page, /THESIS:/);
-    assert.match(page, /FINISH: unreviewed and undocumented is unfinished/);
-    assert.match(page, /grodGoPath\('[ab]'\)/);
+test('the page and each exploration carry a direction contract', () => {
+  for (const file of ['src/pages/grod/index.astro', ...GROD_EXPLORATIONS.map((arm) => `src/explorations/grod/${arm}.astro`)]) {
+    const page = read(file);
+    assert.match(page, /THESIS:/, file);
+    assert.match(page, /FINISH: unreviewed and undocumented is unfinished/, file);
   }
 });

@@ -1,29 +1,28 @@
 ---
-import {
-  GROD_VARIANT_COOKIE,
-  GROD_VARIANT_MAX_AGE,
-  resolveGrodVariant,
-} from '../../lib/grod';
+import GrodSentence from '../../components/GrodSentence.astro';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
 
-/* On-demand: the only route in the /grod test that runs on the Worker.
-   It never renders anything; it picks an arm and redirects. See lib/grod.ts. */
-export const prerender = false;
+/* /grod: the GRØD landing page (see src/lib/grod.ts). It is the "h" cut of
+   the sentence page, src/components/GrodSentence.astro: the hero opens on
+   the tagline with the sentence beneath it and a film of the app beside
+   it, the clauses alternate between the bone paper and the night ground,
+   and the fourth clause's year is the live one, which the reader can
+   filter. The explorations it was chosen from are in
+   src/explorations/grod. */
 
-const { variant, fresh } = resolveGrodVariant(
-  Astro.url.searchParams.get('v'),
-  Astro.cookies.get(GROD_VARIANT_COOKIE)?.value,
-);
-
-if (fresh) {
-  Astro.cookies.set(GROD_VARIANT_COOKIE, variant, {
-    path: '/grod',
-    maxAge: GROD_VARIANT_MAX_AGE,
-    sameSite: 'lax',
-    secure: true,
-    httpOnly: true,
-  });
-}
-
-Astro.response.headers.set('cache-control', 'private, no-store');
-return Astro.redirect(`/grod/${variant}/`, 302);
+const contract = `
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · arm h (g, upgraded)
+THESIS: The page opens on the one line no rival uses, "Meetings, distilled.", and then reads one sentence at the speed of scroll, printed on two papers with the app at the size it is. Its best moment is the fourth clause, where a year of meetings is not a screenshot but the thing itself, which the reader can ask for a person, a series, a month. It refuses the feature grid and the shrunken screenshot.
+OWN-WORLD: grained bone paper and the ink ground (#232019) with teal dots at a 17px pitch, in alternation; Merriweather 300 at 128px for the tagline and up to 132px for the clauses; Merriweather ledes, Atkinson Hyperlegible Next for body and captions; windows at 1000 points, details lifted out of their windows as magnified cards; the night footer with the bowl of oats on its horizon and the wordmark at 19vw.
+STORY: "Meetings, distilled. It remembers what was said, who said it, and what I decided, for as long as I keep it, on this Mac, and it showed me before it asked." Then the beta, then night, then breakfast.
+FIRST VIEWPORT: the bar on bone; "Meetings, distilled." on one line at 128px; beneath it, on the left, the sentence at 44px in the secondary ink, the lede with the promise in italic, the beta key and the film's pause control; on the right the Agenda, oversized and running off the right edge, as a silent seven-second loop: the weekly review opens, its series popover shows Continuity and three dated decisions, a swipe returns to the Agenda; the night ground of the first clause rising at the fold.
+SIGNATURE: the live year. Twelve months of the Demo workspace's real meetings, and a row of names beneath the heading: press one and the year fades to what it holds for that name, with a teal thread through the weekly review.
+FORM: one sentence in clauses, as arm g, with the tagline restored and the archive promoted. Proposed on 2026-10-01 as the upgrade to g; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+`;
 ---
+<GrodSentence
+  arm="h" home="/grod/" title="GRØD · Meetings, distilled" contract={contract}
+  class="gf gg" dark={['said', 'decided', 'mac']} motif="oats" hero="distilled" year="live" heroMedia="agenda"
+/>

@@ -1,0 +1,16 @@
+---
+import { GROD_EXPLORATIONS } from '../../lib/grod';
+
+/* The explorations the /grod page was chosen from, at /grod/<letter>/.
+   Served in development only, so they can still be compared side by side:
+   in a production build this route has no paths and nothing is built. */
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return GROD_EXPLORATIONS.map((arm) => ({ params: { arm } }));
+}
+
+const arms = import.meta.glob('../../explorations/grod/*.astro');
+const load = arms[`../../explorations/grod/${Astro.params.arm}.astro`];
+const { default: Arm } = (await load()) as { default: any };
+---
+<Arm />

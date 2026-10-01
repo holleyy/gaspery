@@ -71,3 +71,8 @@
 .gg .ge-clause[data-band="dark"] ::selection { background: color-mix(in srgb, var(--color-brand) 40%, transparent); }
 /* The last band runs straight into the night footer: same ground, no seam. */
 .gg .g-night { padding-top: 24px; }
+
+/* The canvas beneath the page is the night ground with the bowl at its
+   foot, so a rubber-band overscroll at the bottom shows the oats. Scoped
+   to a document that holds this page. */
+html:has(.gg) { background: #232019 url('/shots/grod/landing/oats.svg') center calc(100% - 40px) / 240px auto no-repeat; }

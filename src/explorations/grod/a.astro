@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/grod.css';
 import '../../styles/grod-a.css';
-import { grodGoPath } from '../../lib/grod';
+import { GROD_GO_PATH } from '../../lib/grod';
 import GrodYear from '../../components/GrodYear.astro';
 
 /* Arm "a" of the /grod test (see src/lib/grod.ts): the year on the wall.
@@ -12,7 +12,7 @@ import GrodYear from '../../components/GrodYear.astro';
    first comment inside the page root (Astro strips a slot's leading
    comment; a deeper one survives). */
 
-const goPath = grodGoPath('a');
+const goPath = GROD_GO_PATH;
 ---
 <Base
   title="GRØD · Meetings, distilled"
