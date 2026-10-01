@@ -1,0 +1,62 @@
+---
+/* Several views of one thing, as a stack of windows that sifts in from the
+   right as it is reached. It works like the app's own tabs: press any
+   window, or any tab in the row above, and that window comes to the front.
+   The row is always there, so no window can be lost behind another.
+
+   With no props it is one meeting's three tabs. `tabs` are listed in the
+   order the row reads; each tab's `n` is its place in the stack, 0 at the
+   back, and the highest starts in front. Styles are in
+   src/styles/grod-e.css (.ge-stack). */
+
+interface Tab { n: number; src: string; label: string; alt: string }
+interface Props { tabs?: Tab[]; label?: string; caption?: string }
+
+const meeting: Tab[] = [
+  { n: 0, src: 'window-notes', label: 'Notes', alt: "The Notes tab of GRØD's meeting page: The story, Decisions, and the Ask panel over them." },
+  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
+  { n: 2, src: 'window-transcript', label: 'Transcript', alt: 'The Transcript tab: six lines, each with its minute and the person who said it.' },
+];
+const {
+  tabs = meeting,
+  label = 'One meeting, three tabs',
+  caption = 'Notes, Summary, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front.',
+} = Astro.props;
+const front = Math.max(...tabs.map((t) => t.n));
+const stacked = [...tabs].sort((a, b) => a.n - b.n);
+---
+<figure class="g-capture ge-stack" aria-label={label} style={`--count:${tabs.length}`}>
+  <div class="ge-stack__tabs" role="group" aria-label="Bring a tab to the front">
+    {tabs.map((t) => <button type="button" class="ge-stack__tabbtn" data-n={t.n} aria-pressed={t.n === front ? 'true' : 'false'}>{t.label}</button>)}
+  </div>
+  <div class="ge-stack__deck">
+    {stacked.map((t) => (
+      <div class="ge-stack__item g-win" style={`--n:${t.n}`} data-n={t.n} role="button" tabindex="0" aria-label={`Bring ${t.label} to the front`}>
+        <img src={`/shots/grod/landing/${t.src}.webp`} width="2000" height="1440" alt={t.alt} decoding="async" loading="lazy" />
+        <span class="ge-stack__tab" aria-hidden="true">{t.label}</span>
+      </div>
+    ))}
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<script>
+  for (const stack of document.querySelectorAll<HTMLElement>('.ge-stack')) {
+    const items = Array.from(stack.querySelectorAll<HTMLElement>('.ge-stack__item'));
+    const buttons = Array.from(stack.querySelectorAll<HTMLButtonElement>('.ge-stack__tabbtn'));
+    const front = (n: string | undefined) => {
+      if (!n) return;
+      for (const item of items) {
+        const top = item.dataset.n === n;
+        item.style.zIndex = top ? String(items.length + 1) : item.dataset.n ?? '0';
+        item.classList.toggle('is-front', top);
+      }
+      for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.n === n));
+    };
+    for (const item of items) {
+      item.addEventListener('click', () => front(item.dataset.n));
+      item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); front(item.dataset.n); } });
+    }
+    for (const b of buttons) b.addEventListener('click', () => front(b.dataset.n));
+  }
+</script>

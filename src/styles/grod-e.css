@@ -83,15 +83,16 @@
 .ge-hero[data-hero="distilled"] .ge-rest { max-width: 30ch; margin-top: 4px; }
 .ge-year { display: grid; gap: 16px; }
 .ge-clause--last .g-receipts { margin-top: 8px; }
-.ge-close { display: grid; gap: 18px; padding-top: 24px; border-top: 1px solid var(--color-hairline); }
+.ge-close { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 24px; border-top: 1px solid var(--color-hairline); min-width: 0; }
 
 /* ---- The stack ----------------------------------------------------------- */
-/* Three windows in one grid cell, each resting a step down and to the
+/* The windows share one grid cell, each resting a step down and to the
    right of the last. As the stack scrolls into view they arrive from the
-   right in turn: Notes, then Summary over it, then Transcript over both. */
+   right in turn, the back one first. The deck leaves room for the steps
+   it has (--count, set by the component). */
 .ge-stack__deck {
   display: grid; grid-template-columns: 1fr;
-  padding: 0 10% 96px 0;
+  padding: 0 calc((var(--count, 3) - 1) * 5%) calc((var(--count, 3) - 1) * 48px) 0;
 }
 .ge-stack__item {
   grid-area: 1 / 1; position: relative; z-index: var(--n);
@@ -152,6 +153,6 @@
   .ge-clause { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 64px; }
   .ge-pin { position: static; }
   .ge-hero { min-height: 0; }
-  .ge-stack__deck { padding-bottom: 48px; }
+  .ge-stack__deck { padding-bottom: calc((var(--count, 3) - 1) * 24px); }
   .ge-stack__item { transform: translate(calc(var(--n) * 3%), calc(var(--n) * 22px)); }
 }

@@ -31,9 +31,14 @@
 
   /* Depth: the app's own card lift (LiftTokens .card), a tight
      three-layer contact cast that seats a thing on the paper instead of
-     floating it. Windows and traced elements take it as a drop-shadow
-     filter, cards and details as a box shadow. */
-  --g-cast: drop-shadow(0 1px 1px rgba(35, 32, 25, .10)) drop-shadow(0 2px 3px rgba(35, 32, 25, .07)) drop-shadow(0 6px 8px rgba(35, 32, 25, .09));
+     floating it. Cards and details take it as a box shadow. Windows and
+     traced elements have shapes of their own, so they take it as a
+     drop-shadow filter, which has no spread: the app's third layer
+     (0 7px 11px -5px) shows only as a few pixels under the edge, but
+     without the negative spread it spilled round the sides and read as a
+     soft shadow, worst under a small part like the toast. So the filter is
+     an edge the width of a hairline and two contact layers, nothing wider. */
+  --g-cast: drop-shadow(0 0 0.5px rgba(35, 32, 25, .30)) drop-shadow(0 1px 1px rgba(35, 32, 25, .12)) drop-shadow(0 3px 3px rgba(35, 32, 25, .07));
   --g-cast-bare: drop-shadow(0 1px 1px rgba(35, 32, 25, .12)) drop-shadow(0 3px 4px rgba(35, 32, 25, .09)) drop-shadow(0 9px 12px rgba(35, 32, 25, .12));
   --g-cast-card: 0 0 0 1px rgba(35, 32, 25, .10), 0 1px 1px rgba(35, 32, 25, .10), 0 2px 3px rgba(35, 32, 25, .07), 0 7px 11px -5px rgba(35, 32, 25, .11);
   --g-lift: 0 1px 1px rgba(35, 32, 25, .10), 0 2px 3px rgba(35, 32, 25, .07), 0 7px 11px -5px rgba(35, 32, 25, .11);
