@@ -1,0 +1,373 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import GrodStack from '../../components/GrodStack.astro';
+import GrodWipe from '../../components/GrodWipe.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-e.css';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
+import '../../styles/grod-craft.css';
+import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
+import { DOCK_STYLES, HOUSE_THEME, THEMES, inkCss } from '../../lib/grodThemes';
+
+/* /grod/craft: how GRØD looks and feels, looked at closely. The page is the
+   home page's world, and its own move is that it can be printed in any of
+   the app's themes: picking an ink re-inks the paper bands in the theme's
+   light palette and the night bands in its dark one, and the captures that
+   exist in that theme follow. The house look, Riso, is what it opens in and
+   what a reload returns to. Copy is the GRØD repo's seed
+   (docs/product/website/04-craft.md); the toppings passage is new. The
+   direction contract is the first comment inside the page root. */
+
+const craft = (name: string) => `/shots/grod/craft/${name}.webp`;
+const landing = (name: string) => `/shots/grod/landing/${name}.webp`;
+const house = THEMES.find((t) => t.id === HOUSE_THEME)!;
+
+/* One complete other look, as a stack: Braun with Castiglioni. */
+const braunTabs = [
+  { n: 2, src: 'craft/braun-agenda', label: 'Agenda', alt: 'The Agenda in the Braun theme with the Castiglioni dock style: a red spine down the docked card, square green markers, a black Record key.' },
+  { n: 1, src: 'craft/braun-tags', label: 'Tags', alt: 'The Tags map in Braun: the tags as blocks of red and pale red.' },
+  { n: 0, src: 'craft/braun-month', label: 'Month', alt: 'November 2025 in Braun: what stood out, and the weeks as red bars.' },
+];
+---
+<Base
+  title="Craft · GRØD"
+  description="How GRØD looks and feels, up close: a house look borrowed from risograph printing, a dark mode done properly, a recording bar built like an instrument, and a receipt for every change. Pick a theme and the page is printed in it."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain ge gf gg gc">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · /grod/craft
+THESIS: GRØD's craft, looked at closely, on a page that can be printed in any of the app's own inks. It refuses the settings gallery: one look all the way down, and one place to change it.
+OWN-WORLD: the home page's world unchanged (grained bone paper and night bands, Merriweather 300 at poster size, Atkinson Hyperlegible Next, real captures, the app's card lift), with close-ups larger than life. Picking a theme swaps every token: paper bands take its light palette, night bands its dark.
+STORY: "Someone sweated this." See the print up close, change the ink and watch the page follow, drag light across dark, try the toppings, then the beta.
+FIRST VIEWPORT: the bar; "Made to be used every morning." at poster size over two lines; the porridge lede at the left; the docked Agenda card, larger than life, running off the right edge.
+SIGNATURE: the re-ink. One row of theme names; the whole page reprints.
+FORM: a specimen sheet, agreed with the user on 2026-10-02; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <style is:inline set:html={inkCss('.gc')}></style>
+  <script is:inline define:vars={{ inks: THEMES.map((t) => t.id), house: HOUSE_THEME }}>
+    /* /grod/craft/?ink=braun opens the page already printed in that ink:
+       set before the first paint, so the house ink never flashes. The
+       module script below finishes the job (the captures, the names). */
+    (function () {
+      var ink = new URLSearchParams(location.search).get('ink');
+      if (ink && ink !== house && inks.indexOf(ink) !== -1) document.currentScript.parentElement.setAttribute('data-ink', ink);
+    })();
+  </script>
+
+  <header class="g-top">
+    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Site">
+      {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === '/grod/craft/' ? 'page' : undefined}>{page.label}</a>)}
+      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="ge-hero ge-hero--media gc-hero" aria-labelledby="h1">
+      <h1 class="g-xl gc-h1" id="h1"><span class="g-ghost"><span aria-hidden="true">Made to be used every morning.</span>Made to be used every morning.</span></h1>
+      <div class="ge-hero__row">
+        <div class="ge-hero__text">
+          <p class="g-lede">GRØD is Danish and Norwegian for porridge. Plain, warm, and something you have every day.</p>
+          <p class="g-body">The app is meant to feel the same: a private notebook, not a recording light in a boardroom. This page is about how it looks and feels, for the people who notice.</p>
+        </div>
+        <figure class="g-capture g-detail ge-hero__media gc-hero__media">
+          <img src={craft('macro-card')} width="1180" height="420" alt="The card at the top of GRØD's Agenda, close up: a small teal crop mark at its corner, Pilot guide final review in magenta serif on a teal rule, a field of halftone dots, Today 10:00 in small caps, and a teal REC stamp set slightly off square." decoding="async" fetchpriority="high" />
+          <figcaption>The top of the Agenda, up close.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ==================== Printed, not rendered ==================== -->
+    <section class="ge-clause" id="printed" data-band="dark" aria-labelledby="h-printed">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-printed">Printed, not rendered.</h2></div>
+      <div class="ge-body">
+        <div class="gc-lead">
+          <p class="g-body">GRØD's house look borrows from risograph printing. Two spot inks, pink and teal. Small caps, crop marks at the corners of cards, rules that print in teal when you hover. It is the look of something made on paper, on purpose.</p>
+          <p class="g-meta gc-rule">This page's rules do the same.</p>
+        </div>
+        <div class="gc-pair">
+            <figure class="g-capture g-detail">
+              <img src={craft('macro-mark')} width="620" height="232" alt="A corner of the docked card: the crop mark, the title on its teal rule, the halftone dots beneath." loading="lazy" decoding="async" />
+              <figcaption>A crop mark, a teal rule, and a halftone field beneath the next meeting.</figcaption>
+            </figure>
+            <figure class="g-capture g-detail">
+              <img src={craft('macro-stamp')} width="500" height="232" alt="The other corner of the docked card: the halftone field thinning out, and the REC stamp, teal with a dot, set a few degrees off square." loading="lazy" decoding="async" />
+              <figcaption>The stamp, a few degrees off square.</figcaption>
+            </figure>
+        </div>
+        <div class="gc-lead" id="grain">
+          <h3 class="g-h2">A grain that prints in ink</h3>
+          <p class="g-body">The paper has a fine grain, and it prints in ink rather than sitting on top of the page. It can be turned down, or off.</p>
+        </div>
+        <div class="gc-grain">
+            <figure class="g-capture g-detail"><img src="/shots/grod/craft/grain-none.png" width="280" height="160" alt="A patch of the app's paper with the grain off: flat." loading="lazy" decoding="async" /><figcaption>Off</figcaption></figure>
+            <figure class="g-capture g-detail"><img src="/shots/grod/craft/grain-fine.png" width="280" height="160" alt="The same patch with a fine grain: faint dots." loading="lazy" decoding="async" /><figcaption>Fine</figcaption></figure>
+            <figure class="g-capture g-detail"><img src="/shots/grod/craft/grain-medium.png" width="280" height="160" alt="The same patch with the house grain: a regular field of small dots." loading="lazy" decoding="async" /><figcaption>Medium, the house setting</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Something quieter ==================== -->
+    <section class="ge-clause" id="ink" aria-labelledby="h-ink">
+      <div class="ge-pin"><h2 class="g-h" id="h-ink">Something quieter?</h2></div>
+      <div class="ge-body">
+        <div class="gc-lead">
+          <p class="g-body">GRØD has a small set of other themes, each in light and dark. Pick one, and this page is printed in it.</p>
+          <div class="gc-inks" role="group" aria-label="Print this page in a theme">
+            {THEMES.map((t) => (
+              <button type="button" class="gc-ink" data-ink={t.id} data-name={t.name} aria-pressed={t.id === HOUSE_THEME ? 'true' : 'false'}
+                style={`--swatch:${t.light.brand};--swatch-paper:${t.light.paper};--swatch-night:${t.dark.paper}`}>
+                <span class="gc-ink__swatch" aria-hidden="true"></span>{t.name}
+              </button>
+            ))}
+          </div>
+        </div>
+        <figure class="g-capture g-win gc-inked">
+          <img src={craft(`agenda-${HOUSE_THEME}`)} data-ink-src={craft('agenda-{ink}')} width="2000" height="1440" alt="GRØD's Agenda in the chosen theme." decoding="async" loading="lazy" />
+          <figcaption>The Agenda in <span data-ink-name>{house.name}</span>.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ==================== Dark, done properly ==================== -->
+    <section class="ge-clause" id="dark" data-band="dark" aria-labelledby="h-dark">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-dark">Dark, done properly.</h2></div>
+      <div class="ge-body">
+        <div class="gc-lead">
+          <p class="g-body">In dark mode, cards step forward by tone, with a real shadow beneath them rather than a pale glow around them. It sounds small. It is the difference between a dark theme and a light theme with the lights off.</p>
+        </div>
+        <GrodWipe
+          left="notes-{ink}" right="notes-{ink}-dark" ink={HOUSE_THEME}
+          altLeft="A meeting's Notes page in the chosen theme, light."
+          altRight="The same page in the same theme, dark."
+        >One meeting in <span data-ink-name>{house.name}</span>, light and dark. Drag the line.</GrodWipe>
+      </div>
+    </section>
+
+    <!-- ==================== Toppings ==================== -->
+    <section class="ge-clause" id="toppings" aria-labelledby="h-toppings">
+      <div class="ge-pin"><h2 class="g-h" id="h-toppings">Choose a topping.</h2></div>
+      <div class="ge-body">
+        <div class="gc-lead">
+          <p class="g-body">The card at the top of your Agenda holds what is next. It comes in more than one style, and since GRØD is porridge, the app calls them toppings.</p>
+        </div>
+        <figure class="g-capture gc-docks">
+          <div class="ge-stack__tabs gc-docks__tabs" role="group" aria-label="Show a topping">
+            {DOCK_STYLES.map((d, i) => <button type="button" class="ge-stack__tabbtn" data-dock={d.id} data-character={d.character} aria-pressed={i === 0 ? 'true' : 'false'}>{d.name}</button>)}
+          </div>
+          <div class="gc-docks__stage g-detail">
+            {DOCK_STYLES.map((d, i) => (
+              <img class:list={{ 'is-on': i === 0 }} data-dock={d.id} src={craft(`dock-${d.id}`)} width="1440" height="508" alt={`The top of the Agenda with the ${d.name} topping.`} loading="lazy" decoding="async" />
+            ))}
+          </div>
+          <figcaption><span aria-live="polite"><span class="gc-docks__name">{DOCK_STYLES[0].name}</span>. <span class="gc-docks__character">{DOCK_STYLES[0].character}</span></span> <span class="gc-docks__where">Shown in Riso.</span></figcaption>
+        </figure>
+
+        <div class="gc-lead" id="braun">
+          <h3 class="g-h2">A theme and a topping, together</h3>
+          <p class="g-body">Any topping goes with any theme. This is Braun with Castiglioni, a favourite here: warm white paper, one red, and a card with a spine.</p>
+          <p><button type="button" class="gc-print" data-ink="braun" data-name="Braun">Print this page in Braun</button></p>
+        </div>
+        <GrodStack
+          tabs={braunTabs}
+          label="GRØD in Braun with Castiglioni"
+          caption="The Agenda, Tags and a month, in Braun with Castiglioni. Press a window, or its tab, to bring it to the front."
+        />
+      </div>
+    </section>
+
+    <!-- ==================== An instrument ==================== -->
+    <section class="ge-clause" id="instrument" data-band="dark" aria-labelledby="h-instrument">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-instrument">An instrument, not a toolbar.</h2></div>
+      <div class="ge-body">
+        <div class="gc-lead">
+          <p class="g-body">The recording bar is built like a piece of equipment. A thin rule across the top carries the state. Cells are scored apart with hairlines. Record is a keycap, and it moves when you press it.</p>
+        </div>
+        <figure class="g-capture g-win gc-bar">
+          <img src={craft('bar')} width="1016" height="124" alt="GRØD's recording bar: a red rule across the top, 08:42, the meeting's name, and Open, Flag, Live, pause and Stop, each in its own scored cell." loading="lazy" decoding="async" />
+          <figcaption>The bar while it records.</figcaption>
+        </figure>
+        <dl class="gc-parts">
+          <div class="gc-part">
+            <img class="gc-part__pill" src={craft('pill')} width="80" height="174" alt="GRØD's recording pill: the Ø, a level meter and the time, 08:48, with a red strip down its edge." loading="lazy" decoding="async" />
+            <dt>A pill at the edge of your screen</dt>
+            <dd>While you record, a slim pill carries the level and the time. It expands slightly when you hover, and otherwise stays out of your way.</dd>
+          </div>
+          <div class="gc-part">
+            <img class="gc-part__card" src={craft('card')} width="640" height="124" alt="GRØD's pre-meeting card: Weekly product review, in 12 min, 60 min, Don't record, and a Join key." loading="lazy" decoding="async" />
+            <dt>A card before each meeting</dt>
+            <dd>A few minutes before a meeting it appears over your work, with Join and a way to skip the recording.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== Nothing spins ==================== -->
+    <section class="ge-clause" id="spins" aria-labelledby="h-spins">
+      <div class="ge-pin"><h2 class="g-h" id="h-spins">Nothing spins.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">GRØD does not use spinners. A spinner promises a duration nobody can honour. Instead it tells you which step it is on, in words, and puts a small dot on the tab when something new has arrived.</p>
+          </div>
+          <figure class="g-capture g-win gc-el gc-el--processing">
+            <img src={landing('bar-processing')} width="794" height="112" alt="The bar after a meeting ends: Summarizing, with a thin line of progress beneath it." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-row" id="receipt">
+          <div class="ge-row__text">
+            <h3 class="g-h2">Every change has a receipt</h3>
+            <p class="g-body">Delete, file, merge or remove, and a small receipt tells you what happened, with Undo. A deletion waits twelve seconds, shown as a ring that drains rather than a countdown that nags.</p>
+          </div>
+          <figure class="g-capture g-win gc-el gc-el--toast">
+            <img src={landing('toast')} width="375" height="67" alt="A receipt in GRØD: a draining ring, 2 notes deleted, and Undo." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-row" id="type">
+          <div class="ge-row__text">
+            <h3 class="g-h2">Type you can read all day</h3>
+            <p class="g-body">Notes are set in Atkinson Hyperlegible Next, a typeface designed for legibility, with true medium and semibold weights. Your own lines use one of them, so you can always tell your words from GRØD's.</p>
+          </div>
+          <div class="gc-specimen" aria-label="A specimen of the typeface, set on this page">
+            <p class="gc-specimen__yours">Invite six teams on 21 April.</p>
+            <p class="gc-specimen__grods">Invitations go to six teams on 21 April. That date supersedes the earlier 14 April note.</p>
+            <p class="g-meta">Set here in the same face: a line in Medium, as yours would be, and one in Regular. This page uses it throughout.</p>
+          </div>
+        </div>
+        <dl class="g-receipts">
+          <div id="motion"><dt>Motion that means something</dt><dd>When notes arrive they rise into place a section at a time, around the lines you wrote. Opening a meeting grows it out of its row. At the top of your Agenda, oats pour. Turn on Reduce Motion and all of it steps quietly instead.</dd></div>
+          <div id="quick"><dt>Quick, at any size</dt><dd>Switching between views stays instant with a thousand meetings in the library. You should never wait for your own notes.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== Calm ==================== -->
+    <section class="ge-clause ge-clause--last" id="calm" data-band="dark" aria-labelledby="h-calm">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-calm">Calm, by design.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">When your last meeting of the day ends, GRØD says so. That is the whole philosophy in one line.</p>
+          </div>
+          <figure class="g-capture g-win gc-el gc-el--dock">
+            <img src={landing('dock-breathe')} width="1200" height="118" alt="The top of GRØD's Agenda at the end of the day: That was your last meeting. Breathe." loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <div class="ge-close">
+          <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><a class="g-more" href="/grod/features/">See everything it does</a><span class="g-meta">An email. No form, no tracker.</span></p>
+          <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GrodNight motif="oats" note="Every capture on this page is the app, running its Demo workspace." />
+
+  <p class="gc-status" role="status"></p>
+  <p class="gc-printed" hidden><span>Printed in <span data-ink-name>{house.name}</span>.</span> <button type="button" class="gc-printed__back" data-ink={HOUSE_THEME} data-name={house.name}>Back to {house.name}</button></p>
+</div>
+
+<script>
+  /* The re-ink. Picking a theme sets it on the page root, where the
+     stylesheet in the page's head swaps every token, and points the
+     captures that exist in that theme at their files. The new captures are
+     fetched before anything changes, so the page turns over in one pass. */
+  const root = document.querySelector<HTMLElement>('.gc');
+  const HOUSE = 'riso';
+  const inked = Array.from(document.querySelectorAll<HTMLImageElement>('img[data-ink-src]'));
+  const names = Array.from(document.querySelectorAll<HTMLElement>('[data-ink-name]'));
+  const choices = Array.from(document.querySelectorAll<HTMLButtonElement>('.gc-ink'));
+  const printed = document.querySelector<HTMLElement>('.gc-printed');
+  const status = document.querySelector<HTMLElement>('.gc-status');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let current = HOUSE;
+
+  const load = (src: string) => new Promise<void>((done) => {
+    const img = new Image();
+    img.onload = img.onerror = () => done();
+    img.src = src;
+    setTimeout(done, 2500);
+  });
+
+  /* Everything that says which ink the page is in, set together. */
+  const apply = (ink: string, name: string, srcs: string[]) => {
+    if (!root) return;
+    if (ink === HOUSE) root.removeAttribute('data-ink'); else root.dataset.ink = ink;
+    inked.forEach((img, i) => { img.src = srcs[i]; });
+    for (const n of names) n.textContent = name;
+    for (const c of choices) c.setAttribute('aria-pressed', String(c.dataset.ink === ink));
+    if (printed) printed.hidden = ink === HOUSE;
+  };
+  const sources = (ink: string) => inked.map((img) => (img.dataset.inkSrc ?? '').replace('{ink}', ink));
+
+  async function print(ink: string, name: string) {
+    if (!root || ink === current) return;
+    current = ink;
+    const next = sources(ink);
+    await Promise.all(next.map(load));
+    if (current !== ink) return; // another ink was chosen while this one loaded
+    const turn = () => {
+      apply(ink, name, next);
+      if (status) status.textContent = `This page is printed in ${name}.`;
+    };
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+    if (doc.startViewTransition && !still.matches) doc.startViewTransition(turn); else turn();
+    /* The address follows the ink, so the page can be sent as it looks. */
+    const url = new URL(location.href);
+    if (ink === HOUSE) url.searchParams.delete('ink'); else url.searchParams.set('ink', ink);
+    history.replaceState(null, '', url);
+  }
+
+  /* A page opened with ?ink= was given its colours before the first paint
+     by the inline script; here the captures and the names catch up, with
+     no transition: it arrived this way. */
+  const opened = root?.dataset.ink;
+  const openedName = choices.find((c) => c.dataset.ink === opened)?.dataset.name;
+  if (opened && openedName) {
+    current = opened;
+    apply(opened, openedName, sources(opened));
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-ink]')) {
+    button.addEventListener('click', () => print(button.dataset.ink ?? HOUSE, button.dataset.name ?? ''));
+  }
+
+  /* The toppings: one stage, one image showing at a time. */
+  for (const docks of document.querySelectorAll<HTMLElement>('.gc-docks')) {
+    const tabs = Array.from(docks.querySelectorAll<HTMLButtonElement>('button[data-dock]'));
+    const shots = Array.from(docks.querySelectorAll<HTMLImageElement>('img[data-dock]'));
+    const name = docks.querySelector('.gc-docks__name');
+    const character = docks.querySelector('.gc-docks__character');
+    for (const tab of tabs) {
+      tab.addEventListener('click', () => {
+        for (const t of tabs) t.setAttribute('aria-pressed', String(t === tab));
+        for (const s of shots) s.classList.toggle('is-on', s.dataset.dock === tab.dataset.dock);
+        if (name) name.textContent = tab.textContent;
+        if (character) character.textContent = tab.dataset.character ?? '';
+      });
+    }
+  }
+
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.querySelector<HTMLButtonElement>('.ge-share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split(/[?#]/)[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>

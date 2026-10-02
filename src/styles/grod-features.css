@@ -60,7 +60,7 @@
 /* minmax(0, …): an auto track would grow to its widest child and push a
    phone's layout off the screen. */
 .gt-lead { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; max-width: 62ch; }
-.gt-lead + .ge-stack, .gt-lead + .g-pop, .gt-lead + .g-win { margin-top: -20px; }
+.gt-lead + .ge-stack, .gt-lead + .g-pop, .gt-lead + .g-win, .gt-lead + .g-wipe { margin-top: -20px; }
 /* The year is the largest image on the page: the column's whole width,
    a little over the size it is on a Mac. */
 .gt .gt-win--wide { max-width: none; }
@@ -102,5 +102,5 @@
 @media (max-width: 900px) {
   .gt-hero { padding-top: 36px; }
   .gt-time ol { justify-content: flex-start; }
-  .gt-lead + .ge-stack, .gt-lead + .g-pop, .gt-lead + .g-win { margin-top: -8px; }
+  .gt-lead + .ge-stack, .gt-lead + .g-pop, .gt-lead + .g-win, .gt-lead + .g-wipe { margin-top: -8px; }
 }

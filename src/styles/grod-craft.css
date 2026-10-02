@@ -1,0 +1,171 @@
+/* /grod/craft · how GRØD looks and feels, up close.
+
+   Loads after grod-e.css, grod-f.css and grod-g.css and keeps their grammar:
+   the clause, the row, the window at actual size, the two grounds. What is
+   new here is the close-up (a capture at its own pixels, twice life size),
+   the ink row that reprints the page, and the toppings stage (the wipe
+   between a light page and a dark one is in grod.css: Features ends on it
+   too). The colours a chosen ink sets are
+   written into the page by `inkCss()` in src/lib/grodThemes.ts. */
+
+/* ---- Rules that print ------------------------------------------------------ */
+/* In the app, a rule prints in teal when you point at it. This page's rules
+   do the same: the hairline over a receipt or a part, under a tab row, over
+   the close. In another ink the rule prints in that theme's accent. */
+.gc { --gc-rule: #2AA7C8; }
+.gc .g-receipts > div, .gc-part, .gc-rule, .gc .ge-close, .gc .ge-stack__tabs { transition: border-color .2s ease; }
+.gc .g-receipts > div:hover, .gc-part:hover, .gc-lead:hover > .gc-rule, .gc .ge-close:hover { border-top-color: var(--gc-rule); }
+.gc .ge-stack__tabs:hover { border-bottom-color: var(--gc-rule); }
+.gc-rule { margin: 6px 0 0; padding-top: 12px; border-top: 1px solid var(--color-hairline); }
+
+/* ---- Hero ---------------------------------------------------------------- */
+.gc-h1 { font-size: clamp(56px, 9vw, 132px); line-height: 0.96; max-width: 12ch; }
+.gc-hero .ge-hero__text { gap: 18px; padding-top: 28px; }
+.gc-hero .g-lede { max-width: 26ch; }
+.gc-hero .g-body { max-width: 40ch; }
+/* The docked card, larger than life: wider than its column, running off
+   the right edge of the screen. */
+.gc-hero__media { margin-top: 20px; }
+.gc-hero__media figcaption { max-width: 34ch; }
+
+/* ---- Inside a chapter ------------------------------------------------------ */
+/* A chapter's heading stands clear of the first thing under it: its
+   descenders hang below its own line box. */
+.gc .ge-clause { gap: 84px; }
+.gc .ge-body { gap: 64px; }
+.gc .ge-row__text .g-h2, .gc .gc-lead .g-h2 { font-size: clamp(26px, 2.5vw, 34px); line-height: 1.12; }
+/* minmax(0, …): an auto track would grow to its widest child and push a
+   phone's layout off the screen. */
+.gc-lead { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.gc-lead > p, .gc-lead > h3 { max-width: 62ch; }
+.gc-lead + .g-capture, .gc-lead + .ge-stack, .gc-lead + .gc-pair, .gc-lead + .gc-grain { margin-top: -24px; }
+
+/* ---- Close-ups ---------------------------------------------------------------- */
+/* Two crops side by side, each at the pixels it was captured in. */
+.gc-pair { display: grid; grid-template-columns: minmax(0, 620fr) minmax(0, 500fr); gap: 20px 24px; align-items: start; max-width: 1144px; }
+/* The grain, off, fine and medium. Each patch is shown at whole pixels,
+   unsmoothed, at any width: the dots are a pixel or two across, and a
+   fractional size would blur them into a grey. A narrower figure shows
+   less of the patch, never a scaled one. */
+.gc-grain { display: flex; flex-wrap: wrap; gap: 20px 24px; }
+.gc-grain figure { width: 280px; }
+.gc .gc-grain img { width: 100%; height: 160px; object-fit: none; object-position: 0 0; image-rendering: pixelated; }
+
+/* ---- The inks ------------------------------------------------------------------- */
+/* One row of theme names. The swatch shows the theme's accent on its own
+   light and dark paper; the pressed one is printed solid, like the year's
+   filters on the home page. */
+.gc-inks { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+.gc-ink {
+  display: inline-flex; align-items: center; gap: 9px;
+  font: inherit; font-size: 15px; font-weight: 500; line-height: 1.2; color: var(--color-ink);
+  padding: 7px 14px 8px 9px; border-radius: 999px; border: 1px solid var(--color-hairline); background: transparent; cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.gc-ink:hover { border-color: var(--color-ink-secondary); }
+.gc-ink[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.gc-ink__swatch {
+  width: 20px; height: 20px; border-radius: 50%; flex: none;
+  background:
+    radial-gradient(circle at 50% 50%, var(--swatch) 0 4.5px, transparent 5px),
+    linear-gradient(90deg, var(--swatch-paper) 50%, var(--swatch-night) 50%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/* A plain button that reads as a link: print the page in an ink, or go back. */
+.gc-print, .gc-printed__back {
+  font: inherit; font-weight: 600; color: var(--color-brand-strong); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+.gc-print { font-size: 16px; }
+.gc-print:hover, .gc-printed__back:hover { text-decoration-color: currentColor; }
+
+/* While the page is in another ink, a note stays in the corner with the
+   way back to the house one. `hidden` needs saying again: any `display`
+   set here would defeat the attribute. */
+.gc-printed {
+  position: fixed; left: 16px; bottom: 16px; z-index: 20; margin: 0;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; max-width: calc(100vw - 32px);
+  padding: 10px 14px 11px; border-radius: 8px;
+  font-size: 14px; line-height: 1.3; color: var(--color-ink);
+  background: var(--color-paper); border: 1px solid var(--color-hairline); box-shadow: var(--g-lift);
+}
+.gc-printed[hidden] { display: none; }
+/* what was printed, said for a reader who cannot see the page change */
+.gc-status { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.gc-printed__back { font-size: 14px; }
+
+/* The reprint is one pass of the press. The new ink lands a few pixels off
+   register, over the old one, so for a moment the page is printed twice;
+   then the plate slides home. The old page stays put underneath and is
+   covered. Reduced motion never starts the transition (see the page's
+   script), so the ink simply changes. */
+::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { animation: gc-register .85s linear both; mix-blend-mode: normal; }
+@keyframes gc-register {
+  0% { opacity: 0; transform: translate(7px, 5px); animation-timing-function: ease-out; }
+  28% { opacity: .6; transform: translate(7px, 5px); }
+  52% { opacity: .6; transform: translate(7px, 5px); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+
+/* ---- Toppings ------------------------------------------------------------------- */
+/* Every topping is the same region of the Agenda, so the stage holds them
+   all in one cell and shows one. The frame is the stage's, not each
+   image's. */
+.gc-docks__tabs { overflow-x: auto; scrollbar-width: none; }
+.gc-docks__tabs::-webkit-scrollbar { display: none; }
+.gc-docks__tabs .ge-stack__tabbtn { flex: none; white-space: nowrap; }
+.gc-docks__stage {
+  display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden;
+  border: 1px solid var(--color-hairline); border-radius: 4px; box-shadow: var(--g-lift, none); background: #F6F1E6;
+}
+/* hidden ones are out of the reading order too, not only faded */
+.gc-docks__stage img { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s .25s; }
+.gc-docks__stage img.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+.gc-docks__name { font-weight: 600; color: var(--color-ink); }
+
+/* ---- The instrument --------------------------------------------------------------- */
+.gc .gc-bar { max-width: 1016px; }
+.gc-parts { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 36px clamp(32px, 5vw, 72px); align-items: start; margin: 0; }
+.gc-part { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0; padding-top: 18px; border-top: 1px solid var(--color-hairline); }
+.gc-part dt { font-weight: 600; font-size: 16px; }
+.gc-part dd { margin: 0; font-size: 16px; line-height: 1.5; text-wrap: pretty; max-width: 44ch; }
+.gc-part img { display: block; height: auto; filter: var(--g-cast); margin-bottom: 14px; }
+.gc-part__pill { width: 80px; }
+.gc-part__card { width: 100%; max-width: 640px; }
+
+/* Floating parts shown by themselves, near twice the size they are in the
+   app, never stretched to fill the column. */
+.gc .gc-el { justify-self: start; width: 100%; }
+.gc .gc-el--processing { max-width: 600px; }
+.gc .gc-el--toast { max-width: 375px; }
+.gc .gc-el--dock { max-width: 640px; }
+
+/* The typeface, set live. */
+.gc-specimen { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.gc-specimen__yours, .gc-specimen__grods { font-size: clamp(20px, 1.9vw, 26px); line-height: 1.35; text-wrap: pretty; }
+.gc-specimen__yours { font-weight: 500; }
+.gc-specimen__grods { font-weight: 400; color: var(--color-ink); }
+.gc-specimen .g-meta { margin-top: 8px; max-width: 46ch; }
+
+@media (max-width: 900px) {
+  .gc-hero .ge-hero__text { padding-top: 8px; }
+  /* On a phone the card keeps its size and runs off the right edge, as it
+     does on a desk: shrunk to the column it would be smaller than life. */
+  .gc-hero__media { margin-right: calc(-1 * var(--g-pad)); overflow: hidden; padding-bottom: 6px; }
+  .gc .gc-hero__media img { width: 720px; max-width: none; }
+  /* three patches across, each a smaller window onto the same grain */
+  .gc-grain { flex-wrap: nowrap; gap: 12px; }
+  .gc-grain figure { width: auto; flex: 1 1 0; min-width: 0; }
+  .gc .gc-grain img { height: 110px; }
+  /* every topping's name stays in view, and the stage keeps the card near
+     life size: it can be panned to the card's far side */
+  .gc-docks__tabs { flex-wrap: wrap; overflow: visible; }
+  .gc-docks__stage { overflow-x: auto; }
+  .gc .gc-docks__stage img { width: 640px; max-width: none; }
+  .gc-pair, .gc-parts { grid-template-columns: minmax(0, 1fr); }
+  .gc-lead + .g-capture, .gc-lead + .ge-stack, .gc-lead + .gc-pair, .gc-lead + .gc-grain { margin-top: -12px; }
+  .gc-printed { left: 12px; bottom: 12px; }
+}

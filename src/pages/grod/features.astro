@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import GrodNight from '../../components/GrodNight.astro';
 import GrodPopOut from '../../components/GrodPopOut.astro';
 import GrodStack from '../../components/GrodStack.astro';
+import GrodWipe from '../../components/GrodWipe.astro';
 import '../../styles/grod.css';
 import '../../styles/grod-e.css';
 import '../../styles/grod-f.css';
@@ -346,11 +347,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </dl>
         </div>
 
+        <div class="gt-lead" id="craft">
+          <h3 class="g-h2"><a class="gt-anchor" href="#craft">That is what it does. This is how it feels.</a></h3>
+          <p class="g-body">One meeting, in light and in dark. Drag the line. The rest of how GRØD looks and feels has a page of its own: the print, the toppings, the recording bar.</p>
+          <p><a class="g-more" href="/grod/craft/">See the craft</a></p>
+        </div>
+        <GrodWipe
+          left="notes-riso" right="notes-riso-dark" ink="riso"
+          altLeft="A meeting's Notes page in GRØD, in light."
+          altRight="The same page in dark."
+        >The same meeting, light and dark.</GrodWipe>
+
         <div class="ge-close">
-          <figure class="g-capture g-win gt-el gt-el--dock">
-            <img src={shot('dock-breathe')} width="1200" height="118" alt="The top of GRØD's Agenda at the end of the day: That was your last meeting. Breathe." loading="lazy" decoding="async" />
-            <figcaption>What the Agenda says when the day's meetings are done.</figcaption>
-          </figure>
           <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
           <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form, no tracker.</span></p>
           <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
