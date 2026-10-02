@@ -85,9 +85,15 @@
 }
 .g-brand { font-weight: 700; font-size: 15px; letter-spacing: 0.12em; color: var(--color-brand); }
 .g-brand:hover { color: var(--color-brand); }
+.g-top { position: relative; }
 .g-nav { display: flex; align-items: center; gap: 28px; font-size: 15px; font-weight: 500; }
 .g-nav a:not(.g-bezel) { color: var(--color-ink); }
 .g-nav a:not(.g-bezel):hover { color: var(--color-brand-strong); }
+.g-nav a[aria-current] { font-weight: 600; }
+/* On a desk the pages are simply items of the row; the menu button is for
+   a phone (see the end of this file). */
+.g-links { display: contents; }
+.g-menu { display: none; }
 .g-bezel {
   display: inline-flex; align-items: center; justify-content: center; height: 34px; padding: 0 13px; border-radius: 8px;
   background: var(--g-key); color: var(--g-key-ink); font-weight: 600; font-size: 14px; line-height: 1; white-space: nowrap;
@@ -169,6 +175,21 @@
   padding: 0; background: none; border-radius: 0; box-shadow: none;
   filter: var(--g-cast-bare);
 }
+
+/* A heading that is the link to its own address. It keeps the heading's
+   ink; pointing at it, or arriving by its address, sets a stop beside it
+   (the Features page's time line draws the same stop). a.g-anchor, not
+   .g-anchor: the page's link colour is set with the same weight
+   (.g a:not(.g-bezel)) and this has to come out ahead of it. */
+.g a.g-anchor, .g a.g-anchor:hover { position: relative; color: inherit; }
+.g-anchor::before {
+  content: ""; position: absolute; left: -17px; top: .5em; width: 7px; height: 7px;
+  border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--color-ink-secondary);
+  opacity: 0; transition: opacity .15s ease;
+}
+.g-anchor:hover::before, .g-anchor:focus-visible::before { opacity: 1; }
+/* a whole chapter being the target lights none of the stops inside it */
+.g :target:not(.ge-clause) .g-anchor::before { opacity: 1; background: var(--color-brand); box-shadow: none; }
 
 /* The wipe (src/components/GrodWipe.astro): two captures of the same window,
    one over the other, the upper one clipped at a line the reader drags. A
@@ -279,22 +300,32 @@
   .g *, .g *::before, .g *::after { animation: none !important; transition: none !important; }
 }
 
-/* On a phone the bar keeps the site's pages and drops the links into the
-   page itself (the #anchors). GRØD, two page names and the key fit at
-   360px; a third page will not, and that is the point to give the phone
-   bar a menu. The footer lists every page whatever the bar holds. */
+/* On a phone the site's pages fold into a menu: GRØD, Menu, and the key.
+   The button opens the pages as a list on a sheet under the bar. Links
+   into the page itself (the #anchors) are left out of it. With no script
+   the bar has no menu (.has-menu is set by src/components/GrodBar.astro),
+   and the pages wrap onto a second line instead. The footer lists every
+   page whatever the bar does. */
 @media (max-width: 640px) {
-  .g-nav { gap: 18px; }
-  .g-top { gap: 16px; }
+  .g-top { gap: 16px; flex-wrap: wrap; }
+  .g-nav { gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
   .g-nav a[href^="#"] { display: none; }
+
+  .g-top.has-menu { flex-wrap: nowrap; }
+  .has-menu .g-nav { flex-wrap: nowrap; }
+  .has-menu .g-menu {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; margin: 0 -10px;
+    font: inherit; font-weight: 500; color: var(--color-ink); background: none; border: 0; cursor: pointer;
+  }
+  .has-menu .g-links {
+    display: none; position: absolute; z-index: 30; top: calc(100% + 4px); left: calc(var(--g-pad) - 6px); right: calc(var(--g-pad) - 6px);
+    padding: 6px; border-radius: 8px;
+    background: var(--color-paper); border: 1px solid var(--color-hairline); box-shadow: var(--g-lift);
+  }
+  .has-menu .g-links.is-open { display: grid; }
+  .has-menu .g-links a { padding: 13px 12px; font-size: 17px; line-height: 1.2; border-radius: 4px; }
+  .has-menu .g-links a + a { border-top: 1px solid var(--color-hairline); border-radius: 0; }
 
   .g-h { letter-spacing: -0.02em; line-height: 1.02; }
   .g-xl { letter-spacing: -0.03em; line-height: 0.98; }
-}
-/* The narrowest phones: the bar draws in so two page names and the key
-   still fit on one line. */
-@media (max-width: 350px) {
-  .g-top { padding-left: 14px; padding-right: 14px; gap: 10px; }
-  .g-nav { gap: 11px; font-size: 14px; }
-  .g-bezel { padding: 0 10px; }
 }

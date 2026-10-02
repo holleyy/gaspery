@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH, GROD_PAGES, GROD_POLICY_PATH } from '../src/lib/grod.ts';
+import { BETA_URL, GROD_CARD, GROD_EXPLORATIONS, GROD_FAQ_PATH, GROD_GO_PATH, GROD_PAGES, GROD_POLICY_PATH, GROD_PRIVACY_PATH } from '../src/lib/grod.ts';
 import {
   DEMO_MEETINGS,
   DEMO_TODAY,
@@ -21,10 +21,21 @@ test('the page is /grod, and its call to action is counted on its own go page', 
   assert.match(read('src/pages/grod/go.astro'), /GrodGo/);
 });
 
-test('a phone keeps the page links in the bar and drops only the in-page ones', () => {
+test('one bar on every GRØD page, and on a phone its pages fold into a menu', () => {
+  for (const file of ['src/components/GrodSentence.astro', 'src/pages/grod/features.astro', 'src/pages/grod/craft.astro', 'src/pages/grod/privacy.astro', 'src/pages/grod/faq.astro', 'src/pages/grod/privacy-policy.astro']) {
+    const page = read(file);
+    assert.match(page, /<GrodBar[ >]/, file);
+    assert.doesNotMatch(page, /<header class="g-top">/, file);
+  }
+  const bar = read('src/components/GrodBar.astro');
+  assert.match(bar, /GROD_PAGES\.map/);
+  assert.match(bar, /<button type="button" class="g-menu" aria-expanded="false" aria-controls="g-links">Menu<\/button>/);
+  assert.match(bar, /href=\{GROD_GO_PATH\}/);
   const css = read('src/styles/grod.css');
-  assert.match(css, /@media \(max-width: 640px\) \{[^}]*\}\s*\.g-top \{[^}]*\}\s*\.g-nav a\[href\^="#"\] \{ display: none; \}/);
-  assert.doesNotMatch(css, /\.g-nav a:not\(\.g-bezel\) \{ display: none; \}/);
+  // the menu exists only once the script has marked the bar, and only on a phone
+  assert.match(css, /\.g-menu \{ display: none; \}/);
+  assert.match(css, /@media \(max-width: 640px\) \{[\s\S]*\.has-menu \.g-links\.is-open \{ display: grid; \}/);
+  assert.match(css, /\.g-nav a\[href\^="#"\] \{ display: none; \}/);
 });
 
 test('the Features page is reachable from the home page and counts its beta click', () => {
@@ -35,9 +46,8 @@ test('the Features page is reachable from the home page and counts its beta clic
   // home page offers Features beside each call to action
   assert.ok(GROD_PAGES.some((p) => p.href === '/grod/features/'));
   const home = read('src/pages/grod/index.astro');
-  assert.match(home, /nav=\{\[\.\.\.GROD_PAGES,/);
   assert.match(home, /more=\{\{ href: GROD_PAGES\[0\]\.href/);
-  assert.match(read('src/components/GrodNight.astro'), /\.\.\.GROD_PAGES\]/);
+  assert.match(read('src/components/GrodNight.astro'), /\.\.\.GROD_PAGES,/);
   assert.equal(read('src/components/GrodSentence.astro').match(/\{more && <a class="g-more"/g)?.length, 2);
   // every time on the line has its section
   const ids = [...page.matchAll(/\{ id: '([a-z]+)', label:/g)].map((m) => m[1]);
@@ -64,7 +74,7 @@ test('every feature on the Features page has an address of its own', () => {
   const headings = [...page.matchAll(/<h3 class="g-h2">(.*?)<\/h3>/g)];
   assert.ok(headings.length >= 20);
   for (const [, inner] of headings) {
-    const id = inner.match(/^<a class="gt-anchor" href="#([a-z-]+)">/)?.[1];
+    const id = inner.match(/^<a class="g-anchor" href="#([a-z-]+)">/)?.[1];
     assert.ok(id, `no address on: ${inner}`);
     assert.match(page, new RegExp(`<div class="(ge-row|gt-lead|gt-needs)" id="${id}">`), id);
   }
@@ -282,5 +292,93 @@ test('every family a page names has local rules, and every file they point to ex
     assert.doesNotMatch(css, /https?:/);
     for (const m of css.matchAll(/url\((\/fonts\/[^)]+)\)/g)) readFileSync(new URL(`../public${m[1]}`, import.meta.url));
   }
+});
+
+/* ---- The Privacy page and the FAQ ------------------------------------------ */
+const visible = (file: string) => read(file).replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+
+test('Privacy is in the bar, the FAQ and the policy are in the footer', () => {
+  assert.equal(GROD_PRIVACY_PATH, '/grod/privacy/');
+  assert.equal(GROD_FAQ_PATH, '/grod/faq/');
+  assert.ok(GROD_PAGES.some((p) => p.href === GROD_PRIVACY_PATH));
+  assert.ok(!GROD_PAGES.some((p) => p.href === GROD_FAQ_PATH));
+  const foot = read('src/components/GrodNight.astro');
+  assert.match(foot, /\{ href: GROD_FAQ_PATH, label: 'FAQ' \}/);
+  assert.match(foot, /href=\{GROD_POLICY_PATH\}/);
+});
+
+test('the Privacy page says the promise exactly and none of the lines it must never say', () => {
+  const page = visible('src/pages/grod/privacy.astro');
+  assert.match(page, /Your meeting content never leaves this Mac\./);
+  for (const banned of [/nothing leaves your mac/i, /works fully offline/i, /exactly one file/i, /network monitor/i, /100% on-device/i, /no cloud\./i, /cannot reach the network/i, /don't trust us/i, /architecture, not policy/i, /—/]) {
+    assert.doesNotMatch(page, banned, String(banned));
+  }
+  // every receipt has an address, and the page points at the policy and the questions
+  for (const id of ['ledger', 'network', 'servers', 'account', 'downloads', 'telemetry', 'diagnostics', 'failure', 'permissions', 'deletion', 'macos', 'calendars', 'join', 'export', 'mcp']) {
+    assert.match(page, new RegExp(` id="${id}"`), id);
+  }
+  assert.match(page, /href=\{GROD_POLICY_PATH\}/);
+  assert.match(page, /href=\{GROD_FAQ_PATH\}/);
+  assert.match(read('src/pages/grod/privacy.astro'), /THESIS:[\s\S]*FINISH: unreviewed and undocumented is unfinished/);
+});
+
+test('the ledger never says a meeting app carries nothing: only that GRØD passes a link', () => {
+  const page = read('src/pages/grod/privacy.astro');
+  const rows = [...page.matchAll(/\{ who: '([^']+)', href: '#([a-z]+)', what: '((?:[^'\\]|\\.)+)', meetings: '([^']+)' \}/g)];
+  assert.equal(rows.length, 6);
+  const app = rows.find((r) => /meeting app/.test(r[1]));
+  assert.equal(app?.[4], 'Never from GRØD. It passes the address, never meeting content.');
+  assert.equal(rows[0][4], 'Never');
+  // each sender links to its receipt, and the receipt exists
+  for (const row of rows) assert.match(page, new RegExp(` id="${row[2]}"`), row[2]);
+  // macOS fetching Apple's assets is hedged, as in the source
+  assert.match(rows.find((r) => r[1] === 'Your Mac, to Apple')?.[3] ?? '', /^macOS may fetch/);
+});
+
+test('every question in the FAQ has an address of its own, and nothing is left to fill in', () => {
+  const page = read('src/pages/grod/faq.astro');
+  const ids = [...page.matchAll(/\{ id: '([a-z-]+)', q: '|\{ id: '([a-z-]+)', q: "/g)].map((m) => m[1] ?? m[2]);
+  const groups = [...page.matchAll(/\{ id: '([a-z-]+)', name: '/g)].map((m) => m[1]);
+  assert.equal(groups.length, 4);
+  assert.ok(ids.length >= 20, String(ids.length));
+  assert.equal(new Set([...ids, ...groups]).size, ids.length + groups.length, 'an address is used twice');
+  const text = visible('src/pages/grod/faq.astro');
+  assert.doesNotMatch(text, /\[[a-z -]+\]/i, 'a [placeholder] is still in the FAQ');
+  assert.doesNotMatch(text, /—/);
+  assert.doesNotMatch(text, /works fully offline|nothing leaves your mac/i);
+  assert.match(page, /href="\$\{GROD_POLICY_PATH\}"/);
+  assert.match(page, /href="\$\{GROD_PRIVACY_PATH\}"/);
+  assert.match(page, /THESIS:[\s\S]*FINISH: unreviewed and undocumented is unfinished/);
+});
+
+test('an answer that points somewhere points at an address that exists', () => {
+  const faq = read('src/pages/grod/faq.astro');
+  const sees = [...faq.matchAll(/see: \{ href: ['`]([^'`]+)['`], label: '([^']+)' \}/g)].map((m) => m[1].replace('${GROD_PRIVACY_PATH}', GROD_PRIVACY_PATH));
+  assert.ok(sees.length >= 10, String(sees.length));
+  const pages: Record<string, string> = {
+    '/grod/features/': read('src/pages/grod/features.astro'),
+    '/grod/craft/': read('src/pages/grod/craft.astro'),
+    '/grod/privacy/': read('src/pages/grod/privacy.astro'),
+  };
+  for (const href of sees) {
+    const [path, id] = href.split('#');
+    assert.ok(pages[path], `no such page: ${href}`);
+    if (id) assert.match(pages[path], new RegExp(` id="${id}"`), href);
+  }
+  // and Features sends its reader on to the questions
+  assert.match(pages['/grod/features/'], /<a class="g-more" href=\{GROD_FAQ_PATH\}>/);
+});
+
+test('every GRØD page unfurls with GRØD\'s own share card', () => {
+  assert.equal(GROD_CARD.src, '/og/grod.jpg');
+  const card = readFileSync(new URL('../public/og/grod.jpg', import.meta.url));
+  assert.ok(card.length > 20_000 && card.length < 300_000, `${card.length} bytes`);
+  assert.doesNotMatch(GROD_CARD.alt, /—/);
+  for (const file of ['src/components/GrodSentence.astro', 'src/pages/grod/features.astro', 'src/pages/grod/craft.astro', 'src/pages/grod/privacy.astro', 'src/pages/grod/faq.astro', 'src/pages/grod/privacy-policy.astro']) {
+    assert.match(read(file), /card=\{GROD_CARD\}/, file);
+  }
+  const base = read('src/layouts/Base.astro');
+  assert.match(base, /new URL\(card\?\.src \?\? '\/og\/card\.png', Astro\.site\)/);
+  assert.match(base, /<meta property="og:image:alt" content=\{ogAlt\} \/>/);
 });
 

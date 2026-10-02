@@ -19,16 +19,27 @@ export const GROD_GO_PATH = '/grod/go/';
 
 /* The site's pages after the home page, in the order the bar and the footer
    list them. One list, so a new page is one line here and appears in both
-   on every page. The bar holds two on a phone; a third page means the phone
-   bar needs a menu (see the note in src/styles/grod.css). */
+   on every page. On a phone the bar folds them into a menu
+   (src/components/GrodBar.astro). */
 export const GROD_HOME = '/grod/';
-/* The policy is linked from the footer only; it is not one of the pages
-   the bar lists. */
+/* The policy and the FAQ are linked from the footer only; they are not
+   among the pages the bar lists. */
 export const GROD_POLICY_PATH = '/grod/privacy-policy/';
+export const GROD_FAQ_PATH = '/grod/faq/';
+export const GROD_PRIVACY_PATH = '/grod/privacy/';
 export const GROD_PAGES = [
   { href: '/grod/features/', label: 'Features' },
   { href: '/grod/craft/', label: 'Craft' },
+  { href: GROD_PRIVACY_PATH, label: 'Privacy' },
 ] as const;
 
 /* The explorations served in development. */
 export const GROD_EXPLORATIONS = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] as const;
+
+/* The share card every GRØD page unfurls with: printed by
+   scripts/grod-share-card.mjs. */
+export const GROD_CARD = {
+  src: '/og/grod.jpg',
+  alt: 'GRØD. Meetings, distilled. It remembers what was said, who said it, and what you decided. Beside the words, the app\'s Agenda in a Mac window.',
+};
+

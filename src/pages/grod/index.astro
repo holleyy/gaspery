@@ -2,7 +2,7 @@
 import GrodSentence from '../../components/GrodSentence.astro';
 import '../../styles/grod-f.css';
 import '../../styles/grod-g.css';
-import { GROD_PAGES } from '../../lib/grod';
+import { GROD_PAGES, GROD_PRIVACY_PATH } from '../../lib/grod';
 
 /* /grod: the GRØD landing page (see src/lib/grod.ts). It is the "h" cut of
    the sentence page, src/components/GrodSentence.astro: the hero opens on
@@ -25,7 +25,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 ---
 <GrodSentence
   arm="h" home="/grod/" title="GRØD · Meetings, distilled" contract={contract}
-  nav={[...GROD_PAGES, { href: '#mac', label: 'On this Mac' }]}
+  nav={[{ href: '#mac', label: 'On this Mac' }]}
+  privacy={GROD_PRIVACY_PATH}
   more={{ href: GROD_PAGES[0].href, label: 'See everything it does' }}
   class="gf gg" dark={['said', 'decided', 'mac']} motif="oats" hero="distilled" year="live" heroMedia="agenda"
 />

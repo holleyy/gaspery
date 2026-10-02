@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
 import GrodNight from '../../components/GrodNight.astro';
 import '../../styles/grod.css';
+import { GROD_CARD } from '../../lib/grod';
 import '../../styles/grod-policy.css';
-import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
+
 
 /* /grod/privacy-policy: GRØD's legal privacy policy, and the address given
    to App Store Connect. It is a document, not a sales page: one reading
@@ -27,6 +29,7 @@ const HISTORY = 'https://github.com/holleyy/gaspery/commits/main/src/pages/grod/
   title="Privacy Policy · GRØD"
   description="GRØD's privacy policy, in plain English. Your meeting content never leaves this Mac; what little reaches Gaspery Limited, and how, is set out here."
   theme="light"
+  card={GROD_CARD}
   fonts={[
     'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
     'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
@@ -42,13 +45,7 @@ FIRST VIEWPORT: the bar; "Privacy Policy" in the display serif; the date; the Pl
 FORM: a plain document, agreed with the user on 2026-10-02; seed key b3c9e4e4.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->
-  <header class="g-top">
-    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
-    <nav class="g-nav" aria-label="Site">
-      {GROD_PAGES.map((page) => <a href={page.href}>{page.label}</a>)}
-      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
-    </nav>
-  </header>
+  <GrodBar />
 
   <main id="main" class="gp-doc">
     <h1 class="g-h gp-title">Privacy Policy</h1>

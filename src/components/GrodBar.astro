@@ -1,0 +1,55 @@
+---
+/* The bar at the top of every GRØD page: the wordmark, the site's pages, and
+   the key. One component, so a new page is one line in src/lib/grod.ts.
+
+   On a desk the pages sit in a row. On a phone three page names and the key
+   do not fit on one line, so the pages fold into a Menu button that opens
+   them as a list under the bar. The inline script marks the bar as having a
+   menu before the first paint; with no script the pages simply wrap onto a
+   second line, and every one of them is also in the footer. Styles are in
+   src/styles/grod.css (.g-top, .g-menu, .g-links). */
+import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../lib/grod';
+
+interface Props {
+  home?: string;
+  /* links into the page itself, shown after the site's pages on a desk */
+  extra?: readonly { href: string; label: string }[];
+}
+const { home = GROD_HOME, extra = [] } = Astro.props;
+const here = Astro.url.pathname.replace(/\/?$/, '/');
+---
+<header class="g-top">
+  <a class="g-brand" href={home} aria-label="GRØD home">GRØD</a>
+  <nav class="g-nav" aria-label="Site">
+    <button type="button" class="g-menu" aria-expanded="false" aria-controls="g-links">Menu</button>
+    <div class="g-links" id="g-links">
+      {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === here ? 'page' : undefined}>{page.label}</a>)}
+      {extra.map((link) => <a href={link.href}>{link.label}</a>)}
+    </div>
+    <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+  </nav>
+</header>
+<script is:inline>document.currentScript.previousElementSibling.classList.add('has-menu');</script>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('.g-top.has-menu');
+  const button = bar?.querySelector<HTMLButtonElement>('.g-menu');
+  const links = bar?.querySelector<HTMLElement>('.g-links');
+  if (bar && button && links) {
+    const set = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      button.textContent = open ? 'Close' : 'Menu';
+      links.classList.toggle('is-open', open);
+    };
+    button.addEventListener('click', () => set(button.getAttribute('aria-expanded') !== 'true'));
+    links.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') { set(false); button.focus(); }
+    });
+    /* pointerdown, not click: a phone may send no click for a tap on plain
+       text. And tabbing on past the list closes it, so it is never left
+       open over the page. */
+    document.addEventListener('pointerdown', (e) => { if (!bar.contains(e.target as Node)) set(false); });
+    bar.addEventListener('focusout', (e) => { if (e.relatedTarget && !bar.contains(e.relatedTarget as Node)) set(false); });
+  }
+</script>

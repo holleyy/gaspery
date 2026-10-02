@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import GrodBar from './GrodBar.astro';
 import GrodNight from './GrodNight.astro';
 import GrodPopOut from './GrodPopOut.astro';
 import GrodYear from './GrodYear.astro';
@@ -8,7 +9,7 @@ import '../styles/grod.css';
 import '../styles/grod-e.css';
 import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { GROD_GO_PATH } from '../lib/grod';
+import { GROD_CARD, GROD_GO_PATH } from '../lib/grod';
 
 /* The sentence page: five clauses, each with the real captures for it.
    Arms e, f, g and h are this one page cut four ways (see their files for
@@ -23,7 +24,10 @@ interface Props {
   /* Where the wordmark links: the page's own address. */
   home?: string;
   /* The bar's links, before the beta key. */
+  /* links into the page itself, shown in the bar after the site's pages */
   nav?: readonly { href: string; label: string }[];
+  /* where the last clause's receipts are set out in full */
+  privacy?: string;
   /* A second, quieter action beside each "Join the beta": the way on for a
      reader who is not ready to write in. */
   more?: { href: string; label: string };
@@ -42,7 +46,7 @@ interface Props {
   /* The app in the hero: the Agenda, beside the words. */
   heroMedia?: 'none' | 'agenda';
 }
-const { arm, home = `/grod/${arm}/`, nav = [{ href: '#mac', label: 'On this Mac' }], more, title, contract, class: cls = '', dark = [], motif = 'sun', hero = 'remembers', year = 'capture', heroMedia = 'none' } = Astro.props;
+const { arm, home = `/grod/${arm}/`, nav = [{ href: '#mac', label: 'On this Mac' }], more, privacy, title, contract, class: cls = '', dark = [], motif = 'sun', hero = 'remembers', year = 'capture', heroMedia = 'none' } = Astro.props;
 
 /* The hero's films. Each is used as soon as it exists in /public; the
    first one present plays, and ?film=<id> shows another, to compare. Until
@@ -67,6 +71,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
   title={title}
   description="GRØD remembers what was said, who said it, and what you decided, for as long as you keep it, on this Mac. A private, Mac-native memory for your meetings."
   theme="light"
+  card={GROD_CARD}
   fonts={[
     'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
     'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
@@ -82,13 +87,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
       if (root && /[?&]depth=soft/.test(location.search)) root.classList.add('g--soft');
     })();
   </script>
-  <header class="g-top">
-    <a class="g-brand" href={home} aria-label="GRØD home">GRØD</a>
-    <nav class="g-nav" aria-label="Page">
-      {nav.map((link) => <a href={link.href}>{link.label}</a>)}
-      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
-    </nav>
-  </header>
+  <GrodBar home={home} extra={nav} />
 
   <main id="main">
     <section class={`ge-hero ${heroMedia === 'agenda' ? 'ge-hero--media' : ''}`} data-hero={hero} aria-labelledby="h1">
@@ -244,6 +243,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
           <div><dt>The call</dt><dd>Nobody in the call knows it is there. Telling the other person is still on you.</dd></div>
           <div><dt>Deletion</dt><dd>“Recording removed” appears only once it is true.</dd></div>
         </dl>
+        {privacy && <p><a class="g-more" href={privacy}>The receipts, in full</a></p>}
         <figure class="g-capture g-win ge-toast">
           <img src="/shots/grod/landing/toast.webp" width="375" height="67" alt="A receipt in GRØD: 2 notes deleted, with Undo." loading="lazy" decoding="async" />
           <figcaption>The receipt, with undo.</figcaption>

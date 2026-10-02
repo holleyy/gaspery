@@ -1,0 +1,210 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-e.css';
+import '../../styles/grod-f.css';
+import '../../styles/grod-g.css';
+import '../../styles/grod-privacy.css';
+import { GROD_CARD, GROD_FAQ_PATH, GROD_GO_PATH, GROD_POLICY_PATH } from '../../lib/grod';
+
+/* /grod/privacy: the receipts. The page a sceptical reader, or their IT
+   department, reads line by line. It is organised by who acts: what GRØD
+   does, what your Mac and other apps do on their own, what you choose to
+   share. Every sentence names its actor and describes something the app
+   enforces.
+
+   The copy is the GRØD repo's (docs/product/website/03-privacy.md), and
+   that file's rule holds here: do not soften, embellish or generalise any
+   of it. If a line needs to change, the app's README privacy section
+   changes first. The ledger under the heading is those same sentences,
+   arranged as a table. This is a product page; the legal policy is
+   /grod/privacy-policy. The direction contract is the first comment inside
+   the page root. */
+
+const landing = (name: string) => `/shots/grod/landing/${name}.webp`;
+
+/* What leaves this Mac, and who sends it. Each row restates a sentence of
+   the copy below it; nothing is claimed here that is not claimed there. */
+const ledger = [
+  { who: 'GRØD, to a GRØD server', href: '#servers', what: 'Nothing. There is no GRØD server.', meetings: 'Never' },
+  { who: 'GRØD, to Hugging Face', href: '#network', what: 'A request for a model file, only when you choose to download one.', meetings: 'Never' },
+  { who: 'Your Mac, to Apple', href: '#macos', what: 'macOS may fetch its own speech, language and Apple Intelligence assets.', meetings: 'Never' },
+  { who: 'Your Mac, to your calendar accounts', href: '#calendars', what: 'Keeping Google, Microsoft 365 or iCloud calendars in sync. That is your Mac\'s job, not GRØD\'s.', meetings: 'Never' },
+  { who: 'Your browser or meeting app', href: '#join', what: 'Its own connection to the call, after GRØD hands it the link.', meetings: 'Never from GRØD. It passes the address, never meeting content.' },
+  { who: 'You', href: '#sharing', what: 'Whatever you export, copy or share, to wherever you send it.', meetings: 'Only what you choose' },
+];
+---
+<Base
+  title="Privacy · GRØD"
+  description="Your meeting content never leaves this Mac. What that means, line by line: no GRØD server, no GRØD account, no telemetry, and the few places your Mac or another app does something on its own."
+  theme="light"
+  card={GROD_CARD}
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain ge gf gg gv">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode persuade · /grod/privacy
+THESIS: The promise, then the receipts, sorted by who acts: GRØD, your Mac, another app, you. It refuses the trust badge and the adjective; every line names an actor and something checkable.
+OWN-WORLD: the home page's world unchanged (grained bone paper and night bands, Merriweather 300 at poster size, Atkinson Hyperlegible Next, real captures, the app's card lift), plus one table, ruled in hairlines, with the actors set in the serif.
+STORY: "They told me exactly what goes out, and it is not my meetings." Read the promise, check the ledger, find the actor you were worried about, then the policy, the questions, or the beta.
+FIRST VIEWPORT: the bar; "Your meeting content never leaves this Mac." at poster size over two lines; the two-paragraph lede; the ledger's heading and first rows at the fold.
+SIGNATURE: the ledger. Everything that leaves the Mac, who sends it, and whether it carries your recordings and notes.
+FORM: a ledger and its receipts, agreed with the user on 2026-10-02; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <GrodBar />
+
+  <main id="main">
+    <section class="gv-hero" aria-labelledby="h1">
+      <h1 class="g-h gv-h1" id="h1"><span class="g-ghost"><span aria-hidden="true">Your meeting content never leaves this Mac.</span>Your meeting content never leaves this Mac.</span></h1>
+      <div class="gv-intro">
+        <p class="g-lede">GRØD records, transcribes, separates speakers, searches and writes summaries on your Mac. GRØD never uploads your audio, transcripts, notes or calendar data. There is no GRØD account, no telemetry and no cloud sync of its own.</p>
+        <p class="g-body">That is a promise about what GRØD does. Below is exactly what it means, and the few places your Mac or another app does something on its own.</p>
+      </div>
+
+      <div class="gv-ledger" id="ledger">
+        {/* The roles are spelled out because on a phone the table is laid
+            out as blocks, and a table drawn that way can lose them. */}
+        <table role="table" aria-labelledby="h-ledger">
+          <caption role="caption"><h2 id="h-ledger">What leaves this Mac, and who sends it</h2></caption>
+          <thead role="rowgroup">
+            <tr role="row"><th role="columnheader" scope="col">Who sends it</th><th role="columnheader" scope="col">What goes out</th><th role="columnheader" scope="col">Your recordings and notes</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            {ledger.map((row) => (
+              <tr role="row">
+                <th role="rowheader" scope="row"><a href={row.href}>{row.who}</a></th>
+                <td role="cell" data-label="What goes out">{row.what}</td>
+                <td role="cell" data-label="Your recordings and notes" class="gv-ledger__meetings">{row.meetings}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== What GRØD does ==================== -->
+    <section class="ge-clause" id="grod" data-band="dark" aria-labelledby="h-grod">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-grod">What GRØD does.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row" id="network">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="g-anchor" href="#network">One reason to go online</a></h3>
+            <p class="g-body">GRØD's only first-party network use is the model downloads you choose to start, for transcription or for summaries. They come over HTTPS from Hugging Face, every redirect is checked against an allowlist, and every file is checksum-verified before it is used.</p>
+            <p class="g-body">All of GRØD's own networking lives in one place, and a test fails the build if GRØD's own code opens a second route.</p>
+          </div>
+          <figure class="g-capture g-detail">
+            <img src={landing('engines')} width="1464" height="308" alt="GRØD's settings: Transcription engine. Apple, built-in, live, selected. Two larger models listed as not installed, with their sizes." loading="lazy" decoding="async" />
+            <figcaption>The built-in engine is selected. The others are yours to download, or not.</figcaption>
+          </figure>
+        </div>
+
+        <dl class="g-receipts">
+          <div id="servers"><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics, not for anything else. There is nowhere for GRØD to send your meetings.</dd></div>
+          <div id="account"><dt>Account</dt><dd>There is nothing to sign in to. GRØD does not know who you are.</dd></div>
+          <div id="downloads"><dt>Downloads you did not ask for</dt><dd>None from GRØD. The default install uses Apple's built-in speech and language models, so GRØD has nothing to download until you choose a model.</dd></div>
+          <div id="telemetry"><dt>Telemetry</dt><dd>None. No analytics, no crash reporting service, no usage tracking.</dd></div>
+          <div id="diagnostics"><dt>Diagnostics</dt><dd>GRØD's diagnostics are a fixed list of content-free events, written to your Mac's own log. If you ever need help, you can create a diagnostics bundle. It is made on this Mac and goes nowhere unless you save or share it.</dd></div>
+          <div id="failure"><dt>Failure</dt><dd>If GRØD ever cannot open your library, it stops and tells you. It never resets it, moves it or migrates it to make the problem go away.</dd></div>
+          <div id="permissions" class="gv-wide"><dt>Permissions</dt><dd>Microphone, for your side of the call. System Audio Recording, for the other side. Calendar, if you want your week in GRØD. Notifications, if you want to be told a meeting is starting. Each is asked for once, with a reason, and saying no to one never blocks the others.</dd></div>
+        </dl>
+
+        <div class="ge-row" id="deletion">
+          <div class="ge-row__text">
+            <h3 class="g-h2"><a class="g-anchor" href="#deletion">Deleted means deleted</a></h3>
+            <p class="g-body">When you delete, a receipt gives you twelve seconds to undo. After that it is done, and “Recording removed” appears only once it is true.</p>
+          </div>
+          <figure class="g-capture g-win gv-el gv-el--toast">
+            <img src={landing('toast')} width="375" height="67" alt="A receipt in GRØD: a draining ring, 2 notes deleted, and Undo." loading="lazy" decoding="async" />
+            <figcaption>The receipt, with undo.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Your Mac and other apps ==================== -->
+    <section class="ge-clause" id="your-mac" aria-labelledby="h-mac">
+      <div class="ge-pin"><h2 class="g-h" id="h-mac">What your Mac and other apps do.</h2></div>
+      <div class="ge-body">
+        <dl class="g-receipts">
+          <div id="macos"><dt>Your Mac fetches its own models</dt><dd>macOS may fetch Apple speech, language and Apple Intelligence assets when they are first needed, for example when you start your first recording. That is your Mac updating its own frameworks. It is managed by macOS, it can happen even if you never download a model in GRØD, and it never includes your meetings.</dd></div>
+          <div id="calendars"><dt>Your Mac keeps your calendars</dt><dd>Calendars reach GRØD through your Mac's own calendar store. Keeping Google, Microsoft 365 or iCloud calendars in sync is your Mac's job, not GRØD's.</dd></div>
+          <div id="join"><dt>Join hands over a link</dt><dd>When you press Join, GRØD hands the meeting link to your browser or conference app, which then makes its own connections. GRØD passes the address, never meeting content.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== What you choose to share ==================== -->
+    <section class="ge-clause" id="sharing" data-band="dark" aria-labelledby="h-sharing">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-sharing">What you choose to share.</h2></div>
+      <div class="ge-body">
+        <dl class="g-receipts">
+          <div id="export"><dt>Export, Copy and Share</dt><dd>They do what they say, to where you send them.</dd></div>
+          <div id="mcp"><dt>The local MCP server</dt><dd>If you turn on the local MCP server in Search settings, a local app you configure can read your meetings on this Mac. It is off by default, read-only, and has no network listener.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ==================== Recording other people ==================== -->
+    <section class="ge-clause" id="other-people" aria-labelledby="h-people">
+      <div class="ge-pin"><h2 class="g-h" id="h-people">Recording other people.</h2></div>
+      <div class="ge-body">
+        <div class="ge-row">
+          <div class="ge-row__text">
+            <p class="g-body">GRØD records your call and learns to recognise voices across meetings, so it can label who said what. Telling the other person is on you.</p>
+            <p class="g-body">Once you connect a calendar, GRØD records scheduled meetings by itself. A card appears before each one so you can skip any meeting you would rather it left alone. GRØD tells you this during setup, before anything is recorded.</p>
+          </div>
+          <div class="gv-proof">
+            <figure class="g-capture g-win gv-el gv-el--setup">
+              <img src={landing('onboard-disclosure')} width="1360" height="1280" alt="GRØD's first run: GRØD records your call and learns to recognise voices across meetings, so it can label who said what. Telling the other person is on you. A key reads Turn on system audio, beside Not now." loading="lazy" decoding="async" />
+              <figcaption>Setup says it in the same words, before anything is recorded.</figcaption>
+            </figure>
+            <figure class="g-capture g-win gv-el gv-el--card">
+              <img src="/shots/grod/craft/card.webp" width="640" height="124" alt="GRØD's pre-meeting card: Weekly product review, in 12 min, 60 min, Don't record, and a Join key." loading="lazy" decoding="async" />
+              <figcaption>The card before a meeting: Join, or Don't record.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Why we can say this ==================== -->
+    <section class="ge-clause ge-clause--last" id="why" data-band="dark" aria-labelledby="h-why">
+      <div class="g-dots" aria-hidden="true"></div>
+      <div class="ge-pin"><h2 class="g-h" id="h-why">Why we can say this.</h2></div>
+      <div class="ge-body">
+        <div class="gv-lead">
+          <p class="g-body">GRØD is built for Apple's Mac App Store sandbox. Its network access is declared, narrow, and used for one thing.</p>
+          <p class="g-body">This page describes the app. The legal version, which also covers this website and the beta, is the <a href={GROD_POLICY_PATH}>privacy policy</a>. Shorter answers are in the <a href={GROD_FAQ_PATH}>questions</a>.</p>
+        </div>
+        <div class="ge-close">
+          <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form.</span></p>
+          <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GrodNight motif="oats" note="Every capture on this page is the app, running its Demo workspace." />
+</div>
+
+<script>
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.querySelector<HTMLButtonElement>('.ge-share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split(/[?#]/)[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>
