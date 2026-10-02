@@ -1,13 +1,15 @@
 ---
 import '../styles/global.css';
+import FONT_FACES from '../lib/fonts.json';
 
 interface Props {
   title: string;
   description?: string;
   mono?: boolean;
   /* A page that lives in another product's type system (the Skål landing
-     pages set Blekk's faces) passes its own Google Fonts family strings and
-     the site's pair is not requested at all. */
+     pages set Blekk's faces) passes its own family strings and the site's
+     pair is not loaded at all. The strings are written the way Google Fonts
+     writes them, which is how scripts/fetch-fonts.mjs finds the faces. */
   fonts?: string[];
   /* A page that is light-only (the GRØD landing pages, whose captures are
      the app on light paper) pins the appearance here. Set server-side, it
@@ -25,7 +27,17 @@ const families = [
   'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
 ];
 if (mono) families.push('family=IBM+Plex+Mono:wght@400;600');
-const fontsHref = `https://fonts.googleapis.com/css2?${(fonts ?? families).join('&')}&display=swap`;
+
+/* The typefaces are served from this site (public/fonts), so a visit sends
+   nothing to a font service. scripts/fetch-fonts.mjs downloads the files and
+   writes the @font-face rules for each family string into src/lib/fonts.json;
+   the rules for this page's strings are set in its head. A string with no
+   rules fails the build here, rather than shipping a page in fallback type. */
+const faces = FONT_FACES as Record<string, string>;
+const fontFaces = (fonts ?? families).map((family) => {
+  if (!faces[family]) throw new Error(`No local typeface for "${family}". Run: node scripts/fetch-fonts.mjs`);
+  return faces[family];
+}).join('');
 
 /* The whole audience arrives by link, so the preview card is the first
    surface most visitors ever see of this site. Canonical + OG/Twitter meta
@@ -96,12 +108,7 @@ const ogImage = new URL('/og/card.png', Astro.site);
       href="/rss.xml"
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href={fontsHref}
-      rel="stylesheet"
-    />
+    <style is:inline set:html={fontFaces}></style>
     {/* Pageviews are counted by Counterscale, a small analytics Worker on
         this site's own Cloudflare account (counterscale.holleyalex.workers.dev).
         It sets no cookies and shares nothing with a third party, which is the
