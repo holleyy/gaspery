@@ -22,6 +22,9 @@ export const GROD_GO_PATH = '/grod/go/';
    on every page. The bar holds two on a phone; a third page means the phone
    bar needs a menu (see the note in src/styles/grod.css). */
 export const GROD_HOME = '/grod/';
+/* The policy is linked from the footer only; it is not one of the pages
+   the bar lists. */
+export const GROD_POLICY_PATH = '/grod/privacy-policy/';
 export const GROD_PAGES = [
   { href: '/grod/features/', label: 'Features' },
   { href: '/grod/craft/', label: 'Craft' },

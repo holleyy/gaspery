@@ -1,0 +1,5 @@
+# The typefaces. Each file's name carries a hash of its contents
+# (scripts/fetch-fonts.mjs), so a changed face has a new name and an old
+# address never needs checking again.
+/fonts/*.woff2
+  Cache-Control: public, max-age=31536000, immutable

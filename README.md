@@ -20,8 +20,13 @@ npm run preview
 
 Requires Node 22.18+ — `npm test` runs on Node's native TypeScript type
 stripping, which is unflagged only from that version on. `.nvmrc` pins `22`;
-developed and tested on v24.14.1. Fonts (Merriweather + Inter) load from
-Google Fonts — the only external request.
+developed and tested on v24.14.1.
+
+The typefaces are served from the site itself (`public/fonts`), so a visit
+sends nothing to a font service. `node scripts/fetch-fonts.mjs` downloads
+them and writes their `@font-face` rules to `src/lib/fonts.json`; run it
+after giving a page a new family string. The only request a page makes to
+another host is the pageview counter.
 
 ## What's where
 

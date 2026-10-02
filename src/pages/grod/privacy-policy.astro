@@ -1,0 +1,157 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-policy.css';
+import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
+
+/* /grod/privacy-policy: GRØD's legal privacy policy, and the address given
+   to App Store Connect. It is a document, not a sales page: one reading
+   column on paper, the site's bar above it and its footer below, nothing
+   else. The product page about privacy is a separate page.
+
+   The text is the GRØD repo's (docs/product/website/07-privacy-policy.md):
+   a Plain English section that answers the whole question, then the small
+   print. Every claim about the app restates that repo's audited surfaces,
+   so when the app's network seam changes, this page changes in the same
+   change. The claims about this website were checked against this repo and
+   are listed in the comment above "This website" below.
+
+   The company's number and registered office are also printed by
+   src/components/Imprint.astro; a test holds the two to the same values. */
+
+const UPDATED = '2 October 2026';
+const HISTORY = 'https://github.com/holleyy/gaspery/commits/main/src/pages/grod/privacy-policy.astro';
+---
+<Base
+  title="Privacy Policy · GRØD"
+  description="GRØD's privacy policy, in plain English. Your meeting content never leaves this Mac; what little reaches Gaspery Limited, and how, is set out here."
+  theme="light"
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain gp">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode read · /grod/privacy-policy
+THESIS: A legal document a person can read in two minutes: the whole answer first, in plain English, then the small print. It refuses the wall of clauses.
+OWN-WORLD: the GRØD site's paper, bar and night footer, with one reading column: Merriweather for the title and headings, Atkinson Hyperlegible Next for the text. No captures, no bands, no motion.
+STORY: "They have almost nothing of mine, and they say exactly what." Read Plain English, stop there or go on, find a section by its address.
+FIRST VIEWPORT: the bar; "Privacy Policy" in the display serif; the date; the Plain English section beginning under it at a larger text size, with the promise set in italic serif.
+FORM: a plain document, agreed with the user on 2026-10-02; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <header class="g-top">
+    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
+    <nav class="g-nav" aria-label="Site">
+      {GROD_PAGES.map((page) => <a href={page.href}>{page.label}</a>)}
+      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+    </nav>
+  </header>
+
+  <main id="main" class="gp-doc">
+    <h1 class="g-h gp-title">Privacy Policy</h1>
+    <p class="g-meta">Last updated: {UPDATED}</p>
+
+    <section class="gp-plain" id="plain-english" aria-labelledby="h-plain">
+      <h2 class="g-h2" id="h-plain">Plain English</h2>
+      <p>Your meetings hold some of the most private things you will ever say: client calls, one-to-ones, things said in confidence. Many meeting tools upload them to someone else's servers. GRØD was built so it never has to.</p>
+      <p class="g-promise">Your meeting content never leaves this Mac.</p>
+      <p>GRØD records, transcribes and summarises on your Mac. There is no GRØD account, no GRØD server, and no analytics or tracking of its own.</p>
+      <p>GRØD goes online for one thing: downloading an optional model when you ask it to. Those come from Hugging Face, which sees your IP address like any website would. Nothing from your meetings is ever sent.</p>
+      <p>Information about you reaches me in only two ways, and both are your choice:</p>
+      <ul>
+        <li><strong>If you email me.</strong> That includes asking to join the beta. I get your message, and a diagnostics bundle if you choose to attach one. You can read the bundle before you send it, and it never contains your meetings.</li>
+        <li><strong>Through Apple.</strong> If you have chosen to share crash reports with app developers, Apple passes them on. If you are testing the beta, TestFlight passes on your feedback and the email address you were invited with.</li>
+      </ul>
+      <p>This website counts page views, without cookies and without knowing who you are.</p>
+      <p>That's it. I don't and won't sell your data. The details are below.</p>
+    </section>
+
+    <section class="gp-small" aria-labelledby="h-small">
+      <h2 class="g-h2" id="h-small">The small print</h2>
+
+      <h3 id="who">Who I am</h3>
+      <p>GRØD is made by Gaspery Limited (that's me, Alex), a company registered in England and Wales. In data protection terms, Gaspery Limited is the "controller" of the little personal information described here. My details are at the bottom of the page.</p>
+
+      <h3 id="on-your-mac">What stays on your Mac</h3>
+      <p>Everything you make with GRØD is stored on your Mac, in GRØD's own folder: recordings, transcripts, summaries, notes, the people you name, the voices GRØD has learned to recognise, tags, search indexes and settings. Recording, transcription, speaker separation, search and summaries all run on your Mac, using Apple's on-device models or a model you choose to download.</p>
+      <p>I can't see any of it, and I never receive a copy. You can delete meetings and people in GRØD whenever you like. If you back up your Mac, for example with Time Machine, those backups may include GRØD's library. They are yours, not mine.</p>
+      <p>If you connect a calendar, GRØD reads your meetings from your Mac's own calendar and never sends calendar data anywhere. If you use Google, Microsoft 365 or iCloud calendars, macOS keeps those accounts in sync, not GRØD.</p>
+
+      <h3 id="model-downloads">Model downloads</h3>
+      <p>When you choose to download a model, for transcription or for summaries, GRØD fetches it from Hugging Face over a secure connection (HTTPS) and checks every file before using it. Hugging Face's servers see the ordinary details of the request, such as your IP address, the time and which file was requested. GRØD sends nothing else. Hugging Face handles those details under its own <a href="https://huggingface.co/privacy">privacy policy</a>. If you never download a model, GRØD never makes that connection.</p>
+      <p>All of GRØD's own networking lives in one place, and a test fails the build if GRØD's own code opens a second route.</p>
+
+      <h3 id="your-mac-and-other-apps">What your Mac and other apps do</h3>
+      <p>macOS may download Apple speech, language and Apple Intelligence components the first time they are needed, for example when you start your first recording. That is your Mac updating its own software, under <a href="https://www.apple.com/legal/privacy/">Apple's privacy policy</a>. It never includes your meetings, and it can happen even if you never download a model.</p>
+      <p>When you press Join, GRØD hands the meeting link to your browser or meeting app, which connects as it normally would. GRØD passes the link, never meeting content.</p>
+      <p>Export, Copy and Share send things where you choose. If you turn on local MCP access in Search settings (it is off by default), an app you set up on this Mac can read your meetings. It can't change them, and GRØD opens no network connection for it.</p>
+
+      <h3 id="email">Email and diagnostics</h3>
+      <p>If you email me, I use your message to reply and to help you, and for nothing else.</p>
+      <p>GRØD writes a short, fixed list of content-free events to your Mac's own system log. If you need help, you can create a diagnostics bundle: a text file made on your Mac, and GRØD shows you exactly what goes in it first. It never includes recordings, transcripts, notes, people, titles or calendar details, and it goes nowhere unless you save or share it.</p>
+
+      <h3 id="beta">Joining the beta</h3>
+      <p>You join the beta by emailing me. I use your address to reply and, if you want in, to invite you through TestFlight. Inviting you by email means giving that address to Apple, so that Apple can send the invitation.</p>
+
+      <h3 id="apple">Apple, the App Store and TestFlight</h3>
+      <p>Apple handles your purchase. I don't receive your name, email address or payment details, only sales reports that don't identify you.</p>
+      <p>If you have turned on "Share with app developers" on your Mac, Apple passes me crash reports and usage statistics that don't identify you. You can turn it off in System Settings ▸ Privacy &amp; Security ▸ Analytics &amp; Improvements.</p>
+      <p>If you test the beta through TestFlight, Apple passes me what it gives every developer: the email address you were invited with (if you were invited by email), any feedback and screenshots you send, crash reports, and basic details such as your Mac model, your macOS version and how often you open the beta.</p>
+
+      {/* What this section claims, and where each claim was checked
+          (2026-10-02): no cookies, ads or forms (this repo; the beta is a
+          mailto). The counter is Counterscale on Alex's own Cloudflare
+          account (src/layouts/Base.astro): it stores the page, the
+          referrer, the country, the browser and device, campaign tags if a
+          link carries them, and a first-visit flag worked out from the
+          browser's cache; no IP address (its collect.ts). Detail is kept 90
+          days in Analytics Engine, daily totals longer. The beta button
+          goes through /grod/go/. The typefaces are served from this site
+          (public/fonts), so no font service is involved. The light or dark
+          choice is in localStorage. If any
+          of these change, change this section in the same change. */}
+      <h3 id="website">This website</h3>
+      <p>This website, gaspery.com, has no cookies, no ads and no forms. Here is everything it does when you visit.</p>
+      <ul>
+        <li><strong>It counts page views.</strong> A small counter that I run on my own Cloudflare account records that a page was opened: which page, the site that sent you here, your country, and the kind of browser and device you are using. It doesn't use cookies and doesn't store your IP address, so it can't tell who you are or follow you to another site. To tell a first visit of the day from a later one it uses your browser's ordinary cache. I keep the detailed counts for 90 days, and daily totals after that.</li>
+        <li><strong>It counts presses of "Join the beta".</strong> The button passes through a page of its own so the counter sees it. That records that the button was pressed, not who pressed it. Then your own mail app opens.</li>
+        <li><strong>Cloudflare serves it.</strong> My web host, Cloudflare, sees the ordinary details of each request, such as your IP address and the page you asked for, to deliver the site and keep it secure. It handles them under its own <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.</li>
+        <li><strong>Your browser remembers one setting.</strong> If you switch the site between light and dark, that choice is saved in your browser. It is never sent to me.</li>
+      </ul>
+
+      <h3 id="other-people">Recording other people</h3>
+      <p>GRØD records the people in your meetings, so it handles their voices and words as well as yours. All of it stays on your Mac, and I never receive it. GRØD doesn't announce itself in a call, so telling people you are recording is up to you, and the law where you are may require it.</p>
+
+      <h3 id="your-rights">Your rights</h3>
+      <p>UK data protection law (the UK GDPR and the Data Protection Act 2018) applies to the personal information I hold, which is mostly email.</p>
+      <ul>
+        <li><strong>Why I use it:</strong> to answer you, fix problems and run the beta. The legal basis is my legitimate interest in supporting GRØD and the people who use it.</li>
+        <li><strong>How long I keep it:</strong> emails are deleted two years after our last contact. Crash reports and beta feedback stay in App Store Connect, Apple's system, under Apple's retention rules.</li>
+        <li><strong>Who else sees it:</strong> I don't share it with anyone. My email provider, Google, stores it on my behalf, on servers that may be outside the UK, under the safeguards UK law requires. I will only hand over what I hold if the law requires it.</li>
+        <li><strong>What you can ask for:</strong> to see, correct, delete or get a copy of what I hold about you, or to object to how I use it. Email me. It's free, and I will reply within one month.</li>
+      </ul>
+      <p>I can't see, export or delete anything stored in GRØD on your Mac, because I never have it. That part is entirely in your hands.</p>
+      <p>If you are unhappy with how I have handled your information, please tell me first so I can put it right. You can also complain to the Information Commissioner's Office, the UK's data protection regulator, at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a> or on 0303 123 1113.</p>
+
+      <h3 id="business-transfers">Business transfers</h3>
+      <p>If Gaspery Limited or GRØD is ever sold, or in the unlikely event that it shuts down, this policy may change, and this page will say so first. (Since GRØD has never had your meetings, there would be very little to hand over.)</p>
+
+      <h3 id="changes">Changes to this policy</h3>
+      <p>If something changes, I will update this page and the date at the top. If a version of GRØD ever collects something it doesn't collect today, this page will say so before that version is released, and its release notes will say so too. Every past version of this page is kept in the site's <a href={HISTORY}>public repository</a>.</p>
+
+      <h3 id="contact">Contact</h3>
+      <address class="gp-contact">
+        Gaspery Limited<br />
+        Registered in England and Wales, company number 17397662<br />
+        Registered office: 66 Paul Street, London EC2A 4NA<br />
+        Email: <a href="mailto:alex@gaspery.com">alex@gaspery.com</a>
+      </address>
+    </section>
+  </main>
+
+  <GrodNight motif="oats" note="This policy covers GRØD and this website." />
+</div>
+</Base>

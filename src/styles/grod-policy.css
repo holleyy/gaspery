@@ -1,0 +1,37 @@
+/* /grod/privacy-policy · a document.
+
+   One reading column on the GRØD site's paper. The Plain English section is
+   set a step larger than the small print, because it is the part most people
+   will read; the promise is the one line in the display serif's italic. No
+   bands, no captures, no motion: it has to be read by a person in a hurry,
+   an App Store reviewer and a regulator. */
+
+.gp-doc { max-width: var(--g-max); margin: 0 auto; padding: clamp(40px, 8vh, 96px) var(--g-pad) 120px; }
+/* about 70 characters of the small print to a line */
+.gp-doc > * { max-width: 640px; }
+.gp-title { max-width: none; }
+.gp-title + .g-meta { margin-top: 18px; }
+
+.gp-doc section { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 72px; }
+.gp-doc p, .gp-doc li { font-size: 17px; line-height: 1.6; text-wrap: pretty; }
+.gp-doc ul { display: grid; gap: 12px; padding-left: 1.15em; list-style: disc; }
+.gp-doc li::marker { color: var(--color-ink-secondary); }
+.gp-doc strong { font-weight: 600; }
+
+/* In a document a link is underlined: it has to be findable without colour. */
+.g .gp-doc a:not(.g-bezel) { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* Plain English: the whole answer, a step up in size. */
+.gp-plain p, .gp-plain li { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; }
+.gp-plain .g-promise { margin: 10px 0; font-size: clamp(26px, 3vw, 42px); line-height: 1.15; }
+
+/* The small print: one heading per subject, each with its own address. */
+.gp-small h3 {
+  font-family: var(--g-serif); font-weight: 700; font-size: 22px; line-height: 1.25;
+  margin-top: 30px; scroll-margin-top: 24px;
+}
+.gp-small h2 + h3 { margin-top: 6px; }
+.gp-contact { font-style: normal; font-size: 17px; line-height: 1.7; }
+
+/* The policy, in the footer of every GRØD page, after the pages. */
+.g .g-night__pages a.g-night__legal { font-weight: 400; }
