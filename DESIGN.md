@@ -667,6 +667,15 @@ bands, so the site's theme toggle does not appear on them.
   applied at once, with no transition. The address follows the ink
   (`/grod/craft/?ink=braun`), and a page opened at such an address is given
   its colours before the first paint, so it arrives printed that way.
+- **The policy** (`/grod/privacy-policy`, `.gp`): a document, not a sales
+  page. One reading column (640px, about 70 characters) on the paper, between
+  the site's bar and its night footer: no bands, no captures, no motion. The
+  title is the Display step, the two section headings the Heading step, the
+  small print's subject headings Merriweather 700 at 22px, and the text
+  Atkinson Hyperlegible Next at 17px/1.6 (the Plain English section a step
+  larger, `clamp(18px, 1.5vw, 21px)`, with the promise in the Promise step).
+  Links are underlined, since a document's links must be findable without
+  colour. The footer of every GRØD page links it; the bar does not.
 - **Rules that print** (Craft): the page's hairlines (over a receipt or a
   part, under a tab row, over the close) take `--gc-rule` when pointed at,
   as the app's rules print in teal: #2AA7C8 in the house ink, the theme's

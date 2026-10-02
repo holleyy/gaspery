@@ -5,7 +5,7 @@
    the wordmark at poster size, grounded off the bottom edge. The motif is
    the half-set sun, or the bowl of oats on arm g. */
 
-import { GROD_HOME, GROD_PAGES } from '../lib/grod';
+import { GROD_HOME, GROD_PAGES, GROD_POLICY_PATH } from '../lib/grod';
 
 interface Props {
   note?: string;
@@ -22,6 +22,7 @@ const pages = [{ href: GROD_HOME, label: 'GRØD' }, ...GROD_PAGES];
   <div class="g-dots" aria-hidden="true"></div>
   <nav class="g-night__pages" aria-label="GRØD site">
     {pages.map((page) => <a href={page.href} aria-current={page.href === here ? 'page' : undefined}>{page.label}</a>)}
+    <a class="g-night__legal" href={GROD_POLICY_PATH} aria-current={GROD_POLICY_PATH === here ? 'page' : undefined}>Privacy policy</a>
   </nav>
   <div class="g-night__colophon">
     <span>GRØD is made by <a href="https://gaspery.com/">Gaspery</a>.</span>

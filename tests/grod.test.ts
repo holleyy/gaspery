@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH, GROD_PAGES } from '../src/lib/grod.ts';
+import { readFileSync, readdirSync } from 'node:fs';
+import { BETA_URL, GROD_EXPLORATIONS, GROD_GO_PATH, GROD_PAGES, GROD_POLICY_PATH } from '../src/lib/grod.ts';
 import {
   DEMO_MEETINGS,
   DEMO_TODAY,
@@ -91,7 +91,7 @@ test('the app roster sends /studio and /apps/grod to the page', () => {
   assert.match(read('src/content/apps/grod.yaml'), /^site: \/grod$/m);
 });
 
-test('the beta link is an email, no form, no tracker', () => {
+test('the beta link is an email, with no form', () => {
   assert.match(BETA_URL, /^mailto:hello@gaspery\.com\?subject=/);
 });
 
@@ -214,5 +214,73 @@ test('Features ends on the craft: the wipe, and the way to the Craft page', () =
   // the wipe's styles are shared, since two pages use it
   assert.match(read('src/styles/grod.css'), /\.g-wipe__range \{/);
   assert.doesNotMatch(read('src/styles/grod-craft.css'), /wipe__range/);
+});
+
+/* ---- The privacy policy -------------------------------------------------- */
+const policy = () => read('src/pages/grod/privacy-policy.astro');
+/* the text a visitor reads: the markup without its comments */
+const policyText = () => policy().replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/<!--[\s\S]*?-->/g, '').split('<main')[1];
+
+test('the privacy policy is published whole: nothing left to fill in, and no em dash', () => {
+  const text = policyText();
+  assert.doesNotMatch(text, /\[[^\]]*\]/, 'a [placeholder] is still in the policy');
+  assert.doesNotMatch(text, /—/);
+  assert.match(text, /Your meeting content never leaves this Mac\./);
+  assert.match(policy(), /const UPDATED = '\d{1,2} [A-Z][a-z]+ 20\d\d';/);
+});
+
+test('the policy and the imprint state the same company facts', () => {
+  const imprint = read('src/components/Imprint.astro');
+  const number = imprint.match(/company number (\d+)/)?.[1];
+  const office = imprint.match(/Registered office: ([^<]+?)\.</)?.[1];
+  assert.ok(number && office);
+  assert.ok(policyText().includes(`company number ${number}`), 'company number');
+  assert.ok(policyText().includes(`Registered office: ${office}`), 'registered office');
+});
+
+test('the policy describes what this website really loads', () => {
+  const base = read('src/layouts/Base.astro');
+  const text = policyText();
+  // if the site counts page views, the policy says so, and no GRØD page says otherwise
+  assert.equal(/counterscale/i.test(base), /It counts page views\./.test(text));
+  for (const file of ['src/components/GrodSentence.astro', 'src/pages/grod/features.astro', 'src/pages/grod/craft.astro']) {
+    assert.doesNotMatch(read(file), /no tracker/i, file);
+  }
+  // the typefaces are served from this site, so the policy names no font service
+  assert.doesNotMatch(base, /fonts\.(googleapis|gstatic)\.com/);
+  assert.doesNotMatch(text, /Google Fonts|Google supplies/);
+  // the beta button is counted through its own page, as the policy says
+  assert.equal(GROD_GO_PATH, '/grod/go/');
+  assert.match(text, /It counts presses of "Join the beta"\./);
+});
+
+test('every GRØD page\'s footer links the policy, and the bar does not', () => {
+  assert.equal(GROD_POLICY_PATH, '/grod/privacy-policy/');
+  assert.match(read('src/components/GrodNight.astro'), /href=\{GROD_POLICY_PATH\}/);
+  assert.ok(!GROD_PAGES.some((p) => p.href === GROD_POLICY_PATH));
+});
+
+/* ---- Typefaces ------------------------------------------------------------ */
+const sources = (dir: string): string[] => readdirSync(new URL(`../${dir}`, import.meta.url), { withFileTypes: true })
+  .flatMap((e) => e.isDirectory() ? sources(`${dir}/${e.name}`) : /\.(astro|ts|css)$/.test(e.name) ? [`${dir}/${e.name}`] : []);
+
+test('no page asks a font service for its typefaces', () => {
+  for (const file of sources('src')) {
+    assert.doesNotMatch(read(file), /fonts\.(googleapis|gstatic)\.com/, file);
+  }
+});
+
+test('every family a page names has local rules, and every file they point to exists', () => {
+  const faces = JSON.parse(read('src/lib/fonts.json')) as Record<string, string>;
+  const named = new Set<string>();
+  for (const file of sources('src')) {
+    for (const m of read(file).matchAll(/family=[A-Za-z0-9+]+(?::[A-Za-z0-9,.;@]+)?/g)) named.add(m[0]);
+  }
+  assert.ok(named.size >= 10);
+  for (const family of named) assert.ok(faces[family], `no local rules for ${family}: run node scripts/fetch-fonts.mjs`);
+  for (const css of Object.values(faces)) {
+    assert.doesNotMatch(css, /https?:/);
+    for (const m of css.matchAll(/url\((\/fonts\/[^)]+)\)/g)) readFileSync(new URL(`../public${m[1]}`, import.meta.url));
+  }
 });
 
