@@ -9,6 +9,7 @@ import {
   countsByDay,
   plannerRows,
 } from '../src/lib/grodDemo.ts';
+import { DOCK_STYLES, HOUSE_THEME, THEMES, contrast, inkCss, tokens } from '../src/lib/grodThemes.ts';
 
 const read = (rel: string) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8');
 
@@ -145,3 +146,73 @@ test('the page and each exploration carry a direction contract', () => {
     assert.match(page, /FINISH: unreviewed and undocumented is unfinished/, file);
   }
 });
+
+/* ---- The Craft page ----------------------------------------------------- */
+test('the Craft page is listed with the site\'s pages and carries its contract', () => {
+  assert.ok(GROD_PAGES.some((p) => p.href === '/grod/craft/'));
+  const page = read('src/pages/grod/craft.astro');
+  assert.match(page, /THESIS:/);
+  assert.match(page, /FINISH: unreviewed and undocumented is unfinished/);
+  assert.match(page, /href=\{GROD_GO_PATH\}/);
+  assert.match(page, /<GrodNight motif="oats"/);
+});
+
+test('the Craft page never counts the options, and has no em dash', () => {
+  const page = read('src/pages/grod/craft.astro');
+  assert.doesNotMatch(page, /\b(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+(other\s+)?(themes|toppings|fonts|dock styles|inks)\b/i);
+  assert.doesNotMatch(page, /—/);
+});
+
+test('every ink the Craft page offers has its captures, and every topping its stage', () => {
+  const shot = (name: string) => readFileSync(new URL(`../public/shots/grod/craft/${name}.webp`, import.meta.url));
+  assert.equal(THEMES[0].id, HOUSE_THEME);
+  for (const t of THEMES) {
+    shot(`agenda-${t.id}`);
+    shot(`notes-${t.id}`);
+    shot(`notes-${t.id}-dark`);
+  }
+  for (const d of DOCK_STYLES) shot(`dock-${d.id}`);
+  for (const name of ['braun-agenda', 'braun-tags', 'braun-month', 'macro-card', 'macro-mark', 'macro-stamp', 'bar', 'pill', 'card']) shot(name);
+});
+
+test('every ink keeps the page readable: text, links and the key at 4.5 to 1', () => {
+  for (const t of THEMES) {
+    for (const [pal, dark] of [[t.light, false], [t.dark, true]] as const) {
+      const k = tokens(pal, dark);
+      const on = k['--color-paper'];
+      for (const key of ['--color-ink', '--color-ink-secondary', '--color-brand-strong'] as const) {
+        assert.ok(contrast(k[key], on) >= 4.5, `${t.id} ${dark ? 'dark' : 'light'} ${key} ${contrast(k[key], on).toFixed(2)}`);
+      }
+      assert.ok(contrast(k['--g-key-ink'], k['--g-key']) >= 4.5, `${t.id} ${dark ? 'dark' : 'light'} key ${contrast(k['--g-key-ink'], k['--g-key']).toFixed(2)}`);
+    }
+  }
+});
+
+test('the re-ink stylesheet covers every ink but the house one, on both grounds', () => {
+  const css = inkCss('.gc');
+  for (const t of THEMES) {
+    const has = css.includes(`.gc[data-ink="${t.id}"]{`);
+    assert.equal(has, t.id !== HOUSE_THEME, t.id);
+    if (t.id !== HOUSE_THEME) assert.ok(css.includes(`.gc[data-ink="${t.id}"] .ge-clause[data-band="dark"]`), t.id);
+  }
+});
+
+test('the Craft page can be opened in an ink, and its address follows the ink', () => {
+  const page = read('src/pages/grod/craft.astro');
+  // set before the first paint, from a list of the inks that exist
+  assert.match(page, /<script is:inline define:vars=\{\{ inks: THEMES\.map\(\(t\) => t\.id\), house: HOUSE_THEME \}\}>/);
+  assert.match(page, /new URLSearchParams\(location\.search\)\.get\('ink'\)/);
+  assert.match(page, /inks\.indexOf\(ink\) !== -1/);
+  assert.match(page, /history\.replaceState/);
+});
+
+test('Features ends on the craft: the wipe, and the way to the Craft page', () => {
+  const page = read('src/pages/grod/features.astro');
+  assert.match(page, /<div class="gt-lead" id="craft">/);
+  assert.match(page, /<GrodWipe\s+left="notes-riso" right="notes-riso-dark"/);
+  assert.match(page, /<a class="g-more" href="\/grod\/craft\/">/);
+  // the wipe's styles are shared, since two pages use it
+  assert.match(read('src/styles/grod.css'), /\.g-wipe__range \{/);
+  assert.doesNotMatch(read('src/styles/grod-craft.css'), /wipe__range/);
+});
+

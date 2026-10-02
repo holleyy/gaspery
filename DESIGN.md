@@ -123,7 +123,7 @@ typography:
     fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
     fontSize: "clamp(56px, 9vw, 132px)"
     fontWeight: 300
-    note: "A clause standing over full-width windows (/grod and /grod/features)."
+    note: "A clause standing over full-width windows (/grod, /grod/features, /grod/craft); also the Craft page's title."
   grodHeading:
     fontFamily: "Merriweather, Georgia, 'Times New Roman', serif"
     fontSize: "clamp(30px, 3.6vw, 48px)"
@@ -156,6 +156,11 @@ typography:
     fontFamily: "'Atkinson Hyperlegible Next', Inter, -apple-system, BlinkMacSystemFont, sans-serif"
     fontSize: "8px"
     note: "The weekday letters over each month of the live year."
+  grodSpecimen:
+    fontFamily: "'Atkinson Hyperlegible Next', Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    fontSize: "clamp(20px, 1.9vw, 26px)"
+    lineHeight: 1.35
+    note: "The Craft page's type specimen (/grod/craft): the app's face set live, one line in 500 as the reader's own would be and one in 400."
 rounded:
   sm: "2px"
   card: "8px"
@@ -395,7 +400,7 @@ only inside `.feature`; every page outside it keeps the `display` / `headline`
   ordinary pages still carry two faces as before.
 
 ### The GRØD site's scale
-The GRØD site (`/grod`, `/grod/features`; every rule scoped under `.g` in
+The GRØD site (`/grod`, `/grod/features`, `/grod/craft`; every rule scoped under `.g` in
 `src/styles/grod*.css`) is the app's own world laid on the site's tokens, and
 it runs a poster scale far above the notebook's, declared as the `grod*` steps
 in the frontmatter above and applied nowhere else.
@@ -424,6 +429,12 @@ in the frontmatter above and applied nowhere else.
   phone): the app's own year grid redrawn at the app's own sizes. They are
   the only type on the site below the 10px floor, and they label a drawing;
   nothing has to be read from them that the month names do not also say.
+- **On the Craft page** nothing above is restepped: the title takes the wide
+  clause's `clamp(56px, 9vw, 132px)` (line-height 0.96, held to 12ch), and a
+  chapter's headings take the Features step, `clamp(26px, 2.5vw, 34px)`
+  (1.12). The one new step is the **Specimen** (Atkinson Hyperlegible Next,
+  `clamp(20px, 1.9vw, 26px)`, 1.35): the typeface set live, a line in 500 as
+  the reader's own would be and a line in 400 as GRØD's.
 
 Two faces, as everywhere, but the functional one changes: **Atkinson
 Hyperlegible Next**, the app's house font, takes Inter's place, and
@@ -597,7 +608,7 @@ the 680px reading measure); an editorial page's spreads run media-dominant
 room: a Mac window shrunk into a prose column is a smudge, not proof.
 
 ### The GRØD site
-The parts `/grod` and `/grod/features` are built from. All are scoped under
+The parts `/grod`, `/grod/features` and `/grod/craft` are built from. All are scoped under
 `.g`; the pages are pinned to the light appearance and carry their own night
 bands, so the site's theme toggle does not appear on them.
 - **Captures.** Every image is a real capture of the app's Demo workspace,
@@ -606,7 +617,8 @@ bands, so the site's theme toggle does not appear on them.
   is a region inside a window with a hairline (4px radius). A floating part
   (popover, toast, palette, bar, card, pill) is traced to its own shape and
   shown near the size it is in the app, never stretched to fill a column.
-  `scripts/grod-landing-crops.mjs` cuts all of them.
+  `scripts/grod-landing-crops.mjs` cuts them for the home and Features
+  pages, and `scripts/grod-craft-crops.mjs` for Craft.
 - **Pop-out** (`GrodPopOut.astro`): a window with one region magnified on a
   card (14px radius) overhanging its right edge. No outlines, no connectors.
 - **Stack** (`GrodStack.astro`): several views of one thing as overlapping
@@ -625,6 +637,58 @@ bands, so the site's theme toggle does not appear on them.
 - **Radii.** 3px (focus ring, a day in the year), 4px (a detail, a stack's
   tab label), 8px (the key), 12px (focus on a stack window), 14px (the
   pop-out card), and a full round for the year's filter chips.
+- **Close-up** (Craft): a capture shown at or above its own pixels, so the
+  print can be inspected. The hero's card (`macro-card`) and the pair of
+  crops under it (`.gc-pair`, two columns in the crops' own proportions,
+  620 to 500, one column on a phone) are details set at the pixels they were
+  captured in, which is twice life size; on a phone the hero's card keeps
+  its size and runs off the right edge rather than shrinking to the column.
+  The grain patches (`.gc-grain`) are shown at whole pixels, unsmoothed
+  (`image-rendering: pixelated`, `object-fit: none`): the dots are a pixel or
+  two across, and a fractional size would blur them into a grey. A narrower
+  figure shows less of the patch, never a scaled one.
+  `scripts/grod-craft-crops.mjs` cuts the Craft page's set.
+- **Re-ink** (Craft): one row of theme buttons (`.gc-ink`: a full-round
+  hairline pill, 15px/500, with a 20px swatch showing the theme's accent on
+  its own light and dark paper; the pressed one is printed solid, ink on
+  paper reversed). A press sets `data-ink` on the page root, and `inkCss()`
+  in `src/lib/grodThemes.ts` writes each theme's light palette onto the
+  paper bands and its dark palette onto the night bands, by swapping the
+  site's own colour tokens, the ghost, the night ground and the key. A
+  theme's accent is tuned for the app, so links and the key are nudged
+  toward the ink until they read at 4.5:1 on their ground, and under
+  another ink the teal tokens resolve to that one accent. The captures that
+  exist in the chosen theme follow, fetched before anything changes. While
+  the page is in another ink a note (`.gc-printed`: paper, hairline, 8px,
+  `--g-lift`, 14px) stays in the bottom-left corner and offers the way back.
+  The change runs as one view transition, drawn as a pass of the press: the
+  new ink lands 7px by 5px off register at 60%, over the old page, holds
+  for a moment, then slides home (0.85s in all). Under reduced motion it is
+  applied at once, with no transition. The address follows the ink
+  (`/grod/craft/?ink=braun`), and a page opened at such an address is given
+  its colours before the first paint, so it arrives printed that way.
+- **Rules that print** (Craft): the page's hairlines (over a receipt or a
+  part, under a tab row, over the close) take `--gc-rule` when pointed at,
+  as the app's rules print in teal: #2AA7C8 in the house ink, the theme's
+  accent in another.
+- **Wipe** (`GrodWipe.astro`, `.g-wipe`, on Craft and as the Features page's
+  ending): two captures of the same window at the same
+  size, one over the other, the second clipped at a 2px magenta line with a
+  30px ring for a grip. A range input is laid over the whole figure, so the
+  line follows a drag, a click or the arrow keys; keyboard focus rings the
+  grip in teal ink. Light and Dark are named above it in 14px sentence case.
+- **Toppings stage** (`.gc-docks`): one region of the Agenda per dock style,
+  all held in one cell of one frame (hairline, 4px, `--g-lift`) and shown
+  one at a time, cross-fading over 0.25s. The stack's tab row chooses, and
+  scrolls sideways on a phone rather than wrapping; the caption names the
+  style and gives its character in the app's own words.
+
+**The House-Ink Rule (GRØD site).** The Craft page opens in Riso and returns
+to it on reload: no ink is remembered. Another ink is something the reader
+chooses, in one place, and the whole page follows at once, never a part of
+it. No other GRØD page re-inks, and none offers the choice. The inks are the
+app's own themes, printed as the page's subject (The Identity Exception, §2,
+at page size); the site's chrome everywhere else stays two inks.
 
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a

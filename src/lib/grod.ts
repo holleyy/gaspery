@@ -24,6 +24,7 @@ export const GROD_GO_PATH = '/grod/go/';
 export const GROD_HOME = '/grod/';
 export const GROD_PAGES = [
   { href: '/grod/features/', label: 'Features' },
+  { href: '/grod/craft/', label: 'Craft' },
 ] as const;
 
 /* The explorations served in development. */

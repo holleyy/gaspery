@@ -106,7 +106,9 @@
   font-size: 12px; font-weight: 600; line-height: 1.2;
   background: var(--color-ink); color: var(--color-paper);
 }
-.ge-stack__item.is-front .ge-stack__tab { background: var(--color-brand); }
+/* the key's colours, which hold 4.5:1 for a label this small; the brand
+   ink with a paper label does not */
+.ge-stack__item.is-front .ge-stack__tab { background: var(--g-key); color: var(--g-key-ink); }
 .ge-stack__item.is-front { animation: none; }
 /* The tab row, drawn like the app's own tabs: the front one is bold with
    the app's underline. */

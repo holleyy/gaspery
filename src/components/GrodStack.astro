@@ -23,6 +23,9 @@ const {
   caption = 'Notes, Summary, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front.',
 } = Astro.props;
 const front = Math.max(...tabs.map((t) => t.n));
+/* A bare name is one of the landing set; a name with a folder is taken from
+   /shots/grod/ as given (the Craft page's set is in craft/). */
+const url = (src: string) => `/shots/grod/${src.includes('/') ? src : `landing/${src}`}.webp`;
 const stacked = [...tabs].sort((a, b) => a.n - b.n);
 ---
 <figure class="g-capture ge-stack" aria-label={label} style={`--count:${tabs.length}`}>
@@ -32,7 +35,7 @@ const stacked = [...tabs].sort((a, b) => a.n - b.n);
   <div class="ge-stack__deck">
     {stacked.map((t) => (
       <div class="ge-stack__item g-win" style={`--n:${t.n}`} data-n={t.n} role="button" tabindex="0" aria-label={`Bring ${t.label} to the front`}>
-        <img src={`/shots/grod/landing/${t.src}.webp`} width="2000" height="1440" alt={t.alt} decoding="async" loading="lazy" />
+        <img src={url(t.src)} width="2000" height="1440" alt={t.alt} decoding="async" loading="lazy" />
         <span class="ge-stack__tab" aria-hidden="true">{t.label}</span>
       </div>
     ))}

@@ -1,0 +1,39 @@
+---
+/* Two captures of the same window, one over the other, with a line the
+   reader drags between them: the same page in light and in dark. Both are
+   the app's own window at the same size, so the line cuts through real
+   pixels on both sides. A range input lies over the whole figure, so the
+   line follows a drag, a click or the arrow keys. Styles are in
+   src/styles/grod.css (.g-wipe). */
+
+interface Props {
+  /* file names under /shots/grod/craft/, without the extension; `{ink}` is
+     replaced by the theme the page is printed in */
+  left: string;
+  right: string;
+  ink: string;
+  leftLabel?: string;
+  rightLabel?: string;
+  altLeft: string;
+  altRight: string;
+}
+const { left, right, ink, leftLabel = 'Light', rightLabel = 'Dark', altLeft, altRight } = Astro.props;
+const src = (pattern: string) => `/shots/grod/craft/${pattern.replace('{ink}', ink)}.webp`;
+---
+<figure class="g-capture g-wipe">
+  <div class="g-wipe__labels" aria-hidden="true"><span>{leftLabel}</span><span>{rightLabel}</span></div>
+  <div class="g-wipe__stage" style="--pos:50%">
+    <img class="g-wipe__a" src={src(left)} data-ink-src={`/shots/grod/craft/${left}.webp`} width="2000" height="1440" alt={altLeft} loading="lazy" decoding="async" />
+    <img class="g-wipe__b" src={src(right)} data-ink-src={`/shots/grod/craft/${right}.webp`} width="2000" height="1440" alt={altRight} loading="lazy" decoding="async" />
+    <span class="g-wipe__line" aria-hidden="true"></span>
+    <input class="g-wipe__range" type="range" min="0" max="100" value="50" step="1" aria-label={`How much of the page shows in ${leftLabel.toLowerCase()}`} />
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<script>
+  for (const stage of document.querySelectorAll<HTMLElement>('.g-wipe__stage')) {
+    const range = stage.querySelector<HTMLInputElement>('.g-wipe__range');
+    range?.addEventListener('input', () => stage.style.setProperty('--pos', `${range.value}%`));
+  }
+</script>
