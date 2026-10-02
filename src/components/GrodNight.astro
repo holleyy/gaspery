@@ -5,7 +5,7 @@
    the wordmark at poster size, grounded off the bottom edge. The motif is
    the half-set sun, or the bowl of oats on arm g. */
 
-import { GROD_HOME, GROD_PAGES, GROD_POLICY_PATH } from '../lib/grod';
+import { GROD_FAQ_PATH, GROD_HOME, GROD_PAGES, GROD_POLICY_PATH } from '../lib/grod';
 
 interface Props {
   note?: string;
@@ -16,7 +16,7 @@ const { note = 'Every capture on this page is the app, running its Demo workspac
 /* The site's pages, on every page: the footer is the one place the whole
    list always is, whatever the bar has room for. */
 const here = Astro.url.pathname.replace(/\/?$/, '/');
-const pages = [{ href: GROD_HOME, label: 'GRØD' }, ...GROD_PAGES];
+const pages = [{ href: GROD_HOME, label: 'GRØD' }, ...GROD_PAGES, { href: GROD_FAQ_PATH, label: 'FAQ' }];
 ---
 <footer class="g-night" data-motif={motif}>
   <div class="g-dots" aria-hidden="true"></div>

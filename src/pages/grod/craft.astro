@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
 import GrodNight from '../../components/GrodNight.astro';
 import GrodStack from '../../components/GrodStack.astro';
 import GrodWipe from '../../components/GrodWipe.astro';
@@ -8,7 +9,7 @@ import '../../styles/grod-e.css';
 import '../../styles/grod-f.css';
 import '../../styles/grod-g.css';
 import '../../styles/grod-craft.css';
-import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
+import { GROD_CARD, GROD_GO_PATH } from '../../lib/grod';
 import { DOCK_STYLES, HOUSE_THEME, THEMES, inkCss } from '../../lib/grodThemes';
 
 /* /grod/craft: how GRØD looks and feels, looked at closely. The page is the
@@ -35,6 +36,7 @@ const braunTabs = [
   title="Craft · GRØD"
   description="How GRØD looks and feels, up close: a house look borrowed from risograph printing, a dark mode done properly, a recording bar built like an instrument, and a receipt for every change. Pick a theme and the page is printed in it."
   theme="light"
+  card={GROD_CARD}
   fonts={[
     'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
     'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
@@ -62,13 +64,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     })();
   </script>
 
-  <header class="g-top">
-    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
-    <nav class="g-nav" aria-label="Site">
-      {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === '/grod/craft/' ? 'page' : undefined}>{page.label}</a>)}
-      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
-    </nav>
-  </header>
+  <GrodBar />
 
   <main id="main">
     <section class="ge-hero ge-hero--media gc-hero" aria-labelledby="h1">

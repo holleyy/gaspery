@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
 import GrodNight from '../../components/GrodNight.astro';
 import GrodPopOut from '../../components/GrodPopOut.astro';
 import GrodStack from '../../components/GrodStack.astro';
@@ -9,7 +10,7 @@ import '../../styles/grod-e.css';
 import '../../styles/grod-f.css';
 import '../../styles/grod-g.css';
 import '../../styles/grod-features.css';
-import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../../lib/grod';
+import { GROD_CARD, GROD_FAQ_PATH, GROD_GO_PATH } from '../../lib/grod';
 
 /* /grod/features: what GRØD does, told by how long after a meeting it is.
    The page is built from the home page's own parts (the clause, the row,
@@ -50,6 +51,7 @@ const tagTabs = [
   title="Features · GRØD"
   description="What GRØD does, from the minute before a meeting to the year after it: a card before each call, both sides recorded with no bot, notes written around yours, decisions carried forward, and a year on one page. On this Mac."
   theme="light"
+  card={GROD_CARD}
   fonts={[
     'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
     'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
@@ -66,13 +68,7 @@ SIGNATURE: the time line. It is the contents, the progress mark and the argument
 FORM: a timeline of scales, agreed with the user on 2026-10-01 as the Features structure (arm d's zoom turned into time); seed key b3c9e4e4.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->
-  <header class="g-top">
-    <a class="g-brand" href={GROD_HOME} aria-label="GRØD home">GRØD</a>
-    <nav class="g-nav" aria-label="Site">
-      {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === '/grod/features/' ? 'page' : undefined}>{page.label}</a>)}
-      <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
-    </nav>
-  </header>
+  <GrodBar />
 
   <main id="main">
     <section class="gt-hero" aria-labelledby="h1">
@@ -94,7 +90,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <div class="ge-row" id="card">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#card">A card before each meeting</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#card">A card before each meeting</a></h3>
             <p class="g-body">A few minutes before a scheduled meeting, a small card appears over your work. Join opens the link in your browser or conference app. If you would rather this one was not recorded, skip it from the card or the keyboard, without switching apps.</p>
             <p class="g-meta">GRØD hands over the meeting address, never meeting content.</p>
           </div>
@@ -104,7 +100,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div class="ge-row" id="agenda">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#agenda">Your day, on one page</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#agenda">Your day, on one page</a></h3>
             <p class="g-body">The Agenda shows what is coming, what just happened, and the next meeting docked at the top. The further back you go, the quieter it gets, until older months hand you on to Timeline.</p>
           </div>
           <figure class="g-capture g-win">
@@ -124,7 +120,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <div class="ge-row" id="no-bot">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#no-bot">Both sides, no bot</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#no-bot">Both sides, no bot</a></h3>
             <p class="g-body">GRØD records your microphone and the audio your conference app is already playing. Nothing joins the call and nothing announces itself. Telling the other person is still on you.</p>
           </div>
           <figure class="g-capture g-win">
@@ -134,7 +130,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div class="ge-row" id="keeps-going">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#keeps-going">It keeps going</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#keeps-going">It keeps going</a></h3>
             <p class="g-body">Swap to your AirPods mid-call and GRØD reconnects and carries on recording to the same file. If the other side's audio drops out, GRØD keeps what it heard and tells you exactly what happened.</p>
           </div>
           <figure class="g-capture g-win gt-el">
@@ -161,7 +157,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <div class="ge-row" id="processing">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#processing">It tells you what it is doing</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#processing">It tells you what it is doing</a></h3>
             <p class="g-body">Transcribing. Improving transcript. Identifying speakers. Summarizing. Structuring notes. Each step shows while it runs, and your notes stay open the whole time.</p>
           </div>
           <figure class="g-capture g-win gt-el gt-el--processing">
@@ -170,7 +166,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
 
         <div class="gt-lead" id="notes">
-          <h3 class="g-h2"><a class="gt-anchor" href="#notes">Summary, Notes, Transcript</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#notes">Summary, Notes, Transcript</a></h3>
           <p class="g-body">Every meeting has three views. Notes is a magic notepad: write something, and it comes back as your notes, enriched. Write nothing, and GRØD fills in what you need. Summary is the decisions, action items and open questions. Transcript is the exact words, with who said them.</p>
         </div>
         <GrodStack
@@ -180,7 +176,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <div class="ge-row" id="ask">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#ask">Ask the meeting</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#ask">Ask the meeting</a></h3>
             <p class="g-body">Ask a question and get an answer drawn from the whole meeting, with a source you can click to jump to the moment. If the meeting did not cover it, GRØD says so.</p>
             <p class="g-quote">“This meeting doesn't cover that.”</p>
           </div>
@@ -191,7 +187,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div class="ge-row" id="retry">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#retry">When it cannot finish, it says so</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#retry">When it cannot finish, it says so</a></h3>
             <p class="g-body">If something fails, GRØD says what happened in plain words, keeps the notes it already has, and offers to try again.</p>
           </div>
           <figure class="g-capture g-detail">
@@ -212,7 +208,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-pin"><h2 class="g-h" id="h-week">The week after.</h2></div>
       <div class="ge-body">
         <div class="gt-lead" id="series">
-          <h3 class="g-h2"><a class="gt-anchor" href="#series">Recurring meetings, as one thing</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#series">Recurring meetings, as one thing</a></h3>
           <p class="g-body">A weekly meeting is one series with a history, not forty unrelated rows. Move between instances with a swipe. A week that was skipped stays a skipped week.</p>
         </div>
         <figure class="g-capture g-win">
@@ -221,7 +217,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </figure>
         <div class="ge-row" id="continuity">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#continuity">It remembers what you decided</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#continuity">It remembers what you decided</a></h3>
             <p class="g-body">Open this week's instance and the decisions from the weeks before are waiting, as records, not as a summary someone wrote.</p>
           </div>
           <figure class="g-capture g-win gt-el gt-el--popover">
@@ -238,7 +234,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-pin"><h2 class="g-h" id="h-month">The month after.</h2></div>
       <div class="ge-body">
         <div class="gt-lead" id="voices">
-          <h3 class="g-h2"><a class="gt-anchor" href="#voices">Voices you name once</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#voices">Voices you name once</a></h3>
           <p class="g-body">GRØD separates speakers on your Mac and keeps track of each voice it hears. Name a voice once and every meeting where GRØD has already recognised it updates, and every meeting after knows who is speaking.</p>
         </div>
         <GrodPopOut
@@ -250,7 +246,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         />
         <div class="ge-row" id="people">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#people">People, not contacts</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#people">People, not contacts</a></h3>
             <p class="g-body">Everyone you meet has a page led by the meetings you shared. Pick two people and see only the meetings they were both in.</p>
           </div>
           <figure class="g-capture g-win">
@@ -259,7 +255,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </figure>
         </div>
         <div class="gt-lead" id="months">
-          <h3 class="g-h2"><a class="gt-anchor" href="#months">Months that notice things</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#months">Months that notice things</a></h3>
           <p class="g-body">Each month has a page that tells you what stood out: the first time you met someone, a topic that doubled, a week that went quiet. Every fact comes from your own records, so none of it is made up.</p>
         </div>
         <figure class="g-capture g-win">
@@ -267,7 +263,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <figcaption>November 2025: who you first met, what doubled, and the weeks as bars.</figcaption>
         </figure>
         <div class="gt-lead" id="tags">
-          <h3 class="g-h2"><a class="gt-anchor" href="#tags">Tags that tidy themselves, and draw you a map</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#tags">Tags that tidy themselves, and draw you a map</a></h3>
           <p class="g-body">“Design review” and “Design reviews” are one tag. GRØD suggests the odd merge, remembers your answer, and lets you undo it. Once you have used enough tags to draw one, they get a map: each tag sized by its meetings and coloured by how lately you used it. The Index is the same tags as a list, the live ones first.</p>
         </div>
         <GrodStack
@@ -283,7 +279,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-pin"><h2 class="g-h" id="h-year">The year after.</h2></div>
       <div class="ge-body">
         <div class="gt-lead" id="year-page">
-          <h3 class="g-h2"><a class="gt-anchor" href="#year-page">A year on one page</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#year-page">A year on one page</a></h3>
           <p class="g-body">Every day you met, on one grid. Click a day or a week to open it. Transcripts and notes stay until you delete them, so last year is still there.</p>
         </div>
         <figure class="g-capture g-win gt-win--wide">
@@ -291,7 +287,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </figure>
         <div class="ge-row" id="search">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#search">Found, by the words or by the meaning</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#search">Found, by the words or by the meaning</a></h3>
             <p class="g-body">One shortcut, ⌘K, searches meetings, people and tags, by the words used or by what was meant. On a month page it searches that month.</p>
           </div>
           <figure class="g-capture g-win gt-el gt-el--palette">
@@ -300,7 +296,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div class="ge-row" id="ask-everything">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#ask-everything">Ask across every meeting</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#ask-everything">Ask across every meeting</a></h3>
             <p class="g-body">Search looks across people, meetings and transcripts at once, and it can answer a question from your meetings.</p>
           </div>
           <figure class="g-capture g-win">
@@ -317,7 +313,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <div class="ge-row" id="undo">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#undo">Undo, everywhere it counts</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#undo">Undo, everywhere it counts</a></h3>
             <p class="g-body">Delete, file, merge or remove, and a receipt appears with Undo. Deleting waits twelve seconds before it happens.</p>
           </div>
           <figure class="g-capture g-win gt-el gt-el--toast">
@@ -326,7 +322,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div class="ge-row" id="engines">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="gt-anchor" href="#engines">Choose your engines</a></h3>
+            <h3 class="g-h2"><a class="g-anchor" href="#engines">Choose your engines</a></h3>
             <p class="g-body">Transcription runs on Apple's built-in speech model, with nothing to download. Summaries run on Apple Intelligence. If you want more, you can choose to download a higher-accuracy transcription model or a local summary model. Each is fetched over HTTPS and checked before it is used.</p>
           </div>
           <figure class="g-capture g-detail">
@@ -336,7 +332,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
 
         <div class="gt-needs" id="needs">
-          <h3 class="g-h2"><a class="gt-anchor" href="#needs">What it needs, and what it does not do</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#needs">What it needs, and what it does not do</a></h3>
           <dl class="g-receipts">
             <div id="mac"><dt>A Mac</dt><dd>An Apple silicon Mac running macOS 26 or later. Summaries use Apple Intelligence, or a local model you choose to download. Recording and transcription work without either.</dd></div>
             <div id="apps"><dt>Any app that plays audio</dt><dd>Zoom, Microsoft Teams, Google Meet in a browser, Slack huddles, FaceTime, Webex and others. It also works for a conversation in the room, through your microphone.</dd></div>
@@ -345,10 +341,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <div id="sync"><dt>No sync, today</dt><dd>There is no GRØD cloud to sync through, so it does not reach your other Macs or your phone.</dd></div>
             <div id="consent"><dt>Telling people is on you</dt><dd>GRØD does not announce itself. Recording laws differ by place; check what applies to you.</dd></div>
           </dl>
+          <p><a class="g-more" href={GROD_FAQ_PATH}>More questions, answered</a></p>
         </div>
 
         <div class="gt-lead" id="craft">
-          <h3 class="g-h2"><a class="gt-anchor" href="#craft">That is what it does. This is how it feels.</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#craft">That is what it does. This is how it feels.</a></h3>
           <p class="g-body">One meeting, in light and in dark. Drag the line. The rest of how GRØD looks and feels has a page of its own: the print, the toppings, the recording bar.</p>
           <p><a class="g-more" href="/grod/craft/">See the craft</a></p>
         </div>

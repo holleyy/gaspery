@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import '../../styles/grod.css';
+import '../../styles/grod-e.css';
+import '../../styles/grod-g.css';
+import '../../styles/grod-faq.css';
+import { GROD_CARD, GROD_GO_PATH, GROD_POLICY_PATH, GROD_PRIVACY_PATH } from '../../lib/grod';
+
+/* /grod/faq: short answers, plain words, honest limits. Four groups, every
+   answer open, and an address for every question (/grod/faq/#offline), so a
+   support reply can point at one. The copy is the GRØD repo's
+   (docs/product/website/05-faq.md); the two answers that differ from it are
+   noted where they are written. An answer is a list of paragraphs, and may
+   carry a link. The direction contract is the first comment inside the
+   page root. */
+
+/* `see` is where the answer is shown rather than told: a feature, a receipt
+   or a close-up elsewhere on the site, by its own address. */
+interface Question { id: string; q: string; a: string[]; see?: { href: string; label: string } }
+interface Group { id: string; name: string; questions: Question[] }
+
+const groups: Group[] = [
+  { id: 'basics', name: 'The basics', questions: [
+    { id: 'what', q: 'What does GRØD do?', a: ['It records both sides of a call on your Mac, transcribes it, works out who said what, and writes an editable summary and notes. Everything stays searchable, and you can ask questions across your meetings.'], see: { href: '/grod/features/', label: 'Everything it does, in order' } },
+    { id: 'requirements', q: 'What do I need?', a: ['An Apple silicon Mac running macOS 26 or later. Summaries use Apple Intelligence, or a local model you can choose to download instead. Recording and transcription work without either.'], see: { href: '/grod/features/#needs', label: 'What it needs, and what it does not do' } },
+    { id: 'apps', q: 'Which meeting apps does it work with?', a: ['Any that plays audio on your Mac: Zoom, Microsoft Teams, Google Meet in a browser, Slack huddles, FaceTime, Webex and others. It also works for a conversation in the room, through your microphone. Automatic detection watches for Zoom, Teams, Slack, FaceTime and Webex.'] },
+    { id: 'bot', q: 'Does a bot join my call?', a: ['No. Nothing joins the call and nothing announces itself. GRØD listens on your Mac.'], see: { href: '/grod/features/#no-bot', label: 'Both sides, no bot' } },
+    /* The seed has a placeholder for the price. It is not set, so the answer
+       says so rather than leaving a gap. */
+    { id: 'price', q: 'How much does it cost?', a: ['GRØD is free during the TestFlight beta. At 1.0 it will be a paid app on the Mac App Store, bought once. The price is not set yet. There are no GRØD servers to pay for, so there is no subscription.'] },
+  ] },
+  { id: 'privacy', name: 'Privacy', questions: [
+    { id: 'leaves', q: 'Does my meeting content leave my Mac?', a: ['No. Your meeting content never leaves this Mac. GRØD never uploads your audio, transcripts, notes or calendar data, and there is no GRØD account, telemetry or cloud sync.'], see: { href: `${GROD_PRIVACY_PATH}#ledger`, label: 'What leaves this Mac, and who sends it' } },
+    { id: 'network', q: 'Then why does GRØD have network access?', a: [`For one thing: downloading optional models you choose to start, for transcription or for summaries. They come from Hugging Face over HTTPS and are checksum-verified before use. The details are on the <a href="${GROD_PRIVACY_PATH}">Privacy page</a>.`] },
+    { id: 'traffic', q: 'Will I see network traffic anyway?', a: ['Possibly, from macOS rather than GRØD. Your Mac may fetch Apple speech, language and Apple Intelligence assets the first time they are needed. That never includes your meetings.'] },
+    { id: 'offline', q: 'Does it work offline?', a: ['Once the models it needs are on your Mac, recording, transcription, search and summaries all run locally. The very first use may need macOS to fetch its own speech or intelligence assets.'] },
+    { id: 'nda', q: 'Can I use it for work that is under NDA?', a: ['GRØD is designed for exactly that: no third party ever receives your meeting content. Whether you may record a particular conversation is a question for your agreement and the people in the room.'] },
+    /* The seed has a placeholder for the link. */
+    { id: 'policy', q: 'Where is the privacy policy?', a: [`<a href="${GROD_POLICY_PATH}">Here</a>. It is short, and it starts in plain English.`] },
+  ] },
+  { id: 'recording', name: 'Recording', questions: [
+    { id: 'automatic', q: 'Will it record without me pressing anything?', a: ['Only if you connect a calendar. Then GRØD records scheduled meetings by itself, and a card appears before each one so you can skip any you would rather it left alone. Without a calendar, GRØD records when you tell it to, and can offer to when it notices a call starting. Setup explains this before anything is recorded.'], see: { href: '/grod/features/#card', label: 'The card before each meeting' } },
+    { id: 'telling-people', q: 'Do I have to tell people I am recording?', a: ['Yes. GRØD does not announce itself, which means telling the other person is on you. Recording laws differ by place; check what applies to you.'], see: { href: `${GROD_PRIVACY_PATH}#other-people`, label: 'Recording other people' } },
+    { id: 'indicator', q: 'How do I know when it is recording?', a: ['Always. The menu bar icon, the floating pill and the recording bar all show it, and recording is never silently on.'], see: { href: '/grod/craft/#instrument', label: 'The recording bar and the pill, up close' } },
+    { id: 'dropouts', q: "What if my headphones disconnect, or the other side's audio drops?", a: ["GRØD reconnects to your microphone and keeps recording to the same file. If the other side's audio stops, it keeps what it captured, marks the meeting as partial, and tells you what happened."], see: { href: '/grod/features/#keeps-going', label: 'It keeps going' } },
+  ] },
+  { id: 'data', name: 'Notes and data', questions: [
+    { id: 'overwrite', q: 'Will it overwrite my notes?', a: ['No. The lines you type are kept as you wrote them, and GRØD writes around them. Original is always one click away, and edits you make to the summary survive regenerating it.'], see: { href: '/grod/features/#notes-arrive', label: 'Notes that arrive around yours' } },
+    { id: 'accuracy', q: 'How accurate is it?', a: ['Good, and not perfect. It is a local model, and GRØD does not mark its own guesses, so a wrong line reads as confidently as a right one. Answers come with a source you can check in one click. For better transcription you can download a higher-accuracy model.'], see: { href: '/grod/features/#engines', label: 'Choose your engines' } },
+    { id: 'export', q: 'Can I get my data out?', a: ['Yes. Export any meeting as three linked Markdown files (summary, notes, transcript), or copy what you are reading. It is your data, in plain text.'], see: { href: '/grod/features/#export', label: 'Take it anywhere' } },
+    { id: 'delete', q: 'Can I delete a recording?', a: ['Yes, with twelve seconds to undo. You can also have GRØD delete audio automatically after 90 days, keeping the transcript and notes.'], see: { href: `${GROD_PRIVACY_PATH}#deletion`, label: 'Deleted means deleted' } },
+    { id: 'sync', q: 'Does it sync to my other Macs or my phone?', a: ['Not today. There is no GRØD cloud to sync through.'] },
+  ] },
+];
+/* The page ends on the night ground, like every GRØD page, so the last
+   group is a night band and the ones before it alternate back from there. */
+const dark = (i: number) => (groups.length - 1 - i) % 2 === 0;
+---
+<Base
+  title="FAQ · GRØD"
+  description="Short answers about GRØD: what it needs, which meeting apps it works with, whether anything leaves your Mac, when it records, and what happens to your notes."
+  theme="light"
+  card={GROD_CARD}
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain ge gg gq">
+<!--
+DIRECTION CONTRACT · seed b3c9e4e4 · mode read · /grod/faq
+THESIS: Every question answered in the open, in a sentence or three. It refuses the accordion: nothing has to be clicked to be read, and a search in the page finds every answer.
+OWN-WORLD: the GRØD site's paper and night bands, bar and footer. A group's name is pinned in the left column in the serif while its questions scroll past on the right; questions are set in the serif at the lede's size, answers in Atkinson Hyperlegible Next.
+STORY: "I had one question, and it was answered plainly." Find the group, read the answer, follow its address if it needs sending on.
+FIRST VIEWPORT: the bar; "Questions, answered." at poster size; a one-line lede; the four groups as links; the first group's name and first question at the fold.
+FORM: a list of questions by group, agreed with the user on 2026-10-02; seed key b3c9e4e4.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <GrodBar />
+
+  <main id="main">
+    <section class="gq-hero" aria-labelledby="h1">
+      <h1 class="g-h" id="h1"><span class="g-ghost"><span aria-hidden="true">Questions, answered.</span>Questions, answered.</span></h1>
+      <p class="g-lede">Short answers, plain words, honest limits.</p>
+      <nav class="gq-groups" aria-label="On this page">
+        {groups.map((g) => <a href={`#${g.id}`}>{g.name}</a>)}
+      </nav>
+    </section>
+
+    {groups.map((g, i) => (
+      <section class:list={['ge-clause', { 'ge-clause--last': i === groups.length - 1 }]} id={g.id} data-band={dark(i) ? 'dark' : undefined} aria-labelledby={`h-${g.id}`}>
+        {dark(i) && <div class="g-dots" aria-hidden="true"></div>}
+        <div class="ge-pin"><h2 class="g-h2" id={`h-${g.id}`}>{g.name}</h2></div>
+        <div class="ge-body">
+          {g.questions.map((item) => (
+            <div class="gq-item" id={item.id}>
+              <h3 class="gq-q"><a class="g-anchor" href={`#${item.id}`}>{item.q}</a></h3>
+              {item.a.map((para) => <p class="g-body" set:html={para} />)}
+              {item.see && <p class="gq-see"><a class="g-more" href={item.see.href}>{item.see.label}</a></p>}
+            </div>
+          ))}
+          {i === groups.length - 1 && (
+            <div class="ge-close">
+              <p class="g-body">Something not answered here? Write to <a href="mailto:hello@gaspery.com">hello@gaspery.com</a>. GRØD is in beta on macOS, and the same address gets you the build.</p>
+              <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form.</span></p>
+              <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
+            </div>
+          )}
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <GrodNight motif="oats" note="Short answers. The long ones are on the Privacy page and in the policy." />
+</div>
+
+<script>
+  /* The phone visitor's ending: the page on a Mac, without a form. */
+  const share = document.querySelector<HTMLButtonElement>('.ge-share');
+  share?.addEventListener('click', async () => {
+    const url = location.href.split(/[?#]/)[0];
+    try {
+      if (navigator.share) await navigator.share({ title: 'GRØD', url });
+      else { await navigator.clipboard.writeText(url); share.textContent = 'Link copied'; }
+    } catch { /* the sheet was dismissed; nothing to do */ }
+  });
+</script>
+</Base>
