@@ -608,7 +608,8 @@ the 680px reading measure); an editorial page's spreads run media-dominant
 room: a Mac window shrunk into a prose column is a smudge, not proof.
 
 ### The GRØD site
-The parts `/grod`, `/grod/features` and `/grod/craft` are built from. All are scoped under
+The parts the GRØD pages are built from (`/grod`, `/grod/features`,
+`/grod/craft`, `/grod/privacy`, `/grod/faq`). All are scoped under
 `.g`; the pages are pinned to the light appearance and carry their own night
 bands, so the site's theme toggle does not appear on them.
 - **Captures.** Every image is a real capture of the app's Demo workspace,
@@ -667,6 +668,36 @@ bands, so the site's theme toggle does not appear on them.
   applied at once, with no transition. The address follows the ink
   (`/grod/craft/?ink=braun`), and a page opened at such an address is given
   its colours before the first paint, so it arrives printed that way.
+- **The share card** (`public/og/grod.jpg`, printed by
+  `scripts/grod-share-card.mjs`): what a link to any GRØD page unfurls with.
+  1200 by 630 on the site's two grounds: grained paper on the left with the
+  wordmark, "Meetings, distilled." in Merriweather 300 on a 3px magenta
+  ghost (3px, not the site's 2px, because the card is nearly always seen
+  reduced), the sentence and the promise; the night ground on the right with
+  its dots and the 3px magenta seam, and the app's Agenda window running off
+  the right and bottom edges. Every other page keeps the site's card.
+- **The bar** (`GrodBar.astro`, on every GRØD page): the wordmark, the
+  site's pages, and the key. On a desk the pages sit in a row, the current
+  one at weight 600. At 640px and below they fold into a text button,
+  "Menu" (a 44px target), which opens them as a list on a sheet under the bar (paper,
+  hairline, 8px, `--g-lift`, 17px links ruled apart) and reads "Close" while
+  open. Links into the page itself are left out on a phone. With no script
+  there is no menu and the pages wrap onto a second line. The footer lists
+  every page, with the FAQ and the policy, whatever the bar holds.
+- **The ledger** (`/grod/privacy`, `.gv-ledger`): a real table of what leaves
+  the Mac, who sends it, and whether it carries your recordings and notes.
+  A 2px ink rule above and below, hairlines between rows; the caption is
+  the Features heading step, the sender in each row the Lede step in the
+  serif, the answers in body text with the verdict at weight 600. On a
+  phone each row becomes a block and each answer carries its column's name
+  as a label. Each sender is a link to its receipt further down. Its rows
+  restate sentences from the page's own copy and claim nothing more.
+- **Questions** (`/grod/faq`, `.gq`): every answer open, nothing to click.
+  The clause keeps its two columns here: a group's name (the Heading step)
+  stays pinned in the left column while its questions scroll past, each
+  question the Lede step in the serif over a body-text answer, ruled apart
+  by hairlines. Every question is a link to its own address (`.g-anchor`,
+  the same stop the Features time line draws).
 - **The policy** (`/grod/privacy-policy`, `.gp`): a document, not a sales
   page. One reading column (640px, about 70 characters) on the paper, between
   the site's bar and its night footer: no bands, no captures, no motion. The
