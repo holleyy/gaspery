@@ -9,7 +9,7 @@ import '../styles/grod.css';
 import '../styles/grod-e.css';
 import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { GROD_CARD, GROD_GO_PATH } from '../lib/grod';
+import { GROD_CARD, BETA_URL } from '../lib/grod';
 
 /* The sentence page: five clauses, each with the real captures for it.
    Arms e, f, g and h are this one page cut four ways (see their files for
@@ -100,7 +100,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
             ? <p class="ge-rest">It remembers what was said, who said it, and what you decided.</p>
             : <p class="ge-rest" aria-hidden="true">what was said, who said it, and what you decided.</p>}
           <p class="g-lede">GRØD is a private, Mac-native memory for your meetings. Nothing joins your call, and there is no account. <em>Your meeting content never leaves this Mac.</em></p>
-          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a>{more && <a class="g-more" href={more.href}>{more.label}</a>}<span class="g-meta">Mac only. No form.</span></p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a>{more && <a class="g-more" href={more.href}>{more.label}</a>}<span class="g-meta">Mac only. No form.</span></p>
           {film && (
             <button type="button" class="ge-film-toggle" aria-pressed="false" hidden>
               <svg viewBox="0 0 12 12" aria-hidden="true"><path class="ge-film-toggle__pause" d="M3 2v8M9 2v8" /><path class="ge-film-toggle__play" d="M3.5 2l6 4-6 4z" /></svg>
@@ -251,7 +251,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
         <div class="ge-close">
           <p class="g-h2">Breakfast is almost ready.</p>
           <p class="g-body">GRØD is in beta on macOS. Write and we will send you the build, and you can come and break it.</p>
-          <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a>{more && <a class="g-more" href={more.href}>{more.label}</a>}<span class="g-meta">An email. No form.</span></p>
+          <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a>{more && <a class="g-more" href={more.href}>{more.label}</a>}<span class="g-meta">An email. No form.</span></p>
           <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
         </div>
       </div>

@@ -6,7 +6,7 @@ import '../../styles/grod.css';
 import '../../styles/grod-e.css';
 import '../../styles/grod-g.css';
 import '../../styles/grod-faq.css';
-import { GROD_CARD, GROD_GO_PATH, GROD_POLICY_PATH, GROD_PRIVACY_PATH } from '../../lib/grod';
+import { GROD_CARD, BETA_URL, GROD_POLICY_PATH, GROD_PRIVACY_PATH } from '../../lib/grod';
 
 /* /grod/faq: short answers, plain words, honest limits. Four groups, every
    answer open, and an address for every question (/grod/faq/#offline), so a
@@ -104,7 +104,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           {i === groups.length - 1 && (
             <div class="ge-close">
               <p class="g-body">Something not answered here? Write to <a href="mailto:hello@gaspery.com">hello@gaspery.com</a>. GRØD is in beta on macOS, and the same address gets you the build.</p>
-              <p class="g-close"><a class="g-bezel g-bezel--big" href={GROD_GO_PATH}>Join the beta</a><span class="g-meta">An email. No form.</span></p>
+              <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a><span class="g-meta">An email. No form.</span></p>
               <p class="ge-phone-end g-meta">Reading on a phone? GRØD is Mac only. <button type="button" class="ge-share">Send yourself this link</button></p>
             </div>
           )}

@@ -17,7 +17,7 @@ test('the page is /grod, and its call to action is counted on its own go page', 
   assert.equal(GROD_GO_PATH, '/grod/go/');
   const page = read('src/pages/grod/index.astro');
   assert.match(page, /home="\/grod\/"/);
-  assert.match(read('src/components/GrodSentence.astro'), /href=\{GROD_GO_PATH\}/);
+  assert.match(read('src/components/GrodSentence.astro'), /href=\{BETA_URL\}/);
   assert.match(read('src/pages/grod/go.astro'), /GrodGo/);
 });
 
@@ -30,7 +30,7 @@ test('one bar on every GRØD page, and on a phone its pages fold into a menu', (
   const bar = read('src/components/GrodBar.astro');
   assert.match(bar, /GROD_PAGES\.map/);
   assert.match(bar, /<button type="button" class="g-menu" aria-expanded="false" aria-controls="g-links">Menu<\/button>/);
-  assert.match(bar, /href=\{GROD_GO_PATH\}/);
+  assert.match(bar, /href=\{BETA_URL\}/);
   const css = read('src/styles/grod.css');
   // the menu exists only once the script has marked the bar, and only on a phone
   assert.match(css, /\.g-menu \{ display: none; \}/);
@@ -41,7 +41,7 @@ test('one bar on every GRØD page, and on a phone its pages fold into a menu', (
 test('the Features page is reachable from the home page and counts its beta click', () => {
   const page = read('src/pages/grod/features.astro');
   assert.match(page, /THESIS:/);
-  assert.match(page, /href=\{GROD_GO_PATH\}/);
+  assert.match(page, /href=\{BETA_URL\}/);
   // the bar and the footer list the site's pages from one list, and the
   // home page offers Features beside each call to action
   assert.ok(GROD_PAGES.some((p) => p.href === '/grod/features/'));
@@ -102,7 +102,7 @@ test('the app roster sends /studio and /apps/grod to the page', () => {
 });
 
 test('the beta link is an email, with no form', () => {
-  assert.match(BETA_URL, /^mailto:hello@gaspery\.com\?subject=/);
+  assert.match(BETA_URL, /^mailto:beta@gaspery\.com\?subject=/);
 });
 
 /* The planner plots real meetings: the port of DemoHistory.swift must
@@ -163,7 +163,7 @@ test('the Craft page is listed with the site\'s pages and carries its contract',
   const page = read('src/pages/grod/craft.astro');
   assert.match(page, /THESIS:/);
   assert.match(page, /FINISH: unreviewed and undocumented is unfinished/);
-  assert.match(page, /href=\{GROD_GO_PATH\}/);
+  assert.match(page, /href=\{BETA_URL\}/);
   assert.match(page, /<GrodNight motif="oats"/);
 });
 

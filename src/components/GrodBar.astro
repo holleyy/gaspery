@@ -8,7 +8,7 @@
    menu before the first paint; with no script the pages simply wrap onto a
    second line, and every one of them is also in the footer. Styles are in
    src/styles/grod.css (.g-top, .g-menu, .g-links). */
-import { GROD_GO_PATH, GROD_HOME, GROD_PAGES } from '../lib/grod';
+import { BETA_URL, GROD_HOME, GROD_PAGES } from '../lib/grod';
 
 interface Props {
   home?: string;
@@ -26,7 +26,7 @@ const here = Astro.url.pathname.replace(/\/?$/, '/');
       {GROD_PAGES.map((page) => <a href={page.href} aria-current={page.href === here ? 'page' : undefined}>{page.label}</a>)}
       {extra.map((link) => <a href={link.href}>{link.label}</a>)}
     </div>
-    <a class="g-bezel" href={GROD_GO_PATH}>Join the beta</a>
+    <a class="g-bezel" href={BETA_URL}>Join the beta</a>
   </nav>
 </header>
 <script is:inline>document.currentScript.previousElementSibling.classList.add('has-menu');</script>

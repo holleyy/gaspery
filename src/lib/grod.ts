@@ -13,7 +13,7 @@
 /* Until the first TestFlight build is up, the call to action is an email:
    no form, no tracker (docs/product/03-landing-page.md §10 in the GRØD
    repo). The go page counts the click and then opens this. */
-export const BETA_URL = 'mailto:hello@gaspery.com?subject=GR%C3%98D%20beta';
+export const BETA_URL = 'mailto:beta@gaspery.com?subject=I%27d%20like%20to%20join%20the%20GR%C3%98D%20beta';
 
 export const GROD_GO_PATH = '/grod/go/';
 
