@@ -53,3 +53,21 @@ const here = Astro.url.pathname.replace(/\/?$/, '/');
     bar.addEventListener('focusout', (e) => { if (e.relatedTarget && !bar.contains(e.relatedTarget as Node)) set(false); });
   }
 </script>
+
+<script>
+  /* The beta button is a plain mailto, so the click is counted here: a hidden
+     copy of /grod/go/ is loaded for a moment, which the tracker counts as a
+     pageview like any other. The go page does not redirect when framed. The
+     mailto itself is never held back. */
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="mailto:beta@gaspery.com"]');
+    if (!a) return;
+    const frame = document.createElement('iframe');
+    frame.src = '/grod/go/';
+    frame.hidden = true;
+    frame.tabIndex = -1;
+    frame.setAttribute('aria-hidden', 'true');
+    document.body.append(frame);
+    setTimeout(() => frame.remove(), 1500);
+  });
+</script>
