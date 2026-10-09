@@ -21,6 +21,8 @@ Sidebar settings travel through `GROD_DEMO_EXTRA_ARGS`; the look flags
 `--echo`, `--text-size` and `--grain` exist only on the branch
 `claude/demo-capture-look-flags`, and `main`'s defaults are the house look.
 
+The run has to happen on a Retina (2x) display; the ask says so.
+
 Films are a separate ask, [ask-films.md](ask-films.md): the Demo's film
 scenes cannot be captured as stills.
 

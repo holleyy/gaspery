@@ -84,6 +84,13 @@ One folder, `~/Downloads/grod-captures-2`, with the six subfolders above. The
 script's own names are kept (`agenda-overview-overprintd2-riso.png`,
 `agenda-overview-overprintd2-riso-dark.png`, `agenda-overview-castiglioni-braun.png`).
 
+## Before starting
+
+- **Run it on the Retina display.** The captures must be 2x: the script
+  checks for 2224 × 1664 and rejects anything else, and a Demo window that
+  opens on a 1x external display captures at half that. Put the Demo on the
+  Mac's own screen, or a 2x display, and leave it there for the whole run.
+
 ## Checks before handing it over
 
 - Every main-window image is 2224 × 1664 with the window at the same place as
