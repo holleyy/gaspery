@@ -181,7 +181,8 @@ test('every ink the Craft page offers has its captures, and every topping its st
     shot(`notes-${t.id}`);
     shot(`notes-${t.id}-dark`);
   }
-  for (const d of DOCK_STYLES) shot(`dock-${d.id}`);
+  // the toppings stage follows the ink: every topping on every theme
+  for (const d of DOCK_STYLES) for (const t of THEMES) shot(`dock-${d.id}-${t.id}`);
   for (const name of ['braun-agenda', 'braun-tags', 'braun-month', 'macro-card', 'macro-mark', 'macro-stamp', 'bar', 'pill', 'card']) shot(name);
 });
 

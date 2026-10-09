@@ -43,9 +43,9 @@ mkdirSync(CRAFT, { recursive: true });
 const WIN = { left: 112, top: 76, width: 2000, height: 1440 };
 const RADIUS = 48;
 /* The pane's left edge in the captures the boxes were measured on, as
-   paneLeft() reads it there (the sidebar is 192 points wide; the edge's
-   antialiased column is counted). */
-const MEASURED_PANE_LEFT = 492;
+   paneLeft() reads it there: the sidebar is 192 points wide, and its edge
+   is the step between window columns 379 and 380. */
+const MEASURED_PANE_LEFT = 491;
 const THEMES = ['riso', 'grod-warm', 'nord', 'sepia', 'red-graphite', 'flexoki', 'braun'];
 const DOCKS = ['overprintd2', 'fukasawa', 'ledger', 'marginalia', 'castiglioni', 'jensen', 'crunchy2'];
 
@@ -59,7 +59,7 @@ const file = (folder, scene, topping = 'overprintd2', theme = 'riso', mode = 'li
   if (!suffixes.has(dir)) {
     const names = existsSync(dir) ? readdirSync(dir) : [];
     const sample = names.find((n) => /^agenda-overview-/.test(n) && n.endsWith('.png')) ?? '';
-    const m = sample.match(/-(?:dark)?((?:-(?:noecho|compact|comfortable|nonegrain|finegrain|inactive))*)\.png$/);
+    const m = sample.match(/((?:-(?:noecho|compact|comfortable|nonegrain|finegrain|inactive))+)\.png$/);
     suffixes.set(dir, m ? m[1] : '');
   }
   return join(dir, `${base}${suffixes.get(dir)}.png`);
@@ -78,16 +78,30 @@ const written = [];
 const report = (set, name, info) => { written.push([set, name]); console.log(`${set}/${name}`, info.width, info.height, Math.round(info.size / 1024) + 'k'); };
 const mask = (w, h, r) => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${r}" ry="${r}" fill="#fff"/></svg>`);
 
-/* Where the pane begins in this run: the first paper pixel right of the
-   sidebar on a row below the content. The boxes shift by the difference. */
+/* Where the pane begins in this run: the sidebar's edge, read as the
+   sharpest vertical step in a band of rows below the content. Rows are
+   averaged so the sidebar's grain does not count as an edge. The boxes
+   shift by the difference from the reference. */
 async function paneLeft(path) {
-  const y = 1200; // a row of bare sidebar ground and bare pane, in every scene
-  const { data, info } = await sharp(path).extract({ left: WIN.left, top: y, width: WIN.width, height: 1 }).raw().toBuffer({ resolveWithObject: true });
-  const paper = (x) => { const i = x * info.channels; return data[i] >= 0xF2 && data[i + 1] >= 0xEC && data[i + 2] >= 0xE0; };
-  for (let x = 60; x < WIN.width - 400; x += 1) if (paper(x) && paper(x + 8) && paper(x + 24)) return WIN.left + x;
-  return MEASURED_PANE_LEFT;
+  const band = { left: WIN.left, top: 1100, width: WIN.width, height: 200 };
+  const { data, info } = await sharp(path).extract(band).raw().toBuffer({ resolveWithObject: true });
+  const mean = new Float32Array(band.width);
+  for (let y = 0; y < band.height; y += 1) for (let x = 0; x < band.width; x += 1) {
+    const i = (y * band.width + x) * info.channels;
+    mean[x] += (data[i] + data[i + 1] + data[i + 2]) / 3 / band.height;
+  }
+  let best = { x: MEASURED_PANE_LEFT - WIN.left, g: 0 };
+  // a sidebar edge is between 330 and 480: the card's and the rows' edges
+  // further right are sharper steps and must not be taken for it
+  for (let x = 330; x < 480; x += 1) {
+    const g = Math.abs((mean[x + 1] + mean[x + 2] + mean[x + 3]) - (mean[x - 3] + mean[x - 2] + mean[x - 1])) / 3;
+    if (g > best.g) best = { x, g };
+  }
+  return WIN.left + best.x;
 }
-const delta = have(house('agenda-overview')) ? (await paneLeft(house('agenda-overview'))) - MEASURED_PANE_LEFT : 0;
+const read = have(house('agenda-overview')) ? (await paneLeft(house('agenda-overview'))) - MEASURED_PANE_LEFT : 0;
+// a pixel either way is the edge's antialiasing, not a moved sidebar
+const delta = Math.abs(read) <= 2 ? 0 : read;
 console.log(`pane left: measured ${MEASURED_PANE_LEFT}, this run ${MEASURED_PANE_LEFT + delta} (${delta >= 0 ? '+' : ''}${delta})`);
 const shift = (box, anchor = 'left') => ({ ...box, left: box.left + Math.round(delta * (anchor === 'left' ? 1 : anchor === 'centre' ? 0.5 : 0)) });
 
@@ -139,7 +153,9 @@ const windows = [
    name, box, corner radius, anchor. The popover is cut 2px inside its
    border, whose corners are not quite circular. */
 const elements = [
-  ['meeting-series-context', 'popover', { left: 975, top: 312, width: 698, height: 870 }, 28, 'left'],
+  // the popover grew on 9 Oct 2026: its Today row now carries the meeting's
+  // first line, and Open the series sits under it
+  ['meeting-series-context', 'popover', { left: 975, top: 312, width: 698, height: 934 }, 28, 'left'],
   ['agenda-deleting', 'toast', { left: 1623, top: 1407, width: 375, height: 67 }, 10, 'right'],
   ['month-page-palette', 'palette', { left: 554, top: 314, width: 1116, height: 956 }, 31, 'centre'],
   ['recording-system-stalled', 'bar-stalled', { left: 604, top: 1352, width: 1283, height: 124 }, 3, 'left'],
@@ -152,10 +168,12 @@ const details = [
   ['month-page-facts', 'weeks', { left: 690, top: 625, width: 1215, height: 300 }],
   ['month-page-facts', 'week45', { left: 690, top: 1205, width: 1215, height: 165 }],
   ['series-ladder', 'skipped', { left: 662, top: 652, width: 1240, height: 196 }],
-  ['meeting-series-context', 'continuity', { left: 940, top: 270, width: 780, height: 930 }],
-  ['meeting-answer-with-evidence', 'line-0302', { left: 678, top: 714, width: 1202, height: 164 }],
+  ['meeting-series-context', 'continuity', { left: 940, top: 270, width: 780, height: 994 }],
+  ['meeting-answer-with-evidence', 'line-0302', { left: 678, top: 486, width: 1202, height: 132 }],
   ['meeting-answer-with-evidence', 'ask', { left: 606, top: 1076, width: 790, height: 282 }],
-  ['meeting-transcript', 'transcript-lines', { left: 690, top: 640, width: 1215, height: 420 }],
+  // the Transcript lost its fixture label and search field on 9 Oct 2026,
+  // so its lines start 143px higher than they did
+  ['meeting-transcript', 'transcript-lines', { left: 690, top: 497, width: 1215, height: 420 }],
   ['tags-index', 'merge', { left: 677, top: 294, width: 1250, height: 195 }],
   ['person-context', 'voice', { left: 662, top: 312, width: 1280, height: 200 }],
   ['agenda-deleting', 'deleted', { left: 1600, top: 1385, width: 420, height: 110 }, 'right'],
@@ -200,7 +218,7 @@ if (ONLY.includes('craft')) {
   // page title's descenders (row 231 in the house capture)
   const STAGE = shift({ left: 640, top: 240, width: 1440, height: 508 });
   for (const dock of DOCKS) {
-    await region(dock === 'overprintd2' ? house('agenda-overview') : file('docks', 'agenda-overview', dock), 'craft', `dock-${dock}`, STAGE, 88);
+    await region(dock === 'overprintd2' ? house('agenda-overview') : file('docks', 'agenda-overview', dock), 'craft', `dock-${dock}-riso`, STAGE, 88);
   }
   // close-ups at the capture's own pixels
   const HOUSE = house('agenda-overview');

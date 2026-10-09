@@ -733,7 +733,9 @@ at page size); the site's chrome everywhere else stays two inks.
 ### Signature motifs
 The four devices that make a new page read as part of this system rather than a
 generic layout. Reuse them deliberately; don't invent competing ones.
-
+  The stage follows the ink: every topping is cut on every theme
+  (`dock-<topping>-<theme>`), so a page printed in Braun shows Braun's
+  Agenda under each topping, and the caption names the ink.
 - **Misregistration** — the one loud print moment, spent on one headline per page. Two stacked copies of the same text: the base copy normal, a second copy offset and colored `--color-brand`, set to `mix-blend-mode: multiply`. The offset is `translate(3px, 3px)` on the 404's Hero (Merriweather 800); the rail masthead, set in the lighter Merriweather 400, drops to `translate(2px, 2px)` — at that weight a 3px shift is wider than the stroke and reads as an outline rather than a registration mark. Under `prefers-reduced-transparency: reduce` or `prefers-contrast: more`, the offset copy is hidden entirely — meaning must never depend on the blend.
 - **Halftone dot field** — a `radial-gradient(--color-teal 1.1px, transparent 1.5px)` at `7px 7px`, `mix-blend-mode: multiply` (flips to `screen` in dark mode), masked to fade out radially. Decorative only, beside a masthead — the rail's identity block, or the 404's hero — never load-bearing for content.
 - **Registration mark** (`RegistrationMark.astro`) — a crosshair (teal stroke) plus a ring (brand stroke), default 16px, stroke-width 1. Three variants: `full`, `cross`, `ring`. The connective thread between sections — rail, stream headers, footer.

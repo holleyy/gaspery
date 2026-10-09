@@ -163,10 +163,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="gc-docks__stage g-detail">
             {DOCK_STYLES.map((d, i) => (
-              <img class:list={{ 'is-on': i === 0 }} data-dock={d.id} src={craft(`dock-${d.id}`)} width="1440" height="508" alt={`The top of the Agenda with the ${d.name} topping.`} loading="lazy" decoding="async" />
+              <img class:list={{ 'is-on': i === 0 }} data-dock={d.id} src={craft(`dock-${d.id}-${HOUSE_THEME}`)} data-ink-src={craft(`dock-${d.id}-{ink}`)} width="1440" height="508" alt={`The top of the Agenda with the ${d.name} topping.`} loading="lazy" decoding="async" />
             ))}
           </div>
-          <figcaption><span aria-live="polite"><span class="gc-docks__name">{DOCK_STYLES[0].name}</span>. <span class="gc-docks__character">{DOCK_STYLES[0].character}</span></span> <span class="gc-docks__where">Shown in Riso.</span></figcaption>
+          <figcaption><span aria-live="polite"><span class="gc-docks__name">{DOCK_STYLES[0].name}</span>. <span class="gc-docks__character">{DOCK_STYLES[0].character}</span></span> <span class="gc-docks__where">Shown in <span data-ink-name>{house.name}</span>.</span></figcaption>
         </figure>
 
         <div class="gc-lead" id="braun">
