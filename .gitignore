@@ -18,7 +18,9 @@ npm-debug.log*
 
 # AI tooling configs/skills (local dev tooling, not site source)
 .agents/
-.claude/skills/
+# the design skill's install, but not the project's own skills
+.claude/skills/*
+!.claude/skills/grod-captures/
 .codex/
 .cursor/
 .impeccable/live/

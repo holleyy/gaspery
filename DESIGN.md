@@ -618,8 +618,8 @@ bands, so the site's theme toggle does not appear on them.
   is a region inside a window with a hairline (4px radius). A floating part
   (popover, toast, palette, bar, card, pill) is traced to its own shape and
   shown near the size it is in the app, never stretched to fill a column.
-  `scripts/grod-landing-crops.mjs` cuts them for the home and Features
-  pages, and `scripts/grod-craft-crops.mjs` for Craft.
+  `scripts/grod-crops.mjs` cuts all of them from one run of the app's
+  capture script (the `grod-captures` skill holds the procedure).
 - **Pop-out** (`GrodPopOut.astro`): a window with one region magnified on a
   card (14px radius) overhanging its right edge. No outlines, no connectors.
 - **Stack** (`GrodStack.astro`): several views of one thing as overlapping
@@ -648,7 +648,7 @@ bands, so the site's theme toggle does not appear on them.
   (`image-rendering: pixelated`, `object-fit: none`): the dots are a pixel or
   two across, and a fractional size would blur them into a grey. A narrower
   figure shows less of the patch, never a scaled one.
-  `scripts/grod-craft-crops.mjs` cuts the Craft page's set.
+  `scripts/grod-crops.mjs` cuts the Craft page's set with the rest.
 - **Re-ink** (Craft): one row of theme buttons (`.gc-ink`: a full-round
   hairline pill, 15px/500, with a 20px swatch showing the theme's accent on
   its own light and dark paper; the pressed one is printed solid, ink on
