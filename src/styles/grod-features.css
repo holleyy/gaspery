@@ -84,7 +84,7 @@
 .gt .gt-el--dock { max-width: 640px; }
 
 /* The pill, at the size it is on the screen's edge, beside its own words. */
-.gt-with-pill { position: relative; padding-left: 62px; min-height: 176px; }
+.gt-with-pill { position: relative; padding-left: 62px; min-height: 104px; }
 .gt-pill { position: absolute; left: 0; top: 16px; width: 40px; height: auto; filter: var(--g-cast); }
 
 @media (max-width: 900px) {
