@@ -3,3 +3,8 @@
 # address never needs checking again.
 /fonts/*.woff2
   Cache-Control: public, max-age=31536000, immutable
+
+# The talk decks are unlisted: reachable by link, kept out of search. The
+# pages say so too; this covers the PDFs and the presenter copies as well.
+/decks/*
+  X-Robots-Tag: noindex, nofollow
