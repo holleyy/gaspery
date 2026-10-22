@@ -38,8 +38,8 @@ const shot = (name: string) => `/shots/grod/landing/${name}.webp`;
    the stack, and the highest starts in front: Notes, the tab the app opens
    on, and the Map, the view Tags opens on. */
 const meetingTabs = [
-  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
   { n: 2, src: 'window-notes', label: 'Notes', alt: "The Notes tab of GRØD's meeting page: The story, Decisions, and the Ask panel over them." },
+  { n: 1, src: 'window-summary', label: 'Summary', alt: 'The Summary tab: a paragraph, Key decisions with two bullets, Actions with their owners.' },
   { n: 0, src: 'window-transcript', label: 'Transcript', alt: 'The Transcript tab: six lines, each with its minute and the person who said it.' },
 ];
 const tagTabs = [
@@ -109,7 +109,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <dl class="g-receipts">
           <div id="detection"><dt>It notices when a call starts</dt><dd>Turn on detection and GRØD watches for Zoom, Teams, Slack, FaceTime and Webex, on every microphone you have plugged in, and offers to record.</dd></div>
-          <div id="calendar"><dt>It records by itself only if you connect a calendar</dt><dd>Then it records scheduled meetings, and the card lets you skip any you would rather it left alone. Without a calendar, GRØD records when you tell it to. Setup explains this before anything is recorded.</dd></div>
+          <div id="calendar"><dt>It records by itself only with a calendar and detection</dt><dd>Connect a calendar and turn on detection, and GRØD starts recording a scheduled meeting once the call has begun, never on the clock alone. The card lets you skip any you would rather it left alone. Otherwise GRØD records when you tell it to. Setup explains this before anything is recorded.</dd></div>
         </dl>
       </div>
     </section>
@@ -121,7 +121,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="ge-row" id="no-bot">
           <div class="ge-row__text">
             <h3 class="g-h2"><a class="g-anchor" href="#no-bot">Both sides, no bot</a></h3>
-            <p class="g-body">GRØD records your microphone and the audio your conference app is already playing. Nothing joins the call and nothing announces itself. Telling the other person is still on you.</p>
+            <p class="g-body">GRØD records your microphone and the sound of every app on your Mac except GRØD itself, so the other side of the call is in it, and so is anything else that plays. Nothing joins the call and nothing announces itself. Telling the other person is still on you.</p>
           </div>
           <figure class="g-capture g-win">
             <img src={shot('window-recording')} width="2000" height="1440" alt="A meeting page while GRØD records: the recording bar at the foot shows 08:42, the meeting's name, and Open, Flag, Live, pause and Stop." loading="lazy" decoding="async" />
@@ -131,7 +131,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="ge-row" id="keeps-going">
           <div class="ge-row__text">
             <h3 class="g-h2"><a class="g-anchor" href="#keeps-going">It keeps going</a></h3>
-            <p class="g-body">Swap to your AirPods mid-call and GRØD reconnects and carries on recording to the same file. If the other side's audio drops out, GRØD keeps what it heard and tells you exactly what happened.</p>
+            <p class="g-body">Change microphones mid-call and GRØD reconnects and carries on recording to the same file. Unless you choose a microphone yourself, GRØD uses your Mac's built-in one when Bluetooth would reduce speech quality, so with AirPods in, GRØD may be recording through the Mac. If the other side's audio drops out, GRØD keeps what it heard and tells you exactly what happened.</p>
           </div>
           <figure class="g-capture g-win gt-el">
             <img src={shot('bar-stalled')} width="1283" height="124" alt="The recording bar at 08:42 with a No system audio flag beside Open, Flag, Live, pause and Stop." loading="lazy" decoding="async" />
@@ -166,12 +166,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
 
         <div class="gt-lead" id="notes">
-          <h3 class="g-h2"><a class="g-anchor" href="#notes">Summary, Notes, Transcript</a></h3>
+          <h3 class="g-h2"><a class="g-anchor" href="#notes">Notes, Summary, Transcript</a></h3>
           <p class="g-body">Every meeting has three views. Notes is a magic notepad: write something, and it comes back as your notes, enriched. Write nothing, and GRØD fills in what you need. Summary is the decisions, action items and open questions. Transcript is the exact words, with who said them.</p>
         </div>
         <GrodStack
           tabs={meetingTabs}
-          caption="Summary, Notes, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front."
+          caption="Notes, Summary, Transcript. One meeting, three tabs, all of it on this Mac. Press a window, or its tab, to bring it to the front."
         />
 
         <div class="ge-row" id="ask">
@@ -334,7 +334,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="gt-needs" id="needs">
           <h3 class="g-h2"><a class="g-anchor" href="#needs">What it needs, and what it does not do</a></h3>
           <dl class="g-receipts">
-            <div id="mac"><dt>A Mac</dt><dd>An Apple silicon Mac running macOS 26 or later. Summaries use Apple Intelligence, or a local model you choose to download. Recording and transcription work without either.</dd></div>
+            <div id="mac"><dt>A Mac</dt><dd>An Apple silicon Mac running macOS 27 or later. Summaries use Apple Intelligence, or a local model you choose to download. Ask, and “Answer from your meetings” in Search, need Apple Intelligence. Recording and transcription work without either.</dd></div>
             <div id="apps"><dt>Any app that plays audio</dt><dd>Zoom, Microsoft Teams, Google Meet in a browser, Slack huddles, FaceTime, Webex and others. It also works for a conversation in the room, through your microphone.</dd></div>
             <div id="offline"><dt>Offline, once it is set up</dt><dd>With the models it needs on your Mac, recording, transcription, search and summaries all run locally. The very first use may need macOS to fetch its own speech or intelligence assets.</dd></div>
             <div id="accuracy"><dt>Good, and not perfect</dt><dd>It is a local model, and GRØD does not mark its own guesses, so a wrong line reads as confidently as a right one. Answers come with a source you can check in one click.</dd></div>
