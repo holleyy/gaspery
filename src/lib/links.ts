@@ -48,7 +48,7 @@ export type WritingData = LinkFields & {
   readingTime?: string;
   template?: string;
 };
-export type WritingEntry = { id: string; data: WritingData };
+export type WritingEntry = { id: string; data: WritingData; body?: string };
 
 export type PostProps = {
   href: string;
@@ -69,6 +69,25 @@ export function newestEssayId(entries: WritingEntry[]): string | null {
   return entries.find((e) => !isLink(e.data))?.id ?? null;
 }
 
+/** Reading speed behind a counted reading time. 230 puts the one essay timed
+    by hand against a full body (612 words, "3 min") on its own figure. */
+const WORDS_PER_MINUTE = 230;
+
+/** An essay's reading time as shown: the one set by hand if there is one,
+    else counted from the body. Counted, not required: Keystatic can't make a
+    field required only when another (`sourceUrl`) is empty, so when the
+    schema demanded it an essay saved without one froze every deploy. A link
+    post gets undefined — it shows its source's domain instead. */
+export function readingTimeOf(entry: { data: LinkFields & { readingTime?: string }; body?: string }): string | undefined {
+  if (entry.data.readingTime) return entry.data.readingTime;
+  if (isLink(entry.data)) return undefined;
+  const words = (entry.body ?? '')
+    .replace(/\{%[\s\S]*?%\}/g, ' ') // Markdoc tags, attributes and all
+    .replace(/\]\([^)]*\)/g, ']') // link and image targets
+    .match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)?.length ?? 0;
+  return `${Math.max(1, Math.round(words / WORDS_PER_MINUTE))} min`;
+}
+
 /** Map a collection entry to what WritingList renders. The single place that
     knows the prop shape — four pages call it. */
 export function toPostProps(entry: WritingEntry, newestId: string | null): PostProps {
@@ -77,7 +96,7 @@ export function toPostProps(entry: WritingEntry, newestId: string | null): PostP
     title: entry.data.title,
     date: entry.data.date,
     dek: entry.data.dek,
-    readingTime: entry.data.readingTime,
+    readingTime: readingTimeOf(entry),
     sourceUrl: entry.data.sourceUrl,
     isNew: entry.id === newestId,
     isFeature: isFeature(entry.data),

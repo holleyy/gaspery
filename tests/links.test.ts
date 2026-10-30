@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 // The `.ts` extension is required here and only here: Node's native type
 // stripping runs this file directly, and ESM in Node needs explicit
 // extensions. Astro/Vite files import the same module extensionless.
-import { isLink, isHttpUrl, sourceDomain, newestEssayId, toPostProps } from '../src/lib/links.ts';
+import { isLink, isHttpUrl, sourceDomain, newestEssayId, toPostProps, readingTimeOf } from '../src/lib/links.ts';
 
 test('isLink is true only when a source URL is present', () => {
   assert.equal(isLink({ sourceUrl: 'https://example.com/a' }), true);
@@ -93,4 +93,32 @@ test('toPostProps carries sourceUrl through and never flags a link as new', () =
   assert.equal(props.sourceUrl, 'https://ethanmarcotte.com/x');
   assert.equal(props.href, '/writing/worry-stone');
   assert.equal(props.isNew, false);
+});
+
+test('readingTimeOf keeps a reading time set by hand', () => {
+  assert.equal(readingTimeOf({ data: { readingTime: '7 min' }, body: 'word '.repeat(2000) }), '7 min');
+});
+
+test('readingTimeOf counts an essay saved without one from its body, at 230 words a minute', () => {
+  assert.equal(readingTimeOf({ data: {}, body: 'word '.repeat(1397) }), '6 min');
+  assert.equal(readingTimeOf({ data: {}, body: 'word '.repeat(612) }), '3 min');
+});
+
+test('readingTimeOf leaves Markdoc tags and link targets out of the count', () => {
+  const body = `{% plate alt="${'word '.repeat(500)}" /%}\n\n[one](https://example.com/${'seg/'.repeat(500)})`;
+  assert.equal(readingTimeOf({ data: {}, body }), '1 min');
+});
+
+test('readingTimeOf never says 0 min', () => {
+  assert.equal(readingTimeOf({ data: {}, body: '' }), '1 min');
+  assert.equal(readingTimeOf({ data: {} }), '1 min');
+});
+
+test('readingTimeOf is undefined for a link post, which shows its source instead', () => {
+  assert.equal(readingTimeOf({ data: { sourceUrl: 'https://example.com/x' }, body: 'word '.repeat(1000) }), undefined);
+});
+
+test('toPostProps counts the reading time when an essay was saved without one', () => {
+  const untimed = { ...essay, data: { ...essay.data, readingTime: undefined }, body: 'word '.repeat(690) };
+  assert.equal(toPostProps(untimed, null).readingTime, '3 min');
 });

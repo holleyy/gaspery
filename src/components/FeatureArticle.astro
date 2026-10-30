@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import Imprint from './Imprint.astro';
-import { isLink, sourceDomain } from '../lib/links';
+import { isLink, sourceDomain, readingTimeOf } from '../lib/links';
 /* The `?raw` suffix keeps this out of Vite's CSS module graph, for the same
    reason `?url` would: a plain `import '../styles/feature.css'` bundles
    into whichever chunk its importer belongs to, and every writing post
@@ -45,7 +45,7 @@ const app = post.data.app ? await getEntry('apps', post.data.app) : undefined;
     <div class="feature__meta">
       <span class="label">{fmt.toUpperCase()}</span>
       <span class="sep" aria-hidden="true">/</span>
-      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
+      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : readingTimeOf(post)}</span>
       {post.data.eyebrow && (
         <>
           <span class="sep" aria-hidden="true">/</span>
