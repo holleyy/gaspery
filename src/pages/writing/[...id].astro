@@ -5,7 +5,7 @@ import RegistrationMark from '../../components/RegistrationMark.astro';
 import Imprint from '../../components/Imprint.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
 import FeatureArticle from '../../components/FeatureArticle.astro';
-import { isLink, isFeature, sourceDomain } from '../../lib/links';
+import { isLink, isFeature, sourceDomain, readingTimeOf } from '../../lib/links';
 
 export async function getStaticPaths() {
   /* Drafts stay reachable under `astro dev` so a post can be previewed at its
@@ -50,7 +50,7 @@ const fmt = post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 
     <div class="article__meta">
       <span class="label">{fmt.toUpperCase()}</span>
       <span class="sep" aria-hidden="true">/</span>
-      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : post.data.readingTime}</span>
+      <span class="label">{isLink(post.data) ? sourceDomain(post.data.sourceUrl) : readingTimeOf(post)}</span>
       <ThemeToggle />
     </div>
 

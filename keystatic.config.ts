@@ -250,12 +250,16 @@ export default config({
         }),
         readingTime: fields.text({
           label: 'Reading time',
-          description: 'Essays only. Leave empty on a link post.',
+          description: 'Leave empty and it’s counted from the body. Link posts don’t show one.',
         }),
         dek: fields.text({
           label: 'Dek / remark',
           description: 'An essay’s standfirst, or a link post’s remark. Shown in the stream and the feed.',
           multiline: true,
+          // Required here because Zod's schema (src/content.config.ts) has
+          // `dek` as non-optional and Keystatic drops an empty text field from
+          // the file, so an empty dek commits fine and then fails the deploy.
+          validation: { isRequired: true },
         }),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
         template: fields.select({

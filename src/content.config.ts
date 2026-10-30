@@ -15,6 +15,10 @@ const writing = defineCollection({
         .url()
         .refine(isHttpUrl, { message: 'Source URL must be an http(s) address.' })
         .optional(),
+      /* Optional even on an essay: left empty, it's counted from the body
+         (`readingTimeOf` in src/lib/links.ts). Keystatic can't require it
+         only when `sourceUrl` is empty, so requiring it here froze deploys
+         again in October. */
       readingTime: z.string().optional(),
       dek: z.string(),
       draft: z.boolean().default(false),
@@ -29,16 +33,6 @@ const writing = defineCollection({
          as any other plate. */
       eyebrow: z.string().optional(),
       app: z.string().optional(),
-    })
-    .superRefine((v, ctx) => {
-      /* Only essays carry a reading time; a linked post has nothing to time. */
-      if (!v.sourceUrl && !v.readingTime) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['readingTime'],
-          message: 'Essays require a readingTime.',
-        });
-      }
     }),
 });
 
