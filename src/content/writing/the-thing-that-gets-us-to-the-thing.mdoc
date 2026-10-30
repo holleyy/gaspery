@@ -1,0 +1,84 @@
+---
+title: The thing that gets us to the thing
+date: 2026-10-30
+dek: >-
+  In the second episode of Halt and Catch Fire, AMC's drama about the early PC
+  business, Cameron Howe is put in a clean room. Her job is to write the code
+  that lets a small Texas company's computer behave like IBM's, and the rule is
+  that she must never see IBM's version. When Joe tries to get her to read the
+  copied code to save time, she refuses. The clean room is the only reason the
+  work will be theirs.
+draft: false
+template: standard
+---
+# 
+
+*What a small language model, and Halt and Catch Fire, taught me about choosing a constraint*
+
+In the second episode of Halt and Catch Fire, AMC's drama about the early PC business, Cameron Howe is put in a clean room. Her job is to write the code that lets a small Texas company's computer behave like IBM's, and the rule is that she must never see IBM's version. When Joe tries to get her to read the copied code to save time, she refuses. The clean room is the only reason the work will be theirs.
+
+I've thought about that scene a lot this year, because this summer I chose a clean room of my own. I've been building GRØD, a meeting notes app for the Mac. The usual way to build one is to send the recording to a large AI model in the cloud, which reads the whole hour and writes the notes. I decided against that, because I wanted a promise I could keep without an asterisk: your meeting content never leaves your Mac.
+
+That meant using the small language model Apple builds into macOS. Small here means about three billion parameters, a rough measure of a model's size; the models behind the cloud tools are many times bigger. A language model reads text in chunks called tokens and can only hold so many at once. An hour of conversation is about 20,000 tokens. Apple's model holds about 8,000, and that has to include my instructions and its reply, so it reads a meeting a slice at a time.
+
+## **What the clean room bought**
+
+The constraint cost something real. The app only runs on the newest Macs, so plenty of people can't use it.
+
+It paid for a lot, too. Nothing needs downloading when you install it. With no server there's no server bill, so I can charge once instead of asking for a subscription. And, as with Cameron's, the clean room is what makes the main promise hold: the app has no reason to send your meeting anywhere, so the privacy promise is easy to check.
+
+## **Wishing it were bigger**
+
+My first move was the one I suspect most of us make under a constraint: I asked the small model to do what a big one would. I gave it long stretches of the meeting, along with the lines I'd typed during the call, and asked it to write the notes and say where each of my lines belonged.
+
+It copied. On a test meeting with 22 facts planted in it, 96% of its longer phrases came straight from the transcript. It made up line numbers, listing twenty lines for a note that had two. When one of my lines named a topic, it wrote about that topic alone and dropped more than half the facts.
+
+## **Changing the job**
+
+Joe has a line in the first episode, quoting back an article Gordon once wrote: "Computers aren't the thing. They're the thing that gets us to the thing." The model wasn't the thing either. The notes were. Once I saw that, I stopped asking "how do I make it do this?" and started asking "how might I design around what it's good at?"
+
+What it's good at is a short stretch of talk. Given about ten minutes of a meeting, it writes clear points in its own words and gets the causes, owners and dates right. Given much more, it starts to mix them up.
+
+So now the model does one job. It writes each ten-minute slice as plain sentences, one point per sentence, under a short heading. Everything else moved to ordinary code, the kind that does the same thing every time. The code turns sentences into bullets, gathers sections about the same client, joins the slices in order, and puts each line you typed beside the topic it belongs to. The model never sees those lines.
+
+Smaller failures shaped the split as well. Asked for bullet points directly, the model fell into loops; asked for sentences, it didn't.
+
+On the same test meeting, copying fell from 96% to 2%, and once the grouping code was in place the notes kept all 22 facts. The smaller slices didn't make it slower either, because the time goes on writing the notes, and the notes came out about the same length.
+
+## **Learning it twice**
+
+A week later I made the same mistake in a new form. The notes were accurate now, but they read like a court record, with every point opening on who said it: "You said…", "She noted…", "He suggested…". The notes I admired read like an account of the meeting, topic by topic, and I spent a day trying to get the model to write that way.
+
+Changing the wording of my instructions didn't work. Without "she said", the model copied the transcript word for word, or turned everything passive ("a decision was made"), or credited one person's story to someone else. The attribution I'd been trying to remove was how a small model kept track of who was who.
+
+Then I tried five ways to have it organise the whole meeting:
+
+- Write an outline, then fill it in. It filled every heading from every slice, inventing points to do it.
+- List every fact, then group them. Every fact landed in one group.
+- Number every point and sort the points into themes. It sorted by whoever started the sentence.
+- Rewrite the whole draft in one pass. It got stuck repeating itself until it ran out of room.
+- Gather the headings into themes. Twelve of twenty-one sections went into one bucket.
+
+A big model might have managed any of them. The small one needed the same answer as the week before: keep it on its slices and do the rest in code. The app now rewrites a "she said" opening itself, and only when it can be sure who is meant.
+
+## **What I didn't expect**
+
+Because the model does one small job, a bad point traces back to one slice, which I can read, and the code that arranges the slices can be tested. With no bigger model to smooth things over, I also had to decide exactly what each part was for.
+
+A small model still slips, though: a number misheard, a point filed under the neighbouring topic, a decision credited to the wrong person. Some "she said" points remain, because the rewrite leaves a point alone when it isn't sure. The slips are small, and I know where each one comes from.
+
+## **Bringing it back to work**
+
+Most of us don't get to choose our constraints. They come with the job: the core system nobody can change before next spring, the approval board that meets once a month. We tend to treat them as the gap between where we are and where the Silicon Valley playbook says we should be, and then we spend our energy wishing, or building workarounds that make the old thing pretend to be new.
+
+Or we cut. At the end of Halt and Catch Fire's first season, at the trade show where their computer is due to launch, Gordon pulls Cameron's operating system out of it. The machine gets faster and easier to sell. Joe backs him, Cameron walks out, and the season ends on Apple's 1984 Macintosh advert: the bold version, built by someone else. Cutting the ambition until things fit is the usual answer to a constraint.
+
+Changing the job is the other answer. A constraint has a grain, like wood. It's strong in one direction and splits easily in another. The work is finding out which is which, giving it the jobs it does well, and moving the rest of the job somewhere else.
+
+A slow core system is often very good at being the one true record, so let it be that and build the fast-moving parts around it. A monthly board is good at big, considered decisions, so stop sending it small ones.
+
+## **Try this**
+
+Pick the constraint you complain about most and draw two columns. In the first, write what it's genuinely good at. In the second, write what you keep asking it to do anyway. Then start redesigning from the second column.
+
+And tell us in the comments: is there a constraint you've come to like, one you'd keep even if someone offered to take it away?
