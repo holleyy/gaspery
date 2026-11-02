@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrodBar from '../../components/GrodBar.astro';
+import GrodNight from '../../components/GrodNight.astro';
+import '../../styles/grod.css';
+import { GROD_CARD } from '../../lib/grod';
+import '../../styles/grod-policy.css';
+
+
+/* /grod/names-helper: GRØD Names Helper, the free companion app behind Names
+   from Teams. GRØD's Settings opens this page from Download… and from Check for
+   an update… (CallAppNamesSettings.downloadPage in the GRØD repo), so its
+   address must not move.
+
+   The text is the GRØD repo's (docs/product/website/07-names-helper.md), set in
+   the privacy policy's document layout: one reading column, the bar above and
+   the night footer below. The button fetches the latest GitHub release of
+   holleyy/grod-names-helper; every release names its file GROD-Names-Helper.zip,
+   so this link never changes. The version line below changes with a release. */
+
+const DOWNLOAD = 'https://github.com/holleyy/grod-names-helper/releases/latest/download/GROD-Names-Helper.zip';
+const RELEASES = 'https://github.com/holleyy/grod-names-helper/releases';
+---
+<Base
+  title="GRØD Names Helper · GRØD"
+  description="A small free app that lets GRØD suggest the names of the people in your Teams calls. It reads only who is in the call and who is highlighted, and when."
+  theme="light"
+  card={GROD_CARD}
+  fonts={[
+    'family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900',
+    'family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800',
+  ]}
+>
+<div class="g g--grain gp">
+  <GrodBar />
+
+  <main id="main" class="gp-doc">
+    <h1 class="g-h gp-title">GRØD Names Helper</h1>
+    <p class="g-meta">Version 0.1 · 4.6 MB · macOS 27 or later · Notarised by Apple</p>
+
+    <section class="gp-plain" aria-labelledby="h-plain">
+      <h2 class="g-h2 nh-hidden" id="h-plain">In short</h2>
+      <p>A small free app that lets GRØD suggest the names of the people in your Teams calls. It reads only who is in the call and who is highlighted, and when.</p>
+      <p class="g-promise">Your meeting content never leaves this Mac.</p>
+      <p class="g-close"><a class="g-bezel g-bezel--big" href={DOWNLOAD}>Download for Mac</a><span class="g-meta">Free · for GRØD 0.7 or later</span></p>
+    </section>
+
+    <section class="gp-small" aria-labelledby="h-small">
+      <h2 class="g-h2" id="h-small">How it works</h2>
+
+      <h3 id="what-it-does">What it does</h3>
+      <p>While GRØD records a Teams call, the helper watches which participant tile Teams highlights as speaking, and the name on that tile. When the recording stops, GRØD lines those moments up with the voices it heard and suggests a name for each voice that matches. One click names a voice. GRØD names nobody without you.</p>
+
+      <h3 id="what-it-reads">What it reads, and what it never reads</h3>
+      <ul>
+        <li><strong>It reads</strong> the names on the participant tiles, which tile Teams highlights, and when.</li>
+        <li><strong>It never reads</strong> chat, captions, shared screens, meeting notes, or anything anyone types or says. It never clicks or types in Teams.</li>
+        <li><strong>It keeps</strong> those names and times in a folder it shares only with GRØD, on this Mac. GRØD collects them when the recording stops; any it never collects, the helper deletes after a day.</li>
+        <li><strong>It never goes online.</strong> The helper has no networking code.</li>
+      </ul>
+
+      <h3 id="why-separate">Why a separate app</h3>
+      <p>GRØD runs in Apple's App Sandbox, as every Mac App Store app does, and the sandbox stops an app reading another app's window. The helper runs outside it and does this one job. It runs only while GRØD records, and quits on its own two minutes after.</p>
+
+      <h3 id="set-up">Set it up</h3>
+      <ol>
+        <li>Download the helper, open the zip, and move GRØD Names Helper to your Applications folder.</li>
+        <li>In GRØD, open Settings › General › Names from Teams and turn on "Name far-side speakers from Teams".</li>
+        <li>macOS asks once about the helper. "Choose Open System Settings, then turn on GRØD Names Helper in the list."</li>
+        <li>Record a Teams call. "Voices are named when the recording stops."</li>
+      </ol>
+
+      <h3 id="what-you-need">What you need</h3>
+      <ul>
+        <li>GRØD 0.7 or later</li>
+        <li>macOS 27 or later</li>
+        <li>Microsoft Teams, the new Teams app. Other call apps are not supported yet.</li>
+      </ul>
+
+      <h3 id="when-teams-changes">When Teams changes</h3>
+      <p>Teams changes its window from time to time. If the helper can't read it any more, GRØD says "Not working on this Teams version" and "Voices stay unnamed until the helper is updated." Check for an update… opens this page.</p>
+
+      <h3 id="remove">Remove it</h3>
+      <p>Turn off "Name far-side speakers from Teams" in GRØD, drag GRØD Names Helper to the Bin, and remove it from System Settings › Privacy &amp; Security › Accessibility.</p>
+
+      <h3 id="versions">Versions</h3>
+      <p>Each version is signed by Gaspery Limited and notarised by Apple. Release notes and earlier versions are on <a href={RELEASES}>GitHub</a>.</p>
+    </section>
+  </main>
+
+  <GrodNight motif="oats" note="GRØD Names Helper is made by Gaspery Limited, the maker of GRØD." />
+</div>
+</Base>
+
+<style>
+  .gp-doc ol { display: grid; gap: 12px; padding-left: 1.25em; list-style: decimal; }
+  .gp-doc ol li::marker { color: var(--color-ink-secondary); }
+  .nh-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
