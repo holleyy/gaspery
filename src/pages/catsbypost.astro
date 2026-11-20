@@ -1,0 +1,345 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/catsbypost.css';
+import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, TURNTABLES } from '../lib/catsbypost';
+
+/* The Cats by Post page: one page, built in the game's world rather than this
+   site's. Converted from the standalone prototype prototypes/catsbypost/b.html;
+   the direction contract is the first comment inside the page root (Astro
+   strips a slot's leading comment; a deeper one survives).
+
+   The hero is playable. board.js is the game's own rules, animation and paper
+   pieces with a small host (scripts/catsbypost-board.mjs builds it from the
+   game repo); it finds [data-cbp-board] and draws on the canvas over the
+   plate. The numbers on that element place the game's floor on the plate. */
+const cap = (word: string) => word[0].toUpperCase() + word.slice(1);
+---
+<Base
+  title="Cats by Post · A cosy routing puzzle game"
+  description="A cosy routing puzzle game about getting cats in boxes safely to their matching baskets and doors. Six paper places, one hundred puzzles. Coming to iPhone, iPad and Mac."
+  fonts={['family=Besley:ital,wght@0,500;0,800;1,500', 'family=Signika:wght@400;500;600']}
+  theme="light"
+  card={{ src: '/og/catsbypost.jpg', alt: 'Cats by Post. The Sorting Office at sunset, a paper-built postal hall beside a canal, under the line: The post has arrived. It’s mostly cats.' }}
+>
+<div class="cbp-page">
+<!--
+THESIS: The page is the game's first delivery. The visitor arrives at the Sorting Office at sunset and the floor is open: three real puzzles, played by the game's own rules in the game's own art, before a word of explanation. Everything below is the round they would go on to walk.
+OWN-WORLD: The skies over the game's six places are the page's grounds (sunset, rose, dusk, day, dawn, snow), all sampled from the artwork. Besley, a Clarendon, is the painted sign over the Sorting Office door; Signika reads. Paper and postal ink step back to type. One look: the skies are the palette, so there is no dark mode.
+STORY: "The post has arrived. It's mostly cats." Play a delivery, see how the routing works, walk the six places, learn what is left after the round (the duty rota, the stamps, the staff), look out of the Sorting Office window at the visitor's own hour, and find where the game will be.
+FIRST VIEWPORT: Wordmark row. The two-line headline over the scene's own sky, the one-sentence description and two plain links beside it. The Sorting Office fills the rest, its floor in view with a cat in a box at the hatch and a basket waiting, and the docket for the puzzle in hand at the lower left with the one filled button, "Send the post".
+FORM: one long page; the places are one horizontal stage whose sky follows the stop. Code-led, light only.
+FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a real phone are not yet checked.
+-->
+  {/* The browser chrome takes the sunset, not this site's paper. Base's own
+      script has just set the meta for the site's appearance; the page is
+      light-only and pinned, so there is nothing else for this to follow. */}
+  <script is:inline>
+    (function () {
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', '#f9a08a');
+    })();
+  </script>
+
+  <main id="main">
+  <div class="cbp-hero">
+    <header class="wrap mast">
+      <b>Cats by Post</b>
+      <span class="small">Coming to iPhone, iPad and Mac</span>
+    </header>
+    <div class="wrap cbp-hero__top">
+      <h1 class="d d1"><span>The post has arrived.</span> <span>It’s mostly cats.</span></h1>
+      <div class="cbp-hero__side">
+        <p class="lede">A cosy routing puzzle game about getting cats in boxes safely to their matching baskets and doors. The floor below is open: have a go.</p>
+        <div class="acts">
+          {/* A plain link to the film for a visitor without scripts; with
+              them it opens in place (the script at the foot of this file). */}
+          <a class="link" href={`${ASSETS}/film.mp4`} data-film><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 1 18 10 4 19Z"/></svg>Watch a delivery</a>
+          <a class="link" href="#round">Walk the round</a>
+        </div>
+      </div>
+    </div>
+    <div class="play" data-cbp-board data-plate-w="2800" data-plate-h="2100" data-origin-x="1480" data-origin-y="1103" data-hw="96" data-sprites={`${ASSETS}/board/acting.webp`}>
+      <div class="play__view">
+        <div class="play__stage" data-stage>
+          <img class="play__plate" src={`${ASSETS}/board/office.webp`} width="2800" height="2100" fetchpriority="high" alt="The Sorting Office at sunset: a paper-built postal hall beside a canal, its blue puzzle floor open to the evening, with a narrowboat moored below and terraced houses lit along the water">
+          <canvas tabindex="0" role="application" aria-label="The puzzle floor, five squares by four. Arrow keys move around it, Enter places or turns a turntable, and S sends the post."></canvas>
+        </div>
+      </div>
+      <div class="play__desk">
+        <div class="play__what">
+          <div class="play__levels" role="group" aria-label="Choose a puzzle">
+            {/* The docket is written here in the warm-up's opening state, so
+                it does not change shape when the board's script arrives. */}
+            <button type="button" data-level="0" aria-current="true">Warm-up</button>
+            <button type="button" data-level="1" aria-current="false">Puzzle 7</button>
+            <button type="button" data-level="2" aria-current="false">Puzzle 8</button>
+          </div>
+          <h2 class="play__title" data-title>A first delivery</h2>
+          <p class="play__status" data-status role="status">Place your turntables, then send the post.</p>
+        </div>
+        <div class="play__tray">
+          <div class="play__tts" role="group" aria-label="Turntables in the tray">
+            {TURNTABLES.map((t) => (
+              <button type="button" class="tt" data-tray={t.type} hidden={t.type !== 'plain'} aria-pressed={t.type === 'plain' ? 'true' : 'false'}><svg viewBox="0 0 60 36" aria-hidden="true"><ellipse cx="30" cy="20.5" rx="28" ry="14" fill="#b99b6c"/><ellipse cx="30" cy="17" rx="28" ry="14" fill="#f4dfb5" stroke="#bca16d"/><ellipse cx="30" cy="17" rx="23" ry="11.5" fill={t.fill}/><path d="M46 9 20.6 14.7l4.1 2.1L14 22.1l5.8 2.9 10.7-5.4 4.1 2.1Z" fill="#fff0cf"/></svg><span>×<b data-left>{t.type === 'plain' ? 1 : 0}</b></span></button>
+            ))}
+          </div>
+          <p class="play__how" data-when="start">Tap a square to put a turntable down. Tap it again to turn it, and a fourth time to pick it up.</p>
+          <p class="play__how" data-when="tried" hidden>A hint will place a helpful turntable, if you ask. Nobody here will think less of you.</p>
+          <ul class="play__stamps" data-stamps hidden aria-label="Stamps for this puzzle">
+            <li data-stamp="delivered">Delivered</li>
+            <li data-stamp="tidy">Few turntables</li>
+            <li data-stamp="firstPost">First post</li>
+          </ul>
+          <p class="play__done" data-done hidden>Those were puzzles seven and eight. The other ninety-eight are in the game.</p>
+        </div>
+        <div class="play__go">
+          <button type="button" class="play__btn play__btn--main" data-send>Send the post</button>
+          <button type="button" class="play__btn play__btn--main" data-next hidden>Next puzzle</button>
+          {/* Until release this goes to the release line at the foot of the
+              page; on release day it becomes the App Store link. */}
+          <a class="play__btn play__btn--main" href="#release" data-store hidden>Get the game</a>
+          <button type="button" class="play__btn" data-hint>Hint</button>
+          <button type="button" class="play__btn" data-clear disabled>Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="how">
+    <div class="wrap how__head">
+      <h2 class="d d2">Read the arrivals. Lay out a route. Send the post on its way.</h2>
+      <p>Plain turntables turn every cat that crosses them, and coloured ones turn only the coat that matches. There are, of course, cats involved.</p>
+    </div>
+  </section>
+
+  <div class="vista" role="img" aria-label="The town at sunset: rooftops and a church spire along a ridge under a rose sky"></div>
+
+  <section class="round" id="round">
+    <div class="wrap">
+      <div class="round__head">
+        <h2 class="d d2">The round takes in six places and a hundred puzzles.</h2>
+        <p class="lede">It starts by the canal at sunset and finishes in the snow. Each place has its own light, and its own way of making a route harder.</p>
+      </div>
+      <nav aria-label="Places on the round">
+        <ol class="route">
+          {STOPS.map((stop, i) => (
+            <li><button type="button" aria-current={i === 0 ? 'true' : 'false'}><span>{stop.name}</span></button></li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+    <div class="stops" tabindex="0" role="region" aria-label="The six places, one at a time">
+      {STOPS.map((stop, i) => (
+        <article class="stop" data-sky={`var(${stop.sky})`} data-dark={stop.dark ? '' : undefined} aria-label={stop.name}>
+          <div class="wrap">
+            <figure class="stop__art"><img src={stop.image.src} width={stop.image.width} height={stop.image.height} loading="lazy" alt={stop.image.alt}></figure>
+            <div class="stop__copy">
+              <p class="stop__where">Stop {i + 1} of {STOPS.length} · {stop.chapters} · {stop.puzzles} puzzles</p>
+              <h3 class="d d2">{stop.name}</h3>
+              <p>{stop.copy}</p>
+              <ul class="names">{stop.names.map((name) => <li>{name}</li>)}</ul>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="nightwork">
+    <div class="wrap">
+      <h2 class="d d2">After the round, there is always more post.</h2>
+      <div class="rota">
+        <table>
+          <caption class="vh">The duty rota: three more ways to play</caption>
+          <thead><tr><th scope="col">Duty</th><th scope="col">When</th><th scope="col">What it involves</th></tr></thead>
+          <tbody>
+            {ROTA.map((row) => (
+              <tr><th scope="row">{row.duty}</th><td>{row.when}</td><td>{row.what}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="keeps">
+        <img src={`${ASSETS}/stamps.webp`} width="1240" height="620" loading="lazy" alt="Three illustrated postage stamps from the game: two cats asleep in a basket, a cat sorting parcels, and a ginger cat carrying a satchel of letters">
+        <div class="keeps__copy">
+          <h3 class="d d3">Three stamps a puzzle</h3>
+          <ul class="reasons">
+            <li>One for making the delivery.</li>
+            <li>One for doing it with few turntables.</li>
+            <li>One for finishing within three attempts, without a hint.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="crew">
+        <div class="crew__head">
+          <h3 class="d d3">The staff</h3>
+          <p>Ginger and blue do most of the work. Night Shift deliveries bring in the others.</p>
+        </div>
+        <ul class="staff">
+          {STAFF.map((cat) => (
+            <li><img src={`${ASSETS}/coats/${cat.file}.webp`} width="520" height="520" loading="lazy" alt={cat.alt}><span>{cat.name}</span></li>
+          ))}
+        </ul>
+      </div>
+      <p class="comfort"><b>The office is run for thinking, not rushing.</b> Pause, undo, hints, zoom and a save that picks up where you stopped. Options for larger lettering, stronger contrast and gentler motion, with separate controls for music and room sounds.</p>
+    </div>
+  </section>
+
+  <section class="town">
+    <div class="wrap">
+      {/* The script fills the window with the view for the visitor's own
+          season and hour. Without scripts it shows one view, and the line
+          beside it does not claim to know the time. */}
+      <div class="window" id="window" role="img" aria-label="The town from an upstairs window: slate and tile rooftops, gardens and a church tower">
+        <noscript><img class="is-on" src={`${ASSETS}/town/autumn-day.webp`} alt="" loading="lazy"></noscript>
+      </div>
+      <div class="town__copy">
+        <h2 class="d d2" id="now">The view from the Sorting Office window.</h2>
+        <p class="lede">The game’s town keeps your hours. This is the view from the Sorting Office window where you are, right now.</p>
+        <div class="dials" hidden>
+          <p class="small">Or see it another time:</p>
+          <div class="seg" id="seasons" role="group" aria-label="Season">
+            {SEASONS.map((season) => <button type="button" data-v={season}>{cap(season)}</button>)}
+          </div>
+          <div class="seg" id="lights" role="group" aria-label="Time of day">
+            {LIGHTS.map((light) => <button type="button" data-v={light}>{cap(light)}</button>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="release">
+    <div class="wrap">
+      <h2 class="d d1"><span>Every cat is</span> <span>precious cargo.</span></h2>
+      <p class="soon"><b class="d d3">Coming to iPhone, iPad and Mac</b><span>The App Store link goes here on release day.</span></p>
+    </div>
+  </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <b>Cats by Post</b>
+      <span>A game by <a href="/studio">Gaspery</a>.</span>
+      <span>© 2026 Gaspery Limited</span>
+    </div>
+  </footer>
+
+  <dialog id="film" aria-labelledby="film-title">
+    <div class="dlg__head"><b id="film-title" class="d d3">A delivery, start to finish</b><button type="button" id="film-close">Close</button></div>
+    <video controls playsinline preload="none" poster={`${ASSETS}/film-poster.webp`} src={`${ASSETS}/film.mp4`}></video>
+  </dialog>
+
+  {/* The game's own code, as one classic script: it is built from another
+      repository and written for a script tag, so it is served as it is
+      rather than bundled. Deferred, so it never holds up the page. */}
+  <script is:inline defer src="/shots/catsbypost/board/board.js"></script>
+</div>
+</Base>
+
+<script>
+  import { townAt, townImage, townLine, type Light, type Season } from '../lib/catsbypost';
+
+  /* The round: one stage. Choosing a stop slides to its place and turns the
+     sky to that place's light; swiping or scrolling the stage does the same.
+     Without scripts the stage still scrolls sideways, under the first sky. */
+  const round = document.getElementById('round');
+  const main = document.getElementById('main');
+  const rail = round?.querySelector<HTMLElement>('.stops');
+  if (round && main && rail) {
+    const stops = [...rail.children] as HTMLElement[];
+    const dots = [...round.querySelectorAll<HTMLButtonElement>('.route button')];
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let at = 0;
+    const show = (i: number) => {
+      at = i;
+      main.style.setProperty('--sky', stops[i].dataset.sky ?? '');
+      round.classList.toggle('is-dark', 'dark' in stops[i].dataset);
+      dots.forEach((b, j) => b.setAttribute('aria-current', String(i === j)));
+    };
+    /* While a chosen stop slides in, the scroll does not get a say, or the
+       sky would flicker through every stop on the way. */
+    let aim = -1;
+    let aimTimer = 0;
+    const go = (i: number) => {
+      i = Math.max(0, Math.min(stops.length - 1, i));
+      aim = i;
+      window.clearTimeout(aimTimer);
+      aimTimer = window.setTimeout(() => { aim = -1; }, 1200);
+      rail.scrollTo({ left: stops[i].offsetLeft - rail.offsetLeft, behavior: still.matches ? 'auto' : 'smooth' });
+      show(i);
+    };
+    dots.forEach((b, i) => b.addEventListener('click', () => go(i)));
+    round.querySelector('.route')?.addEventListener('keydown', (e) => {
+      const key = (e as KeyboardEvent).key;
+      const step = key === 'ArrowRight' ? 1 : key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      e.preventDefault();
+      go(at + step);
+      dots[at].focus();
+    });
+    let tick = 0;
+    rail.addEventListener('scroll', () => {
+      if (tick) return;
+      tick = requestAnimationFrame(() => {
+        tick = 0;
+        const i = Math.round(rail.scrollLeft / rail.clientWidth);
+        if (aim >= 0) { if (i === aim) aim = -1; return; }
+        if (i !== at && stops[i]) show(i);
+      });
+    }, { passive: true });
+  }
+
+  /* The film opens in place only when asked for, and gives focus back where
+     it came from. The link's own address is the fallback. */
+  const dlg = document.querySelector<HTMLDialogElement>('#film');
+  const film = dlg?.querySelector('video');
+  if (dlg && film && typeof dlg.showModal === 'function') {
+    let from: HTMLElement | null = null;
+    const shut = () => { film.pause(); dlg.close(); from?.focus(); };
+    document.querySelectorAll<HTMLElement>('[data-film]').forEach((b) => b.addEventListener('click', (e) => {
+      e.preventDefault();
+      from = b;
+      dlg.showModal();
+      film.currentTime = 0;
+      film.play().catch(() => {});
+    }));
+    document.getElementById('film-close')?.addEventListener('click', shut);
+    dlg.addEventListener('cancel', () => film.pause());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) shut(); });
+  }
+
+  /* The town window: eight views of one town. It opens on the visitor's own
+     season and time of day; the buttons are there for the curious. */
+  const win = document.getElementById('window');
+  const now = document.getElementById('now');
+  const dials = document.querySelector<HTMLElement>('.dials');
+  if (win && now && dials) {
+    const mine = townAt(new Date());
+    let season: Season = mine.season;
+    let light: Light = mine.light;
+    const imgs: Record<string, HTMLImageElement> = {};
+    const view = () => {
+      const k = `${season}-${light}`;
+      if (!imgs[k]) {
+        const im = new Image();
+        im.alt = '';
+        im.decoding = 'async';
+        im.src = townImage(season, light);
+        win.append(im);
+        imgs[k] = im;
+        void im.offsetWidth;
+      }
+      Object.entries(imgs).forEach(([q, im]) => im.classList.toggle('is-on', q === k));
+      const line = townLine(season, light, mine);
+      now.textContent = line.headline;
+      win.setAttribute('aria-label', `The town from an upstairs window on ${line.phrase}: slate and tile rooftops, gardens and a church tower`);
+      dials.querySelectorAll<HTMLElement>('#seasons button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === season)));
+      dials.querySelectorAll<HTMLElement>('#lights button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === light)));
+    };
+    dials.querySelectorAll<HTMLElement>('#seasons button').forEach((b) => b.addEventListener('click', () => { season = b.dataset.v as Season; view(); }));
+    dials.querySelectorAll<HTMLElement>('#lights button').forEach((b) => b.addEventListener('click', () => { light = b.dataset.v as Light; view(); }));
+    dials.hidden = false;
+    view();
+  }
+</script>
