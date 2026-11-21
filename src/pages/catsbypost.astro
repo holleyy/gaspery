@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import CbpFoot from '../components/CbpFoot.astro';
 import '../styles/catsbypost.css';
 import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, TURNTABLES } from '../lib/catsbypost';
 
@@ -217,13 +218,7 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
   </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap">
-      <b>Cats by Post</b>
-      <span>A game by <a href="/studio">Gaspery</a>.</span>
-      <span>© 2026 Gaspery Limited</span>
-    </div>
-  </footer>
+  <CbpFoot />
 
   <dialog id="film" aria-labelledby="film-title">
     <div class="dlg__head"><b id="film-title" class="d d3">A delivery, start to finish</b><button type="button" id="film-close">Close</button></div>

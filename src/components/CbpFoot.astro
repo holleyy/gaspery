@@ -1,0 +1,15 @@
+---
+import { SUPPORT_PATH } from '../lib/catsbypost';
+
+/* The foot of every Cats by Post page: whose game it is, and the way to the
+   privacy policy and support. Styled by src/styles/catsbypost.css (.foot). */
+const here = Astro.url.pathname.replace(/\/?$/, '/') === SUPPORT_PATH;
+---
+<footer class="foot">
+  <div class="wrap">
+    <b>Cats by Post</b>
+    <span>A game by <a href="/studio">Gaspery</a>.</span>
+    <a href={SUPPORT_PATH} aria-current={here ? 'page' : undefined}>Privacy and support</a>
+    <span>© 2026 Gaspery Limited</span>
+  </div>
+</footer>

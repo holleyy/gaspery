@@ -1,0 +1,187 @@
+---
+import Base from '../../layouts/Base.astro';
+import CbpFoot from '../../components/CbpFoot.astro';
+import '../../styles/catsbypost.css';
+import '../../styles/catsbypost-doc.css';
+
+/* /catsbypost/support: the game's privacy policy and its support page, and
+   the address given to App Store Connect for both. It is a document, not a
+   sales page: the game page's sky and wordmark above, one reading column on
+   the game's paper, nothing else. The manner is GRØD's policy
+   (src/pages/grod/privacy-policy.astro): the whole answer first in plain
+   English, written as "I", then the small print. Policies are per app.
+
+   Every claim about the game was checked against the game's own repository
+   (~/Git/cosysortie, origin/main at 5bb3fa40, on 2026-11-21):
+   - no networking: no URLSession, Network, GameKit, StoreKit or CloudKit in
+     any Swift source; the only frameworks are Apple's own, for drawing,
+     sound and files. The privacy manifest (native/App/PrivacyInfo.xcprivacy)
+     declares no tracking and no collected data.
+   - what it saves: JSON files of progress, the session in play and the
+     settings, under Application Support in the game's own container, and a
+     few settings in UserDefaults. Nothing is excluded from device backups.
+   - Share: a ShareLink with a line of text, at the end of a daily puzzle, a
+     practice round or a Night Shift (PostalDeliveryView.swift).
+   - hints, the three stamps and the settings named under Support are the
+     game's own wording (PostalHelpView.swift, PostalSettingsView.swift).
+   - iOS 18 and macOS 15 are the project's deployment targets.
+   If a build of the game changes any of these, this page changes first.
+
+   The claims about this website are listed in the comment above "This
+   website" below. The company's number and registered office are also
+   printed by src/components/Imprint.astro; a test holds the two together. */
+
+const UPDATED = '21 November 2026';
+const HISTORY = 'https://github.com/holleyy/gaspery/commits/main/src/pages/catsbypost/support.astro';
+const MAIL = 'alex@gaspery.com';
+---
+<Base
+  title="Privacy and support · Cats by Post"
+  description="Cats by Post's privacy policy and support, in plain English. The game never goes online and collects nothing about you."
+  fonts={['family=Besley:ital,wght@0,500;0,800;1,500', 'family=Signika:wght@400;500;600']}
+  theme="light"
+  card={{ src: '/og/catsbypost.jpg', alt: 'Cats by Post. The Sorting Office at sunset, a paper-built postal hall beside a canal, under the line: The post has arrived. It’s mostly cats.' }}
+>
+<div class="cbp-page cbp-doc">
+<!--
+THESIS: A legal page a person can read in a minute: the whole privacy answer first, then how to get help, then the small print for whoever needs it.
+OWN-WORLD: the game page's sunset sky and wordmark for the head, the game's paper and postal ink for the reading column, its night for the foot. Besley for the title, headings and the one promise; Signika reads. No art, no bands, no motion.
+STORY: "It never goes online, and I can write to a person." Read Plain English, find the email address, stop there or go on.
+FIRST VIEWPORT: the wordmark; "Privacy and support"; beside it both answers in two sentences and a link to each section; the paper begins under it with the plain-English policy.
+FORM: a plain document, in the manner agreed for GRØD's policy on 2026-10-02.
+-->
+  <script is:inline>
+    (function () {
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', '#f9a08a');
+    })();
+  </script>
+
+  <header class="doc-top">
+    <div class="wrap mast">
+      <a href="/catsbypost"><b>Cats by Post</b></a>
+      <a class="small" href="/catsbypost">Back to the game</a>
+    </div>
+    <div class="wrap doc-head">
+      <h1 class="d">Privacy and support</h1>
+      <div class="doc-head__side">
+        <p class="lede">The game never goes online, and it collects nothing about you. If you need a hand with it, write to me.</p>
+        <div class="acts">
+          <a class="link" href="#privacy">Privacy</a>
+          <a class="link" href="#support">Support</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="doc">
+    <div class="wrap">
+    <section class="doc-plain" id="privacy" aria-labelledby="h-privacy">
+      <h2 class="d d2" id="h-privacy">Privacy, in plain English</h2>
+      <p>Cats by Post is a puzzle game about cats in boxes. It has no reason to know anything about you, so it doesn’t.</p>
+      <p class="doc-promise">The game never goes online.</p>
+      <p>There is no account, no ads, no analytics and nothing to buy inside the game. Your progress and your settings are saved on your own device, and they stay there.</p>
+      <p>Information about you reaches me in only two ways, and both are your choice:</p>
+      <ul>
+        <li><strong>If you email me.</strong> I get your message, and I use it to reply.</li>
+        <li><strong>Through Apple.</strong> If you have chosen to share crash reports with app developers, Apple passes them on. If you are testing a beta, TestFlight passes on your feedback and, if you were invited by email, that address.</li>
+      </ul>
+      <p>This website counts page views, without cookies and without knowing who you are.</p>
+      <p>That’s it. I don’t and won’t sell your data. The details are in <a href="#small-print">the small print</a>.</p>
+      <p class="doc-date">Last updated: {UPDATED}</p>
+    </section>
+
+    <section class="doc-help" id="support" aria-labelledby="h-support">
+      <h2 class="d d2" id="h-support">Support</h2>
+      <p>Stuck, or has something gone wrong? Email me and I’ll help.</p>
+      <p class="doc-mail"><a href={`mailto:${MAIL}`}>{MAIL}</a></p>
+      <p>It helps to say which device you are playing on, its version of iOS, iPadOS or macOS, and which puzzle you were on.</p>
+
+      <h3 class="d d3" id="stuck">Stuck on a puzzle</h3>
+      <p>Ask for a hint. It places a helpful turntable for you, and that piece stays locked while you work out the rest. All a hint costs is that puzzle’s First post stamp.</p>
+
+      <h3 class="d d3" id="progress">Where your progress is kept</h3>
+      <p>On the device you play on, and nowhere else. There is no account, so progress doesn’t travel between your iPhone, iPad and Mac. It is part of your device’s own backups. If you delete the game from an iPhone or iPad, its progress goes with it.</p>
+
+      <h3 class="d d3" id="comfort">Sound, motion and lettering</h3>
+      <p>Settings has separate switches for the music, the room sounds, and the little sounds and taps of play. If the game is too lively or hard to read, it also has Gentler motion, Larger lettering and Stronger ink.</p>
+
+      <h3 class="d d3" id="devices">What it runs on</h3>
+      <p>An iPhone or iPad with iOS or iPadOS 18 or later, or a Mac with macOS 15 or later.</p>
+    </section>
+
+    <section class="doc-small" id="small-print" aria-labelledby="h-small">
+      <h2 class="d d2" id="h-small">Privacy, the small print</h2>
+
+      <h3 class="d d3" id="who">Who I am</h3>
+      <p>Cats by Post is made by Gaspery Limited (that’s me, Alex), a company registered in England and Wales. In data protection terms, Gaspery Limited is the “controller” of the little personal information described here. My details are at the bottom of the page.</p>
+
+      <h3 class="d d3" id="on-your-device">What stays on your device</h3>
+      <p>The game saves two things: how far you have got (the puzzles you have finished, your stamps and where you left off) and your settings. Both are kept in the game’s own storage on your device. I can’t see them, and I never receive a copy.</p>
+      <p>The game has no networking code at all. It never connects to the internet, so nothing you do in it can be sent to me or to anyone else. It contains no advertising, no analytics and no tracking of any kind, and it never asks for your location, contacts, photos, camera or microphone.</p>
+      <p>If you back up your device, to iCloud or to a computer, the backup includes the game’s progress. Those backups are yours, not mine.</p>
+
+      <h3 class="d d3" id="sharing">Sharing a result</h3>
+      <p>At the end of a daily puzzle, a practice round or a Night Shift you can press Share. That opens your device’s own share sheet with a short line of text about your result, and it goes only where you choose to send it. The game doesn’t learn where that is.</p>
+
+      <h3 class="d d3" id="apple">Apple, the App Store and TestFlight</h3>
+      <p>You get Cats by Post from Apple, and Apple handles the download and any payment. I don’t receive your name, email address or payment details, only sales reports that don’t identify you.</p>
+      <p>If you have turned on “Share with app developers”, Apple passes me crash reports and usage statistics that don’t identify you. You can turn it off in Settings (System Settings on a Mac) ▸ Privacy &amp; Security ▸ Analytics &amp; Improvements.</p>
+      <p>If you test a beta through TestFlight, Apple passes me what it gives every developer: the email address you were invited with (if you were invited by email), any feedback and screenshots you send, crash reports, and basic details such as your device model, its software version and how often you open the beta.</p>
+
+      <h3 class="d d3" id="email">Email</h3>
+      <p>If you email me, I use your message to reply and to help you, and for nothing else.</p>
+
+      <h3 class="d d3" id="children">Children</h3>
+      <p>Cats by Post asks nobody for a name, an age or an account, and it has no ads and nothing to buy inside the game. So there is nothing different to say about children: the game collects nothing from them either.</p>
+
+      {/* What this section claims, and where each claim was checked
+          (2026-11-21): no cookies, ads or forms (this repo). The counter is
+          Counterscale on Alex's own Cloudflare account
+          (src/layouts/Base.astro): it stores the page, the referrer, the
+          country, the browser and device, campaign tags if a link carries
+          them, and a first-visit flag worked out from the browser's cache;
+          no IP address. Detail is kept 90 days in Analytics Engine, daily
+          totals longer. The typefaces are served from this site
+          (public/fonts). The light or dark choice is in localStorage. The
+          board on the game page (scripts/catsbypost-host.js) stores nothing
+          and sends nothing; it loads one image. If any of these change,
+          change this section in the same change. */}
+      <h3 class="d d3" id="website">This website</h3>
+      <p>This website, gaspery.com, has no cookies, no ads and no forms. Here is everything it does when you visit.</p>
+      <ul>
+        <li><strong>It counts page views.</strong> A small counter that I run on my own Cloudflare account records that a page was opened: which page, the site that sent you here, your country, and the kind of browser and device you are using. It doesn’t use cookies and doesn’t store your IP address, so it can’t tell who you are or follow you to another site. To tell a first visit of the day from a later one it uses your browser’s ordinary cache. I keep the detailed counts for 90 days, and daily totals after that.</li>
+        <li><strong>Cloudflare serves it.</strong> My web host, Cloudflare, sees the ordinary details of each request, such as your IP address and the page you asked for, to deliver the site and keep it secure. It handles them under its own <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.</li>
+        <li><strong>The puzzles on the game’s page stay in your browser.</strong> What you do on that floor isn’t recorded, saved or sent anywhere.</li>
+        <li><strong>Your browser remembers one setting.</strong> If you switch the rest of the site between light and dark, that choice is saved in your browser. It is never sent to me.</li>
+      </ul>
+
+      <h3 class="d d3" id="your-rights">Your rights</h3>
+      <p>UK data protection law (the UK GDPR and the Data Protection Act 2018) applies to the personal information I hold, which is mostly email.</p>
+      <ul>
+        <li><strong>Why I use it:</strong> to answer you, fix problems and run betas. The legal basis is my legitimate interest in supporting Cats by Post and the people who play it.</li>
+        <li><strong>How long I keep it:</strong> emails are deleted two years after our last contact. Crash reports and beta feedback stay in App Store Connect, Apple’s system, under Apple’s retention rules.</li>
+        <li><strong>Who else sees it:</strong> I don’t share it with anyone. My email provider, Google, stores it on my behalf, on servers that may be outside the UK, under the safeguards UK law requires. I will only hand over what I hold if the law requires it.</li>
+        <li><strong>What you can ask for:</strong> to see, correct, delete or get a copy of what I hold about you, or to object to how I use it. Email me. It’s free, and I will reply within one month.</li>
+      </ul>
+      <p>I can’t see, export or delete anything saved in the game on your device, because I never have it. That part is entirely in your hands.</p>
+      <p>If you are unhappy with how I have handled your information, please tell me first so I can put it right. You can also complain to the Information Commissioner’s Office, the UK’s data protection regulator, at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a> or on 0303 123 1113.</p>
+
+      <h3 class="d d3" id="changes">Changes to this policy</h3>
+      <p>If something changes, I will update this page and the date on it. If a version of Cats by Post ever collects something it doesn’t collect today, or if Gaspery Limited or the game is ever sold, this page will say so first. Every past version of this page is kept in the site’s <a href={HISTORY}>public repository</a>.</p>
+
+      <h3 class="d d3" id="contact">Contact</h3>
+      <address class="doc-contact">
+        Gaspery Limited<br />
+        Registered in England and Wales, company number 17397662<br />
+        Registered office: 66 Paul Street, London EC2A 4NA<br />
+        Email: <a href={`mailto:${MAIL}`}>{MAIL}</a>
+      </address>
+      <p class="doc-date">This policy covers Cats by Post and this website.</p>
+    </section>
+    </div>
+  </main>
+
+  <CbpFoot />
+</div>
+</Base>
