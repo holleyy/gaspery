@@ -215,3 +215,25 @@ production and are kept as starting points for later pages.
 
 **Revisit if** a third page type wants the same parts: move the `.g` tokens
 into `global.css` as a second named scale instead of copying them.
+
+## On the GRØD site, the promise never stands alone
+
+**Decided:** 2026-11-21, with GRØD's optional cloud notes engine.
+
+GRØD can now, if you choose it, send each meeting's transcript to Apple's
+Private Cloud Compute to write its notes. So wherever the site sets "Your
+meeting content never leaves this Mac." as a promise or a headline (the
+privacy page's title, the policy's and the Names Helper's promise lines, the
+home page's "on this Mac." promise and the night footer), the promise keeps
+its words and the very next line is "Unless you choose Apple's Private Cloud
+Compute to write your notes." That line is `.g-unless`: the lede's size and the
+same ink, tucked under the promise, so it never reads as small print. Running
+text carries the exception in the same sentence instead.
+
+**Why.** Alex chose it over putting the whole sentence at poster size: the
+promise stays legible as the site's headline, and nobody can read it without
+the exception directly beneath. The words are ratified in the GRØD repo
+(`GROD/docs/launch/site-copy-flags.md`, decisions.md 2026-11-21).
+
+**Revisit if** the engine is ever on by default, or sends more than the
+transcript: then the promise itself has to change, not just its second line.
