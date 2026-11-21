@@ -1,0 +1,49 @@
+/* /catsbypost/support · a document.
+
+   Loaded after catsbypost.css, whose tokens, type classes, wordmark row and
+   foot it uses. The head stands on the game page's sunset; the reading column
+   is the game's paper and postal ink; the foot is the game's night. One
+   column, about 70 characters to a line. The plain-English policy and the
+   support notes are set a step larger than the small print, because they are
+   what most people came for. No art, no bands, no motion: it has to be read by
+   a player in a hurry, an App Store reviewer and a regulator. */
+
+.doc-top { padding-bottom: clamp(32px, 4.5vw, 64px); }
+.doc-top .mast a { text-decoration: none; }
+/* The way back stays on a phone, where the game page drops its own note. */
+.doc-top .mast a.small { display: inline-block; padding-block: 9px; text-decoration: underline; }
+.doc-head { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: clamp(20px, 4vw, 72px); align-items: end; padding-top: clamp(28px, 4.5vw, 72px); }
+.doc-head h1 { font-size: clamp(2.2rem, 4.75vw, 4.4rem); }
+.doc-head__side { display: grid; gap: 4px; }
+.doc-head .lede { font-size: clamp(1.08rem, 1.3vw, 1.22rem); }
+
+.doc { background: var(--paper); padding-block: clamp(44px, 6vw, 96px) clamp(64px, 9vw, 136px); font-weight: 400; }
+.doc section { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 660px; scroll-margin-top: 28px; }
+.doc section + section { margin-top: clamp(64px, 8vw, 112px); }
+.doc p, .doc li, .doc address { font-size: 1.0625rem; line-height: 1.6; text-wrap: pretty; }
+.doc ul { display: grid; gap: 12px; padding-left: 1.15em; list-style: disc; }
+.doc li::marker { color: var(--ink-soft); }
+.doc strong { font-weight: 600; }
+/* In a document a link is underlined, and found without colour. */
+.doc a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.doc a:hover { text-decoration-thickness: 2px; }
+
+/* Under a title, not beside a picture: a step below the game page's own. */
+.doc h2 { font-size: clamp(1.7rem, 2.8vw, 2.4rem); margin-bottom: 6px; }
+.doc h3 { font-size: clamp(1.2rem, 1.5vw, 1.35rem); margin-top: 22px; scroll-margin-top: 28px; }
+.doc h2 + h3 { margin-top: 4px; }
+
+/* The two short sections: the whole answer, a step up in size. */
+.doc-plain p, .doc-plain li, .doc-help p { font-size: clamp(1.125rem, 1.4vw, 1.25rem); line-height: 1.55; }
+.doc .doc-promise { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(1.75rem, 3.2vw, 2.7rem); line-height: 1.12; letter-spacing: -.01em; text-wrap: balance; margin-block: 8px; }
+.doc .doc-mail { font-family: var(--display); font-weight: 800; font-size: clamp(1.4rem, 2.4vw, 2rem); line-height: 1.2; letter-spacing: -.012em; overflow-wrap: anywhere; }
+.doc .doc-mail a { text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.doc .doc-date { font-size: .95rem; color: var(--ink-soft); margin-top: 10px; }
+.doc-contact { font-style: normal; }
+
+/* The foot's link to this page, on every Cats by Post page. */
+.foot a[aria-current="page"] { color: var(--paper); text-decoration: none; }
+
+@media (max-width: 960px) {
+  .doc-head { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 14px; }
+}

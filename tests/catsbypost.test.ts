@@ -4,10 +4,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import {
   ASSETS,
   LIGHTS,
+  PRIVACY_PATH,
   ROTA,
   SEASONS,
   STAFF,
   STOPS,
+  SUPPORT_PATH,
   TURNTABLES,
   townAt,
   townImage,
@@ -133,4 +135,54 @@ test('no em dashes on the page, in its stylesheet or in its facts', () => {
   for (const [name, text] of [['page', page], ['stylesheet', css], ['facts', read('src/lib/catsbypost.ts')]] as const) {
     assert.doesNotMatch(text, /—/, `em dash in the ${name}`);
   }
+});
+
+/* ---- Privacy and support --------------------------------------------------- */
+const doc = read('src/pages/catsbypost/support.astro');
+/* the text a visitor reads: the markup without its comments */
+const docText = doc.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/<!--[\s\S]*?-->/g, '').split('<main')[1];
+
+test('the policy is published whole: nothing left to fill in, a date, and its three parts', () => {
+  assert.doesNotMatch(docText, /\[[^\]]*\]/, 'a [placeholder] is still in the policy');
+  assert.doesNotMatch(doc, /—/);
+  assert.match(docText, /The game never goes online\./);
+  assert.match(doc, /const UPDATED = '\d{1,2} [A-Z][a-z]+ 20\d\d';/);
+  for (const id of ['privacy', 'support', 'small-print', 'contact']) assert.ok(docText.includes(`id="${id}"`), `#${id} is missing`);
+  assert.match(doc, /const MAIL = 'alex@gaspery\.com';/);
+});
+
+test('the policy and the imprint state the same company facts', () => {
+  const imprint = read('src/components/Imprint.astro');
+  const number = imprint.match(/company number (\d+)/)?.[1];
+  const office = imprint.match(/Registered office: ([^<]+?)\.</)?.[1];
+  assert.ok(number && office);
+  assert.ok(docText.includes(`company number ${number}`), 'company number');
+  assert.ok(docText.includes(`Registered office: ${office}`), 'registered office');
+});
+
+test('the policy describes what this website really does', () => {
+  const base = read('src/layouts/Base.astro');
+  // if the site counts page views, the policy says so
+  assert.equal(/counterscale/i.test(base), /It counts page views\./.test(docText));
+  // the typefaces are served from this site, so the policy names no font service
+  assert.doesNotMatch(base, /fonts\.(googleapis|gstatic)\.com/);
+  // "the puzzles stay in your browser": the board and the page store and send nothing
+  for (const file of ['scripts/catsbypost-host.js', 'src/pages/catsbypost.astro']) {
+    assert.doesNotMatch(read(file), /localStorage|sessionStorage|indexedDB|document\.cookie|fetch\(|XMLHttpRequest|sendBeacon|WebSocket/, file);
+  }
+  assert.match(docText, /The puzzles on the game’s page stay in your browser\./);
+});
+
+test('both Cats by Post pages end in the foot that links the policy, and /privacy forwards to it', () => {
+  assert.equal(SUPPORT_PATH, '/catsbypost/support/');
+  assert.equal(PRIVACY_PATH, '/catsbypost/privacy/');
+  assert.match(read('src/components/CbpFoot.astro'), /href=\{SUPPORT_PATH\}/);
+  for (const text of [page, doc]) assert.match(text, /<CbpFoot \/>/);
+  // The forward is a raw rule, in both forms: Workers Static Assets matches them literally.
+  const rules = read('public/_redirects');
+  for (const from of [PRIVACY_PATH, PRIVACY_PATH.replace(/\/$/, '')]) {
+    assert.match(rules, new RegExp(`^${from}\\s+${SUPPORT_PATH}\\s+301$`, 'm'), `${from} does not forward`);
+  }
+  // The policy is the first thing in the document, so the forward needs no fragment.
+  assert.ok(docText.indexOf('id="privacy"') < docText.indexOf('id="support"'));
 });

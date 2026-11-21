@@ -9,6 +9,13 @@
 
 export const ASSETS = '/shots/catsbypost';
 
+/* The game's privacy policy and support page: one document, and the address
+   given to App Store Connect for both. /catsbypost/privacy/ forwards to it
+   (public/_redirects), for the field that asks for a policy: the policy is
+   the document's first section. */
+export const SUPPORT_PATH = '/catsbypost/support/';
+export const PRIVACY_PATH = '/catsbypost/privacy/';
+
 export interface Stop {
   name: string;
   /** The custom property (declared in catsbypost.css) holding this place's sky. */

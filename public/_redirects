@@ -26,3 +26,10 @@
 # scripts/verify-parity.sh asserts both rules survive into dist/_redirects.
 /apps/aftershot/    /apps/afterframe/    301
 /apps/aftershot     /apps/afterframe     301
+
+# Cats by Post's privacy policy and support notes are one document, at
+# /catsbypost/support/, and the policy is its first section. App Store Connect
+# asks for a policy address and a support address; this gives the policy one
+# of its own. Both forms, for the reason given above.
+/catsbypost/privacy/    /catsbypost/support/    301
+/catsbypost/privacy     /catsbypost/support/    301
