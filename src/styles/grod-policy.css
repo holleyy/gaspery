@@ -24,6 +24,7 @@
 /* Plain English: the whole answer, a step up in size. */
 .gp-plain p, .gp-plain li { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; }
 .gp-plain .g-promise { margin: 10px 0; font-size: clamp(26px, 3vw, 42px); line-height: 1.15; }
+.gp-plain .gp-unless { margin: -2px 0 14px; font-size: clamp(21px, 2vw, 28px); line-height: 1.3; }
 
 /* The small print: one heading per subject, each with its own address. */
 .gp-small h3 {

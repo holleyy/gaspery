@@ -99,7 +99,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
           {hero === 'distilled'
             ? <p class="ge-rest">It remembers what was said, who said it, and what you decided.</p>
             : <p class="ge-rest" aria-hidden="true">what was said, who said it, and what you decided.</p>}
-          <p class="g-lede">GRØD is a private, Mac-native memory for your meetings. Nothing joins your call, and there is no account. <em>Your meeting content never leaves this Mac.</em></p>
+          <p class="g-lede">GRØD is a private, Mac-native memory for your meetings. Nothing joins your call, and there is no account. <em>Your meeting content never leaves this Mac</em> unless you choose Apple's Private Cloud Compute to write your notes.</p>
           <p class="g-close"><a class="g-bezel g-bezel--big" href={BETA_URL}>Join the beta</a>{more && <a class="g-more" href={more.href}>{more.label}</a>}<span class="g-meta">Mac only. No form.</span></p>
           {film && (
             <button type="button" class="ge-film-toggle" aria-pressed="false" hidden>
@@ -220,6 +220,7 @@ const band = (id: string) => (dark.includes(id) ? 'dark' : undefined);
       <div class="ge-pin"><h2 class="g-h" id="h-mac">on this Mac.</h2></div>
       <div class="ge-body">
         <p class="g-promise">Your meeting content never leaves this Mac.</p>
+        <p class="g-unless">Unless you choose Apple's Private Cloud Compute to write your notes.</p>
 
         <div class="ge-proof">
           <div class="ge-row__text">

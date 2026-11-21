@@ -65,6 +65,8 @@
 .ge-pin .g-h { font-size: clamp(52px, 7.2vw, 108px); }
 .ge-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; padding-bottom: 56px; min-width: 0; }
 .ge-body .g-body { max-width: 52ch; }
+/* The exception belongs to the promise above it, not to the grid's rhythm. */
+.ge-body .g-promise + .g-unless { margin-top: -34px; }
 .ge-toast { max-width: 220px; }
 /* A paragraph and its detail. Stacked here, where the body is one of two
    columns; arm f and after set them side by side across the page. */

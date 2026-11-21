@@ -29,6 +29,7 @@ const landing = (name: string) => `/shots/grod/landing/${name}.webp`;
    the copy below it; nothing is claimed here that is not claimed there. */
 const ledger = [
   { who: 'GRØD, to a GRØD server', href: '#servers', what: 'Nothing. There is no GRØD server.', meetings: 'Never' },
+  { who: 'GRØD, to Apple\'s Private Cloud Compute', href: '#notes-engine', what: 'Each meeting\'s transcript, so Apple\'s servers can write its notes. Only if you choose Private Cloud Compute in Settings › Notes.', meetings: 'The transcript, only if you choose it' },
   { who: 'GRØD, to Hugging Face', href: '#network', what: 'A request for a model file, only when you choose to download one.', meetings: 'Never' },
   { who: 'Your Mac, to Apple', href: '#macos', what: 'macOS may fetch its own speech, language and Apple Intelligence assets.', meetings: 'Never' },
   { who: 'Your Mac, to your calendar accounts', href: '#calendars', what: 'Keeping Google, Microsoft 365 or iCloud calendars in sync. That is your Mac\'s job, not GRØD\'s.', meetings: 'Never' },
@@ -38,7 +39,7 @@ const ledger = [
 ---
 <Base
   title="Privacy · GRØD"
-  description="Your meeting content never leaves this Mac. What that means, line by line: no GRØD server, no GRØD account, no telemetry, and the few places your Mac or another app does something on its own."
+  description="Your meeting content never leaves this Mac unless you choose Apple's Private Cloud Compute to write your notes. What that means, line by line: no GRØD server, no GRØD account, no telemetry, and the few places your Mac or another app does something on its own."
   theme="light"
   card={GROD_CARD}
   fonts={[
@@ -62,8 +63,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <main id="main">
     <section class="gv-hero" aria-labelledby="h1">
       <h1 class="g-h gv-h1" id="h1"><span class="g-ghost"><span aria-hidden="true">Your meeting content never leaves this Mac.</span>Your meeting content never leaves this Mac.</span></h1>
+      <p class="g-unless gv-unless">Unless you choose Apple's Private Cloud Compute to write your notes.</p>
       <div class="gv-intro">
-        <p class="g-lede">GRØD records, transcribes, separates speakers, searches and writes summaries on your Mac. GRØD never uploads your audio, transcripts, notes or calendar data. There is no GRØD account, no telemetry and no cloud sync of its own.</p>
+        <p class="g-lede">GRØD records, transcribes, separates speakers, searches and writes summaries on your Mac. With Private Cloud Compute chosen, each meeting's transcript goes to Apple's servers to write its notes, and nothing else does. GRØD never uploads your audio or calendar data. There is no GRØD account, no telemetry and no cloud sync of its own.</p>
         <p class="g-body">That is a promise about what GRØD does. Below is exactly what it means, and the few places your Mac or another app does something on its own.</p>
       </div>
 
@@ -95,8 +97,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <div class="ge-row" id="network">
           <div class="ge-row__text">
-            <h3 class="g-h2"><a class="g-anchor" href="#network">One reason to go online</a></h3>
-            <p class="g-body">GRØD's only first-party network use is the model downloads you choose to start, for transcription or for summaries. They come over HTTPS from Hugging Face, every redirect is checked against an allowlist, and every file is checksum-verified before it is used.</p>
+            <h3 class="g-h2"><a class="g-anchor" href="#network">Online only when you choose</a></h3>
+            <p class="g-body">Besides the optional notes engine, below, GRØD's only network use is the model downloads you choose to start, for transcription or for summaries. They come over HTTPS from Hugging Face, every redirect is checked against an allowlist, and every file is checksum-verified before it is used.</p>
             <p class="g-body">All of GRØD's own networking lives in one place, and a test fails the build if GRØD's own code opens a second route.</p>
           </div>
           <figure class="g-capture g-detail">
@@ -106,7 +108,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
 
         <dl class="g-receipts">
-          <div id="servers"><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics, not for anything else. There is nowhere for GRØD to send your meetings.</dd></div>
+          <div id="notes-engine" class="gv-wide"><dt>The optional notes engine</dt><dd>Off unless you choose it in Settings › Notes. With Private Cloud Compute chosen, GRØD sends each meeting's transcript to Apple's servers, through Apple's own framework, and they write its notes. Nothing else is sent: not the recording, the notes you type or your calendar. If Apple's servers can't be reached, your Mac writes the notes and the meeting says so. Settings › Privacy reads back which you have chosen.</dd></div>
+          <div id="servers"><dt>Servers</dt><dd>There is no GRØD server. Not for sync, not for analytics, not for anything else. There is nowhere for GRØD to send your meetings, except Apple's Private Cloud Compute if you choose it.</dd></div>
           <div id="account"><dt>Account</dt><dd>There is nothing to sign in to. GRØD does not know who you are.</dd></div>
           <div id="downloads"><dt>Downloads you did not ask for</dt><dd>None from GRØD. The default install uses Apple's built-in speech and language models, so GRØD has nothing to download until you choose a model.</dd></div>
           <div id="telemetry"><dt>Telemetry</dt><dd>None. No analytics, no crash reporting service, no usage tracking.</dd></div>
@@ -147,7 +150,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <dl class="g-receipts">
           <div id="export"><dt>Export, Copy and Share</dt><dd>They do what they say, to where you send them.</dd></div>
-          <div id="mcp"><dt>The local MCP server</dt><dd>If you turn on the local MCP server in Search settings, a local app you configure can read your meetings on this Mac. It is off by default, read-only, and has no network listener.</dd></div>
+          <div id="mcp"><dt>The local MCP server</dt><dd>If you turn on the local MCP server in Privacy settings, a local app you configure can read your meetings on this Mac. It is off by default, read-only, and has no network listener.</dd></div>
         </dl>
       </div>
     </section>
@@ -181,7 +184,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-pin"><h2 class="g-h" id="h-why">Why we can say this.</h2></div>
       <div class="ge-body">
         <div class="gv-lead">
-          <p class="g-body">GRØD is built for Apple's Mac App Store sandbox. Its network access is declared, narrow, and used for one thing.</p>
+          <p class="g-body">GRØD is built for Apple's Mac App Store sandbox. Its own network access is declared, narrow, and used for one thing: the model downloads. The optional notes engine reaches Apple's servers through Apple's own framework, under an entitlement Apple grants.</p>
           <p class="g-body">This page describes the app. The legal version, which also covers this website and the beta, is the <a href={GROD_POLICY_PATH}>privacy policy</a>. Shorter answers are in the <a href={GROD_FAQ_PATH}>questions</a>.</p>
         </div>
         <div class="ge-close">
