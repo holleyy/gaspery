@@ -418,6 +418,11 @@ in the frontmatter above and applied nowhere else.
 - **Promise** (Merriweather 400 italic, `clamp(26px, 3vw, 42px)`) and
   **Quote** (Merriweather 400, `clamp(26px, 2.8vw, 40px)`): the one promise
   and the app's own words, quoted.
+- **Unless** (`.g-unless`, the Lede's face and size, in the same ink): the
+  promise's exception, directly under every promise or headline that sets it,
+  "Unless you choose Apple's Private Cloud Compute to write your notes." It is
+  never small print, and the promise never appears without it (DECISIONS.md,
+  "On the GRØD site, the promise never stands alone").
 - **Lede** (Merriweather 400, `clamp(21px, 2vw, 30px)`, 1.3) and **Body**
   (Atkinson Hyperlegible Next 400, `clamp(17px, 1.35vw, 19px)`, 1.55; one
   step larger, `clamp(18px, 1.5vw, 21px)`, beside full-width windows).

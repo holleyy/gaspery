@@ -7,6 +7,8 @@
 /* ---- Hero ---------------------------------------------------------------- */
 .gv-hero { max-width: var(--g-max); margin: 0 auto; padding: clamp(48px, 9vh, 104px) var(--g-pad) 96px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
 .gv-h1 { max-width: 15ch; }
+/* The hero grid's gap would float the exception away from the headline. */
+.gv-unless { margin-top: -14px; }
 .gv-intro { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
 .gv-intro .g-lede { max-width: 40ch; }
 .gv-intro .g-body { max-width: 56ch; color: var(--color-ink-secondary); }
