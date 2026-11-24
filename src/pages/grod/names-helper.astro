@@ -21,7 +21,7 @@ import '../../styles/grod-policy.css';
    macOS 27.3 moved the helper's permission to System & App Protection Override,
    where the user adds it by hand with Override System Protections. Set it up and
    Remove it carry both routes, and "If it doesn't work" names the two 27.3 traps
-   (an old row; Choose Apps). The 27.3 lines follow the GRØD repo's docs page
+   (an old row; Choose Apps, then Check again). The 27.3 lines follow the GRØD repo's docs page
    (docs/product/website/docs/people/names-from-teams.md) and quote
    CallAppNamesPermissionCopy. The seed has no 27.3 lines yet. */
 
@@ -68,7 +68,7 @@ const RELEASES = 'https://github.com/holleyy/grod-names-helper/releases';
       </ul>
 
       <h3 id="why-separate">Why a separate app</h3>
-      <p>GRØD runs in Apple's App Sandbox, as every Mac App Store app does, and the sandbox stops an app reading another app's window. The helper runs outside it and does this one job. It runs only while GRØD records, and quits on its own two minutes after.</p>
+      <p>GRØD runs in Apple's App Sandbox, as every Mac App Store app does, and the sandbox stops an app reading another app's window. The helper runs outside it and does this one job. It runs while GRØD records, or for a few seconds when you ask GRØD to check it, and quits on its own two minutes after.</p>
 
       <h3 id="set-up">Set it up</h3>
       <ol>
@@ -86,7 +86,7 @@ const RELEASES = 'https://github.com/holleyy/grod-names-helper/releases';
       <h3 id="no-access">If it doesn't work on macOS 27.3 or later</h3>
       <ul>
         <li><strong>"No access yet."</strong> The list can keep a row for the helper from an earlier copy. The row looks allowed, but the copy you have now gets nothing from it. Select the row and click −, then add the helper again with + and Override System Protections.</li>
-        <li><strong>"Can’t see the Teams tiles"</strong> means the helper was added with Choose Apps. Teams draws its tiles in a second app, Microsoft Teams WebView, and that app refuses the helper. In GRØD, choose "Open System Settings". Remove the helper with −, then add it again with + and Override System Protections.</li>
+        <li><strong>"Can’t see the Teams tiles"</strong> means the helper was added with Choose Apps. Teams draws its tiles in a second app, Microsoft Teams WebView, and that app refuses the helper. In GRØD, choose "Open System Settings". Remove the helper with −, then add it again with + and Override System Protections. Back in GRØD, choose "Check again" with Teams' window open. After about 15 seconds the row says "On", or "Still blocked." if Teams still refuses the helper.</li>
       </ul>
 
       <h3 id="what-you-need">What you need</h3>
