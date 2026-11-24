@@ -19,8 +19,9 @@ import '../../styles/grod-policy.css';
    so this link never changes. The version line below changes with a release.
 
    macOS 27.3 moved the helper's permission to System & App Protection Override,
-   where the user adds it by hand. Set it up and Remove it carry both routes; the
-   27.3 lines follow the GRØD repo's docs page
+   where the user adds it by hand with Override System Protections. Set it up and
+   Remove it carry both routes, and "If it doesn't work" names the two 27.3 traps
+   (an old row; Choose Apps). The 27.3 lines follow the GRØD repo's docs page
    (docs/product/website/docs/people/names-from-teams.md) and quote
    CallAppNamesPermissionCopy. The seed has no 27.3 lines yet. */
 
@@ -75,12 +76,18 @@ const RELEASES = 'https://github.com/holleyy/grod-names-helper/releases';
         <li>In GRØD, open Settings › Recording › Names from Teams and turn on "Name people from Teams".</li>
         <li>Let the helper see Teams. What comes next depends on your version of macOS.
           <ul>
-            <li><em>macOS 27.3 or later.</em> You add the helper in System Settings. GRØD opens Privacy &amp; Security › System &amp; App Protection Override. "Click +, choose GRØD Names Helper, then Choose Apps and add Microsoft Teams." Back in GRØD, choose "I’ve added it".</li>
+            <li><em>macOS 27.3 or later.</em> You add the helper in System Settings. GRØD opens Privacy &amp; Security › System &amp; App Protection Override. "Click +, choose GRØD Names Helper, then Override System Protections, not Choose Apps." Back in GRØD, choose "I’ve added it".</li>
             <li><em>macOS 27.2 or earlier.</em> macOS asks once about the helper. "Choose Open System Settings, then turn on GRØD Names Helper in the list."</li>
           </ul>
         </li>
         <li>Record a Teams call. "Voices are named when the recording stops."</li>
       </ol>
+
+      <h3 id="no-access">If it doesn't work on macOS 27.3 or later</h3>
+      <ul>
+        <li><strong>"No access yet."</strong> The list can keep a row for the helper from an earlier copy. The row looks allowed, but the copy you have now gets nothing from it. Select the row and click −, then add the helper again with + and Override System Protections.</li>
+        <li><strong>"Can’t see the Teams tiles"</strong> means the helper was added with Choose Apps. Teams draws its tiles in a second app, Microsoft Teams WebView, and that app refuses the helper. In GRØD, choose "Open System Settings". Remove the helper with −, then add it again with + and Override System Protections.</li>
+      </ul>
 
       <h3 id="what-you-need">What you need</h3>
       <ul>
