@@ -221,6 +221,18 @@ export default config({
       label: 'Writing',
       path: 'src/content/writing/*',
       slugField: 'title',
+      /* The body gets its own pane and the frontmatter moves beside it, instead
+         of the body sitting last in a stack of nine form fields. Needs
+         `format.contentField` below, and falls back to the stacked form on a
+         narrow window. */
+      entryLayout: 'content',
+      /* Without this the list is one "Name" column, so the only thing you can
+         sort by is the slug, and the slug is the title: the stream reads
+         alphabetically. These add sortable Date and Dek columns. Keystatic
+         0.6.0 still opens on slug-ascending every time (the sort state is
+         component state, not config), so Date is one click away rather than
+         the default. */
+      columns: ['date', 'dek'],
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
@@ -290,6 +302,7 @@ export default config({
       label: 'App pages',
       path: 'src/content/appPages/*',
       slugField: 'title',
+      entryLayout: 'content',
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
@@ -376,6 +389,7 @@ export default config({
     about: singleton({
       label: 'About page',
       path: 'src/content/about/',
+      entryLayout: 'content',
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title' }),
@@ -390,6 +404,7 @@ export default config({
     company: singleton({
       label: 'Company page',
       path: 'src/content/company/',
+      entryLayout: 'content',
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title' }),
