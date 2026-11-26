@@ -325,8 +325,10 @@ test('the Privacy page says the promise exactly and none of the lines it must ne
 
 test('the ledger never says a meeting app carries nothing: only that GRØD passes a link', () => {
   const page = read('src/pages/grod/privacy.astro');
-  const rows = [...page.matchAll(/\{ who: '([^']+)', href: '#([a-z]+)', what: '((?:[^'\\]|\\.)+)', meetings: '([^']+)' \}/g)];
-  assert.equal(rows.length, 6);
+  // every field may hold an escaped quote (Apple\'s) and an address may hold a hyphen (#notes-engine)
+  const rows = [...page.matchAll(/\{ who: '((?:[^'\\]|\\.)+)', href: '#([a-z-]+)', what: '((?:[^'\\]|\\.)+)', meetings: '((?:[^'\\]|\\.)+)' \}/g)];
+  assert.equal(rows.length, (page.match(/^  \{ who: /gm) ?? []).length, 'a ledger row the pattern cannot read');
+  assert.equal(rows.length, 8);
   const app = rows.find((r) => /meeting app/.test(r[1]));
   assert.equal(app?.[4], 'Never from GRØD. It passes the address, never meeting content.');
   assert.equal(rows[0][4], 'Never');
