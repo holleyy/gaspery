@@ -235,5 +235,14 @@ promise stays legible as the site's headline, and nobody can read it without
 the exception directly beneath. The words are ratified in the GRØD repo
 (`GROD/docs/launch/site-copy-flags.md`, decisions.md 2026-11-21).
 
+**Connected apps are not a second exception** (2026-11-26, with the GRØD for
+Claude plugin). An app the user connects through Allow MCP apps, such as
+Claude, can read meetings and send them on: Claude sends them to Anthropic.
+The promise is about what GRØD sends, and a connected app is a destination the
+user chooses, like Share, so it is named in running text and gets no
+`.g-unless` line: the policy's Plain English and its "Apps you connect"
+section, and the privacy page's ledger row and MCP receipt. Alex agreed.
+
 **Revisit if** the engine is ever on by default, or sends more than the
 transcript: then the promise itself has to change, not just its second line.
+The same holds if GRØD ever connects an app by default or sends to one itself.

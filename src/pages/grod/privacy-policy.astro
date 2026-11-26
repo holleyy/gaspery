@@ -22,7 +22,7 @@ import '../../styles/grod-policy.css';
    The company's number and registered office are also printed by
    src/components/Imprint.astro; a test holds the two to the same values. */
 
-const UPDATED = '21 November 2026';
+const UPDATED = '26 November 2026';
 const HISTORY = 'https://github.com/holleyy/gaspery/commits/main/src/pages/grod/privacy-policy.astro';
 ---
 <Base
@@ -58,6 +58,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <p class="g-unless gp-unless">Unless you choose Apple's Private Cloud Compute to write your notes.</p>
       <p>GRØD records, transcribes and summarises on your Mac. There is no GRØD account, no GRØD server, and no analytics or tracking of its own.</p>
       <p>GRØD goes online for two things, and both are your choice. It downloads an optional model when you ask it to. Those come from Hugging Face, which sees your IP address like any website would, and nothing from your meetings is sent. And if you choose Apple's Private Cloud Compute to write your notes, each meeting's transcript goes to Apple's servers to write its notes, and nothing else from your meetings does. I never receive any of it.</p>
+      <p>If you turn on Allow MCP apps and connect an app such as Claude, that app can read your meetings, and what it reads goes wherever that app sends it. For Claude, that's Anthropic. It's off unless you turn it on.</p>
       <p>Information about you reaches me in only two ways, and both are your choice:</p>
       <ul>
         <li><strong>If you email me.</strong> That includes asking to join the beta. I get your message, and a diagnostics bundle if you choose to attach one. You can read the bundle before you send it, and it never contains your meetings.</li>
@@ -90,7 +91,26 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <h3 id="your-mac-and-other-apps">What your Mac and other apps do</h3>
       <p>macOS may download Apple speech, language and Apple Intelligence components the first time they are needed, for example when you start your first recording. That is your Mac updating its own software, under <a href="https://www.apple.com/legal/privacy/">Apple's privacy policy</a>. It never includes your meetings, and it can happen even if you never download a model.</p>
       <p>When you press Join, GRØD hands the meeting link to your browser or meeting app, which connects as it normally would. GRØD passes the link, never meeting content.</p>
-      <p>Export, Copy and Share send things where you choose. If you turn on local MCP access in Privacy settings (it is off by default), an app you set up on this Mac can read your meetings. It can't change them, and GRØD opens no network connection for it.</p>
+      <p>Export, Copy and Share send things where you choose.</p>
+
+      {/* What this section claims, and where each claim was checked
+          (2026-11-26, GRØD repo main at 25e5b0ce): off by default and
+          turned on by the "Allow MCP apps" toggle under "Other apps" in
+          Settings › Privacy (MCPSettings.registerDefaults,
+          PrivacySettingsView); search, read and export are the tools
+          search_records, list_meetings, read_meeting and
+          export_meeting_markdown, all reading a store opened with
+          allowsSave: false; the connection is stdio, with no listener and
+          no network route (README "Local MCP access", HOL-114 audit); the
+          session's search index is a temporary file deleted when the
+          session shuts down (MCPMeetingRepository.shutdown). The plugin is
+          holleyy/grod-claude-plugin: a launcher that starts GRØD and four
+          skills, writing nothing. If any of these change, change this
+          section in the same change. */}
+      <h3 id="connected-apps">Apps you connect, such as Claude</h3>
+      <p>GRØD can let other apps on this Mac read your meetings, through a standard called MCP. It's off until you turn on Allow MCP apps in GRØD's Settings ▸ Privacy, and you can turn it off there at any time. An app you connect can search, read and export your meetings. It can't change them, and GRØD opens no network connection for it.</p>
+      <p>GRØD for Claude is a plugin I publish so that Claude can do this in Claude Code and Cowork on your Mac. The plugin stores nothing. Your meetings stay in GRØD, and the search index GRØD builds for Claude lasts only while Claude is connected.</p>
+      <p>What an app reads from GRØD goes wherever that app sends it. With Claude, it becomes part of your conversation, which goes to Anthropic, the company that runs Claude, under Anthropic's terms and your Claude privacy settings. Other apps follow their own policies. I never receive any of it. Your meetings include other people's words, so ask only about meetings you're happy for that app to have.</p>
 
       <h3 id="email">Email and diagnostics</h3>
       <p>If you email me, I use your message to reply and to help you, and for nothing else.</p>
@@ -155,6 +175,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </section>
   </main>
 
-  <GrodNight motif="oats" note="This policy covers GRØD and this website." />
+  <GrodNight motif="oats" note="This policy covers GRØD, GRØD for Claude and this website." />
 </div>
 </Base>
