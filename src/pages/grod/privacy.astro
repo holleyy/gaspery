@@ -35,7 +35,7 @@ const ledger = [
   { who: 'Your Mac, to your calendar accounts', href: '#calendars', what: 'Keeping Google, Microsoft 365 or iCloud calendars in sync. That is your Mac\'s job, not GRØD\'s.', meetings: 'Never' },
   { who: 'Your browser or meeting app', href: '#join', what: 'Its own connection to the call, after GRØD hands it the link.', meetings: 'Never from GRØD. It passes the address, never meeting content.' },
   { who: 'You', href: '#sharing', what: 'Whatever you export, copy or share, to wherever you send it.', meetings: 'Only what you choose' },
-  { who: 'An app you connect, such as Claude', href: '#mcp', what: 'Whatever it reads from GRØD, to wherever that app sends it. Claude sends it to Anthropic. Only if you turn on Allow MCP apps.', meetings: 'What it reads, only if you turn it on' },
+  { who: 'An app you connect, such as Claude or Codex', href: '#mcp', what: 'Whatever it reads from GRØD, to wherever that app sends it. Claude sends it to Anthropic, Codex to OpenAI. Only if you turn on Allow MCP apps.', meetings: 'What it reads, only if you turn it on' },
 ];
 ---
 <Base
@@ -151,7 +151,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="ge-body">
         <dl class="g-receipts">
           <div id="export"><dt>Export, Copy and Share</dt><dd>They do what they say, to where you send them.</dd></div>
-          <div id="mcp"><dt>The local MCP server</dt><dd>If you turn on Allow MCP apps in Settings ▸ Privacy, an app you connect on this Mac can search, read and export your meetings. It is off by default, read-only, and has no network listener. What the app reads goes wherever that app sends it: Claude, for example, sends it to Anthropic.</dd></div>
+          <div id="mcp"><dt>The local MCP server</dt><dd>If you turn on Allow MCP apps in Settings ▸ Privacy, an app you connect on this Mac can search, read and export your meetings. It is off by default, read-only, and has no network listener. What the app reads goes wherever that app sends it: Claude, for example, sends it to Anthropic, and Codex to OpenAI.</dd></div>
         </dl>
       </div>
     </section>

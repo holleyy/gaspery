@@ -58,7 +58,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <p class="g-unless gp-unless">Unless you choose Apple's Private Cloud Compute to write your notes.</p>
       <p>GRØD records, transcribes and summarises on your Mac. There is no GRØD account, no GRØD server, and no analytics or tracking of its own.</p>
       <p>GRØD goes online for two things, and both are your choice. It downloads an optional model when you ask it to. Those come from Hugging Face, which sees your IP address like any website would, and nothing from your meetings is sent. And if you choose Apple's Private Cloud Compute to write your notes, each meeting's transcript goes to Apple's servers to write its notes, and nothing else from your meetings does. I never receive any of it.</p>
-      <p>If you turn on Allow MCP apps and connect an app such as Claude, that app can read your meetings, and what it reads goes wherever that app sends it. For Claude, that's Anthropic. It's off unless you turn it on.</p>
+      <p>If you turn on Allow MCP apps and connect an app such as Claude or Codex, that app can read your meetings, and what it reads goes wherever that app sends it. For Claude, that's Anthropic; for Codex, OpenAI. It's off unless you turn it on.</p>
       <p>Information about you reaches me in only two ways, and both are your choice:</p>
       <ul>
         <li><strong>If you email me.</strong> That includes asking to join the beta. I get your message, and a diagnostics bundle if you choose to attach one. You can read the bundle before you send it, and it never contains your meetings.</li>
@@ -104,13 +104,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           no network route (README "Local MCP access", HOL-114 audit); the
           session's search index is a temporary file deleted when the
           session shuts down (MCPMeetingRepository.shutdown). The plugin is
-          holleyy/grod-claude-plugin: a launcher that starts GRØD and four
+          holleyy/grod-plugin, for Claude and Codex: a launcher that starts GRØD and four
           skills, writing nothing. If any of these change, change this
           section in the same change. */}
-      <h3 id="connected-apps">Apps you connect, such as Claude</h3>
+      <h3 id="connected-apps">Apps you connect, such as Claude or Codex</h3>
       <p>GRØD can let other apps on this Mac read your meetings, through a standard called MCP. It's off until you turn on Allow MCP apps in GRØD's Settings ▸ Privacy, and you can turn it off there at any time. An app you connect can search, read and export your meetings. It can't change them, and GRØD opens no network connection for it.</p>
-      <p>GRØD for Claude is a plugin I publish so that Claude can do this in Claude Code and Cowork on your Mac. The plugin stores nothing. Your meetings stay in GRØD, and the search index GRØD builds for Claude lasts only while Claude is connected.</p>
-      <p>What an app reads from GRØD goes wherever that app sends it. With Claude, it becomes part of your conversation, which goes to Anthropic, the company that runs Claude, under Anthropic's terms and your Claude privacy settings. Other apps follow their own policies. I never receive any of it. Your meetings include other people's words, so ask only about meetings you're happy for that app to have.</p>
+      <p>I publish a GRØD plugin so that Claude, in Claude Code and Cowork, and OpenAI's Codex can do this on your Mac. The plugin stores nothing. Your meetings stay in GRØD, and the search index GRØD builds for the app lasts only while the app is connected.</p>
+      <p>What an app reads from GRØD goes wherever that app sends it. With Claude, it becomes part of your conversation, which goes to Anthropic, the company that runs Claude, under Anthropic's terms and your Claude privacy settings. With Codex, it goes to OpenAI, the company that runs Codex, under OpenAI's terms and your OpenAI account's data controls. Other apps follow their own policies. I never receive any of it. Your meetings include other people's words, so ask only about meetings you're happy for that app to have.</p>
 
       <h3 id="email">Email and diagnostics</h3>
       <p>If you email me, I use your message to reply and to help you, and for nothing else.</p>
@@ -175,6 +175,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </section>
   </main>
 
-  <GrodNight motif="oats" note="This policy covers GRØD, GRØD for Claude and this website." />
+  <GrodNight motif="oats" note="This policy covers GRØD, its plugin for Claude and Codex, and this website." />
 </div>
 </Base>
