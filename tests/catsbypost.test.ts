@@ -3,18 +3,13 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import {
   ASSETS,
-  LIGHTS,
   PRIVACY_PATH,
   ROTA,
-  SEASONS,
   STAFF,
   STOPS,
   STORE_URL,
   SUPPORT_PATH,
   TURNTABLES,
-  townAt,
-  townImage,
-  townLine,
 } from '../src/lib/catsbypost.ts';
 
 const read = (rel: string) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8');
@@ -64,13 +59,12 @@ test('every picture, film and script the page names is in public', () => {
   const paths = [
     ...STOPS.map((s) => s.image.src),
     ...STAFF.map((c) => `${ASSETS}/coats/${c.file}.webp`),
-    ...SEASONS.flatMap((s) => LIGHTS.map((l) => townImage(s, l))),
     ...[...page.matchAll(/\$\{ASSETS\}(\/[a-z0-9/.-]+)/g)].map((m) => ASSETS + m[1]),
     ...[...page.matchAll(/"(\/(?:shots|og)\/catsbypost[a-z0-9/.-]*\.[a-z0-9]+)"/g)].map((m) => m[1]),
     ...[...page.matchAll(/'(\/og\/[a-z0-9/.-]+)'/g)].map((m) => m[1]),
     ...[...css.matchAll(/url\((\/shots\/[^)]+)\)/g)].map((m) => m[1]),
   ];
-  assert.ok(paths.length >= 30, `only ${paths.length} paths found; the page's asset references have changed shape`);
+  assert.ok(paths.length >= 22, `only ${paths.length} paths found; the page's asset references have changed shape`);
   for (const path of paths) assert.ok(served(path), `${path} is not in public`);
   for (const must of ['/shots/catsbypost/board/board.js', '/shots/catsbypost/board/office.webp', '/shots/catsbypost/board/acting.webp', '/shots/catsbypost/film.mp4', '/og/catsbypost.jpg']) {
     assert.ok(paths.includes(must), `${must} is no longer referenced`);
@@ -101,12 +95,8 @@ test('the docket is written in the warm-up\'s opening state, so it does not chan
 });
 
 test('nothing hidden is un-hidden by a display rule', () => {
-  // An author `display` beats the hidden attribute. The board hides and shows
-  // by that attribute, and the dials are rendered hidden until the script runs.
+  // An author `display` beats the hidden attribute. The board hides and shows by that attribute.
   assert.match(css, /\.play \[hidden\] \{ display: none !important; \}/);
-  assert.match(css, /\.dials:not\(\[hidden\]\) \{ display: grid;/);
-  assert.doesNotMatch(css, /\.dials \{[^}]*display/);
-  assert.match(page, /<div class="dials" hidden>/);
 });
 
 test('the film and the store link work without the script', () => {
@@ -115,21 +105,23 @@ test('the film and the store link work without the script', () => {
   assert.match(page, /<section class="close" id="release">/);
 });
 
-test('the window opens on the visitor\'s own season and hour', () => {
-  assert.deepEqual(townAt(new Date(2026, 10, 20, 15, 0)), { season: 'autumn', light: 'day', word: 'afternoon' });
-  assert.deepEqual(townAt(new Date(2026, 0, 3, 23, 0)), { season: 'winter', light: 'night', word: 'night' });
-  assert.deepEqual(townAt(new Date(2026, 11, 24, 8, 0)), { season: 'winter', light: 'day', word: 'morning' });
-  assert.deepEqual(townAt(new Date(2026, 5, 21, 6, 0)), { season: 'summer', light: 'night', word: 'morning' });
-  assert.deepEqual(townAt(new Date(2026, 3, 1, 19, 30)), { season: 'spring', light: 'night', word: 'evening' });
-  assert.deepEqual(townAt(new Date(2026, 8, 1, 3, 0)), { season: 'autumn', light: 'night', word: 'night' });
+test('the store link at the close is Apple\'s own badge, unaltered', () => {
+  assert.match(page, /<a class="badge" href=\{STORE_URL\}><img src=\{`\$\{ASSETS\}\/app-store-badge\.svg`\} width="120" height="40" alt="Download on the App Store"><\/a>/);
+  const badge = read('public/shots/catsbypost/app-store-badge.svg');
+  assert.match(badge, /<title>Download_on_the_App_Store_Badge_US-UK_RGB_blk_4SVG_092917<\/title>/);
+  assert.match(badge, /viewBox="0 0 119\.66407 40"/);
+  assert.doesNotMatch(badge, /<script|<image|href=/);
+  // Apple asks for 40px at the least on a screen.
+  const height = Number(css.match(/\.soon \.badge img \{ height: (\d+)px;/)?.[1]);
+  assert.ok(height >= 40, `the badge is ${height}px tall`);
 });
 
-test('the line beside the window says whose view it is', () => {
-  const mine = townAt(new Date(2026, 10, 20, 19, 0));
-  assert.equal(townLine('autumn', 'night', mine).headline, 'It’s an autumn evening in town.');
-  assert.equal(townLine('winter', 'night', mine).headline, 'This is a winter night in town.');
-  assert.equal(townLine('autumn', 'day', mine).headline, 'This is an autumn afternoon in town.');
-  assert.equal(townLine('spring', 'day', mine).phrase, 'a spring afternoon');
+test('the town window is gone, with its pictures and its buttons', () => {
+  assert.doesNotMatch(page, /class="(?:town|window|dials|seg)\b|townAt|townImage/);
+  assert.doesNotMatch(css, /\.(?:town|window|dials|seg)\b/);
+  assert.ok(!served('/shots/catsbypost/town/autumn-day.webp'), 'the town views are still in public');
+  // The round's last word runs straight into the close.
+  assert.match(page, /<\/section>\s*<section class="close" id="release">/);
 });
 
 test('no em dashes on the page, in its stylesheet or in its facts', () => {

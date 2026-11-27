@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CbpFoot from '../components/CbpFoot.astro';
 import '../styles/catsbypost.css';
-import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, STORE_URL, TURNTABLES } from '../lib/catsbypost';
+import { ASSETS, ROTA, STAFF, STOPS, STORE_URL, TURNTABLES } from '../lib/catsbypost';
 
 /* The Cats by Post page: one page, built in the game's world rather than this
    site's. Converted from the standalone prototype prototypes/catsbypost/b.html;
@@ -13,7 +13,6 @@ import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, STORE_URL, TURNTABLES } fr
    pieces with a small host (scripts/catsbypost-board.mjs builds it from the
    game repo); it finds [data-cbp-board] and draws on the canvas over the
    plate. The numbers on that element place the game's floor on the plate. */
-const cap = (word: string) => word[0].toUpperCase() + word.slice(1);
 ---
 <Base
   title="Cats by Post · A cosy routing puzzle game"
@@ -26,7 +25,7 @@ const cap = (word: string) => word[0].toUpperCase() + word.slice(1);
 <!--
 THESIS: The page is the game's first delivery. The visitor arrives at the Sorting Office at sunset and the floor is open: three real puzzles, played by the game's own rules in the game's own art, before a word of explanation. Everything below is the round they would go on to walk.
 OWN-WORLD: The skies over the game's six places are the page's grounds (sunset, rose, dusk, day, dawn, snow), all sampled from the artwork. Besley, a Clarendon, is the painted sign over the Sorting Office door; Signika reads. Paper and postal ink step back to type. One look: the skies are the palette, so there is no dark mode.
-STORY: "The post has arrived. It's mostly cats." Play a delivery, see how the routing works, walk the six places, learn what is left after the round (the duty rota, the stamps, the staff), look out of the Sorting Office window at the visitor's own hour, and find where the game will be.
+STORY: "The post has arrived. It's mostly cats." Play a delivery, see how the routing works, walk the six places, learn what is left after the round (the duty rota, the stamps, the staff), and find the game on the App Store.
 FIRST VIEWPORT: Wordmark row. The two-line headline over the scene's own sky, the one-sentence description and two plain links beside it. The Sorting Office fills the rest, its floor in view with a cat in a box at the hatch and a basket waiting, and the docket for the puzzle in hand at the lower left with the one filled button, "Send the post".
 FORM: one long page; the places are one horizontal stage whose sky follows the stop. Code-led, light only.
 FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a real phone are not yet checked.
@@ -185,34 +184,14 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
     </div>
   </section>
 
-  <section class="town">
-    <div class="wrap">
-      {/* The script fills the window with the view for the visitor's own
-          season and hour. Without scripts it shows one view, and the line
-          beside it does not claim to know the time. */}
-      <div class="window" id="window" role="img" aria-label="The town from an upstairs window: slate and tile rooftops, gardens and a church tower">
-        <noscript><img class="is-on" src={`${ASSETS}/town/autumn-day.webp`} alt="" loading="lazy"></noscript>
-      </div>
-      <div class="town__copy">
-        <h2 class="d d2" id="now">The view from the Sorting Office window.</h2>
-        <p class="lede">The game’s town keeps your hours. This is the view from the Sorting Office window where you are, right now.</p>
-        <div class="dials" hidden>
-          <p class="small">Or see it another time:</p>
-          <div class="seg" id="seasons" role="group" aria-label="Season">
-            {SEASONS.map((season) => <button type="button" data-v={season}>{cap(season)}</button>)}
-          </div>
-          <div class="seg" id="lights" role="group" aria-label="Time of day">
-            {LIGHTS.map((light) => <button type="button" data-v={light}>{cap(light)}</button>)}
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="close" id="release">
     <div class="wrap">
       <h2 class="d d1"><span>Every cat is</span> <span>precious cargo.</span></h2>
-      <p class="soon"><b class="d d3">Out now for iPhone, iPad and Mac</b><a class="get" href={STORE_URL}>Get it on the App Store</a></p>
+      <p class="soon">
+        <b class="d d3">Out now for iPhone, iPad and Mac</b>
+        {/* Apple's own badge, as Apple supplies it. */}
+        <a class="badge" href={STORE_URL}><img src={`${ASSETS}/app-store-badge.svg`} width="120" height="40" alt="Download on the App Store"></a>
+      </p>
     </div>
   </section>
   </main>
@@ -232,8 +211,6 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
 </Base>
 
 <script>
-  import { townAt, townImage, townLine, type Light, type Season } from '../lib/catsbypost';
-
   /* The round: one stage. Choosing a stop slides to its place and turns the
      sky to that place's light; swiping or scrolling the stage does the same.
      Without scripts the stage still scrolls sideways, under the first sky. */
@@ -301,39 +278,5 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
     document.getElementById('film-close')?.addEventListener('click', shut);
     dlg.addEventListener('cancel', () => film.pause());
     dlg.addEventListener('click', (e) => { if (e.target === dlg) shut(); });
-  }
-
-  /* The town window: eight views of one town. It opens on the visitor's own
-     season and time of day; the buttons are there for the curious. */
-  const win = document.getElementById('window');
-  const now = document.getElementById('now');
-  const dials = document.querySelector<HTMLElement>('.dials');
-  if (win && now && dials) {
-    const mine = townAt(new Date());
-    let season: Season = mine.season;
-    let light: Light = mine.light;
-    const imgs: Record<string, HTMLImageElement> = {};
-    const view = () => {
-      const k = `${season}-${light}`;
-      if (!imgs[k]) {
-        const im = new Image();
-        im.alt = '';
-        im.decoding = 'async';
-        im.src = townImage(season, light);
-        win.append(im);
-        imgs[k] = im;
-        void im.offsetWidth;
-      }
-      Object.entries(imgs).forEach(([q, im]) => im.classList.toggle('is-on', q === k));
-      const line = townLine(season, light, mine);
-      now.textContent = line.headline;
-      win.setAttribute('aria-label', `The town from an upstairs window on ${line.phrase}: slate and tile rooftops, gardens and a church tower`);
-      dials.querySelectorAll<HTMLElement>('#seasons button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === season)));
-      dials.querySelectorAll<HTMLElement>('#lights button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === light)));
-    };
-    dials.querySelectorAll<HTMLElement>('#seasons button').forEach((b) => b.addEventListener('click', () => { season = b.dataset.v as Season; view(); }));
-    dials.querySelectorAll<HTMLElement>('#lights button').forEach((b) => b.addEventListener('click', () => { light = b.dataset.v as Light; view(); }));
-    dials.hidden = false;
-    view();
   }
 </script>
