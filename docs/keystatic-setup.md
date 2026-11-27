@@ -6,9 +6,9 @@ Production uses `github` storage, which authenticates via a GitHub App and needs
 values set on the Cloudflare **Worker**. This is a one-time setup.
 
 > **Deploy model:** `gaspery` is a Cloudflare **Worker** (Workers Builds, Git-connected;
-> deploy command `npx wrangler deploy`), not a Pages project. `wrangler.jsonc` uses the
-> Workers config (`main` + `assets`), and `postbuild` writes `dist/.assetsignore` so the
-> server bundle isn't served as a static asset.
+> deploy command `npx wrangler deploy`), not a Pages project. The build turns
+> `wrangler.jsonc` into `dist/server/wrangler.json`: the Worker in `dist/server`, the
+> static assets in `dist/client`, so the server bundle is never served as a file.
 
 ## 1. Create the GitHub App
 
