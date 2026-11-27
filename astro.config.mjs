@@ -33,6 +33,23 @@ export default defineConfig({
      `wrangler deploy` would provision a KV namespace for it. */
   session: false,
 
+  vite: {
+    build: {
+      /* Minify CSS with esbuild, as Astro 5 did. Vite 8 switched to
+         LightningCSS, and Astro builds with target 'esnext', which gives
+         LightningCSS no browser list. It then treats a -webkit- property
+         and its standard form as duplicates and keeps only the last one,
+         so Safari before 18 (or Chrome, depending on the order) silently
+         loses the declaration: /afterframe/a's header lost its blur. */
+      cssMinify: 'esbuild',
+      /* Astro 7's compiler rewrites every .astro <style> through LightningCSS
+         and turns `@media (max-width: 900px)` into `@media (width <= 900px)`,
+         which Safari only reads from 16.4. A browser target lets esbuild write
+         it back as max-width, the form the source and the live site use. */
+      cssTarget: ['chrome111', 'edge111', 'firefox114', 'safari16.3', 'ios16.3'],
+    },
+  },
+
   integrations: [sitemap(), react(), markdoc({ typographer: true }), keystatic()],
   adapter:
     devAdapter ??
