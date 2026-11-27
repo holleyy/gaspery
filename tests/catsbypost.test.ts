@@ -9,6 +9,7 @@ import {
   SEASONS,
   STAFF,
   STOPS,
+  STORE_URL,
   SUPPORT_PATH,
   TURNTABLES,
   townAt,
@@ -110,7 +111,7 @@ test('nothing hidden is un-hidden by a display rule', () => {
 
 test('the film and the store link work without the script', () => {
   assert.match(page, /<a class="link" href=\{`\$\{ASSETS\}\/film\.mp4`\} data-film>/);
-  assert.match(page, /<a class="play__btn play__btn--main" href="#release" data-store hidden>/);
+  assert.match(page, /<a class="play__btn play__btn--main" href=\{STORE_URL\} data-store hidden>/);
   assert.match(page, /<section class="close" id="release">/);
 });
 
@@ -185,4 +186,18 @@ test('both Cats by Post pages end in the foot that links the policy, and /privac
   }
   // The policy is the first thing in the document, so the forward needs no fragment.
   assert.ok(docText.indexOf('id="privacy"') < docText.indexOf('id="support"'));
+});
+
+/* ---- Released --------------------------------------------------------------- */
+test('the game is out: every way to it is the App Store, and nothing still says it is coming', () => {
+  // No country in the address, so Apple sends each visitor to their own storefront.
+  assert.equal(STORE_URL, 'https://apps.apple.com/app/cats-by-post/id6834231907');
+  // the wordmark row, the docket after the last puzzle, and the close
+  assert.equal(page.match(/href=\{STORE_URL\}/g)?.length, 3);
+  for (const [name, text] of [['page', page], ['policy', doc], ['share card', read('scripts/catsbypost-share-card.mjs')]] as const) {
+    assert.doesNotMatch(text, /Coming to|release day/, `the ${name} still says the game is coming`);
+  }
+  assert.match(read('src/content/apps/catsbypost.yaml'), /^status: live$/m);
+  // the wordmark row's link is the one thing in it a phone keeps
+  assert.match(css, /\.mast span\.small \{ display: none; \}/);
 });

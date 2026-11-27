@@ -251,6 +251,14 @@ main { --sky: var(--sunset); transition: --sky .7s var(--ease); }
 .close h2 span { display: block; }
 .soon { display: grid; gap: 4px; padding-top: clamp(18px, 2vw, 26px); border-top: 2px solid #56608c; }
 .soon span { color: var(--paper-dim); }
+/* The one filled action off the board: the docket's pill, in paper on the night. */
+.soon .get { justify-self: start; margin-top: 12px; padding: 14px 22px; border-radius: 999px; background: var(--paper); color: var(--night-deep); font-weight: 600; font-size: 1rem; line-height: 1; text-decoration: none; transition: background .15s; }
+.soon .get:hover { background: var(--lamp); }
+.soon .get:active { transform: translateY(1px); }
+/* The way to the shop stays in the wordmark row on a phone. */
+.mast a.small { display: inline-block; padding-block: 9px; margin-block: -9px; }
+/* Narrower than this it would take a line of its own, and the floor would start lower. */
+@media (max-width: 359px) { .mast a.small { display: none; } }
 
 .foot { background: var(--night-deep); color: var(--paper-dim); font-size: .95rem; }
 .foot .wrap { display: flex; justify-content: space-between; gap: 8px 32px; flex-wrap: wrap; padding-block: 22px; border-top: 2px solid #2a3260; }
@@ -275,7 +283,7 @@ dialog video { width: 100%; aspect-ratio: 4 / 3; background: #000; }
 @media (max-width: 720px) {
   /* A phone's first screen is the headline and the floor. */
   .mast { padding-top: 14px; }
-  .mast .small { display: none; }
+  .mast span.small { display: none; }
   .cbp-hero__top { padding-top: 14px; gap: 10px; }
   .cbp-hero h1 { font-size: clamp(1.9rem, 9.4vw, 2.6rem); }
   .cbp-hero .lede { font-size: 1.02rem; line-height: 1.4; }

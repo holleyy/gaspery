@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CbpFoot from '../components/CbpFoot.astro';
 import '../styles/catsbypost.css';
-import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, TURNTABLES } from '../lib/catsbypost';
+import { ASSETS, LIGHTS, ROTA, SEASONS, STAFF, STOPS, STORE_URL, TURNTABLES } from '../lib/catsbypost';
 
 /* The Cats by Post page: one page, built in the game's world rather than this
    site's. Converted from the standalone prototype prototypes/catsbypost/b.html;
@@ -17,7 +17,7 @@ const cap = (word: string) => word[0].toUpperCase() + word.slice(1);
 ---
 <Base
   title="Cats by Post · A cosy routing puzzle game"
-  description="A cosy routing puzzle game about getting cats in boxes safely to their matching baskets and doors. Six paper places, one hundred puzzles. Coming to iPhone, iPad and Mac."
+  description="A cosy routing puzzle game about getting cats in boxes safely to their matching baskets and doors. Six paper places, one hundred puzzles. On the App Store for iPhone, iPad and Mac."
   fonts={['family=Besley:ital,wght@0,500;0,800;1,500', 'family=Signika:wght@400;500;600']}
   theme="light"
   card={{ src: '/og/catsbypost.jpg', alt: 'Cats by Post. The Sorting Office at sunset, a paper-built postal hall beside a canal, under the line: The post has arrived. It’s mostly cats.' }}
@@ -45,7 +45,7 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
   <div class="cbp-hero">
     <header class="wrap mast">
       <b>Cats by Post</b>
-      <span class="small">Coming to iPhone, iPad and Mac</span>
+      <a class="small" href={STORE_URL}>On the App Store</a>
     </header>
     <div class="wrap cbp-hero__top">
       <h1 class="d d1"><span>The post has arrived.</span> <span>It’s mostly cats.</span></h1>
@@ -96,9 +96,8 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
         <div class="play__go">
           <button type="button" class="play__btn play__btn--main" data-send>Send the post</button>
           <button type="button" class="play__btn play__btn--main" data-next hidden>Next puzzle</button>
-          {/* Until release this goes to the release line at the foot of the
-              page; on release day it becomes the App Store link. */}
-          <a class="play__btn play__btn--main" href="#release" data-store hidden>Get the game</a>
+          {/* Shown by the board once the last puzzle is delivered. */}
+          <a class="play__btn play__btn--main" href={STORE_URL} data-store hidden>Get the game</a>
           <button type="button" class="play__btn" data-hint>Hint</button>
           <button type="button" class="play__btn" data-clear disabled>Clear</button>
         </div>
@@ -213,7 +212,7 @@ FINISH: reviewed in headless Chrome at ten widths from 320 to 1920; Safari and a
   <section class="close" id="release">
     <div class="wrap">
       <h2 class="d d1"><span>Every cat is</span> <span>precious cargo.</span></h2>
-      <p class="soon"><b class="d d3">Coming to iPhone, iPad and Mac</b><span>The App Store link goes here on release day.</span></p>
+      <p class="soon"><b class="d d3">Out now for iPhone, iPad and Mac</b><a class="get" href={STORE_URL}>Get it on the App Store</a></p>
     </div>
   </section>
   </main>

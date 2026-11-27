@@ -14,6 +14,10 @@ export const ASSETS = '/shots/catsbypost';
    (public/_redirects), for the field that asks for a policy: the policy is
    the document's first section. */
 export const SUPPORT_PATH = '/catsbypost/support/';
+
+/* The game on the App Store (released 25 November 2026). Written without a
+   country, so Apple sends each visitor to their own storefront. */
+export const STORE_URL = 'https://apps.apple.com/app/cats-by-post/id6834231907';
 export const PRIVACY_PATH = '/catsbypost/privacy/';
 
 export interface Stop {
