@@ -7,6 +7,7 @@ import {
   ROTA,
   STAFF,
   STOPS,
+  STORE_ID,
   STORE_URL,
   SUPPORT_PATH,
   TURNTABLES,
@@ -186,6 +187,10 @@ test('the game is out: every way to it is the App Store, and nothing still says 
   assert.equal(STORE_URL, 'https://apps.apple.com/app/cats-by-post/id6834231907');
   // the wordmark row, the docket after the last puzzle, and the close
   assert.equal(page.match(/href=\{STORE_URL\}/g)?.length, 3);
+  // Safari's own banner for the game, on this page only: the support page is where the App Store sends people.
+  assert.ok(STORE_URL.endsWith(`/id${STORE_ID}`));
+  assert.match(page, /<meta name="apple-itunes-app" content=\{`app-id=\$\{STORE_ID\}`\} slot="head" \/>/);
+  assert.doesNotMatch(doc, /apple-itunes-app/);
   for (const [name, text] of [['page', page], ['policy', doc], ['share card', read('scripts/catsbypost-share-card.mjs')]] as const) {
     assert.doesNotMatch(text, /Coming to|release day/, `the ${name} still says the game is coming`);
   }

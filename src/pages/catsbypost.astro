@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CbpFoot from '../components/CbpFoot.astro';
 import '../styles/catsbypost.css';
-import { ASSETS, ROTA, STAFF, STOPS, STORE_URL, TURNTABLES } from '../lib/catsbypost';
+import { ASSETS, ROTA, STAFF, STOPS, STORE_ID, STORE_URL, TURNTABLES } from '../lib/catsbypost';
 
 /* The Cats by Post page: one page, built in the game's world rather than this
    site's. Converted from the standalone prototype prototypes/catsbypost/b.html;
@@ -21,6 +21,9 @@ import { ASSETS, ROTA, STAFF, STOPS, STORE_URL, TURNTABLES } from '../lib/catsby
   theme="light"
   card={{ src: '/og/catsbypost.jpg', alt: 'Cats by Post. The Sorting Office at sunset, a paper-built postal hall beside a canal, under the line: The post has arrived. It’s mostly cats.' }}
 >
+  {/* Safari on an iPhone or iPad shows its own strip for the game at the top
+      of the page, with the way to the App Store. Other browsers ignore it. */}
+  <meta name="apple-itunes-app" content={`app-id=${STORE_ID}`} slot="head" />
 <div class="cbp-page">
 <!--
 THESIS: The page is the game's first delivery. The visitor arrives at the Sorting Office at sunset and the floor is open: three real puzzles, played by the game's own rules in the game's own art, before a word of explanation. Everything below is the round they would go on to walk.
