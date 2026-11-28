@@ -45,7 +45,7 @@ p { font-size: 26px; line-height: 1.35; font-weight: 500; max-width: 15em; }
 <div class="words">
   <div class="wm">Cats by Post</div>
   <h1><span>The post</span><span>has arrived.</span><span>It’s mostly cats.</span></h1>
-  <p>A cosy routing puzzle game. Coming to iPhone, iPad and Mac.</p>
+  <p>A cosy routing puzzle game for iPhone, iPad and Mac. Out now.</p>
 </div>
 </body></html>`;
 

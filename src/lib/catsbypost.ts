@@ -14,6 +14,11 @@ export const ASSETS = '/shots/catsbypost';
    (public/_redirects), for the field that asks for a policy: the policy is
    the document's first section. */
 export const SUPPORT_PATH = '/catsbypost/support/';
+
+/* The game on the App Store (released 25 November 2026). Written without a
+   country, so Apple sends each visitor to their own storefront. */
+export const STORE_ID = '6834231907';
+export const STORE_URL = `https://apps.apple.com/app/cats-by-post/id${STORE_ID}`;
 export const PRIVACY_PATH = '/catsbypost/privacy/';
 
 export interface Stop {
@@ -94,35 +99,3 @@ export const TURNTABLES: { type: 'plain' | 'ginger' | 'blue'; fill: string }[] =
   { type: 'ginger', fill: '#d9913f' },
   { type: 'blue', fill: '#627f9e' },
 ];
-
-/* ---- The town window ------------------------------------------------------
-   Eight views of one town: four seasons, by day and by night. The window opens
-   on the visitor's own season and hour. */
-
-export const SEASONS = ['spring', 'summer', 'autumn', 'winter'] as const;
-export const LIGHTS = ['day', 'night'] as const;
-export type Season = (typeof SEASONS)[number];
-export type Light = (typeof LIGHTS)[number];
-
-export interface TownTime { season: Season; light: Light; word: string }
-
-/** The view for a moment in the visitor's own clock. Seasons are the
-    meteorological ones of the northern hemisphere, where the town is. */
-export function townAt(date: Date): TownTime {
-  const m = date.getMonth(), h = date.getHours();
-  const season: Season = m < 2 || m === 11 ? 'winter' : m < 5 ? 'spring' : m < 8 ? 'summer' : 'autumn';
-  const light: Light = h >= 7 && h < 17 ? 'day' : 'night';
-  const word = h < 5 ? 'night' : h < 12 ? 'morning' : h < 17 ? 'afternoon' : h < 22 ? 'evening' : 'night';
-  return { season, light, word };
-}
-
-/** What the window shows, in words. The visitor's own view says "It's";
-    any other, chosen with the buttons, says "This is". */
-export function townLine(season: Season, light: Light, mine: TownTime): { own: boolean; phrase: string; headline: string } {
-  const own = season === mine.season && light === mine.light;
-  const word = own ? mine.word : light === 'day' ? 'afternoon' : 'night';
-  const phrase = `${/^[aeiou]/.test(season) ? 'an' : 'a'} ${season} ${word}`;
-  return { own, phrase, headline: `${own ? 'It’s' : 'This is'} ${phrase} in town.` };
-}
-
-export const townImage = (season: Season, light: Light) => `${ASSETS}/town/${season}-${light}.webp`;

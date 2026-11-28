@@ -229,28 +229,18 @@ main { --sky: var(--sunset); transition: --sky .7s var(--ease); }
 .comfort { margin-top: clamp(36px, 5vw, 72px); max-width: 62ch; color: var(--paper-dim); }
 .comfort b { color: var(--paper); font-weight: 600; }
 
-/* ---------- The town window ---------- */
-.town { background: var(--night); color: var(--paper); padding-block: clamp(32px, 5vw, 72px) clamp(64px, 9vw, 136px); }
-.town .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: clamp(28px, 6vw, 104px); align-items: center; }
-.window { position: relative; aspect-ratio: 1; max-width: 620px; width: 100%; border-radius: 300px 300px 10px 10px; overflow: hidden; background: var(--night-deep); box-shadow: 0 0 0 10px var(--paper), 0 0 0 14px var(--night-deep); margin: 14px; }
-.window img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s var(--ease); }
-.window img.is-on { opacity: 1; }
-.town__copy { display: grid; gap: clamp(16px, 2vw, 24px); }
-.town__copy .lede { color: var(--paper-dim); }
-/* Rendered hidden and shown by the script, so a visitor without scripts is not offered buttons that do nothing. */
-.dials:not([hidden]) { display: grid; gap: 10px; margin-top: 4px; }
-.dials p { color: var(--paper-dim); }
-.seg { display: flex; flex-wrap: wrap; gap: 8px; }
-.seg button { appearance: none; background: none; border: 2px solid #56608c; color: var(--paper); border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 1rem; line-height: 1; cursor: pointer; transition: background-color .15s, border-color .15s, color .15s; }
-.seg button:hover { border-color: var(--paper); }
-.seg button[aria-pressed="true"] { background: var(--lamp); border-color: var(--lamp); color: var(--night-deep); }
-
 /* ---------- The close ---------- */
 .close { background: var(--night-deep); color: var(--paper); padding-block: clamp(56px, 8vw, 128px) clamp(40px, 6vw, 88px); scroll-margin-top: 0; }
 .close .wrap { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: clamp(20px, 4vw, 72px); align-items: end; }
 .close h2 span { display: block; }
 .soon { display: grid; gap: 4px; padding-top: clamp(18px, 2vw, 26px); border-top: 2px solid #56608c; }
-.soon span { color: var(--paper-dim); }
+/* Apple's badge, unaltered: its own proportions, and clear space of at least a quarter of its height. */
+.soon .badge { justify-self: start; margin-top: 16px; border-radius: 9px; }
+.soon .badge img { height: 54px; width: auto; }
+/* The way to the shop stays in the wordmark row on a phone. */
+.mast a.small { display: inline-block; padding-block: 9px; margin-block: -9px; }
+/* Narrower than this it would take a line of its own, and the floor would start lower. */
+@media (max-width: 359px) { .mast a.small { display: none; } }
 
 .foot { background: var(--night-deep); color: var(--paper-dim); font-size: .95rem; }
 .foot .wrap { display: flex; justify-content: space-between; gap: 8px 32px; flex-wrap: wrap; padding-block: 22px; border-top: 2px solid #2a3260; }
@@ -266,16 +256,15 @@ dialog::backdrop { background: rgb(23 29 61 / .82); }
 dialog video { width: 100%; aspect-ratio: 4 / 3; background: #000; }
 
 @media (max-width: 960px) {
-  .cbp-hero__top, .how__head, .round__head, .stop .wrap, .keeps, .town .wrap, .close .wrap { grid-template-columns: minmax(0, 1fr); }
+  .cbp-hero__top, .how__head, .round__head, .stop .wrap, .keeps, .close .wrap { grid-template-columns: minmax(0, 1fr); }
   .cbp-hero__top { padding-top: clamp(28px, 6vw, 56px); }
   .play { margin-top: clamp(-40px, -3.5vw, -12px); }
   .staff { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 20px; }
-  .window { max-width: 460px; margin-inline: auto; }
 }
 @media (max-width: 720px) {
   /* A phone's first screen is the headline and the floor. */
   .mast { padding-top: 14px; }
-  .mast .small { display: none; }
+  .mast span.small { display: none; }
   .cbp-hero__top { padding-top: 14px; gap: 10px; }
   .cbp-hero h1 { font-size: clamp(1.9rem, 9.4vw, 2.6rem); }
   .cbp-hero .lede { font-size: 1.02rem; line-height: 1.4; }
@@ -296,5 +285,4 @@ dialog video { width: 100%; aspect-ratio: 4 / 3; background: #000; }
 @media (prefers-reduced-motion: reduce) {
   main, .round { transition: none; }
   html { scroll-behavior: auto; }
-  .window img { transition: none; }
 }
