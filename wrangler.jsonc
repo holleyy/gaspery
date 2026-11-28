@@ -1,7 +1,11 @@
+// The Cloudflare adapter builds from this file into dist/server/wrangler.json
+// (Worker in dist/server, static assets in dist/client), and `wrangler deploy`
+// finds that generated config through .wrangler/deploy/config.json. Deploy
+// after `npm run build`, never from this file on its own.
 {
 	"name": "gaspery",
-	"main": "./dist/_worker.js/index.js",
+	"main": "@astrojs/cloudflare/entrypoints/server",
 	"compatibility_date": "2026-07-19",
 	"compatibility_flags": ["nodejs_compat"],
-	"assets": { "directory": "./dist", "binding": "ASSETS" }
+	"assets": { "binding": "ASSETS" }
 }

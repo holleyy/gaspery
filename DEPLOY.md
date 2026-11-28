@@ -11,11 +11,13 @@ npm run dev
 ```
 
 Site runs at `http://localhost:4321`. Every public page is prerendered to static
-HTML; `npm run build` outputs to `dist/` as a Cloudflare Pages bundle (`_worker.js/`
-for the on-demand `/keystatic` admin route, plus the prerendered pages as static
-assets). `npm run preview` serves the build locally.
+HTML; `npm run build` outputs a Cloudflare Worker: `dist/client/` holds the
+prerendered pages and other static assets, `dist/server/` the Worker for the
+on-demand routes (the `/keystatic` admin, `/api/*`, and the `/skal` and `/afterframe`
+redirects). `npm run preview` serves the build locally in `workerd`.
 
-Node version is pinned in `.nvmrc` (22). If you use nvm: `nvm use`.
+Node version is pinned in `.nvmrc` (22). Astro 7 needs 22.23.4 or later. If you use
+nvm: `nvm use`.
 
 The content editor (Keystatic) lives at `http://localhost:4321/keystatic` while the
 dev server is running — see [Editing content](#adding-content).
@@ -70,15 +72,17 @@ every public page is still prerendered, so visitors get the same static site.
 ```jsonc
 {
 	"name": "gaspery",
-	"main": "./dist/_worker.js/index.js",
+	"main": "@astrojs/cloudflare/entrypoints/server",
 	"compatibility_date": "2026-07-19",
 	"compatibility_flags": ["nodejs_compat"],
-	"assets": { "directory": "./dist", "binding": "ASSETS" }
+	"assets": { "binding": "ASSETS" }
 }
 ```
 
-The `postbuild` script writes `dist/.assetsignore` so the adapter's `_worker.js` and
-`_routes.json` aren't served as public static assets.
+`npm run build` turns this into the real deploy config, `dist/server/wrangler.json`,
+which serves `dist/client/` as the static assets, and `npx wrangler deploy` picks it up
+through `.wrangler/deploy/config.json`. The adapter also writes
+`dist/client/.assetsignore`, so the generated config is never served as a file.
 
 **3. Configure Keystatic's GitHub mode.** The production `/keystatic` admin authenticates
 via a GitHub App and needs four values set on the Worker (one build variable + three runtime

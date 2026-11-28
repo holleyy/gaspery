@@ -22,20 +22,20 @@ norm() {
 fail=0
 
 # Route set must match exactly.
-if ! diff <(cd dist && find . -name '*.html' | sort) \
+if ! diff <(cd dist/client && find . -name '*.html' | sort) \
           <(cd .baseline && find . -name '*.html' | sort) > /tmp/routes.diff; then
   echo "ROUTE SET CHANGED:"; cat /tmp/routes.diff; fail=1
 fi
 
 while IFS= read -r f; do
-  rel="${f#dist/}"
+  rel="${f#dist/client/}"
   [ -f ".baseline/$rel" ] || continue
   if ! diff -q <(norm "$f") <(norm ".baseline/$rel") >/dev/null; then
     echo "CHANGED: $rel"
     diff -u <(norm ".baseline/$rel") <(norm "$f") | head -30
     fail=1
   fi
-done < <(find dist -name '*.html' | sort)
+done < <(find dist/client -name '*.html' | sort)
 
 # Every page carries exactly one appearance control: the site's theme
 # toggle (ThemeToggle.astro) or, on /studio, the studio switch
@@ -49,15 +49,15 @@ while IFS= read -r f; do
     echo "APPEARANCE CONTROL COUNT WRONG: $f has theme=$theme studio=$studio, expected exactly one of either"
     fail=1
   fi
-done < <(find dist -name '*.html' | sort)
+done < <(find dist/client -name '*.html' | sort)
 
 # The old app URL's redirects must survive into the built output. They live in
 # public/_redirects as raw rules; a build that drops them still succeeds and
 # still passes every test, and the only symptom is the old link 404ing in
 # production. So the gate that already builds checks for them.
 for rule in '/apps/aftershot/' '/apps/aftershot' '/catsbypost/privacy/' '/catsbypost/privacy'; do
-  if ! grep -qE "^${rule}[[:space:]]" dist/_redirects 2>/dev/null; then
-    echo "REDIRECT MISSING from dist/_redirects: $rule"
+  if ! grep -qE "^${rule}[[:space:]]" dist/client/_redirects 2>/dev/null; then
+    echo "REDIRECT MISSING from dist/client/_redirects: $rule"
     fail=1
   fi
 done

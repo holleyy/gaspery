@@ -8,25 +8,27 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "postbuild": "printf '_worker.js\\n_routes.json\\n' > dist/.assetsignore",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.13",
-    "@astrojs/markdoc": "^0.15.11",
-    "@astrojs/react": "^5.0.7",
+    "@astrojs/cloudflare": "^14.4.9",
+    "@astrojs/markdoc": "^2.1.5",
+    "@astrojs/react": "^7.1.9",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.3",
-    "@keystatic/astro": "^5.2.0",
-    "@keystatic/core": "^0.6.0",
+    "@astrojs/sitemap": "^3.7.6",
+    "@keystatic/astro": "^6.0.0",
+    "@keystatic/core": "^0.6.10",
     "@markdoc/markdoc": "^0.4.0",
-    "astro": "^5.2.0",
+    "astro": "^7.4.13",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "sharp": "^0.34.5"
+    "@astrojs/node": "^11.1.14",
+    "esbuild": "^0.28.2",
+    "sharp": "^0.35.5",
+    "wrangler": "^4.169.0"
   }
 }
